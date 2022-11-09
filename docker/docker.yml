@@ -1,0 +1,54 @@
+version: '3.1'
+
+networks:
+  shared-cudos-network:
+    name: shared-cudos-network
+
+volumes:
+  cudosdappdbdata:
+    driver: local
+
+services:
+  cudos-dapp:
+    image: cudos-dapp
+    container_name: cudos-dapp
+    build:
+      dockerfile: docker/docker.dockerfile
+      context: ../
+      args:
+        args:
+        USER_ID: "$USER_ID"
+        USER_NAME: "$USER_NAME"
+        GROUP_ID: "$GROUP_ID"
+        GROUP_NAME: "$GROUP_NAME"
+    restart: unless-stopped
+    volumes:
+      - '../:/usr/cudos-dapp'
+    ports:
+      - "$HOST_PORT:$DOCKER_PORT"
+    networks:
+      - shared-cudos-network
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "128m"
+        max-file: "1"
+    depends_on: 
+      - postgres
+
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      POSTGRES_PASSWORD: "$POSTGRES_PASSWORD"
+      POSTGRES_HOST_AUTH_METHOD: "$POSTGRES_HOST_AUTH_METHOD"
+      POSTGRES_DB: "$POSTGRES_DB"
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    volumes:
+      - cudosdappdbdata:/var/lib/postgresql/data
+    networks:
+      - shared-cudos-network

@@ -1,0 +1,8 @@
+.ReactBody {
+    width:100%; height:100%;
+}
+
+.ReactBody > .Page {
+    width:100%; min-height:100%;
+    display:flex; flex-direction:column;
+}
