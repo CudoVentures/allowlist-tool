@@ -10,6 +10,9 @@ import { UserModule } from './user/user.module';
 import { AuthService } from './auth/auth.service';
 import { PassportModule } from '@nestjs/passport';
 import { UserService } from './user/user.service';
+import { AllowlistModule } from './allowlist/allowlist.module';
+import { AllowlistService } from './allowlist/allowlist.service';
+import { AllowlistController } from './allowlist/allowlist.controller';
 
 @Module({
   imports: [
@@ -52,8 +55,9 @@ import { UserService } from './user/user.service';
     AuthModule,
     UserModule,
     PassportModule.register({ session: true }),
+    AllowlistModule,
   ],
-  providers: [AppService, AuthService, UserService],
-  controllers: [AuthController],
+  providers: [AppService, AuthService, UserService, AllowlistService],
+  controllers: [AuthController, AllowlistController],
 })
 export class AppModule {}

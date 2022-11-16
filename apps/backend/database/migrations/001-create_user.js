@@ -17,9 +17,14 @@ module.exports = {
         unique: true,
         allowNull: false,
       },
-      address: {
+      refresh_token: {
         type: Sequelize.STRING,
         unique: true,
+        allowNull: false,
+      },
+      address: {
+        type: Sequelize.STRING,
+        unique: false,
         allowNull: false,
       },
       createdAt: {

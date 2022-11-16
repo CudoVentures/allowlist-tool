@@ -7,35 +7,38 @@ import NotFoundPage from '../../../not-found/presensation/components/NotFoundPag
 import UiKitPage from '../../../ui-kit/presensation/components/UiKitPage';
 
 import '../styles/app-router.css';
+import CreateAllowlistPage from '../../../allowlists/presentation/pages/create-allowlist';
 
 const AppRouter = () => {
-    const location = useLocation();
-    const [displayLocation, setDisplayLocation] = useState(location);
-    const [transitionStage, setTransistionStage] = useState('PageTransitionIn');
+  const location = useLocation();
+  const [displayLocation, setDisplayLocation] = useState(location);
+  const [transitionStage, setTransistionStage] = useState('PageTransitionIn');
 
-    useEffect(() => {
-        if (location !== displayLocation) {
-            setTransistionStage('PageTransitionOut');
-        }
-    }, [location, displayLocation]);
-
-    const onRouterTransitionEnd = () => {
-        if (transitionStage === 'PageTransitionOut') {
-            setTransistionStage('PageTransitionIn');
-            setDisplayLocation(location);
-        }
+  useEffect(() => {
+    if (location !== displayLocation) {
+      setTransistionStage('PageTransitionOut');
     }
+  }, [location, displayLocation]);
 
-    return (
-        <div
-            className={`AppRouter ${transitionStage}`}
-            onAnimationEnd = { onRouterTransitionEnd } >
-            <Routes location = { displayLocation } >
-                <Route path = { AppRoutes.HOME } element = { <UiKitPage /> } />
-                <Route path = { AppRoutes.NOT_FOUND } element = { <NotFoundPage /> } />
-            </Routes>
-        </div>
-    )
-}
+  const onRouterTransitionEnd = () => {
+    if (transitionStage === 'PageTransitionOut') {
+      setTransistionStage('PageTransitionIn');
+      setDisplayLocation(location);
+    }
+  };
+
+  return (
+    <div
+      className={`AppRouter ${transitionStage}`}
+      onAnimationEnd={onRouterTransitionEnd}
+    >
+      <Routes location={displayLocation}>
+        <Route path={AppRoutes.HOME} element={<UiKitPage />} />
+        <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
+        <Route path={'/allowlist'} element={<CreateAllowlistPage />} />
+      </Routes>
+    </div>
+  );
+};
 
 export default AppRouter;
