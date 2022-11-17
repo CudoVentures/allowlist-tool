@@ -23,10 +23,10 @@ export class CreateAllowlistDto {
   @ApiProperty({ required: false })
   twitter_account?: string;
 
-  @IsNumberString()
+  @IsString()
   @IsOptional()
   @ApiProperty({ required: false })
-  tweetId?: number;
+  tweet?: string;
 
   @IsString()
   @IsOptional()

@@ -44,8 +44,7 @@ const CreateAllowlistForm = () => {
     }
 
     if (tweet) {
-      const tweetId = tweet.split('/').at(-1).split('?')[0];
-      data['tweet'] = Number(tweetId);
+      data['tweet'] = tweet;
     }
 
     if (discordServer && serverRole) {

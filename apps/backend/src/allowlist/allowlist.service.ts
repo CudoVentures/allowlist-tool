@@ -11,8 +11,13 @@ export class AllowlistService {
     private allowlistModel: typeof Allowlist,
   ) {}
 
-  async findAll(): Promise<Allowlist[]> {
-    return await this.allowlistModel.findAll();
+  async findAll(userId: string) {
+    return (await this.allowlistModel.findAll()).map((allowlist) => {
+      return {
+        ...allowlist,
+        isAdmin: allowlist.admin === userId,
+      } as unknown as Allowlist;
+    });
   }
 
   async findByAdmin(id: number): Promise<Allowlist[]> {

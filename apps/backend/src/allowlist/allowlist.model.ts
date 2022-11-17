@@ -6,7 +6,6 @@ import {
   PrimaryKey,
   Unique,
   AutoIncrement,
-  HasMany,
 } from 'sequelize-typescript';
 @Table({
   freezeTableName: true,
@@ -41,7 +40,7 @@ export class Allowlist extends Model {
 
   @AllowNull(true)
   @Column
-  tweet: number;
+  tweet: string;
 
   @AllowNull(true)
   @Column
