@@ -11,7 +11,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
       clientID: process.env.App_Discord_Client_ID,
       clientSecret: process.env.App_Discord_Client_Secret,
       callbackURL: process.env.App_Auth_Callback_Url,
-      scope: ['identify', 'email', 'guilds', 'guilds.join'],
+      scope: ['identify', 'email', 'guilds'],
     });
   }
 

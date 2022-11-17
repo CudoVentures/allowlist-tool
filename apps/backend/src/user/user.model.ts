@@ -28,5 +28,9 @@ export class User extends Model {
 
   @AllowNull(false)
   @Column
+  refresh_token: string;
+
+  @AllowNull(false)
+  @Column
   address: string;
 }

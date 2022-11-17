@@ -13,7 +13,13 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
       clientID,
       clientSecret,
       callbackURL: process.env.App_Twitter_Callback_Url,
-      scope: ['users.read', 'tweet.read', 'offline.access'],
+      scope: [
+        'users.read',
+        'tweet.read',
+        'offline.access',
+        'follows.read',
+        'like.read',
+      ],
       customHeaders: {
         Authorization:
           'Basic ' +

@@ -22,11 +22,13 @@ export class UserService {
   async create(
     id: string,
     accessToken: string,
+    refreshToken: string,
     address: string,
   ): Promise<User> {
     const user = this.userModel.create({
       profile_id: id,
       access_token: accessToken,
+      refresh_token: refreshToken,
       address,
     });
     return user;
