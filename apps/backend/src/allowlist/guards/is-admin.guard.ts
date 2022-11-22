@@ -14,12 +14,13 @@ export class IsAdminGuard extends LoggedInGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { user, body } = request;
+    const { session, params } = request;
 
-    if (!user || !body) return false;
+    console.log(session, params);
+    if (!session || !params) return false;
 
-    const userId = user.id;
-    const allowlistId = parseInt(body.id);
+    const userId = session.user.id;
+    const allowlistId = parseInt(params.id);
 
     return this.allowlistService
       .findOne(allowlistId)

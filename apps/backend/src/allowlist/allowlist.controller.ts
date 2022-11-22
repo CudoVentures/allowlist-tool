@@ -24,16 +24,17 @@ export class AllowlistController {
 
   @Get('all')
   async findAll(@Request() req): Promise<Allowlist[]> {
-    return await this.allowlistService.findAll();
+    return await this.allowlistService.findAll(req.session.user.id);
   }
 
   @Get()
+  @UseGuards(LoggedInGuard)
   async findByAdmin(@Request() req): Promise<Allowlist[]> {
-    return await this.allowlistService.findByAdmin(req.user.id);
+    return await this.allowlistService.findByAdmin(req.session.user.id);
   }
 
-  @UseGuards(LoggedInGuard)
   @Post()
+  @UseGuards(LoggedInGuard)
   async create(
     @Request() req,
     @Body() createCollectionDto: CreateAllowlistDto,

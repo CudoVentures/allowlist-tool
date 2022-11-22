@@ -36,7 +36,7 @@ module.exports = {
       },
       tweet: {
         allowNull: true,
-        type: Sequelize.BIGINT,
+        type: Sequelize.STRING,
       },
       discord_server: {
         allowNull: true,
@@ -52,7 +52,7 @@ module.exports = {
       },
       users: {
         allowNull: false,
-        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
       },
       createdAt: {

@@ -8,6 +8,7 @@ import UiKitPage from '../../../ui-kit/presensation/components/UiKitPage';
 
 import '../styles/app-router.css';
 import CreateAllowlistPage from '../../../allowlists/presentation/pages/create-allowlist';
+import MyAllowlistsPage from '../../../allowlists/presentation/pages/my-allowlists';
 
 const AppRouter = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ const AppRouter = () => {
         <Route path={AppRoutes.HOME} element={<UiKitPage />} />
         <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
         <Route path={'/allowlist'} element={<CreateAllowlistPage />} />
+        <Route path={'/allowlists'} element={<MyAllowlistsPage />} />
       </Routes>
     </div>
   );
