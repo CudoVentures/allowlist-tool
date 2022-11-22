@@ -38,13 +38,13 @@ const AppRouter = ({ walletStore }) => {
       <Header walletStore={walletStore} />
       <Routes location={displayLocation}>
         <Route path={AppRoutes.MAIN} element={<UiKitPage />} />
-        <Route path={AppRoutes.HOME} element={<AllAllowlistsPage />} />
+        <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
         <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
         <Route
           path={AppRoutes.CREATE_ALLOWLIST}
           element={<CreateAllowlistPage />}
         />
-        <Route path={AppRoutes.ALLOWLISTS} element={<MyAllowlistsPage />} />
+        <Route path={AppRoutes.MY_ALLOWLISTS} element={<MyAllowlistsPage />} />
       </Routes>
     </div>
   );

@@ -16,11 +16,12 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(accessToken, refreshToken, profile): Promise<User> {
-    const user = await this.authService.validateUser(
-      accessToken,
-      refreshToken,
-      profile,
-    );
+    const user = await this.authService.validateUser({
+      discord_access_token: accessToken,
+      discord_refresh_token: refreshToken,
+      discord_profile_id: profile.id,
+      discord_profile_username: `${profile.username}#${profile.discriminator}`,
+    });
 
     if (!user) {
       throw new UnauthorizedException();

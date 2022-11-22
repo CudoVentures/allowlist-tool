@@ -1,14 +1,20 @@
 import { Controller, Req, Res, Get, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { User } from '../user/user.model';
 import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
-import { LoggedInGuard } from './guards/loggedIn.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Get('login')
+  async login(@Req() req, @Res() res) {
+    await this.authService.login(req.query.userAddress);
+    res.send(200);
+  }
 
   @Get('discord/login')
   @UseGuards(DiscordAuthGuard)
