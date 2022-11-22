@@ -1,6 +1,7 @@
 export default class AppRoutes {
-
-    static HOME = '/';
-    static NOT_FOUND = '/not-found';
-
+  static MAIN = '/';
+  static HOME = '/home';
+  static NOT_FOUND = '/not-found';
+  static CREATE_ALLOWLIST = '/create';
+  static ALLOWLISTS = '/allowlists';
 }

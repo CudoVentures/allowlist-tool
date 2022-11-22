@@ -18,7 +18,7 @@ export class AuthController {
   @UseGuards(DiscordAuthGuard)
   async discordCallback(@Req() req, @Res() res) {
     req.session.user = req.user;
-    res.sendStatus(200);
+    res.redirect(`/home`);
   }
 
   @Get('twitter/login')
@@ -29,6 +29,6 @@ export class AuthController {
   @UseGuards(TwitterAuthGuard)
   async twitterCallback(@Req() req, @Res() res) {
     req.session.user = req.user;
-    res.sendStatus(200);
+    res.redirect(`/home`);
   }
 }

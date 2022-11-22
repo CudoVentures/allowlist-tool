@@ -24,13 +24,13 @@ export class AllowlistController {
 
   @Get('all')
   async findAll(@Request() req): Promise<Allowlist[]> {
-    return await this.allowlistService.findAll(req.session.user.id);
+    return this.allowlistService.findAll();
   }
 
   @Get()
   @UseGuards(LoggedInGuard)
   async findByAdmin(@Request() req): Promise<Allowlist[]> {
-    return await this.allowlistService.findByAdmin(req.session.user.id);
+    return this.allowlistService.findByAdmin(req.session.user.id);
   }
 
   @Post()

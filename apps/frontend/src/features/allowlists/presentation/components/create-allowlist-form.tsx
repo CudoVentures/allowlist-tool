@@ -89,7 +89,7 @@ const CreateAllowlistForm = () => {
         <input
           style={{ width: '20%' }}
           type={'text'}
-          placeholder="Tweet to interact(optional)"
+          placeholder="Tweet to interact with(optional)"
           value={tweet}
           onChange={(e) => onChange(e, setTweet)}
           required={false}
