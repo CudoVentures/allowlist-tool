@@ -32,4 +32,24 @@ export class UserService {
     );
     return user;
   }
+
+  async clearSession(address: string): Promise<User> {
+    const [count, [user]] = await this.userModel.update(
+      {
+        twitter_access_token: null,
+        twitter_profile_id: null,
+        twitter_profile_username: null,
+        twitter_refresh_token: null,
+        discord_access_token: null,
+        discord_profile_id: null,
+        discord_profile_username: null,
+        discord_refresh_token: null,
+      },
+      {
+        where: { address },
+        returning: true,
+      },
+    );
+    return user;
+  }
 }

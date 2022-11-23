@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Allowlist from '../components/allowlist';
+import Allowlist from '../components/allowlist-preview';
 
 function MyAllowlistsPage() {
   const [allowlists, setAllowlists] = useState([]);
@@ -8,7 +8,11 @@ function MyAllowlistsPage() {
   useEffect(() => {
     (async () => {
       const url = '/api/v1/allowlist';
-      const res = await axios.get(url);
+      const userAddress = window.localStorage
+        .getItem('addr')
+        .split('"')
+        .join('');
+      const res = await axios.get(url, { params: { userAddress } });
       setAllowlists(res.data);
     })();
   }, []);

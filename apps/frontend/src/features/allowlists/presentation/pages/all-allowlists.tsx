@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Allowlist from '../components/allowlist';
+import Allowlist from '../components/allowlist-preview';
 
 function AllAllowlistsPage() {
   const [allowlists, setAllowlists] = useState([]);
@@ -18,6 +18,8 @@ function AllAllowlistsPage() {
       <h1 style={{ padding: '0 5% 0 5%' }}>Allowlists</h1>
       {allowlists &&
         allowlists.map((allowlist) => {
+          delete allowlist.createdAt;
+          delete allowlist.updatedAt;
           return <Allowlist key={allowlist.id} {...allowlist}></Allowlist>;
         })}
     </div>

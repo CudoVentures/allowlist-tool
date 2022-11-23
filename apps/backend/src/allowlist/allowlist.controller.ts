@@ -33,6 +33,11 @@ export class AllowlistController {
     return this.allowlistService.findByAdmin(req.session.user.id);
   }
 
+  @Get(':id')
+  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Allowlist> {
+    return this.allowlistService.findOne(id);
+  }
+
   @Post()
   @UseGuards(LoggedInGuard)
   async create(
