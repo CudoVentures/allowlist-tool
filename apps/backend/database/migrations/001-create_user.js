@@ -7,25 +7,50 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      profile_id: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      access_token: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-      },
-      refresh_token: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-      },
       address: {
         type: Sequelize.STRING,
-        unique: false,
+        unique: true,
         allowNull: false,
+      },
+      twitter_profile_id: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      twitter_profile_username: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      twitter_access_token: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      twitter_refresh_token: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      discord_profile_id: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      discord_profile_username: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      discord_access_token: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
+      },
+      discord_refresh_token: {
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

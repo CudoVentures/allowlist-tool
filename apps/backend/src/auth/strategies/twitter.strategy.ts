@@ -29,11 +29,12 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
   }
 
   async validate(accessToken, refreshToken, profile): Promise<User> {
-    const user = await this.authService.validateUser(
-      accessToken,
-      refreshToken,
-      profile,
-    );
+    const user = await this.authService.validateUser({
+      twitter_access_token: accessToken,
+      twitter_refresh_token: refreshToken,
+      twitter_profile_id: profile.id,
+      twitter_profile_username: profile.username,
+    });
 
     if (!user) {
       throw new UnauthorizedException();

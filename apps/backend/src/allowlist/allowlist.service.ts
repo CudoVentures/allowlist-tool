@@ -11,17 +11,12 @@ export class AllowlistService {
     private allowlistModel: typeof Allowlist,
   ) {}
 
-  async findAll(userId: string) {
-    return (await this.allowlistModel.findAll()).map((allowlist) => {
-      return {
-        ...allowlist,
-        isAdmin: allowlist.admin === userId,
-      } as unknown as Allowlist;
-    });
+  async findAll() {
+    return this.allowlistModel.findAll();
   }
 
   async findByAdmin(id: number): Promise<Allowlist[]> {
-    return await this.allowlistModel.findAll({
+    return this.allowlistModel.findAll({
       where: {
         admin: id,
       },
@@ -32,14 +27,14 @@ export class AllowlistService {
     createAllowlistDTO: CreateAllowlistDto,
     admin: string,
   ): Promise<Allowlist> {
-    return await this.allowlistModel.create({
+    return this.allowlistModel.create({
       ...createAllowlistDTO,
       admin,
     });
   }
 
   async findOne(id: number): Promise<Allowlist> {
-    return await this.allowlistModel.findByPk(id);
+    return this.allowlistModel.findByPk(id);
   }
 
   async updateOne(

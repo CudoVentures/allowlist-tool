@@ -9,8 +9,10 @@ import UiKitPage from '../../../ui-kit/presensation/components/UiKitPage';
 import '../styles/app-router.css';
 import CreateAllowlistPage from '../../../allowlists/presentation/pages/create-allowlist';
 import MyAllowlistsPage from '../../../allowlists/presentation/pages/my-allowlists';
+import AllAllowlistsPage from '../../../allowlists/presentation/pages/all-allowlists';
+import Header from './Header';
 
-const AppRouter = () => {
+const AppRouter = ({ walletStore }) => {
   const location = useLocation();
   const [displayLocation, setDisplayLocation] = useState(location);
   const [transitionStage, setTransistionStage] = useState('PageTransitionIn');
@@ -33,11 +35,16 @@ const AppRouter = () => {
       className={`AppRouter ${transitionStage}`}
       onAnimationEnd={onRouterTransitionEnd}
     >
+      <Header walletStore={walletStore} />
       <Routes location={displayLocation}>
-        <Route path={AppRoutes.HOME} element={<UiKitPage />} />
+        <Route path={AppRoutes.MAIN} element={<UiKitPage />} />
+        <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
         <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
-        <Route path={'/allowlist'} element={<CreateAllowlistPage />} />
-        <Route path={'/allowlists'} element={<MyAllowlistsPage />} />
+        <Route
+          path={AppRoutes.CREATE_ALLOWLIST}
+          element={<CreateAllowlistPage />}
+        />
+        <Route path={AppRoutes.MY_ALLOWLISTS} element={<MyAllowlistsPage />} />
       </Routes>
     </div>
   );
