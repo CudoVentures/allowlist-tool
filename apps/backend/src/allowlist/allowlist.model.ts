@@ -20,8 +20,8 @@ export class Allowlist extends Model {
   id: number;
 
   @AllowNull(false)
-  @Column
-  admin: string;
+  @Column({ type: DataType.ARRAY(DataType.STRING) })
+  admins: string[];
 
   @AllowNull(false)
   @Column

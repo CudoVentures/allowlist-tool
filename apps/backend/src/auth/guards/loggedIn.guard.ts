@@ -8,8 +8,7 @@ export class LoggedInGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
     const user = req.session.user;
-    const address = req.query.userAddress;
     console.log(user);
-    return !!user && address === AuthService.userAddress;
+    return !!user;
   }
 }

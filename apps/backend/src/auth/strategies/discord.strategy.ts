@@ -11,17 +11,18 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
       clientID: process.env.App_Discord_Client_ID,
       clientSecret: process.env.App_Discord_Client_Secret,
       callbackURL: process.env.App_Auth_Callback_Url,
-      scope: ['identify', 'email', 'guilds', 'guilds.members.read', 'bot'],
+      scope: ['identify', 'email', 'guilds', 'guilds.members.read'],
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken, refreshToken, profile): Promise<User> {
-    const user = await this.authService.validateUser({
-      discord_access_token: accessToken,
-      discord_refresh_token: refreshToken,
-      discord_profile_id: profile.id,
-      discord_profile_username: `${profile.username}#${profile.discriminator}`,
-    });
+  async validate(req, accessToken, refreshToken, profile): Promise<User> {
+    const user = await this.authService.validateDiscordUser(
+      req,
+      accessToken,
+      refreshToken,
+      profile,
+    );
 
     if (!user) {
       throw new UnauthorizedException();

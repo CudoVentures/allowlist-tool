@@ -8,11 +8,7 @@ function MyAllowlistsPage() {
   useEffect(() => {
     (async () => {
       const url = '/api/v1/allowlist';
-      const userAddress = window.localStorage
-        .getItem('addr')
-        .split('"')
-        .join('');
-      const res = await axios.get(url, { params: { userAddress } });
+      const res = await axios.get(url);
       setAllowlists(res.data);
     })();
   }, []);

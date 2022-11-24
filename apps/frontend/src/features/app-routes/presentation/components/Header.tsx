@@ -29,9 +29,7 @@ const Header = ({ walletStore }) => {
         JSON.stringify(walletStore.getAddress()),
       );
       const url = 'api/v1/user';
-      const res = await axios.get(url, {
-        params: { userAddress: walletStore.getAddress() },
-      });
+      const res = await axios.get(url);
       setUser({
         twitterUsername: res.data.twitter_profile_username,
         discordUsername: res.data.discord_profile_username,
@@ -54,11 +52,8 @@ const Header = ({ walletStore }) => {
 
     try {
       await walletStore.connectKeplr();
-      const userAddress = walletStore.getAddress();
       const url = 'api/v1/auth/login';
-      await axios.get(url, {
-        params: { userAddress },
-      });
+      await axios.get(url);
       setIsConnected(true);
     } catch (error) {
       await walletStore.disconnect();

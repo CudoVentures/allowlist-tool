@@ -52,11 +52,7 @@ const CreateAllowlistForm = () => {
       data['server_role'] = serverRole;
     }
 
-    const userAddress = window.localStorage.getItem('addr').split('"').join('');
-    console.log(userAddress);
-    const res = await axios.post(url, data, {
-      params: { userAddress },
-    });
+    const res = await axios.post(url, data);
     console.log(res);
   };
 

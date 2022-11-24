@@ -7,11 +7,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      address: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-      },
       twitter_profile_id: {
         type: Sequelize.STRING,
         unique: true,

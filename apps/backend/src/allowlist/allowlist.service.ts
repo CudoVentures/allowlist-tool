@@ -20,21 +20,15 @@ export class AllowlistService {
     return this.allowlistModel.findAll();
   }
 
-  async findByAdmin(id: number): Promise<Allowlist[]> {
-    return this.allowlistModel.findAll({
-      where: {
-        admin: id,
-      },
-    });
+  async findByAdmin(admin: string): Promise<Allowlist[]> {
+    const allowlists = await this.allowlistModel.findAll();
+    return allowlists.filter((allowlist) => allowlist.admins.includes(admin));
   }
 
-  async createOne(
-    createAllowlistDTO: CreateAllowlistDto,
-    admin: string,
-  ): Promise<Allowlist> {
+  async createOne(createAllowlistDTO: CreateAllowlistDto): Promise<Allowlist> {
     return this.allowlistModel.create({
       ...createAllowlistDTO,
-      admin,
+      admins: [createAllowlistDTO.address],
     });
   }
 
@@ -64,9 +58,13 @@ export class AllowlistService {
     return updated;
   }
 
-  async joinAllowlist(allowlistId: number, userAaddress: string) {
+  async joinAllowlist(
+    allowlistId: number,
+    userId: number,
+    userAddress: string,
+  ) {
     const allowlist = await this.findOne(allowlistId);
-    const user = await this.userSerivice.findByAddress(userAaddress);
+    const user = await this.userSerivice.findOne(userId);
 
     if (allowlist.twitter_account) {
       const followAcc = this.followsAcc(
@@ -99,7 +97,7 @@ export class AllowlistService {
       }
     }
 
-    return this.addToAllowlist(allowlistId, userAaddress);
+    return this.addToAllowlist(allowlistId, userAddress);
   }
 
   private async followsAcc(
@@ -194,7 +192,6 @@ export class AllowlistService {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const botToken = '';
     const guildRolseURL = `https://discord.com/api//guilds/${guild.id}/roles`;
     const guildRoleRes = await axios.get(guildRolseURL, {
       headers: { Authorization: process.env.App_Discord_Bot_Token },

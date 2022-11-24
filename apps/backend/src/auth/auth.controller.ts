@@ -9,12 +9,6 @@ import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Get('login')
-  async login(@Req() req, @Res() res) {
-    await this.authService.login(req.query.userAddress);
-    res.send(200);
-  }
-
   @Get('discord/login')
   @UseGuards(DiscordAuthGuard)
   async discordLogin(@Req() req, @Res() res) {}
