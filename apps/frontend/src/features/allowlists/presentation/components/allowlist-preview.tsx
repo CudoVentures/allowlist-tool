@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const AllowlistPreview = (props) => {
   return (
     <div style={{ padding: '0 5% 0 5%', height: '100%' }}>
-      <Link to={`/allowlist/${props.id}`}>
+      <Link to={`/${props.id}`}>
         <h1>{props.name}</h1>
       </Link>
       {props.description && <p>{props.description}</p>}

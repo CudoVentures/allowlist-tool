@@ -24,6 +24,10 @@ const Header = ({ walletStore }) => {
         return;
       }
 
+      window.localStorage.setItem(
+        'addr',
+        JSON.stringify(walletStore.getAddress()),
+      );
       const url = 'api/v1/user';
       const res = await axios.get(url, {
         params: { userAddress: walletStore.getAddress() },
@@ -56,10 +60,6 @@ const Header = ({ walletStore }) => {
         params: { userAddress },
       });
       setIsConnected(true);
-      window.localStorage.setItem(
-        'addr',
-        JSON.stringify(walletStore.getAddress()),
-      );
     } catch (error) {
       await walletStore.disconnect();
       console.log(error);
@@ -74,7 +74,7 @@ const Header = ({ walletStore }) => {
         justifyContent: 'flex-end',
         alignItems: 'center',
         gap: '1rem',
-        padding: '1rem',
+        paddingTop: '1rem',
       }}
     >
       {isConnected && (

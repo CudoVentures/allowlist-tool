@@ -38,6 +38,12 @@ export class AllowlistController {
     return this.allowlistService.findOne(id);
   }
 
+  @Post('join/:id')
+  @UseGuards(LoggedInGuard)
+  async join(@Request() req, @Param('id', ParseIntPipe) id: number) {
+    return this.allowlistService.joinAllowlist(id, req.query.userAddress);
+  }
+
   @Post()
   @UseGuards(LoggedInGuard)
   async create(

@@ -6,6 +6,7 @@ import {
   PrimaryKey,
   Unique,
   AutoIncrement,
+  DataType,
 } from 'sequelize-typescript';
 @Table({
   freezeTableName: true,
@@ -53,4 +54,8 @@ export class Allowlist extends Model {
   @AllowNull(false)
   @Column
   cosmos_chain_id: string;
+
+  @AllowNull(false)
+  @Column({ type: DataType.ARRAY(DataType.STRING) })
+  users: string[];
 }
