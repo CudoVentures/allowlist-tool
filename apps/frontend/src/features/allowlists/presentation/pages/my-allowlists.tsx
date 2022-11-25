@@ -1,14 +1,19 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Allowlist from '../components/allowlist-preview';
+import Allowlist from '../components/allowlist';
 
-function MyAllowlistsPage() {
+function MyAllowlistsPage({ walletStore }) {
   const [allowlists, setAllowlists] = useState([]);
 
   useEffect(() => {
     (async () => {
+      const address = window.localStorage.getItem('addr').split('"').join('');
+      if (!address) {
+        return;
+      }
+
       const url = '/api/v1/allowlist';
-      const res = await axios.get(url);
+      const res = await axios.get(url, { params: { admin: address } });
       setAllowlists(res.data);
     })();
   }, []);
@@ -22,6 +27,7 @@ function MyAllowlistsPage() {
             key={allowlist.id}
             {...allowlist}
             isAdmin={true}
+            walletStore={walletStore}
           ></Allowlist>
         );
       })}

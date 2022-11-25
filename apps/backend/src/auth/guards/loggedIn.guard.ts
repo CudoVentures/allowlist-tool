@@ -8,7 +8,6 @@ export class LoggedInGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
     const req = context.switchToHttp().getRequest();
     const user = req.session.user;
-    console.log(user);
     return !!user;
   }
 }

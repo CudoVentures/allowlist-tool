@@ -1,14 +1,16 @@
+import { CHAIN_DETAILS } from '../../../../core/utilities/Constants';
 import axios from 'axios';
 import React, { useState } from 'react';
+import ProjectUtils from '../../../../core/utilities/ProjectUtils';
 
-const CreateAllowlistForm = () => {
+const CreateAllowlistForm = ({ walletStore }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [twitterAcc, setTwitterAcc] = useState('');
   const [tweet, setTweet] = useState('');
   const [discordServer, setDiscordServer] = useState('');
   const [serverRole, setServerRole] = useState('');
-  const [chainId, setChainId] = useState(0);
+  const [projectChainId, setChainId] = useState(0);
   const [endDate, setEndDate] = useState(0 as unknown as Date);
 
   const onChange = (e, stateFunc) => {
@@ -20,7 +22,7 @@ const CreateAllowlistForm = () => {
       return;
     }
 
-    if (!chainId) {
+    if (!projectChainId) {
       return;
     }
 
@@ -29,9 +31,9 @@ const CreateAllowlistForm = () => {
     }
 
     const url = `/api/v1/allowlist`;
-    const data = {
+    let data = {
       name,
-      cosmos_chain_id: chainId,
+      cosmos_chain_id: projectChainId,
       end_date: endDate,
     };
 
@@ -52,8 +54,19 @@ const CreateAllowlistForm = () => {
       data['server_role'] = serverRole;
     }
 
-    const res = await axios.post(url, data);
-    console.log(res);
+    const signData = await ProjectUtils.signMessage(
+      CHAIN_DETAILS.RPC_ADDRESS[walletStore.selectedNetwork],
+      walletStore.ledger.offlineSigner,
+      walletStore.getAddress(),
+    );
+
+    data = { ...data, ...signData };
+    try {
+      await axios.post(url, data);
+      alert('success');
+    } catch (ex) {
+      console.error(ex);
+    }
   };
 
   return (
@@ -117,7 +130,7 @@ const CreateAllowlistForm = () => {
           style={{ width: '10%' }}
           type={'text'}
           placeholder="Cosmos chain id"
-          value={chainId || ''}
+          value={projectChainId || ''}
           onChange={(e) => onChange(e, setChainId)}
         ></input>
         <br></br>

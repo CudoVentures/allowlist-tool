@@ -55,7 +55,7 @@ export class Allowlist extends Model {
   @Column
   cosmos_chain_id: string;
 
-  @AllowNull(false)
+  @AllowNull(true)
   @Column({ type: DataType.ARRAY(DataType.STRING) })
   users: string[];
 }
