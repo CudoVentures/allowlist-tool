@@ -7,16 +7,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      admin: {
-        type: Sequelize.INTEGER,
+      admins: {
         allowNull: false,
-        references: {
-          model: {
-            tableName: 'users',
-            schema: 'public',
-          },
-          key: 'id',
-        },
+        type: Sequelize.ARRAY(Sequelize.STRING),
+        defaultValue: [],
       },
       name: {
         type: Sequelize.STRING,
@@ -46,7 +40,7 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING,
       },
-      cosmos_chain_id: {
+      project_chain_id: {
         allowNull: false,
         type: Sequelize.STRING,
       },

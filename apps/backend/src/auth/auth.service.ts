@@ -1,40 +1,62 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { User } from '../user/user.model';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  static userAddress: string;
-
   constructor(private readonly usersService: UserService) {}
 
-  async login(address: string) {
-    if (!address) {
-      throw new BadRequestException();
-    }
+  async validateDiscordUser(
+    req: any,
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+  ): Promise<User> {
+    const data = { ...req.session.user };
+    data['discord_access_token'] = accessToken;
+    data['discord_refresh_token'] = refreshToken;
+    data['discord_profile_id'] = profile.id;
+    data[
+      'discord_profile_username'
+    ] = `${profile.username}#${profile.discriminator}`;
 
-    let user = await this.usersService.findByAddress(address);
+    let user = await this.usersService.findByDiscordId(profile.id);
+
+    if (req.session.user) {
+      return this.usersService.update(req.session.user.id, data);
+    }
 
     if (!user) {
-      user = await this.usersService.create({ address });
+      return this.usersService.create(data);
     }
 
-    AuthService.userAddress = address;
-
-    return user;
+    data['twitter_profile_username'] = null;
+    return this.usersService.update(user.id, data);
   }
 
-  async validateUser(args: any): Promise<any> {
-    let user = await this.usersService.findByAddress(AuthService.userAddress);
+  async validateTwitterUser(
+    req: any,
+    accessToken: string,
+    refreshToken: string,
+    profile: any,
+  ): Promise<User> {
+    const data = { ...req.session.user };
+    data['twitter_access_token'] = accessToken;
+    data['twitter_refresh_token'] = refreshToken;
+    data['twitter_profile_id'] = profile.id;
+    data['twitter_profile_username'] = profile.username;
 
-    if (!user) {
-      user = await this.usersService.create({
-        address: AuthService.userAddress,
-        ...args,
-      });
-    } else {
-      user = await this.usersService.update(AuthService.userAddress, args);
+    let user = await this.usersService.findByTwitterId(profile.id);
+
+    if (req.session.user) {
+      return this.usersService.update(req.session.user.id, data);
     }
 
-    return user;
+    if (!user) {
+      return this.usersService.create(data);
+    }
+
+    data['discord_profile_username'] = null;
+    return this.usersService.update(user.id, data);
   }
 }

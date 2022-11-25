@@ -4,13 +4,14 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import AppRoutes from '../../entities/AppRoutes';
 
 import NotFoundPage from '../../../not-found/presensation/components/NotFoundPage';
-import UiKitPage from '../../../ui-kit/presensation/components/UiKitPage';
 
 import '../styles/app-router.css';
 import CreateAllowlistPage from '../../../allowlists/presentation/pages/create-allowlist';
 import MyAllowlistsPage from '../../../allowlists/presentation/pages/my-allowlists';
 import AllAllowlistsPage from '../../../allowlists/presentation/pages/all-allowlists';
 import Header from './Header';
+import Home from './home';
+import AllowlistPage from '../../../allowlists/presentation/pages/allowlist';
 
 const AppRouter = ({ walletStore }) => {
   const location = useLocation();
@@ -37,7 +38,8 @@ const AppRouter = ({ walletStore }) => {
     >
       <Header walletStore={walletStore} />
       <Routes location={displayLocation}>
-        <Route path={AppRoutes.MAIN} element={<UiKitPage />} />
+        <Route path={AppRoutes.MAIN} element={<Home />} />
+        <Route path={AppRoutes.ALLOWLIST} element={<AllowlistPage />} />
         <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
         <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
         <Route

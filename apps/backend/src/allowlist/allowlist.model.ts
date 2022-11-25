@@ -6,6 +6,7 @@ import {
   PrimaryKey,
   Unique,
   AutoIncrement,
+  DataType,
 } from 'sequelize-typescript';
 @Table({
   freezeTableName: true,
@@ -19,8 +20,8 @@ export class Allowlist extends Model {
   id: number;
 
   @AllowNull(false)
-  @Column
-  admin: string;
+  @Column({ type: DataType.ARRAY(DataType.STRING) })
+  admins: string[];
 
   @AllowNull(false)
   @Column
@@ -53,4 +54,8 @@ export class Allowlist extends Model {
   @AllowNull(false)
   @Column
   cosmos_chain_id: string;
+
+  @AllowNull(false)
+  @Column({ type: DataType.ARRAY(DataType.STRING) })
+  users: string[];
 }

@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { LoggedInGuard } from '../../auth/guards/loggedIn.guard';
 import { Allowlist } from '../allowlist.model';
 import { AllowlistService } from '../allowlist.service';
+import { verifyNonceMsgSigner } from 'cudosjs';
 
 @Injectable()
 export class IsAdminGuard extends LoggedInGuard implements CanActivate {
@@ -14,16 +15,14 @@ export class IsAdminGuard extends LoggedInGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { session, params } = request;
+    const { session, params, body } = request;
 
-    console.log(session, params);
-    if (!session || !params) return false;
+    if (!session || !params || body) return false;
 
-    const userId = session.user.id;
     const allowlistId = parseInt(params.id);
 
     return this.allowlistService
       .findOne(allowlistId)
-      .then((allowlist: Allowlist) => allowlist.admin == userId);
+      .then((allowlist: Allowlist) => allowlist.admins.includes(body.address));
   }
 }

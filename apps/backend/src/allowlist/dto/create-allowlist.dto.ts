@@ -6,8 +6,9 @@ import {
   IsDateString,
   IsNumberString,
 } from 'class-validator';
+import { SignedMessageDto } from './signed-message.dto';
 
-export class CreateAllowlistDto {
+export class CreateAllowlistDto extends SignedMessageDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ required: true })
@@ -41,7 +42,7 @@ export class CreateAllowlistDto {
   @IsNumberString()
   @IsOptional()
   @ApiProperty({ required: true })
-  chainId: number;
+  project_chain_id: number;
 
   @IsDateString()
   @IsNotEmpty()

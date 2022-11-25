@@ -25,16 +25,17 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
           'Basic ' +
           Buffer.from(`${clientID}:${clientSecret}`).toString('base64'),
       },
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken, refreshToken, profile): Promise<User> {
-    const user = await this.authService.validateUser({
-      twitter_access_token: accessToken,
-      twitter_refresh_token: refreshToken,
-      twitter_profile_id: profile.id,
-      twitter_profile_username: profile.username,
-    });
+  async validate(req, accessToken, refreshToken, profile): Promise<User> {
+    const user = await this.authService.validateTwitterUser(
+      req,
+      accessToken,
+      refreshToken,
+      profile,
+    );
 
     if (!user) {
       throw new UnauthorizedException();
