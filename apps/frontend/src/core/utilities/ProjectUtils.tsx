@@ -39,14 +39,14 @@ export default class ProjectUtils {
   }
 
   static downloadUrl(url: string, filename = S.Strings.EMPTY) {
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = filename;
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    const hyperlink = document.createElement('a');
+    hyperlink.style.display = 'none';
+    hyperlink.href = url;
+    hyperlink.download = filename;
+    hyperlink.target = '_blank';
+    document.body.appendChild(hyperlink);
+    hyperlink.click();
+    document.body.removeChild(hyperlink);
   }
 
   static makeUrl(
@@ -121,13 +121,13 @@ export default class ProjectUtils {
       return;
     }
 
-    const a = document.createElement('a');
-    a.href = url;
-    a.target = '_blank';
-    a.rel = 'noopener noreferrer';
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
+    const hyperlink = document.createElement('a');
+    hyperlink.href = url;
+    hyperlink.target = '_blank';
+    hyperlink.rel = 'noopener noreferrer';
+    hyperlink.style.display = 'none';
+    document.body.appendChild(hyperlink);
+    hyperlink.click();
   }
 
   static stripHtml(html: string, node: HTMLElement) {
