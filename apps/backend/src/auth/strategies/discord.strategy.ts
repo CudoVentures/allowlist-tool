@@ -8,7 +8,7 @@ import { User } from '../../user/user.model';
 export class DiscordStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super({
-      clientID: process.env.App_Discord_Client_ID,
+      clientID: process.env.REACT_APP_DISCORD_CLIENT_ID,
       clientSecret: process.env.App_Discord_Client_Secret,
       callbackURL: process.env.App_Auth_Callback_Url,
       scope: ['identify', 'email', 'guilds', 'guilds.members.read'],
