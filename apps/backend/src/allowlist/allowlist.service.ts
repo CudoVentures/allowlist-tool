@@ -8,8 +8,6 @@ import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 
 @Injectable()
 export class AllowlistService {
-  private bearerToken: string;
-
   constructor(
     @InjectModel(Allowlist)
     private allowlistModel: typeof Allowlist,
@@ -50,6 +48,11 @@ export class AllowlistService {
 
   private async addToAllowlist(id: number, address: string) {
     const allowlist = await this.findOne(id);
+
+    if (allowlist.users.includes(address)) {
+      return allowlist;
+    }
+
     const updatedList = allowlist.users.concat([address]);
     const [count, [updated]] = await this.allowlistModel.update(
       { users: updatedList },
@@ -64,6 +67,13 @@ export class AllowlistService {
     userAddress: string,
   ) {
     const allowlist = await this.findOne(allowlistId);
+
+    const now = Math.floor(new Date().getTime() / 1000);
+    const endDate = Math.floor(allowlist.end_date.getTime() / 1000);
+    if (endDate < now) {
+      throw new BadRequestException();
+    }
+
     const user = await this.userSerivice.findOne(userId);
 
     if (allowlist.twitter_account) {
@@ -78,8 +88,11 @@ export class AllowlistService {
 
     if (allowlist.tweet) {
       const tweetId = allowlist.tweet.split('/').at(-1).split('?')[0];
-      const liked = this.likedTweet(tweetId, user.twitter_profile_id);
-      const retweeted = this.retweeted(tweetId, user.twitter_profile_username);
+      const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
+      const retweeted = await this.retweeted(
+        user.twitter_profile_username,
+        tweetId,
+      );
       if (!liked && !retweeted) {
         throw new BadRequestException();
       }
@@ -102,71 +115,61 @@ export class AllowlistService {
 
   private async followsAcc(
     accUsername: string,
-    userTwitterId: string,
+    twitterId: string,
   ): Promise<boolean> {
-    const url = `https://api.twitter.com/2/users/${userTwitterId}/following`;
-    let accounts = [];
-
-    let res;
-    while (true) {
-      res = await axios.get(url, {
-        headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-        params: { max_results: 1000 },
-      });
-      const data = res.data.map((acc) => acc.username);
-      accounts = accounts.concat(data);
-      if (!res.meta.next_token) {
-        break;
-      }
-    }
-
-    return accounts.includes(accUsername);
+    return this.passCheck(
+      `https://api.twitter.com/2/users/${twitterId}/following`,
+      accUsername,
+    );
   }
 
   private async likedTweet(
     tweetId: string,
     twitterId: string,
   ): Promise<boolean> {
-    const url = `https://api.twitter.com/2/users/${twitterId}/liked_tweets`;
-    let likes = [];
-
-    let res;
-    while (true) {
-      res = await axios.get(url, {
-        headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-        params: { max_results: 100 },
-      });
-      const data = res.data.map((tweet) => tweet.id);
-      likes = likes.concat(data);
-      if (!res.meta.next_token) {
-        break;
-      }
-    }
-
-    return likes.includes(tweetId);
+    return this.passCheck(
+      `https://api.twitter.com/2/users/${twitterId}/liked_tweets`,
+      tweetId,
+    );
   }
 
   private async retweeted(
-    tweetId: string,
     twitterUsername: string,
+    tweetId: string,
   ): Promise<boolean> {
-    const url = `https://api.twitter.com/2/users/${tweetId}/liked_tweets`;
-    let retweets = [];
+    return this.passCheck(
+      `https://api.twitter.com/2/tweets/${tweetId}/retweeted_by`,
+      twitterUsername,
+    );
+  }
+
+  private async passCheck(url, target) {
+    let arr = [];
 
     let res;
-    while (true) {
+    let next_token;
+
+    do {
+      const params = { max_results: 100 };
+      if (next_token) {
+        params['pagination_token'] = next_token;
+      }
+
       res = await axios.get(url, {
         headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-        params: { max_results: 100 },
+        params,
       });
-      const data = res.data.map((tweet) => tweet.id);
-      retweets = retweets.concat(data);
-      if (!res.meta.next_token) {
+
+      if (res.data.meta.result_count === 0 || !res.data.data) {
         break;
       }
-    }
 
-    return retweets.includes(twitterUsername);
+      const data = res.data.data.map((tweet) => tweet.id);
+      arr = arr.concat(data);
+      next_token = res.data.meta.next_token;
+    } while (next_token);
+
+    return arr.includes(target);
   }
 
   private async hasRole(

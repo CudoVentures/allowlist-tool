@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Allowlist from '../components/allowlist';
 import { useParams } from 'react-router-dom';
 
-function AllowlistPage() {
+function AllowlistPage({ walletStore }) {
   const { id } = useParams();
   const [allowlist, setAllowlist] = useState({});
 
@@ -19,7 +19,7 @@ function AllowlistPage() {
   }, []);
 
   return Object.keys(allowlist).length ? (
-    <Allowlist {...allowlist} />
+    <Allowlist {...allowlist} walletStore={walletStore} />
   ) : (
     <div></div>
   );

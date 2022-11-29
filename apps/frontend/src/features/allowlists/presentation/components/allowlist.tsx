@@ -1,11 +1,30 @@
+import { CHAIN_DETAILS } from '../../../../core/utilities/Constants';
 import axios from 'axios';
 import React, { useState } from 'react';
+import ProjectUtils from '../../../../core/utilities/ProjectUtils';
 
 const Allowlist = (props) => {
   const end_date = props.end_date.substring(0, 10);
   const [editMode, setEditMode] = useState(false);
   const [description, setDescription] = useState(props.description || '');
   const [endDate, setEndDate] = useState(end_date);
+
+  const signUp = async () => {
+    const url = `/api/v1/allowlist/join/${props.id}`;
+
+    const data = await ProjectUtils.signMessage(
+      CHAIN_DETAILS.RPC_ADDRESS[props.walletStore.selectedNetwork],
+      props.walletStore.ledger.offlineSigner,
+      props.walletStore.getAddress(),
+    );
+
+    try {
+      const res = await axios.post(url, data);
+      alert('success');
+    } catch (ex) {
+      console.error(ex);
+    }
+  };
 
   const onClick = () => {
     if (!editMode) {
@@ -15,7 +34,7 @@ const Allowlist = (props) => {
 
     (async () => {
       const url = `/api/v1/allowlist/${props.id}`;
-      const data = {};
+      let data = {};
 
       if (description && description !== props.description) {
         data['description'] = description;
@@ -31,6 +50,14 @@ const Allowlist = (props) => {
       }
 
       try {
+        const signData = await ProjectUtils.signMessage(
+          CHAIN_DETAILS.RPC_ADDRESS[props.walletStore.selectedNetwork],
+          props.walletStore.ledger.offlineSigner,
+          props.walletStore.getAddress(),
+        );
+
+        data = { ...data, ...signData };
+
         const res = await axios.put(url, data);
 
         if (res.data.description) {
@@ -40,8 +67,8 @@ const Allowlist = (props) => {
         if (res.data.end_date) {
           setEndDate(res.data.end_date.substring(0, 10));
         }
-      } catch (error) {
-        console.log(error);
+      } catch (ex) {
+        console.error(ex);
       } finally {
         setEditMode(false);
       }
@@ -86,7 +113,7 @@ const Allowlist = (props) => {
         )}
         {props.tweet && (
           <li>
-            Like/Retweet/Comment{' '}
+            Like/Retweet{' '}
             <h5>
               <a href={props.tweet}>this tweet</a>
             </h5>
@@ -105,6 +132,7 @@ const Allowlist = (props) => {
       {props.isAdmin && (
         <button onClick={onClick}>{editMode ? 'Save' : 'Edit'}</button>
       )}
+      {!props.isAdmin && <button onClick={() => signUp()}>Sign up</button>}
       <hr></hr>
     </div>
   );

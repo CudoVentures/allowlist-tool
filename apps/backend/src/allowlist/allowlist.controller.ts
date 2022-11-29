@@ -30,7 +30,7 @@ export class AllowlistController {
   }
 
   @Get()
-  @UseGuards(LoggedInGuard)
+  @UseGuards()
   async findByAdmin(@Request() req): Promise<Allowlist[]> {
     return this.allowlistService.findByAdmin(req.query.admin);
   }

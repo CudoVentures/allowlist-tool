@@ -39,14 +39,20 @@ const AppRouter = ({ walletStore }) => {
       <Header walletStore={walletStore} />
       <Routes location={displayLocation}>
         <Route path={AppRoutes.MAIN} element={<Home />} />
-        <Route path={AppRoutes.ALLOWLIST} element={<AllowlistPage />} />
+        <Route
+          path={AppRoutes.ALLOWLIST}
+          element={<AllowlistPage walletStore={walletStore} />}
+        />
         <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
         <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
         <Route
           path={AppRoutes.CREATE_ALLOWLIST}
-          element={<CreateAllowlistPage />}
+          element={<CreateAllowlistPage walletStore={walletStore} />}
         />
-        <Route path={AppRoutes.MY_ALLOWLISTS} element={<MyAllowlistsPage />} />
+        <Route
+          path={AppRoutes.MY_ALLOWLISTS}
+          element={<MyAllowlistsPage walletStore={walletStore} />}
+        />
       </Routes>
     </div>
   );

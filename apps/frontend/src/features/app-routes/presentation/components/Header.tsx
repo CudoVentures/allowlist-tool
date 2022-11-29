@@ -55,9 +55,9 @@ const Header = ({ walletStore }) => {
       const url = 'api/v1/auth/login';
       await axios.get(url);
       setIsConnected(true);
-    } catch (error) {
+    } catch (ex) {
       await walletStore.disconnect();
-      console.log(error);
+      console.error(ex);
     }
   };
 
