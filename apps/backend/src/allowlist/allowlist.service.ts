@@ -204,8 +204,6 @@ export class AllowlistService {
       headers: { Authorization: process.env.App_Discord_Bot_Token },
     });
 
-    console.log('here', guildRoleRes.data, role);
-
     const roleId = guildRoleRes.data.find(
       (guildRole) => guildRole.name.toLowerCase() === role.toLowerCase(),
     ).id;
