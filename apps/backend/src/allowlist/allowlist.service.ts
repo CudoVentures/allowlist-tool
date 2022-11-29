@@ -148,7 +148,8 @@ export class AllowlistService {
 
     let res;
     let next_token;
-    while (true) {
+
+    do {
       const params = { max_results: 100 };
       if (next_token) {
         params['pagination_token'] = next_token;
@@ -165,12 +166,8 @@ export class AllowlistService {
 
       const data = res.data.data.map((tweet) => tweet.id);
       arr = arr.concat(data);
-
-      if (!res.data.meta.next_token) {
-        break;
-      }
       next_token = res.data.meta.next_token;
-    }
+    } while (next_token);
 
     return arr.includes(target);
   }

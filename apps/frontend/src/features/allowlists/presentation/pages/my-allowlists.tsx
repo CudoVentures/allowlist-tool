@@ -7,13 +7,16 @@ function MyAllowlistsPage({ walletStore }) {
 
   useEffect(() => {
     (async () => {
-      const address = window.localStorage.getItem('addr').split('"').join('');
-      if (!address) {
+      const userAddress = window.localStorage
+        .getItem('addr')
+        .split('"')
+        .join('');
+      if (!userAddress) {
         return;
       }
 
       const url = '/api/v1/allowlist';
-      const res = await axios.get(url, { params: { admin: address } });
+      const res = await axios.get(url, { params: { admin: userAddress } });
       setAllowlists(res.data);
     })();
   }, []);
