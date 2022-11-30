@@ -5,7 +5,6 @@ import { UserService } from '../user/user.service';
 import { Allowlist } from './allowlist.model';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
-
 @Injectable()
 export class AllowlistService {
   constructor(
@@ -99,12 +98,17 @@ export class AllowlistService {
     }
 
     if (allowlist.discord_server && allowlist.server_role) {
+      const inviteCode = allowlist.discord_server.split('/').pop();
+      const serverId = (
+        await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
+      ).data.guild.id;
+
       const hasRole = await this.hasRole(
-        allowlist.discord_server,
+        serverId,
         allowlist.server_role,
-        user.discord_profile_id,
         user.discord_access_token,
       );
+
       if (!hasRole) {
         throw new BadRequestException();
       }
@@ -173,9 +177,8 @@ export class AllowlistService {
   }
 
   private async hasRole(
-    server: string,
+    serverId: string,
     role: string,
-    discordId,
     accessToken,
   ): Promise<boolean> {
     const userGuildsURL = `https://discord.com/api/users/@me/guilds`;
@@ -184,25 +187,27 @@ export class AllowlistService {
       params: { scope: 'identify' },
     });
 
-    if (userGuildsRes.data.includes(server)) {
+    const guild = userGuildsRes.data.find(
+      (guild) => guild.id.toString() === serverId,
+    );
+    if (!guild) {
       return false;
     }
-
-    const guild = userGuildsRes.data.findOne((guild) => guild.name === server);
 
     const guildMemberURL = `https://discord.com/api/users/@me/guilds/${guild.id}/member`;
     const guildMemberRes = await axios.get(guildMemberURL, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const guildRolseURL = `https://discord.com/api//guilds/${guild.id}/roles`;
-    const guildRoleRes = await axios.get(guildRolseURL, {
+    const guildRolesURL = `https://discord.com/api//guilds/${guild.id}/roles`;
+    const guildRoleRes = await axios.get(guildRolesURL, {
       headers: { Authorization: process.env.App_Discord_Bot_Token },
     });
 
-    const roleId = guildRoleRes.data.findOne(
-      (guildRole) => guildRole.name === role,
-    );
+    const roleId = guildRoleRes.data.find(
+      (guildRole) => guildRole.name.toLowerCase() === role.toLowerCase(),
+    ).id;
+
     if (!roleId) {
       return false;
     }

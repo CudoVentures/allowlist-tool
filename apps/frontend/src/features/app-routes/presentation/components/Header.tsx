@@ -14,6 +14,12 @@ const Header = ({ walletStore }) => {
       if (addr) {
         await walletStore.connectKeplr();
         setIsConnected(true);
+        const url = 'api/v1/user';
+        const res = await axios.get(url);
+        setUser({
+          twitterUsername: res.data.twitter_profile_username,
+          discordUsername: res.data.discord_profile_username,
+        });
       }
     })();
   }, []);
@@ -28,12 +34,6 @@ const Header = ({ walletStore }) => {
         'addr',
         JSON.stringify(walletStore.getAddress()),
       );
-      const url = 'api/v1/user';
-      const res = await axios.get(url);
-      setUser({
-        twitterUsername: res.data.twitter_profile_username,
-        discordUsername: res.data.discord_profile_username,
-      });
     })();
   }, [isConnected]);
 

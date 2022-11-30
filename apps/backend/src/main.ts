@@ -10,44 +10,46 @@ import passport from 'passport';
 declare const module: any;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
-    app.setGlobalPrefix('api')
-    app.enableVersioning({
-        type: VersioningType.URI,
-        defaultVersion: '1',
-    })
+  app.enableCors();
 
-    app.use(
-        session({
-            cookie: {
-                maxAge: 3600000 * 24
-            },
-          secret: 'my-secret',
-          resave: false,
-          saveUninitialized: false,
-        }),
-      );
+  app.setGlobalPrefix('api');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
 
-      app.use(passport.initialize())
-      app.use(passport.session())
+  app.use(
+    session({
+      cookie: {
+        maxAge: 3600000 * 24,
+      },
+      secret: 'my-secret',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
 
-    const config = new DocumentBuilder()
-        .setTitle('Cudos allowlist tool')
-        .setDescription('Cudos allowlist tool descrition')
-        .setVersion('1.0')
-        .build();
-    const document = SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, document);
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-    const configService = app.get(ConfigService);
-    const appPort = configService.get < number >('APP_PORT');
-    await app.listen(appPort);
+  const config = new DocumentBuilder()
+    .setTitle('Cudos allowlist tool')
+    .setDescription('Cudos allowlist tool descrition')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
 
-    if (module.hot) {
-        module.hot.accept();
-        module.hot.dispose(() => app.close());
-    }
+  const configService = app.get(ConfigService);
+  const appPort = configService.get<number>('APP_PORT');
+  await app.listen(appPort);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 
 bootstrap();

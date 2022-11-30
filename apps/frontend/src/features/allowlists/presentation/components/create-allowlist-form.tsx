@@ -2,6 +2,7 @@ import { CHAIN_DETAILS } from '../../../../core/utilities/Constants';
 import axios from 'axios';
 import React, { useState } from 'react';
 import ProjectUtils from '../../../../core/utilities/ProjectUtils';
+declare let Config;
 
 const CreateAllowlistForm = ({ walletStore }) => {
   const [name, setName] = useState('');
@@ -15,6 +16,12 @@ const CreateAllowlistForm = ({ walletStore }) => {
 
   const onChange = (e, stateFunc) => {
     stateFunc(e.target.value);
+  };
+
+  const addDiscordBot = () => {
+    window.open(
+      `https://discord.com/api/oauth2/authorize?client_id=${Config.REACT_APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
+    );
   };
 
   const createAllowlist = async () => {
@@ -50,7 +57,7 @@ const CreateAllowlistForm = ({ walletStore }) => {
     }
 
     if (discordServer && serverRole) {
-      data['discord_server'] = twitterAcc;
+      data['discord_server'] = discordServer;
       data['server_role'] = serverRole;
     }
 
@@ -111,7 +118,7 @@ const CreateAllowlistForm = ({ walletStore }) => {
         <input
           style={{ width: '20%' }}
           type={'text'}
-          placeholder="Discord server(optional)"
+          placeholder="Discord invite link(optional)"
           value={discordServer}
           onChange={(e) => onChange(e, setDiscordServer)}
           required={false}
@@ -142,6 +149,10 @@ const CreateAllowlistForm = ({ walletStore }) => {
           onChange={(e) => onChange(e, setEndDate)}
         ></input>
       </form>
+      <button type="submit" onClick={addDiscordBot}>
+        Add allowlist-bot to your server
+      </button>
+      <br></br>
       <button type="submit" onClick={createAllowlist}>
         Create allowlist
       </button>

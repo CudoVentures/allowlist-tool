@@ -19,7 +19,7 @@ const Allowlist = (props) => {
     );
 
     try {
-      const res = await axios.post(url, data);
+      await axios.post(url, data);
       alert('success');
     } catch (ex) {
       console.error(ex);
@@ -105,7 +105,10 @@ const Allowlist = (props) => {
           <li>
             Follow
             <h5>
-              <a href={`https://www.twitter.com/${props.twitter_account}`}>
+              <a
+                href={`https://www.twitter.com/${props.twitter_account}`}
+                target="_blank"
+              >
                 {props.twitter_account}
               </a>
             </h5>
@@ -115,7 +118,9 @@ const Allowlist = (props) => {
           <li>
             Like/Retweet{' '}
             <h5>
-              <a href={props.tweet}>this tweet</a>
+              <a href={props.tweet} target="_blank">
+                this tweet
+              </a>
             </h5>
           </li>
         )}
@@ -123,7 +128,9 @@ const Allowlist = (props) => {
           <li>
             Join
             <h5>
-              <a href={props.discord_server}>this discord server</a>
+              <a href={props.discord_server} target="_blank">
+                this discord server
+              </a>
             </h5>
             and get {props.server_role} role
           </li>
