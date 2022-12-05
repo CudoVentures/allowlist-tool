@@ -1,5 +1,4 @@
 import { SigningStargateClient, StdSignature } from 'cudosjs';
-import { CHAIN_DETAILS } from './Constants';
 import S from './Main';
 
 const QUERY_PATTERN = '?p=';
@@ -158,26 +157,28 @@ export default class ProjectUtils {
     });
   }
 
-  static async signMessage(
-    endpoint,
-    signer,
-    address,
-  ): Promise<{
-    signature: StdSignature;
-    chainId: string;
-    sequence: number;
-    accountNumber: number;
-    nonce: number;
-    address: string;
-  }> {
-    const client = await SigningStargateClient.connectWithSigner(
-      endpoint,
-      signer,
-    );
+  static async getKeplr(): Promise<any> {
+    if (window.keplr) {
+      return window.keplr;
+    }
 
-    const nonce = 0;
-    const res = await client.signNonceMsg(address, nonce);
-    return { ...res, nonce, address };
+    if (document.readyState === 'complete') {
+      return window.keplr;
+    }
+
+    return new Promise((resolve) => {
+      const documentStateChange = (event: Event) => {
+        if (
+          event.target &&
+          (event.target as Document).readyState === 'complete'
+        ) {
+          resolve(window.keplr);
+          document.removeEventListener('readystatechange', documentStateChange);
+        }
+      };
+
+      document.addEventListener('readystatechange', documentStateChange);
+    });
   }
 }
 

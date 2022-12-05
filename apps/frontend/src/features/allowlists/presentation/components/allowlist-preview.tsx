@@ -9,7 +9,7 @@ const AllowlistPreview = (props) => {
       </Link>
       {props.description && <p>{props.description}</p>}
       <h3>End date: {props.end_date}</h3>
-      <h3>Cosmos chain id: {props.cosmos_chain_id}</h3>
+      <h3>Cosmos chain id: {props.project_chain_id}</h3>
       <hr></hr>
     </div>
   );

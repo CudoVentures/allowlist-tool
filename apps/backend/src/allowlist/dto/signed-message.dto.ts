@@ -3,43 +3,44 @@ import {
   IsString,
   IsNotEmpty,
   IsOptional,
-  IsNumberString,
+  IsObject,
+  IsNumber,
 } from 'class-validator';
 
 export class SignedMessageDto {
+  @IsObject()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty()
+  signature: Object;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty()
+  sequence: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty()
+  account_number: number;
+
+  @IsNumber()
+  @IsNotEmpty()
+  @IsOptional()
+  @ApiProperty()
+  chain_id: number;
+
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   @ApiProperty()
-  signature: string;
+  message: string;
 
   @IsString()
   @IsNotEmpty()
   @IsOptional()
   @ApiProperty()
   address: string;
-
-  @IsNumberString()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
-  nonce: number;
-
-  @IsNumberString()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
-  sequence: number;
-
-  @IsNumberString()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
-  accountNumber: number;
-
-  @IsString()
-  @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
-  chainId: string;
 }

@@ -57,6 +57,7 @@ export class AllowlistService {
       { users: updatedList },
       { where: { id }, returning: true },
     );
+
     return updated;
   }
 
@@ -74,6 +75,10 @@ export class AllowlistService {
     }
 
     const user = await this.userSerivice.findOne(userId);
+
+    if (user.address && user.address !== userAddress) {
+      throw new BadRequestException();
+    }
 
     if (allowlist.twitter_account) {
       const followAcc = this.followsAcc(
@@ -112,6 +117,10 @@ export class AllowlistService {
       if (!hasRole) {
         throw new BadRequestException();
       }
+    }
+
+    if (!user.address) {
+      await this.userSerivice.update(user.id, { address: userAddress });
     }
 
     return this.addToAllowlist(allowlistId, userAddress);

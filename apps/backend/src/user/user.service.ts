@@ -9,6 +9,10 @@ export class UserService {
     private userModel: typeof User,
   ) {}
 
+  async findByAddress(address: string): Promise<User> {
+    return this.userModel.findOne({ where: { address } });
+  }
+
   async findByDiscordId(id: number): Promise<User> {
     return this.userModel.findOne({ where: { discord_profile_id: id } });
   }

@@ -1,5 +1,13 @@
 import { action, makeAutoObservable, makeObservable, observable } from 'mobx';
-import { KeplrWallet, Ledger } from 'cudosjs';
+import { KeplrWallet } from 'cudosjs/src/ledgers/KeplrWallet';
+import { Ledger } from 'cudosjs/src/ledgers/Ledger';
+import { SigningStargateClient } from 'cudosjs/src/stargate';
+import {
+  // KeplrWallet,
+  // Ledger,
+  // CudosSigningStargateClient,
+  StdSignature,
+} from 'cudosjs';
 import S from '../../../../core/utilities/Main';
 import { CHAIN_DETAILS } from '../../../../core/utilities/Constants';
 import BigNumber from 'bignumber.js';
@@ -137,6 +145,23 @@ export default class WalletStore {
   onChangeAccount = () => {
     window.location.reload();
   };
+
+  async getClient(): Promise<SigningStargateClient> {
+    return SigningStargateClient.connectWithSigner(
+      CHAIN_DETAILS.RPC_ADDRESS[this.selectedNetwork],
+      this.ledger.offlineSigner,
+    );
+  }
+
+  async signNonceMsg(message: string): Promise<{
+    signature: StdSignature;
+    chainId: string;
+    sequence: number;
+    accountNumber: number;
+  }> {
+    const client = await this.getClient();
+    return client.signNonceMsg(this.getAddress(), message);
+  }
 
   // async getSignerData() {
   //     const signer = this.ledger.offlineSigner;

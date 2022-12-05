@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { LoggedInGuard } from '../../auth/guards/loggedIn.guard';
 import { Allowlist } from '../allowlist.model';
 import { AllowlistService } from '../allowlist.service';

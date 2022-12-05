@@ -53,7 +53,7 @@ export class Allowlist extends Model {
 
   @AllowNull(false)
   @Column
-  cosmos_chain_id: string;
+  project_chain_id: string;
 
   @AllowNull(true)
   @Column({ type: DataType.ARRAY(DataType.STRING) })
