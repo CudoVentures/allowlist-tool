@@ -16,7 +16,7 @@ function MyAllowlistsPage({ walletStore }) {
       }
 
       const url = '/api/v1/allowlist';
-      const res = await axios.get(url, { params: { admin: userAddress } });
+      const res = await axios.get(url);
       setAllowlists(res.data);
     })();
   }, []);

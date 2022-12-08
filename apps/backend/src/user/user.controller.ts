@@ -12,6 +12,6 @@ export class UserController {
   @Get()
   @UseGuards(LoggedInGuard)
   async getUser(@Req() req): Promise<User> {
-    return this.userService.findOne(req.session.user.id);
+    return this.userService.findByAddress(req.session.user.address);
   }
 }

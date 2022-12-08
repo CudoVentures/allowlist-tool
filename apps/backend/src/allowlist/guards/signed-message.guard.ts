@@ -1,14 +1,14 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { verifyNonceMsgSigner } from '/Users/georgitsonev/Desktop/CUDOS/cudosjs/src/utils/nonce';
+import { verifyNonceMsgSigner } from 'cudosjs';
 @Injectable()
 export class SignedMessageGuard implements CanActivate {
   constructor() {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const { body } = request;
+    const { body, session } = request;
 
-    if (!body) return false;
+    if (!body || !session) return false;
 
     return verifyNonceMsgSigner(
       body.signature,

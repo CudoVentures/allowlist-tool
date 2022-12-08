@@ -25,7 +25,7 @@ export class UserService {
     return this.userModel.findByPk(id);
   }
 
-  async create(params: any): Promise<User> {
+  async createUser(params: any): Promise<User> {
     const user = this.userModel.create({
       ...params,
     });

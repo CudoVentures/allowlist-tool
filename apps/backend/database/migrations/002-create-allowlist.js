@@ -7,32 +7,66 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      admins: {
+      admin: {
         allowNull: false,
-        type: Sequelize.ARRAY(Sequelize.STRING),
-        defaultValue: [],
+        type: Sequelize.STRING,
       },
+      users: {
+        allowNull: false,
+        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        defaultValue: [],
+        refences: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+
       name: {
         type: Sequelize.STRING,
         allowNull: false,
+      },
+      url: {
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       description: {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      end_date: {
+      cosmos_chain_id: {
         allowNull: false,
-        type: Sequelize.DATE,
+        type: Sequelize.STRING,
+      },
+      website: {
+        allowNull: true,
+        type: Sequelize.STRING,
       },
       twitter_account: {
         allowNull: true,
         type: Sequelize.STRING,
       },
-      tweet: {
+      discord_url: {
         allowNull: true,
         type: Sequelize.STRING,
       },
-      discord_server: {
+      end_date: {
+        allowNull: false,
+        type: Sequelize.DATE,
+      },
+
+      twitter_account_to_follow: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      tweet_to_like: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      tweet_to_retweet: {
+        allowNull: true,
+        type: Sequelize.STRING,
+      },
+      discord_invite_link: {
         allowNull: true,
         type: Sequelize.STRING,
       },
@@ -40,14 +74,9 @@ module.exports = {
         allowNull: true,
         type: Sequelize.STRING,
       },
-      project_chain_id: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
-      users: {
-        allowNull: false,
-        type: Sequelize.ARRAY(Sequelize.STRING),
-        defaultValue: [],
+      require_email: {
+        allowNull: true,
+        type: Sequelize.BOOLEAN,
       },
       createdAt: {
         allowNull: false,

@@ -25,42 +25,36 @@ export class AllowlistController {
   constructor(private allowlistService: AllowlistService) {}
 
   @Get('all')
-  async findAll(@Request() req): Promise<Allowlist[]> {
+  async findAll(): Promise<Allowlist[]> {
     return this.allowlistService.findAll();
+  }
+
+  @Get(':customId')
+  async findOne(@Param('customId') customId: string): Promise<Allowlist> {
+    return this.allowlistService.findByCustomId(customId);
   }
 
   @Get()
   @UseGuards()
   async findByAdmin(@Request() req): Promise<Allowlist[]> {
-    return this.allowlistService.findByAdmin(req.query.admin);
-  }
-
-  @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number): Promise<Allowlist> {
-    return this.allowlistService.findOne(id);
+    return this.allowlistService.findByAdmin(req.session.user.address);
   }
 
   @Post('join/:id')
   @UseGuards(LoggedInGuard, SignedMessageGuard)
   async join(
-    @Request() req,
     @Param('id', ParseIntPipe) id: number,
     @Body() signedMessageDto: SignedMessageDto,
   ) {
-    return this.allowlistService.joinAllowlist(
-      id,
-      req.session.user.id,
-      signedMessageDto.address,
-    );
+    return this.allowlistService.joinAllowlist(id, signedMessageDto.address);
   }
 
   @Post()
   @UseGuards(LoggedInGuard, SignedMessageGuard)
   async create(
-    @Request() req,
     @Body() createCollectionDto: CreateAllowlistDto,
   ): Promise<Allowlist> {
-    return this.allowlistService.createOne(createCollectionDto);
+    return this.allowlistService.createAllowlist(createCollectionDto);
   }
 
   @UseGuards(IsAdminGuard, SignedMessageGuard)

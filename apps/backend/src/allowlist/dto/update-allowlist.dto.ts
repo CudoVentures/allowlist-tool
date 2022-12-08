@@ -1,15 +1,45 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { IsString, IsOptional, IsDateString } from 'class-validator';
 import { SignedMessageDto } from './signed-message.dto';
 
 export class UpdateAllowlistDto extends SignedMessageDto {
   @IsString()
   @IsOptional()
-  @ApiProperty({ example: 'New description' })
+  @ApiProperty({ required: false })
+  name: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  url: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
   description: string;
 
   @IsString()
   @IsOptional()
-  @ApiProperty({ example: '2022-11-15' })
-  end_time: string;
+  @ApiProperty({ required: false })
+  cosmos_chain_id: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  website: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  twitter_account: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  discord_url: string;
+
+  @IsDateString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  end_date: string;
 }

@@ -1,7 +1,5 @@
-import { CHAIN_DETAILS } from '../../../../core/utilities/Constants';
 import axios from 'axios';
 import React, { useState } from 'react';
-import ProjectUtils from '../../../../core/utilities/ProjectUtils';
 
 const Allowlist = (props) => {
   const end_date = props.end_date.substring(0, 10);
@@ -11,7 +9,6 @@ const Allowlist = (props) => {
 
   const signUp = async () => {
     const userRes = await axios.get(`api/v1/user`);
-    console.log(userRes);
     const data = {};
     if (userRes.data.twitter_access_token) {
       data['twitter_access_token'] = userRes.data.twitter_access_token;
@@ -54,7 +51,6 @@ const Allowlist = (props) => {
     }
 
     (async () => {
-      const url = `/api/v1/allowlist/${props.id}`;
       let data = {};
 
       if (description && description !== props.description) {
@@ -77,11 +73,6 @@ const Allowlist = (props) => {
           await props.walletStore.connectKeplr();
         }
 
-        const network =
-          CHAIN_DETAILS.CHAIN_ID[props.walletStore.selectedNetwork];
-        const userAddress = props.walletStore.getAddress();
-        const keplr = await ProjectUtils.getKeplr();
-
         const messageObj = {};
         if (props.twitter_account || props.tweet) {
           messageObj['twitter_access_token'] =
@@ -93,12 +84,25 @@ const Allowlist = (props) => {
         }
 
         const message = JSON.stringify(messageObj);
-        const signature = (
-          await keplr.signArbitrary(network, userAddress, message)
-        ).signature;
+        const address = props.walletStore.getAddress();
+        const {
+          signature,
+          chainId: chain_id,
+          sequence,
+          accountNumber: account_number,
+        } = await props.walletStore.signNonceMsg(message);
 
-        data = { ...data, signature, message, address: userAddress };
+        data = {
+          ...data,
+          signature,
+          message,
+          address,
+          chain_id,
+          account_number,
+          sequence,
+        };
 
+        const url = `/api/v1/allowlist/${props.id}`;
         const res = await axios.put(url, data);
 
         if (res.data.description) {
