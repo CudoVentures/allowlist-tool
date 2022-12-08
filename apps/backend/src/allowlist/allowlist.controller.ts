@@ -54,7 +54,7 @@ export class AllowlistController {
   async create(
     @Body() createCollectionDto: CreateAllowlistDto,
   ): Promise<Allowlist> {
-    return this.allowlistService.createOne(createCollectionDto);
+    return this.allowlistService.createAllowlist(createCollectionDto);
   }
 
   @UseGuards(IsAdminGuard, SignedMessageGuard)

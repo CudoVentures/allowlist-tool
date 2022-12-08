@@ -24,7 +24,7 @@ export class AuthService {
     let user = await this.usersService.findByAddress(address);
 
     if (!user) {
-      return this.usersService.create({ ...data, address });
+      return this.usersService.createUser({ ...data, address });
     }
 
     return this.usersService.update(user.id, data);
@@ -46,7 +46,7 @@ export class AuthService {
     let user = await this.usersService.findByAddress(address);
 
     if (!user) {
-      return this.usersService.create({ ...data, address });
+      return this.usersService.createUser({ ...data, address });
     }
 
     return this.usersService.update(user.id, data);
