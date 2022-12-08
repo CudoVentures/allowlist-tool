@@ -19,18 +19,33 @@ export class AllowlistService {
 
   async findByAdmin(admin: string): Promise<Allowlist[]> {
     const allowlists = await this.allowlistModel.findAll();
-    return allowlists.filter((allowlist) => allowlist.admins.includes(admin));
+    return allowlists.filter((allowlist) => allowlist.admin === admin);
   }
 
-  async createOne(createAllowlistDTO: CreateAllowlistDto): Promise<Allowlist> {
-    return this.allowlistModel.create({
-      ...createAllowlistDTO,
-      admins: [createAllowlistDTO.address],
-    });
+  async findByCustomId(id: string): Promise<Allowlist> {
+    return this.allowlistModel.findOne({ where: { url: id } });
   }
 
   async findOne(id: number): Promise<Allowlist> {
     return this.allowlistModel.findByPk(id);
+  }
+
+  async createOne(createAllowlistDTO: CreateAllowlistDto): Promise<Allowlist> {
+    const userAddress = createAllowlistDTO.address;
+    let user = await this.userSerivice.findByAddress(userAddress);
+    if (!user) {
+      user = await this.userSerivice.create({ address: userAddress });
+    }
+
+    const duplicate = await this.findByCustomId(createAllowlistDTO.url);
+    if (duplicate) {
+      throw new BadRequestException();
+    }
+
+    return this.allowlistModel.create({
+      ...createAllowlistDTO,
+      admin: userAddress,
+    });
   }
 
   async updateOne(
@@ -45,14 +60,14 @@ export class AllowlistService {
     return allowlist;
   }
 
-  private async addToAllowlist(id: number, address: string) {
+  private async addToAllowlist(id: number, userId: number) {
     const allowlist = await this.findOne(id);
 
-    if (allowlist.users.includes(address)) {
+    if (allowlist.users.includes(userId)) {
       return allowlist;
     }
 
-    const updatedList = allowlist.users.concat([address]);
+    const updatedList = allowlist.users.concat([userId]);
     const [count, [updated]] = await this.allowlistModel.update(
       { users: updatedList },
       { where: { id }, returning: true },
@@ -61,11 +76,7 @@ export class AllowlistService {
     return updated;
   }
 
-  async joinAllowlist(
-    allowlistId: number,
-    userId: number,
-    userAddress: string,
-  ) {
+  async joinAllowlist(allowlistId: number, userAddress: string) {
     const allowlist = await this.findOne(allowlistId);
 
     const now = Math.floor(new Date().getTime() / 1000);
@@ -74,11 +85,7 @@ export class AllowlistService {
       throw new BadRequestException();
     }
 
-    const user = await this.userSerivice.findOne(userId);
-
-    if (user.address && user.address !== userAddress) {
-      throw new BadRequestException();
-    }
+    const user = await this.userSerivice.findByAddress(userAddress);
 
     if (allowlist.twitter_account) {
       const followAcc = this.followsAcc(
@@ -90,20 +97,27 @@ export class AllowlistService {
       }
     }
 
-    if (allowlist.tweet) {
-      const tweetId = allowlist.tweet.split('/').at(-1).split('?')[0];
+    if (allowlist.tweet_to_like) {
+      const tweetId = allowlist.tweet_to_like.split('/').at(-1).split('?')[0];
       const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
-      const retweeted = await this.retweeted(
-        user.twitter_profile_username,
-        tweetId,
-      );
-      if (!liked && !retweeted) {
+      if (!liked) {
         throw new BadRequestException();
       }
     }
 
-    if (allowlist.discord_server && allowlist.server_role) {
-      const inviteCode = allowlist.discord_server.split('/').pop();
+    if (allowlist.tweet_to_retweet) {
+      const tweetId = allowlist.tweet_to_like.split('/').at(-1).split('?')[0];
+      const retweeted = await this.retweeted(
+        user.twitter_profile_username,
+        tweetId,
+      );
+      if (!retweeted) {
+        throw new BadRequestException();
+      }
+    }
+
+    if (allowlist.discord_invite_link && allowlist.server_role) {
+      const inviteCode = allowlist.discord_invite_link.split('/').pop();
       const serverId = (
         await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
       ).data.guild.id;
@@ -119,11 +133,7 @@ export class AllowlistService {
       }
     }
 
-    if (!user.address) {
-      await this.userSerivice.update(user.id, { address: userAddress });
-    }
-
-    return this.addToAllowlist(allowlistId, userAddress);
+    return this.addToAllowlist(allowlistId, user.id);
   }
 
   private async followsAcc(

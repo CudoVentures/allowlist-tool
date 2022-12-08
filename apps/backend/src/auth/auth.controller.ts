@@ -1,17 +1,33 @@
-import { Controller, Req, Res, Get, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Req,
+  Res,
+  Get,
+  UseGuards,
+  BadRequestException,
+} from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  @Get('login')
+  async login(@Req() req, @Res() res) {
+    const address = req.query.address;
+
+    if (!address) {
+      throw new BadRequestException();
+    }
+
+    req.session.user = { address };
+    res.status(200).send();
+  }
 
   @Get('discord/login')
   @UseGuards(DiscordAuthGuard)
-  async discordLogin(@Req() req, @Res() res) {}
+  async discordLogin() {}
 
   @Get('discord/callback')
   @UseGuards(DiscordAuthGuard)
@@ -22,7 +38,7 @@ export class AuthController {
 
   @Get('twitter/login')
   @UseGuards(TwitterAuthGuard)
-  async twitterLogin(@Req() req, @Res() res) {}
+  async twitterLogin() {}
 
   @Get('twitter/callback')
   @UseGuards(TwitterAuthGuard)

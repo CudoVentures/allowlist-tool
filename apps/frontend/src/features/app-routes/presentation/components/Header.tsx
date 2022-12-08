@@ -8,14 +8,24 @@ const Header = ({ walletStore }) => {
     discordUsername: '',
   });
 
+  const login = async () => {
+    await walletStore.connectKeplr();
+    const userAddress = walletStore.getAddress();
+    window.localStorage.setItem('addr', JSON.stringify(userAddress));
+    await axios.get('api/v1/auth/login', {
+      params: { address: userAddress },
+    });
+    setIsConnected(true);
+  };
+
   useEffect(() => {
     (async () => {
       const addr = window.localStorage.getItem('addr');
       if (addr) {
         await walletStore.connectKeplr();
         setIsConnected(true);
-        const url = 'api/v1/user';
-        const res = await axios.get(url);
+        await login();
+        const res = await axios.get('api/v1/user');
         setUser({
           twitterUsername: res.data.twitter_profile_username,
           discordUsername: res.data.discord_profile_username,
@@ -23,19 +33,6 @@ const Header = ({ walletStore }) => {
       }
     })();
   }, []);
-
-  useEffect(() => {
-    (async () => {
-      if (!isConnected) {
-        return;
-      }
-
-      window.localStorage.setItem(
-        'addr',
-        JSON.stringify(walletStore.getAddress()),
-      );
-    })();
-  }, [isConnected]);
 
   const onClickAuth = async (service: string) => {
     const url = `api/v1/auth/${service}/login`;
@@ -50,15 +47,7 @@ const Header = ({ walletStore }) => {
       return;
     }
 
-    try {
-      await walletStore.connectKeplr();
-      const url = 'api/v1/auth/login';
-      await axios.get(url);
-      setIsConnected(true);
-    } catch (ex) {
-      await walletStore.disconnect();
-      console.error(ex);
-    }
+    await login();
   };
 
   return (

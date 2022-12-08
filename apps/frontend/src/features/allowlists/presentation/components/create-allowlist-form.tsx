@@ -1,12 +1,11 @@
-import { CHAIN_DETAILS } from '../../../../core/utilities/Constants';
 import axios from 'axios';
 import React, { useState } from 'react';
-import ProjectUtils from '../../../../core/utilities/ProjectUtils';
 declare let Config;
 
 const CreateAllowlistForm = ({ walletStore }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [customUrl, setCustomUrl] = useState('');
   const [twitterAcc, setTwitterAcc] = useState('');
   const [tweet, setTweet] = useState('');
   const [discordServer, setDiscordServer] = useState('');
@@ -29,6 +28,10 @@ const CreateAllowlistForm = ({ walletStore }) => {
       return;
     }
 
+    if (!customUrl) {
+      return;
+    }
+
     if (!projectChainId) {
       return;
     }
@@ -40,7 +43,8 @@ const CreateAllowlistForm = ({ walletStore }) => {
     const url = `/api/v1/allowlist`;
     const data = {
       name,
-      project_chain_id: projectChainId,
+      url: customUrl,
+      cosmos_chain_id: projectChainId,
       end_date: endDate,
     };
 
@@ -101,6 +105,15 @@ const CreateAllowlistForm = ({ walletStore }) => {
           placeholder="Name"
           value={name}
           onChange={(e) => onChange(e, setName)}
+          required={true}
+        ></input>
+        <br></br>
+        <input
+          style={{ width: '20%' }}
+          type={'text'}
+          placeholder="Custom url"
+          value={customUrl}
+          onChange={(e) => onChange(e, setCustomUrl)}
           required={true}
         ></input>
         <br></br>

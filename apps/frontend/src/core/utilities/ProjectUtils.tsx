@@ -1,4 +1,3 @@
-import { SigningStargateClient, StdSignature } from 'cudosjs';
 import S from './Main';
 
 const QUERY_PATTERN = '?p=';

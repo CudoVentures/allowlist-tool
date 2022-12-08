@@ -1,7 +1,5 @@
 import { action, makeAutoObservable, makeObservable, observable } from 'mobx';
-import { KeplrWallet } from 'cudosjs/src/ledgers/KeplrWallet';
-import { Ledger } from 'cudosjs/src/ledgers/Ledger';
-import { SigningStargateClient } from 'cudosjs/src/stargate';
+import { Ledger, KeplrWallet, SigningStargateClient } from 'cudosjs';
 import {
   // KeplrWallet,
   // Ledger,
@@ -14,7 +12,7 @@ import BigNumber from 'bignumber.js';
 
 declare let Config;
 
-const SESSION_STORAGE_WALLET_KEY = 'auraPoolConnectedWallet';
+const SESSION_STORAGE_WALLET_KEY = 'allowlistToolConnectedWallet';
 
 enum SessionStorageWalletOptions {
   KEPLR = 'keplr',
