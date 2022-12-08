@@ -38,9 +38,9 @@ const CreateAllowlistForm = ({ walletStore }) => {
     }
 
     const url = `/api/v1/allowlist`;
-    let data = {
+    const data = {
       name,
-      cosmos_chain_id: projectChainId,
+      project_chain_id: projectChainId,
       end_date: endDate,
     };
 
@@ -61,15 +61,31 @@ const CreateAllowlistForm = ({ walletStore }) => {
       data['server_role'] = serverRole;
     }
 
-    const signData = await ProjectUtils.signMessage(
-      CHAIN_DETAILS.RPC_ADDRESS[walletStore.selectedNetwork],
-      walletStore.ledger.offlineSigner,
-      walletStore.getAddress(),
-    );
+    if (!walletStore.isConnected) {
+      await walletStore.connectKeplr();
+    }
 
-    data = { ...data, ...signData };
+    const message = JSON.stringify(data);
+
+    const address = walletStore.getAddress();
+    const {
+      signature,
+      chainId: chain_id,
+      sequence,
+      accountNumber: account_number,
+    } = await walletStore.signNonceMsg(message);
+
+    const reqData = {
+      ...data,
+      signature,
+      address,
+      message,
+      sequence,
+      account_number,
+      chain_id,
+    };
     try {
-      await axios.post(url, data);
+      await axios.post(url, reqData);
       alert('success');
     } catch (ex) {
       console.error(ex);

@@ -1,6 +1,5 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { verifyNonceMsgSigner } from 'cudosjs';
-
+import { verifyNonceMsgSigner } from '/Users/georgitsonev/Desktop/CUDOS/cudosjs/src/utils/nonce';
 @Injectable()
 export class SignedMessageGuard implements CanActivate {
   constructor() {}
@@ -14,10 +13,10 @@ export class SignedMessageGuard implements CanActivate {
     return verifyNonceMsgSigner(
       body.signature,
       body.address,
-      body.nonce,
+      body.message,
       body.sequence,
-      body.accountNumber,
-      body.chainId,
+      body.account_number,
+      body.chain_id,
     );
   }
 }

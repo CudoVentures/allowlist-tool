@@ -20,6 +20,10 @@ export class User extends Model {
 
   @AllowNull(true)
   @Column
+  address: string;
+
+  @AllowNull(true)
+  @Column
   twitter_profile_id: string;
 
   @AllowNull(true)

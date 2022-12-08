@@ -10,16 +10,37 @@ const Allowlist = (props) => {
   const [endDate, setEndDate] = useState(end_date);
 
   const signUp = async () => {
+    const userRes = await axios.get(`api/v1/user`);
+    console.log(userRes);
+    const data = {};
+    if (userRes.data.twitter_access_token) {
+      data['twitter_access_token'] = userRes.data.twitter_access_token;
+    }
+    if (userRes.data.discord_access_token) {
+      data['discord_access_token'] = userRes.data.discord_access_tokens;
+    }
+    const message = JSON.stringify(data);
+
+    await props.walletStore.connectKeplr();
     const url = `/api/v1/allowlist/join/${props.id}`;
 
-    const data = await ProjectUtils.signMessage(
-      CHAIN_DETAILS.RPC_ADDRESS[props.walletStore.selectedNetwork],
-      props.walletStore.ledger.offlineSigner,
-      props.walletStore.getAddress(),
-    );
+    const address = props.walletStore.getAddress();
+    const {
+      signature,
+      chainId: chain_id,
+      sequence,
+      accountNumber: account_number,
+    } = await props.walletStore.signNonceMsg(message);
 
     try {
-      await axios.post(url, data);
+      await axios.post(url, {
+        signature,
+        address,
+        message,
+        sequence,
+        account_number,
+        chain_id,
+      });
       alert('success');
     } catch (ex) {
       console.error(ex);
@@ -50,13 +71,33 @@ const Allowlist = (props) => {
       }
 
       try {
-        const signData = await ProjectUtils.signMessage(
-          CHAIN_DETAILS.RPC_ADDRESS[props.walletStore.selectedNetwork],
-          props.walletStore.ledger.offlineSigner,
-          props.walletStore.getAddress(),
-        );
+        const userDetails = await axios.get('api/v1/user');
 
-        data = { ...data, ...signData };
+        if (!props.walletStore.isConnected) {
+          await props.walletStore.connectKeplr();
+        }
+
+        const network =
+          CHAIN_DETAILS.CHAIN_ID[props.walletStore.selectedNetwork];
+        const userAddress = props.walletStore.getAddress();
+        const keplr = await ProjectUtils.getKeplr();
+
+        const messageObj = {};
+        if (props.twitter_account || props.tweet) {
+          messageObj['twitter_access_token'] =
+            userDetails.data.twitter_access_token;
+        }
+        if (props.discord_server) {
+          messageObj['discord_access_token'] =
+            userDetails.data.discord_access_token;
+        }
+
+        const message = JSON.stringify(messageObj);
+        const signature = (
+          await keplr.signArbitrary(network, userAddress, message)
+        ).signature;
+
+        data = { ...data, signature, message, address: userAddress };
 
         const res = await axios.put(url, data);
 
@@ -98,7 +139,7 @@ const Allowlist = (props) => {
       {props.isAdmin && editMode && (
         <input type="date" value={endDate} onChange={onDateChange}></input>
       )}
-      <h3>Cosmos chain id: {props.cosmos_chain_id}</h3>
+      <h3>Cosmos chain id: {props.project_chain_id}</h3>
       <h2>Criteria:</h2>
       <ul>
         {props.twitter_account && (
