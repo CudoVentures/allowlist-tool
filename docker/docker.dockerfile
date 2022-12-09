@@ -1,11 +1,18 @@
+FROM node:16-buster as builder
+
+ARG WORKING_DIR="/usr/src/cudos-allowlist"
+
+COPY ./ ${WORKING_DIR}
+
+WORKDIR ${WORKING_DIR}
+
+RUN npm i
+
+RUN npm run build:prod
 
 FROM node:16-buster
 
-ARG USER_ID
-ARG USER_NAME
-ARG GROUP_ID
-ARG GROUP_NAME
-ARG WORKING_DIR="/usr/cudos-dapp"
+ARG WORKING_DIR="/usr/local/cudos-allowlist" 
 
 RUN if [ $USER_NAME != 'root' ]; then \
         groupmod -g 2000 node; \
@@ -14,15 +21,18 @@ RUN if [ $USER_NAME != 'root' ]; then \
         useradd --no-log-init --create-home --shell /bin/bash --uid ${USER_ID} --gid ${GROUP_ID} ${USER_NAME}; \
     fi
 
-COPY ./package.json "${WORKING_DIR}/package.json"
-
-RUN mkdir -p "${WORKING_DIR}/node_modules" && \
-    chown -R ${USER_NAME}:${GROUP_NAME} "${WORKING_DIR}"
-
 WORKDIR ${WORKING_DIR}
+COPY --from=builder "/usr/src/cudos-allowlist" ./
 
-USER ${USER_NAME}
+# COPY --from=builder "/usr/src/cudos-allowlist/package.json" ./package.json
 
-RUN npm i
 
-CMD ["/bin/bash", "-c", "(trap 'kill 0' SIGINT; npm run start:backend:dev & npm run build:frontend:dev)"] 
+COPY --from=builder "/usr/src/cudos-allowlist/config/.env" ./config/.env
+
+RUN chown -R node:node ${WORKING_DIR}
+
+USER node
+
+RUN npm i --omit=dev
+
+CMD ["npm", "run", "start:backend:prod"] 

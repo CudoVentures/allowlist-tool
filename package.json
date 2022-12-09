@@ -13,7 +13,7 @@
     "build:frontend:prod": "export NODE_ENV=production && nest build --webpack --webpackPath webpack-frontend.config.js",
     "start:backend:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch",
     "start:backend:debug": "nest start backend --debug --watch",
-    "start:backend:prod": "nest build backend && node dist/apps/backend/main",
+    "start:backend:prod": "node dist/apps/backend/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -22,6 +22,7 @@
     "test:e2e": "jest --config ./apps/cudos-aura-pool-service/test/jest-e2e.json"
   },
   "dependencies": {
+    "@nestjs/cli": "^9.0.0",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",
@@ -77,7 +78,6 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/lab": "^5.0.0-alpha.100",
     "@mui/material": "^5.10.6",
-    "@nestjs/cli": "^9.0.0",
     "@peculiar/webcrypto": "^1.4.0",
     "@rollup/plugin-alias": "^3.1.9",
     "@types/express": "^4.17.13",

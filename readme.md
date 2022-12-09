@@ -68,10 +68,10 @@ node ./dist/apps/backend/main
 
 Create ./docker/docker.arg based on ./docker/docker.arg.example
 
-Build and Start the container using VS shortcuts commands or
+Build and Start the dev container using VS shortcuts commands or
 
 ```bash
-cd ./docker && docker-compose --env-file ./docker.arg -f ./docker.yml -p cudos-dapp-boilerplate up --build
+cd ./docker && docker-compose --env-file ./docker.arg -f ./docker.dev.yml -p cudos-allowlist-boilerplate up --build
 ```
 
 ## Production with docker
