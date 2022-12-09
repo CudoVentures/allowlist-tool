@@ -6,6 +6,16 @@ import { UserService } from '../user/user.service';
 export class AuthService {
   constructor(private readonly usersService: UserService) {}
 
+  async login(address: string): Promise<User> {
+    const user = await this.usersService.findByAddress(address);
+
+    if (!user) {
+      return this.usersService.createUser({ address });
+    }
+
+    return user;
+  }
+
   async validateDiscordUser(
     req: any,
     accessToken: string,
@@ -27,7 +37,7 @@ export class AuthService {
       return this.usersService.createUser({ ...data, address });
     }
 
-    return this.usersService.update(user.id, data);
+    return this.usersService.updateUser(user.id, data);
   }
 
   async validateTwitterUser(
@@ -49,6 +59,6 @@ export class AuthService {
       return this.usersService.createUser({ ...data, address });
     }
 
-    return this.usersService.update(user.id, data);
+    return this.usersService.updateUser(user.id, data);
   }
 }
