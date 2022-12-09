@@ -11,10 +11,24 @@ const Header = ({ walletStore }) => {
   const login = async () => {
     await walletStore.connectKeplr();
     const userAddress = walletStore.getAddress();
-    window.localStorage.setItem('addr', JSON.stringify(userAddress));
-    await axios.get('api/v1/auth/login', {
-      params: { address: userAddress },
+    const message = 'Allowlist tool login';
+    const {
+      signature,
+      chainId: chain_id,
+      sequence,
+      accountNumber: account_number,
+    } = await walletStore.signNonceMsg(message);
+
+    await axios.post('api/v1/auth/login', {
+      signature,
+      address: userAddress,
+      message,
+      sequence,
+      account_number,
+      chain_id,
     });
+
+    window.localStorage.setItem('addr', JSON.stringify(userAddress));
     setIsConnected(true);
   };
 
@@ -24,7 +38,6 @@ const Header = ({ walletStore }) => {
       if (addr) {
         await walletStore.connectKeplr();
         setIsConnected(true);
-        await login();
         const res = await axios.get('api/v1/user');
         setUser({
           twitterUsername: res.data.twitter_profile_username,

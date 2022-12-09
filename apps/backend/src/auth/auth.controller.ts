@@ -5,23 +5,37 @@ import {
   Get,
   UseGuards,
   BadRequestException,
+  Body,
+  Post,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { SignedMessageDto } from '../allowlist/dto/signed-message.dto';
+import { SignedMessageGuard } from '../allowlist/guards/signed-message.guard';
+import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
+@UseGuards(SignedMessageGuard)
 export class AuthController {
-  @Get('login')
-  async login(@Req() req, @Res() res) {
-    const address = req.query.address;
+  constructor(private authService: AuthService) {}
+
+  @Post('login')
+  async login(
+    @Req() req,
+    @Res() res,
+    @Body() signedMessageDto: SignedMessageDto,
+  ) {
+    const address = signedMessageDto.address;
 
     if (!address) {
       throw new BadRequestException();
     }
 
-    req.session.user = { address };
+    const user = await this.authService.login(address);
+
+    req.session.user = user;
     res.status(200).send();
   }
 

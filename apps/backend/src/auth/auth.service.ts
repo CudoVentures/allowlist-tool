@@ -6,6 +6,16 @@ import { UserService } from '../user/user.service';
 export class AuthService {
   constructor(private readonly usersService: UserService) {}
 
+  async login(address: string): Promise<User> {
+    const user = await this.usersService.findByAddress(address);
+
+    if (!user) {
+      return this.usersService.createUser({ address });
+    }
+
+    return user;
+  }
+
   async validateDiscordUser(
     req: any,
     accessToken: string,
