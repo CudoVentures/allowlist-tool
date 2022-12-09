@@ -7,9 +7,8 @@ import {
   Unique,
   AutoIncrement,
   DataType,
-  ForeignKey,
 } from 'sequelize-typescript';
-import { User } from '../user/user.model';
+
 @Table({
   freezeTableName: true,
   tableName: 'allowlists',
@@ -27,8 +26,7 @@ export class Allowlist extends Model {
 
   @AllowNull(true)
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  @ForeignKey(() => User)
-  users: number[];
+  users: string[];
 
   @AllowNull(false)
   @Column
@@ -82,4 +80,8 @@ export class Allowlist extends Model {
   @AllowNull(true)
   @Column
   server_role: string;
+
+  @AllowNull(true)
+  @Column
+  require_email: string;
 }

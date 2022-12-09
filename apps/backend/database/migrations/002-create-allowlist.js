@@ -13,12 +13,8 @@ module.exports = {
       },
       users: {
         allowNull: false,
-        type: Sequelize.ARRAY(Sequelize.INTEGER),
+        type: Sequelize.ARRAY(Sequelize.STRING),
         defaultValue: [],
-        refences: {
-          model: 'users',
-          key: 'id',
-        },
       },
 
       name: {
@@ -77,6 +73,7 @@ module.exports = {
       require_email: {
         allowNull: true,
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       createdAt: {
         allowNull: false,

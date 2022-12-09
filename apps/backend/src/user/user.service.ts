@@ -21,7 +21,7 @@ export class UserService {
     return this.userModel.findOne({ where: { twitter_profile_id: id } });
   }
 
-  async findOne(id: number): Promise<User> {
+  async findById(id: number): Promise<User> {
     return this.userModel.findByPk(id);
   }
 
@@ -32,7 +32,7 @@ export class UserService {
     return user;
   }
 
-  async update(id: number, params: any): Promise<User> {
+  async updateUser(id: number, params: any): Promise<User> {
     const [count, [user]] = await this.userModel.update(
       {
         ...params,

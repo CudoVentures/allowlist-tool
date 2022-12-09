@@ -27,7 +27,7 @@ export class AuthService {
       return this.usersService.createUser({ ...data, address });
     }
 
-    return this.usersService.update(user.id, data);
+    return this.usersService.updateUser(user.id, data);
   }
 
   async validateTwitterUser(
@@ -49,6 +49,6 @@ export class AuthService {
       return this.usersService.createUser({ ...data, address });
     }
 
-    return this.usersService.update(user.id, data);
+    return this.usersService.updateUser(user.id, data);
   }
 }

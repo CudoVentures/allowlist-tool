@@ -14,6 +14,7 @@ import { LoggedInGuard } from '../auth/guards/loggedIn.guard';
 import { Allowlist } from './allowlist.model';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
+import { JoinAllowlistDto } from './dto/join-allowlist.dto';
 import { SignedMessageDto } from './dto/signed-message.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
@@ -44,9 +45,13 @@ export class AllowlistController {
   @UseGuards(LoggedInGuard, SignedMessageGuard)
   async join(
     @Param('id', ParseIntPipe) id: number,
-    @Body() signedMessageDto: SignedMessageDto,
+    @Body() joinAllowlistDto: JoinAllowlistDto,
   ) {
-    return this.allowlistService.joinAllowlist(id, signedMessageDto.address);
+    return this.allowlistService.joinAllowlist(
+      id,
+      joinAllowlistDto.address,
+      joinAllowlistDto.email,
+    );
   }
 
   @Post()
@@ -63,6 +68,6 @@ export class AllowlistController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAllowlistDto: UpdateAllowlistDto,
   ): Promise<Allowlist> {
-    return this.allowlistService.updateOne(id, updateAllowlistDto);
+    return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
   }
 }

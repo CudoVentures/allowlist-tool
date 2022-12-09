@@ -50,7 +50,7 @@ export class AllowlistService {
     });
   }
 
-  async updateOne(
+  async updateAllowlist(
     id: number,
     updateCollectionDto: UpdateAllowlistDto,
   ): Promise<Allowlist> {
@@ -62,14 +62,20 @@ export class AllowlistService {
     return allowlist;
   }
 
-  private async addToAllowlist(id: number, userId: number) {
+  private async addToAllowlist(id: number, userId: number, email: string) {
     const allowlist = await this.findOne(id);
 
-    if (allowlist.users.includes(userId)) {
+    const registeredUsers = allowlist.users.map(
+      (entry) => JSON.parse(entry).userId,
+    );
+    if (registeredUsers.includes(userId)) {
       return allowlist;
     }
 
-    const updatedList = allowlist.users.concat([userId]);
+    const updatedList = allowlist.users.concat([
+      JSON.stringify({ userId, email }),
+    ]);
+
     const [count, [updated]] = await this.allowlistModel.update(
       { users: updatedList },
       { where: { id }, returning: true },
@@ -78,7 +84,11 @@ export class AllowlistService {
     return updated;
   }
 
-  async joinAllowlist(allowlistId: number, userAddress: string) {
+  async joinAllowlist(
+    allowlistId: number,
+    userAddress: string,
+    userEmail: string,
+  ) {
     const allowlist = await this.findOne(allowlistId);
 
     const now = Math.floor(new Date().getTime() / 1000);
@@ -135,7 +145,7 @@ export class AllowlistService {
       }
     }
 
-    return this.addToAllowlist(allowlistId, user.id);
+    return this.addToAllowlist(allowlistId, user.id, userEmail);
   }
 
   private async followsAcc(

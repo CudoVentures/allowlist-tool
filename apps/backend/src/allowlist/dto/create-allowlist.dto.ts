@@ -72,4 +72,9 @@ export class CreateAllowlistDto extends SignedMessageDto {
   @IsOptional()
   @ApiProperty({ required: false })
   server_role: string;
+
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  require_email: string;
 }

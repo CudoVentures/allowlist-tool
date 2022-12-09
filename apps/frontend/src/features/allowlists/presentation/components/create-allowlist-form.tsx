@@ -12,9 +12,14 @@ const CreateAllowlistForm = ({ walletStore }) => {
   const [serverRole, setServerRole] = useState('');
   const [projectChainId, setChainId] = useState(0);
   const [endDate, setEndDate] = useState(0 as unknown as Date);
+  const [requireEmail, setRequireEmail] = useState(false);
 
   const onChange = (e, stateFunc) => {
     stateFunc(e.target.value);
+  };
+
+  const onCheckboxChange = (target, stateFunc) => {
+    stateFunc(!target);
   };
 
   const addDiscordBot = () => {
@@ -87,6 +92,7 @@ const CreateAllowlistForm = ({ walletStore }) => {
       sequence,
       account_number,
       chain_id,
+      require_email: requireEmail,
     };
     try {
       await axios.post(url, reqData);
@@ -177,6 +183,12 @@ const CreateAllowlistForm = ({ walletStore }) => {
           value={endDate.toString()}
           onChange={(e) => onChange(e, setEndDate)}
         ></input>
+        <br></br>
+        <label>Provide Email</label>
+        <input
+          type={'checkbox'}
+          onChange={() => onCheckboxChange(requireEmail, setRequireEmail)}
+        />
       </form>
       <button type="submit" onClick={addDiscordBot}>
         Add allowlist-bot to your server

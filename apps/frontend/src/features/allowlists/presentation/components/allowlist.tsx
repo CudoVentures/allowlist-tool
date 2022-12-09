@@ -6,8 +6,13 @@ const Allowlist = (props) => {
   const [editMode, setEditMode] = useState(false);
   const [description, setDescription] = useState(props.description || '');
   const [endDate, setEndDate] = useState(end_date);
+  const [email, setEmail] = useState('');
 
   const signUp = async () => {
+    if (props.require_email && !email) {
+      return;
+    }
+
     const userRes = await axios.get(`api/v1/user`);
     const data = {};
     if (userRes.data.twitter_access_token) {
@@ -37,6 +42,7 @@ const Allowlist = (props) => {
         sequence,
         account_number,
         chain_id,
+        email,
       });
       alert('success');
     } catch (ex) {
@@ -120,6 +126,10 @@ const Allowlist = (props) => {
     })();
   };
 
+  const onInputChange = (e, stateFunc) => {
+    stateFunc(e.target.value);
+  };
+
   const onDateChange = (e) => {
     setEndDate(e.target.value.substring(0, 10));
   };
@@ -181,6 +191,15 @@ const Allowlist = (props) => {
           </li>
         )}
       </ul>
+      {props.require_email && (
+        <input
+          type={'email'}
+          placeholder={'email'}
+          value={email}
+          onChange={(e) => onInputChange(e, setEmail)}
+        />
+      )}
+      <br></br>
       {props.isAdmin && (
         <button onClick={onClick}>{editMode ? 'Save' : 'Edit'}</button>
       )}
