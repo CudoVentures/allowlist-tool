@@ -30,13 +30,7 @@ export class AuthService {
       'discord_profile_username'
     ] = `${profile.username}#${profile.discriminator}`;
 
-    const address = req.session.user.address;
-    let user = await this.usersService.findByAddress(address);
-
-    if (!user) {
-      return this.usersService.createUser({ ...data, address });
-    }
-
+    let user = await this.usersService.findByAddress(req.session.user.address);
     return this.usersService.updateUser(user.id, data);
   }
 
@@ -52,13 +46,7 @@ export class AuthService {
     data['twitter_profile_id'] = profile.id;
     data['twitter_profile_username'] = profile.username;
 
-    const address = req.session.user.address;
-    let user = await this.usersService.findByAddress(address);
-
-    if (!user) {
-      return this.usersService.createUser({ ...data, address });
-    }
-
+    let user = await this.usersService.findByAddress(req.session.user.address);
     return this.usersService.updateUser(user.id, data);
   }
 }
