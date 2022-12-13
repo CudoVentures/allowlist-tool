@@ -34,10 +34,6 @@ export class AllowlistService {
     createAllowlistDTO: CreateAllowlistDto,
   ): Promise<Allowlist> {
     const userAddress = createAllowlistDTO.address;
-    let user = await this.userSerivice.findByAddress(userAddress);
-    if (!user) {
-      user = await this.userSerivice.createUser({ address: userAddress });
-    }
 
     const duplicate = await this.findByCustomId(createAllowlistDTO.url);
     if (duplicate) {
