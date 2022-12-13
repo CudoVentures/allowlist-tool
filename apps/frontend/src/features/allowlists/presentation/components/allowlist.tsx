@@ -13,6 +13,11 @@ const Allowlist = (props) => {
   const [endDate, setEndDate] = useState(end_date);
   const [email, setEmail] = useState('');
 
+  enum Format {
+    JSON,
+    CSV,
+  }
+
   const signUp = async () => {
     if (props.require_email && !email) {
       return;
@@ -171,6 +176,57 @@ const Allowlist = (props) => {
     );
   };
 
+  const downloadFile = ({ data, fileName, fileType }) => {
+    // Create a blob with the data we want to download as a file
+    const blob = new Blob([data], { type: fileType });
+    // Create an anchor element and dispatch a click event on it
+    // to trigger a download
+    const a = document.createElement('a');
+    a.download = fileName;
+    a.href = window.URL.createObjectURL(blob);
+    const clickEvt = new MouseEvent('click', {
+      view: window,
+      bubbles: true,
+      cancelable: true,
+    });
+    a.dispatchEvent(clickEvt);
+    a.remove();
+  };
+
+  const downloadJSON = (data) => {
+    downloadFile({
+      data: JSON.stringify(data),
+      fileName: 'users.json',
+      fileType: 'text/json',
+    });
+  };
+
+  const downloadCSV = (data) => {
+    // Headers for each column
+    let headers = ['twitter_handle,discord_handle,address,email'];
+    // Convert users data to a csv
+    let usersCsv = data.reduce((acc, user) => {
+      const { twitter_handle, discord_handle, address, email } = user;
+      acc.push([twitter_handle, discord_handle, address, email].join(','));
+      return acc;
+    }, []);
+
+    downloadFile({
+      data: [...headers, ...usersCsv].join('\n'),
+      fileName: 'users.csv',
+      fileType: 'text/csv',
+    });
+  };
+
+  const exportEntries = async (format: Format) => {
+    const res = await axios.get(`api/v1/allowlist/entries/${props.id}`);
+    if (format === Format.JSON) {
+      downloadJSON(res.data);
+    } else {
+      downloadCSV(res.data);
+    }
+  };
+
   return (
     <div style={{ padding: '0 5% 0 5%', height: '100%' }}>
       {getElement('name', name, setName)}
@@ -183,7 +239,7 @@ const Allowlist = (props) => {
       {props.isAdmin && editMode && (
         <input type="date" value={endDate} onChange={onDateChange}></input>
       )}
-      <h3>Cosmos chain id: {props.project_chain_id}</h3>
+      <h3>Cosmos chain id: {props.cosmos_chain_id}</h3>
       <h2>Criteria:</h2>
       <ul>
         {props.twitter_account_to_follow && (
@@ -233,6 +289,15 @@ const Allowlist = (props) => {
         <button onClick={onEdit}>{editMode ? 'Save' : 'Edit'}</button>
       )}
       {!props.isAdmin && <button onClick={() => signUp()}>Sign up</button>}
+      {props.isAdmin && (
+        <div>
+          <br></br>
+          <button onClick={() => exportEntries(Format.JSON)}>
+            Export JSON
+          </button>
+          <button onClick={() => exportEntries(Format.CSV)}>Export CSV</button>
+        </div>
+      )}
       <hr></hr>
     </div>
   );

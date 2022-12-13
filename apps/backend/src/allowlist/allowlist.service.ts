@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import axios from 'axios';
+import { User } from '../user/user.model';
 import { UserService } from '../user/user.service';
 import { Allowlist } from './allowlist.model';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
@@ -241,5 +242,23 @@ export class AllowlistService {
 
     const userRoles = guildMemberRes.data.roles;
     return userRoles.includes(roleId);
+  }
+
+  async getEntries(allowlistId: number) {
+    const allowlist = await this.allowlistModel.findByPk(allowlistId);
+    const entries = allowlist.users.map((entry) => JSON.parse(entry));
+    return Promise.all(
+      entries.map((entry) => {
+        return this.userSerivice.findById(entry.userId).then((user) => {
+          return {
+            id: user.id,
+            address: user.address,
+            email: entry.email,
+            twitter_handle: user.twitter_profile_id,
+            discord_handle: user.discord_profile_id,
+          };
+        });
+      }),
+    );
   }
 }

@@ -36,9 +36,14 @@ export class AllowlistController {
   }
 
   @Get()
-  @UseGuards()
   async findByAdmin(@Request() req): Promise<Allowlist[]> {
     return this.allowlistService.findByAdmin(req.session.user.address);
+  }
+
+  @Get('entries/:id')
+  @UseGuards(IsAdminGuard)
+  async getEntries(@Param('id', ParseIntPipe) id: number) {
+    return this.allowlistService.getEntries(id);
   }
 
   @Post('join/:id')
