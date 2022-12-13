@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsDateString } from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsObject } from 'class-validator';
 import { SignedMessageDto } from './signed-message.dto';
 
 export class UpdateAllowlistDto extends SignedMessageDto {
@@ -42,4 +42,14 @@ export class UpdateAllowlistDto extends SignedMessageDto {
   @IsOptional()
   @ApiProperty({ required: false })
   end_date: string;
+
+  @IsObject()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  image: Blob;
+
+  @IsObject()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  banner_image: Blob;
 }

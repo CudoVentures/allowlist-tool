@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { SetStateAction, useState } from 'react';
 declare let Config;
 
 const CreateAllowlistForm = ({ walletStore }) => {
@@ -13,6 +13,28 @@ const CreateAllowlistForm = ({ walletStore }) => {
   const [projectChainId, setChainId] = useState(0);
   const [endDate, setEndDate] = useState(0 as unknown as Date);
   const [requireEmail, setRequireEmail] = useState(false);
+  const [imageDataUri, setImageDataUri] = useState('');
+  const [bannerDataUri, setBannerDataUri] = useState('');
+
+  const fileToDataUri = async (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        resolve(event.target.result);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const setLink = (blob) => {
+    document.querySelector('a').href = URL.createObjectURL(blob);
+  };
+
+  const addDiscordBot = () => {
+    window.open(
+      `https://discord.com/api/oauth2/authorize?client_id=${Config.REACT_APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
+    );
+  };
 
   const onChange = (e, stateFunc) => {
     stateFunc(e.target.value);
@@ -22,10 +44,15 @@ const CreateAllowlistForm = ({ walletStore }) => {
     stateFunc(!target);
   };
 
-  const addDiscordBot = () => {
-    window.open(
-      `https://discord.com/api/oauth2/authorize?client_id=${Config.REACT_APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
-    );
+  const onImageChange = (file, stateFunc) => {
+    if (!file) {
+      stateFunc('');
+      return;
+    }
+
+    fileToDataUri(file).then((data) => {
+      stateFunc(data);
+    });
   };
 
   const createAllowlist = async () => {
@@ -45,12 +72,22 @@ const CreateAllowlistForm = ({ walletStore }) => {
       return;
     }
 
+    if (!imageDataUri) {
+      return;
+    }
+
+    if (!bannerDataUri) {
+      return;
+    }
+
     const url = `/api/v1/allowlist`;
     const data = {
       name,
       url: customUrl,
       cosmos_chain_id: projectChainId,
       end_date: endDate,
+      image: imageDataUri,
+      banner_image: bannerDataUri,
     };
 
     if (description) {
@@ -184,6 +221,24 @@ const CreateAllowlistForm = ({ walletStore }) => {
           onChange={(e) => onChange(e, setEndDate)}
         ></input>
         <br></br>
+        <label>Allowlist Image</label>
+        <input
+          style={{ display: 'block' }}
+          accept="image/*"
+          type="file"
+          onChange={(event) =>
+            onImageChange(event.target.files[0] || null, setImageDataUri)
+          }
+        />
+        <label>Banner Image</label>
+        <input
+          style={{ display: 'block' }}
+          accept="image/*"
+          type="file"
+          onChange={(event) =>
+            onImageChange(event.target.files[0] || null, setBannerDataUri)
+          }
+        />
         <label>Provide Email</label>
         <input
           type={'checkbox'}

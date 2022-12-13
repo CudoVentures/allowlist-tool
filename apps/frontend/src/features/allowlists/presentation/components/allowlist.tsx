@@ -1,3 +1,4 @@
+import ProjectUtils from '../../../../core/utilities/ProjectUtils';
 import axios from 'axios';
 import React, { useState } from 'react';
 
@@ -12,10 +13,24 @@ const Allowlist = (props) => {
   const [description, setDescription] = useState(props.description || '');
   const [endDate, setEndDate] = useState(end_date);
   const [email, setEmail] = useState('');
+  const [imageSrc, setImageSrc] = useState(
+    ProjectUtils.buffToString(props.image.data),
+  );
 
   enum Format {
     JSON,
     CSV,
+  }
+
+  function buffToString(buffer) {
+    const hex = [...new Uint8Array(buffer)]
+      .map((x) => x.toString(16).padStart(2, '0'))
+      .join('');
+
+    let str = '';
+    for (var i = 0; i < hex.length; i += 2)
+      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
+    return str;
   }
 
   const signUp = async () => {
@@ -229,6 +244,10 @@ const Allowlist = (props) => {
 
   return (
     <div style={{ padding: '0 5% 0 5%', height: '100%' }}>
+      <img
+        style={{ width: '350px', height: '150px' }}
+        src={buffToString(props.image.data)}
+      />
       {getElement('name', name, setName)}
       {getElement('custom url', url, setUrl)}
       {getElement('description', description, setDescription)}
