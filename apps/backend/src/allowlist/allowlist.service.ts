@@ -34,11 +34,20 @@ export class AllowlistService {
   async createAllowlist(
     createAllowlistDTO: CreateAllowlistDto,
   ): Promise<Allowlist> {
+    if (
+      !createAllowlistDTO.twitter_account_to_follow &&
+      !createAllowlistDTO.tweet_to_like &&
+      !createAllowlistDTO.tweet_to_retweet &&
+      !createAllowlistDTO.discord_invite_link &&
+      !createAllowlistDTO.server_role
+    ) {
+      throw new BadRequestException('Allowlist criteria not set');
+    }
     const userAddress = createAllowlistDTO.address;
 
     const duplicate = await this.findByCustomId(createAllowlistDTO.url);
     if (duplicate) {
-      throw new BadRequestException();
+      throw new BadRequestException('Allowlist with this url already exists');
     }
 
     return this.allowlistModel.create({
@@ -91,10 +100,12 @@ export class AllowlistService {
     const now = Math.floor(new Date().getTime() / 1000);
     const endDate = Math.floor(allowlist.end_date.getTime() / 1000);
     if (endDate < now) {
-      throw new BadRequestException();
+      throw new BadRequestException('Allowlist is closed for new entries');
     }
 
     const user = await this.userSerivice.findByAddress(userAddress);
+
+    await this.checkForDuplicateAcc(user, allowlist);
 
     if (allowlist.twitter_account) {
       const followAcc = this.followsAcc(
@@ -143,6 +154,30 @@ export class AllowlistService {
     }
 
     return this.addToAllowlist(allowlistId, user.id, userEmail);
+  }
+
+  private async checkForDuplicateAcc(user: User, allowlist: Allowlist) {
+    const users = await Promise.all(
+      allowlist.users.map((entry) => {
+        const { userId } = JSON.parse(entry);
+        return this.userSerivice.findById(userId);
+      }),
+    );
+
+    for (const u of users) {
+      if (
+        user.discord_profile_id &&
+        user.discord_profile_id === u.discord_profile_id
+      ) {
+        throw new BadRequestException('Discord profile is already registered');
+      }
+      if (
+        user.twitter_profile_id &&
+        user.twitter_profile_id === u.twitter_profile_id
+      ) {
+        throw new BadRequestException('Twitter profile is already registered');
+      }
+    }
   }
 
   private async followsAcc(

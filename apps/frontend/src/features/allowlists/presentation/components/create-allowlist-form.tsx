@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React, { SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 declare let Config;
 
 const CreateAllowlistForm = ({ walletStore }) => {
@@ -24,10 +24,6 @@ const CreateAllowlistForm = ({ walletStore }) => {
       };
       reader.readAsDataURL(file);
     });
-  };
-
-  const setLink = (blob) => {
-    document.querySelector('a').href = URL.createObjectURL(blob);
   };
 
   const addDiscordBot = () => {
