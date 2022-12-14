@@ -61,6 +61,14 @@ export class Allowlist extends Model {
   @Column
   end_date: Date;
 
+  @AllowNull(false)
+  @Column
+  image: string;
+
+  @AllowNull(false)
+  @Column
+  banner_image: string;
+
   @AllowNull(true)
   @Column
   twitter_account_to_follow: string;

@@ -15,7 +15,6 @@ import { Allowlist } from './allowlist.model';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { JoinAllowlistDto } from './dto/join-allowlist.dto';
-import { SignedMessageDto } from './dto/signed-message.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { SignedMessageGuard } from './guards/signed-message.guard';

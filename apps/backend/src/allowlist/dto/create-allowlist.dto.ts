@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsDateString,
+  IsObject,
 } from 'class-validator';
 import { SignedMessageDto } from './signed-message.dto';
 
@@ -47,6 +48,16 @@ export class CreateAllowlistDto extends SignedMessageDto {
   @IsNotEmpty()
   @ApiProperty({ required: true })
   end_date: Date;
+
+  @IsObject()
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  image: Blob;
+
+  @IsObject()
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  banner_image: Blob;
 
   @IsString()
   @IsOptional()

@@ -4,7 +4,6 @@ import {
   Res,
   Get,
   UseGuards,
-  BadRequestException,
   Body,
   Post,
 } from '@nestjs/common';
@@ -27,14 +26,7 @@ export class AuthController {
     @Res() res,
     @Body() signedMessageDto: SignedMessageDto,
   ) {
-    const address = signedMessageDto.address;
-
-    if (!address) {
-      throw new BadRequestException();
-    }
-
-    const user = await this.authService.login(address);
-
+    const user = await this.authService.login(signedMessageDto.address);
     req.session.user = user;
     res.status(200).send();
   }

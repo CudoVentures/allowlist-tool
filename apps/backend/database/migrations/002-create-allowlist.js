@@ -49,6 +49,14 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
+      image: {
+        allowNull: false,
+        type: Sequelize.BLOB,
+      },
+      banner_image: {
+        allowNull: false,
+        type: Sequelize.BLOB,
+      },
 
       twitter_account_to_follow: {
         allowNull: true,
