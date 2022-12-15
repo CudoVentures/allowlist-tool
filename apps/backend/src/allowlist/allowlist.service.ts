@@ -19,8 +19,7 @@ export class AllowlistService {
   }
 
   async findByAdmin(admin: string): Promise<Allowlist[]> {
-    const allowlists = await this.allowlistModel.findAll();
-    return allowlists.filter((allowlist) => allowlist.admin === admin);
+    return this.allowlistModel.findAll({ where: { admin } });
   }
 
   async findByCustomId(id: string): Promise<Allowlist> {
@@ -34,17 +33,6 @@ export class AllowlistService {
   async createAllowlist(
     createAllowlistDTO: CreateAllowlistDto,
   ): Promise<Allowlist> {
-    if (
-      !createAllowlistDTO.twitter_account_to_follow &&
-      !createAllowlistDTO.tweet_to_like &&
-      !createAllowlistDTO.tweet_to_retweet &&
-      !createAllowlistDTO.discord_invite_link &&
-      !createAllowlistDTO.server_role
-    ) {
-      throw new BadRequestException('Allowlist criteria not set');
-    }
-    const userAddress = createAllowlistDTO.address;
-
     const duplicate = await this.findByCustomId(createAllowlistDTO.url);
     if (duplicate) {
       throw new BadRequestException('Allowlist with this url already exists');
@@ -52,7 +40,7 @@ export class AllowlistService {
 
     return this.allowlistModel.create({
       ...createAllowlistDTO,
-      admin: userAddress,
+      admin: createAllowlistDTO.address,
     });
   }
 

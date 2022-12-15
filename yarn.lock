@@ -4574,10 +4574,10 @@
   "resolved" "https://registry.npmjs.org/csstype/-/csstype-3.1.1.tgz"
   "version" "3.1.1"
 
-"cudosjs@^1.2.4":
-  "integrity" "sha512-Hq+sWfUDx7qk0BhFMqYXjQsKp8Sri7XVAffCdWdg79GhnpDTEDUj0U3zDHUlo9vmfI9lwosyDT1fJeF8T4zH6g=="
-  "resolved" "https://registry.npmjs.org/cudosjs/-/cudosjs-1.2.4.tgz"
-  "version" "1.2.4"
+"cudosjs@^1.2.5":
+  "integrity" "sha512-LignXN62Ni355FlU+5A8liwoktKkXffV2rHpCKmrRKPljIPEyrRrtjs0YOHFDbbioouqmZXlQb+z2mgfErPknw=="
+  "resolved" "https://registry.npmjs.org/cudosjs/-/cudosjs-1.2.5.tgz"
+  "version" "1.2.5"
   dependencies:
     "@cosmjs/cosmwasm-stargate" "^0.28.4"
     "@cosmjs/crypto" "^0.28.4"
@@ -4587,7 +4587,7 @@
     "@cosmostation/cosmos-client" "^0.0.4"
     "@cosmostation/extension-client" "^0.1.9"
     "bignumber.js" "^9.0.2"
-    "tslib" "^2.4.1"
+    "detect-browser" "^5.3.0"
     "yarn" "^1.22.19"
 
 "d@^1.0.1", "d@1":
@@ -4724,6 +4724,11 @@
   "integrity" "sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg=="
   "resolved" "https://registry.npmjs.org/destroy/-/destroy-1.2.0.tgz"
   "version" "1.2.0"
+
+"detect-browser@^5.3.0":
+  "integrity" "sha512-53rsFbGdwMwlF7qvCt0ypLM5V5/Mbl0szB7GPN8y9NCcbknYOeVVXdrXEq+90IwAfrrzt6Hd+u2E2ntakICU8w=="
+  "resolved" "https://registry.npmjs.org/detect-browser/-/detect-browser-5.3.0.tgz"
+  "version" "5.3.0"
 
 "detect-browser@5.2.0":
   "integrity" "sha512-tr7XntDAu50BVENgQfajMLzacmSe34D+qZc4zjnniz0ZVuw/TZcLcyxHQjYpJTM36sGEkZZlYLnIM1hH7alTMA=="
@@ -10300,11 +10305,6 @@
   "integrity" "sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ=="
   "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz"
   "version" "2.4.0"
-
-"tslib@^2.4.1":
-  "integrity" "sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA=="
-  "resolved" "https://registry.npmjs.org/tslib/-/tslib-2.4.1.tgz"
-  "version" "2.4.1"
 
 "tsutils@^3.21.0":
   "integrity" "sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA=="

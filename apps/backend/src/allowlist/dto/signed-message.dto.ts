@@ -30,7 +30,7 @@ export class SignedMessageDto {
   @IsNotEmpty()
   @IsOptional()
   @ApiProperty()
-  chain_id: number;
+  chain_id: string;
 
   @IsString()
   @IsNotEmpty()

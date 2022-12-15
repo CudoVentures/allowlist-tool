@@ -5,6 +5,7 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
+        unique: true,
         type: Sequelize.INTEGER,
       },
       admin: {
@@ -23,6 +24,7 @@ module.exports = {
       },
       url: {
         type: Sequelize.STRING,
+        unique: true,
         allowNull: true,
       },
       description: {

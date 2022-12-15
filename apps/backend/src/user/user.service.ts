@@ -26,10 +26,9 @@ export class UserService {
   }
 
   async createUser(params: any): Promise<User> {
-    const user = this.userModel.create({
+    return this.userModel.create({
       ...params,
     });
-    return user;
   }
 
   async updateUser(id: number, params: any): Promise<User> {
