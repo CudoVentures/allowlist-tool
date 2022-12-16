@@ -8,9 +8,11 @@ import {
   Put,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { LoggedInGuard } from '../auth/guards/loggedIn.guard';
+import { TransactionInterceptor } from '../common/common.interceptors';
 import { Allowlist } from './allowlist.model';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
@@ -48,6 +50,7 @@ export class AllowlistController {
     return this.allowlistService.getEntries(id);
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @Post('join/:id')
   @UseGuards(LoggedInGuard)
   async join(
@@ -61,6 +64,7 @@ export class AllowlistController {
     );
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @Post()
   @UseGuards(LoggedInGuard)
   async create(
@@ -70,6 +74,7 @@ export class AllowlistController {
     return this.allowlistService.createAllowlist(createAllowlistDto);
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @UseGuards(IsAdminGuard)
   @Put(':id')
   async update(

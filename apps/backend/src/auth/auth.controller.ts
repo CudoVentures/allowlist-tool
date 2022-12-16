@@ -6,10 +6,12 @@ import {
   UseGuards,
   Body,
   Post,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SignedMessageDto } from '../allowlist/dto/signed-message.dto';
 import { SignMessagePipe } from '../allowlist/pipes/sign-message.pipe';
+import { TransactionInterceptor } from '../common/common.interceptors';
 import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
@@ -19,6 +21,7 @@ import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseInterceptors(TransactionInterceptor)
   @Post('login')
   async login(
     @Req() req,
