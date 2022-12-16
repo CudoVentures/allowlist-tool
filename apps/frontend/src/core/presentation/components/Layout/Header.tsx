@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
 import { formatAddress, isMainnetInstance } from '../../../utilities/ProjectUtils';
-import { DropDownItem, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
+import { DropDownItem, HashBasedUserAvatar, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
 import { RootState } from '../../../store';
 import { updateUser } from '../../../store/user';
 import { initialState as initialUserState } from '../../../store/user';
@@ -120,7 +120,7 @@ const Header = () => {
             onMouseEnter={() => isConnected ? setOpenMenu(true) : null}
             onClick={handleClick}
           >
-            {isConnected ? null :
+            {isConnected ? <HashBasedUserAvatar UID={connectedAddress} size={25} /> :
               <SvgComponent
                 type={LAYOUT_CONTENT_TEXT.WalletLogo}
                 style={{ height: '24px', marginRight: '5px' }}
@@ -133,7 +133,7 @@ const Header = () => {
             {isConnected ?
               <SvgComponent
                 type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                style={{ transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
               /> : null}
           </Button>}
         />

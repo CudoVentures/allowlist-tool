@@ -21,6 +21,7 @@ import youTubeIcon from '../../../../public/assets/vectors/youtube.svg';
 import facebookIcon from '../../../../public/assets/vectors/facebook.svg';
 import spotifyIcon from '../../../../public/assets/vectors/spotify.svg';
 import logoHeader from '../../../../public/assets/vectors/logo-header.svg';
+import { JdenticonConfig, toSvg } from 'jdenticon';
 
 import { helperStyles } from './styles';
 
@@ -123,4 +124,41 @@ export const RESOLUTIONS = {
     LOWER: 750,
     MID_LOWEST: 450,
     LOWEST: 200
+}
+
+export const JD_CONFIG: JdenticonConfig = {
+    hues: [204],
+    lightness: {
+        color: [0.28, 0.59],
+        grayscale: [0.26, 0.90]
+    },
+    saturation: {
+        color: 1.00,
+        grayscale: 0.42
+    },
+    backColor: "#0000"
+}
+
+export const HashBasedUserAvatar = ({
+    UID,
+    size,
+}: {
+    UID: string,
+    size: number,
+}): JSX.Element => {
+
+    return (
+        <Box sx={{
+            ...helperStyles.imgHolder,
+            bgcolor: '#1F2436',
+            width: `${size + 4}px`,
+            height: `${size + 4}px`,
+        }}
+        >
+            <SVG
+                title={'User avatar'}
+                src={toSvg(UID, size, JD_CONFIG)}
+            />
+        </Box>
+    )
 }

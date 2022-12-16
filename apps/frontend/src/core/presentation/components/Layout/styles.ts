@@ -52,11 +52,11 @@ export const headerStyles = {
     },
     btnHolder: {
         zIndex: '10',
-        width: '192px',
+        width: '224px',
     },
     logInBtn: {
-        padding: '10px, 16px',
-        borderRadius: '12px',
+        padding: '10px 20px 10px 12px',
+        borderRadius: '100px',
         height: '40px',
         width: '100%',
         display: 'flex',
@@ -108,6 +108,13 @@ export const helperStyles = {
         height: '18px',
         marginRight: '5px',
     },
+    imgHolder: {
+        overflow: 'clip',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: '50%'
+    }
 }
 
 export const layoutStyles = {
