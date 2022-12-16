@@ -6,6 +6,11 @@ declare global {
     interface Window extends KeplrWindow {
         cosmostation: any
     }
+
+    interface WindowSize {
+        width: number;
+        height: number;
+    }
 }
 
 declare module '@mui/material/styles' {

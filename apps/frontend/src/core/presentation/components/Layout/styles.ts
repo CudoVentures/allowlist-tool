@@ -73,7 +73,7 @@ export const footerStyles = {
         }
     },
     holder: {
-        position: 'absolute',
+        position: 'relative',
         bottom: 0,
         width: '100%',
         height: '50px',
@@ -93,7 +93,7 @@ export const footerStyles = {
             borderRight: `1px solid ${COLORS_DARK_THEME.SECONDARY_TEXT}`
         },
         cursor: 'pointer'
-    },
+    }
 }
 
 export const helperStyles = {
@@ -108,4 +108,25 @@ export const helperStyles = {
         height: '18px',
         marginRight: '5px',
     },
+}
+
+export const layoutStyles = {
+    contentWrapper: {
+        marginBottom: '2rem',
+        maxWidth: '1320px',
+        overflowWrap: 'break-word',
+        overflow: 'auto',
+        padding: '0 2rem',
+        display: 'flex',
+    },
+    contentHolder: {
+        display: 'flex',
+        justifyContent: 'center',
+
+    },
+    appWrapper: {
+        position: 'relative',
+        display: 'flex',
+        flexDirection: 'column'
+    }
 }
