@@ -25,7 +25,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
     );
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('User not found');
     }
 
     return user;

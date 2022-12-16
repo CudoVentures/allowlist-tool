@@ -38,7 +38,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
     );
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('User not found');
     }
 
     return user;

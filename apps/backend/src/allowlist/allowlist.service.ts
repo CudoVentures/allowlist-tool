@@ -101,7 +101,7 @@ export class AllowlistService {
         user.twitter_profile_id,
       );
       if (!followAcc) {
-        throw new BadRequestException();
+        throw new BadRequestException('Criteria not met');
       }
     }
 
@@ -109,7 +109,7 @@ export class AllowlistService {
       const tweetId = allowlist.tweet_to_like.split('/').at(-1).split('?')[0];
       const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
       if (!liked) {
-        throw new BadRequestException();
+        throw new BadRequestException('Criteria not met');
       }
     }
 
@@ -120,7 +120,7 @@ export class AllowlistService {
         tweetId,
       );
       if (!retweeted) {
-        throw new BadRequestException();
+        throw new BadRequestException('Criteria not met');
       }
     }
 
@@ -137,7 +137,7 @@ export class AllowlistService {
       );
 
       if (!hasRole) {
-        throw new BadRequestException();
+        throw new BadRequestException('Criteria not met');
       }
     }
 
