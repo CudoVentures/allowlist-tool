@@ -19,13 +19,15 @@ const Header = ({ walletStore }) => {
       accountNumber: account_number,
     } = await walletStore.signNonceMsg(message);
 
-    await axios.post('api/v1/auth/login', {
-      signature,
-      address: userAddress,
-      message,
-      sequence,
-      account_number,
-      chain_id,
+    await axios.post('api/v1/auth/login', null, {
+      params: {
+        signature,
+        address: userAddress,
+        message,
+        sequence,
+        account_number,
+        chain_id,
+      },
     });
 
     window.localStorage.setItem('addr', JSON.stringify(userAddress));

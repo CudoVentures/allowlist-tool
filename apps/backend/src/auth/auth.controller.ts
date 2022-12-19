@@ -4,9 +4,9 @@ import {
   Res,
   Get,
   UseGuards,
-  Body,
   Post,
   UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SignedMessageDto } from '../allowlist/dto/signed-message.dto';
@@ -26,7 +26,7 @@ export class AuthController {
   async login(
     @Req() req,
     @Res() res,
-    @Body(SignMessagePipe) signedMessageDto: SignedMessageDto,
+    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
   ) {
     const user = await this.authService.login(signedMessageDto.address);
     req.session.user = user;

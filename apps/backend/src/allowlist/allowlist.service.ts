@@ -32,6 +32,7 @@ export class AllowlistService {
 
   async createAllowlist(
     createAllowlistDTO: CreateAllowlistDto,
+    adminAddress: string,
   ): Promise<Allowlist> {
     const duplicate = await this.findByCustomId(createAllowlistDTO.url);
     if (duplicate) {
@@ -40,7 +41,7 @@ export class AllowlistService {
 
     return this.allowlistModel.create({
       ...createAllowlistDTO,
-      admin: createAllowlistDTO.address,
+      admin: adminAddress,
     });
   }
 

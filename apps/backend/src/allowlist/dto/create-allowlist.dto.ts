@@ -6,9 +6,8 @@ import {
   IsDateString,
   IsObject,
 } from 'class-validator';
-import { SignedMessageDto } from './signed-message.dto';
 
-export class CreateAllowlistDto extends SignedMessageDto {
+export class CreateAllowlistDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ required: true })

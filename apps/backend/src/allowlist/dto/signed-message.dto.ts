@@ -10,37 +10,32 @@ import {
 export class SignedMessageDto {
   @IsObject()
   @IsNotEmpty()
-  @IsOptional()
+  @ApiProperty({ required: true })
   @ApiProperty()
   signature: Object;
 
   @IsNumber()
   @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ required: true })
   sequence: number;
 
   @IsNumber()
   @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ required: true })
   account_number: number;
 
   @IsNumber()
   @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ required: true })
   chain_id: string;
 
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ required: true })
   message: string;
 
   @IsString()
   @IsNotEmpty()
-  @IsOptional()
-  @ApiProperty()
+  @ApiProperty({ required: true })
   address: string;
 }

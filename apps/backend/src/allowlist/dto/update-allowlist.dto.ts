@@ -1,8 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsOptional, IsDateString, IsObject } from 'class-validator';
-import { SignedMessageDto } from './signed-message.dto';
 
-export class UpdateAllowlistDto extends SignedMessageDto {
+export class UpdateAllowlistDto {
   @IsString()
   @IsOptional()
   @ApiProperty({ required: false })

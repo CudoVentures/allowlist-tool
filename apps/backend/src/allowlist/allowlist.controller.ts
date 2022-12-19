@@ -6,6 +6,7 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
   UseInterceptors,
@@ -17,6 +18,7 @@ import { Allowlist } from './allowlist.model';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { JoinAllowlistDto } from './dto/join-allowlist.dto';
+import { SignedMessageDto } from './dto/signed-message.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { CreateAllowlistPipe } from './pipes/create-allowlist.pipe';
@@ -55,11 +57,12 @@ export class AllowlistController {
   @UseGuards(LoggedInGuard)
   async join(
     @Param('id', ParseIntPipe) id: number,
-    @Body(SignMessagePipe) joinAllowlistDto: JoinAllowlistDto,
+    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
+    @Body() joinAllowlistDto: JoinAllowlistDto,
   ) {
     return this.allowlistService.joinAllowlist(
       id,
-      joinAllowlistDto.address,
+      signedMessageDto.address,
       joinAllowlistDto.email,
     );
   }
@@ -68,10 +71,14 @@ export class AllowlistController {
   @Post()
   @UseGuards(LoggedInGuard)
   async create(
-    @Body(SignMessagePipe, CreateAllowlistPipe)
+    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
+    @Body(CreateAllowlistPipe)
     createAllowlistDto: CreateAllowlistDto,
   ): Promise<Allowlist> {
-    return this.allowlistService.createAllowlist(createAllowlistDto);
+    return this.allowlistService.createAllowlist(
+      createAllowlistDto,
+      signedMessageDto.address,
+    );
   }
 
   @UseInterceptors(TransactionInterceptor)
@@ -79,7 +86,8 @@ export class AllowlistController {
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body(SignMessagePipe) updateAllowlistDto: UpdateAllowlistDto,
+    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
+    @Body() updateAllowlistDto: UpdateAllowlistDto,
   ): Promise<Allowlist> {
     return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
   }
