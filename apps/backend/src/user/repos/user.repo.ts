@@ -11,7 +11,7 @@ import {
   freezeTableName: true,
   tableName: 'users',
 })
-export class User extends Model {
+export class UserRepo extends Model {
   @Unique
   @PrimaryKey
   @AutoIncrement

@@ -1,82 +1,101 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import axios from 'axios';
-import { User } from '../user/user.model';
 import { UserService } from '../user/user.service';
-import { Allowlist } from './allowlist.model';
+import { AllowlistRepo } from './repos/allowlist.repo';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
+import AllowlistEntity from './entities/allowlist.entity';
+import UserEntity from '../user/entities/user.entity';
 @Injectable()
 export class AllowlistService {
   constructor(
-    @InjectModel(Allowlist)
-    private allowlistModel: typeof Allowlist,
+    @InjectModel(AllowlistRepo)
+    private allowlistRepo: typeof AllowlistRepo,
     private userSerivice: UserService,
   ) {}
 
   async findAll() {
-    return this.allowlistModel.findAll();
+    const allowlistRepos = await this.allowlistRepo.findAll();
+    return allowlistRepos.map((allowlistRepo) =>
+      AllowlistEntity.fromRepo(allowlistRepo),
+    );
   }
 
-  async findByAdmin(admin: string): Promise<Allowlist[]> {
-    return this.allowlistModel.findAll({ where: { admin } });
+  async findByAdmin(admin: string): Promise<AllowlistEntity[]> {
+    const allowlistRepos = await this.allowlistRepo.findAll({
+      where: { admin },
+    });
+    return allowlistRepos.map((allowlistRepo) =>
+      AllowlistEntity.fromRepo(allowlistRepo),
+    );
   }
 
-  async findByCustomId(id: string): Promise<Allowlist> {
-    return this.allowlistModel.findOne({ where: { url: id } });
+  async findByCustomId(id: string): Promise<AllowlistEntity> {
+    const allowlistRepo = await this.allowlistRepo.findOne({
+      where: { url: id },
+    });
+    return AllowlistEntity.fromRepo(allowlistRepo);
   }
 
-  async findOne(id: number): Promise<Allowlist> {
-    return this.allowlistModel.findByPk(id);
+  async findOne(id: number): Promise<AllowlistEntity> {
+    const allowlistRepo = await this.allowlistRepo.findByPk(id);
+    return AllowlistEntity.fromRepo(allowlistRepo);
   }
 
   async createAllowlist(
     createAllowlistDTO: CreateAllowlistDto,
     adminAddress: string,
-  ): Promise<Allowlist> {
+  ): Promise<AllowlistEntity> {
     const duplicate = await this.findByCustomId(createAllowlistDTO.url);
     if (duplicate) {
       throw new BadRequestException('Allowlist with this url already exists');
     }
 
-    return this.allowlistModel.create({
+    const allowlistRepo = await this.allowlistRepo.create({
       ...createAllowlistDTO,
       admin: adminAddress,
     });
+    return AllowlistEntity.fromRepo(allowlistRepo);
   }
 
   async updateAllowlist(
     id: number,
     updateCollectionDto: UpdateAllowlistDto,
-  ): Promise<Allowlist> {
-    const [count, [allowlist]] = await this.allowlistModel.update(
+  ): Promise<AllowlistEntity> {
+    const [count, [allowlistRepo]] = await this.allowlistRepo.update(
       { ...updateCollectionDto },
       { where: { id }, returning: true },
     );
 
-    return allowlist;
+    return AllowlistEntity.fromRepo(allowlistRepo);
   }
 
-  private async addToAllowlist(id: number, userId: number, email: string) {
-    const allowlist = await this.findOne(id);
+  private async addToAllowlist(
+    id: number,
+    userId: number,
+    email: string,
+  ): Promise<AllowlistEntity> {
+    const allowlistRepo = await this.allowlistRepo.findByPk(id);
+    const allowlistEntity = AllowlistEntity.fromRepo(allowlistRepo);
 
-    const registeredUsers = allowlist.users.map(
+    const registeredUsers = allowlistEntity.users.map(
       (entry) => JSON.parse(entry).userId,
     );
     if (registeredUsers.includes(userId)) {
-      return allowlist;
+      return allowlistEntity;
     }
 
-    const updatedList = allowlist.users.concat([
+    const updatedList = allowlistEntity.users.concat([
       JSON.stringify({ userId, email }),
     ]);
 
-    const [count, [updated]] = await this.allowlistModel.update(
+    const [count, [updatedAllowlistRepo]] = await this.allowlistRepo.update(
       { users: updatedList },
       { where: { id }, returning: true },
     );
 
-    return updated;
+    return AllowlistEntity.fromRepo(updatedAllowlistRepo);
   }
 
   async joinAllowlist(
@@ -84,21 +103,22 @@ export class AllowlistService {
     userAddress: string,
     userEmail: string,
   ) {
-    const allowlist = await this.findOne(allowlistId);
+    const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
+    const allowlistEntity = AllowlistEntity.fromRepo(allowlistRepo);
 
     const now = Math.floor(new Date().getTime() / 1000);
-    const endDate = Math.floor(allowlist.end_date.getTime() / 1000);
+    const endDate = Math.floor(allowlistRepo.end_date.getTime() / 1000);
     if (endDate < now) {
       throw new BadRequestException('Allowlist is closed for new entries');
     }
 
     const user = await this.userSerivice.findByAddress(userAddress);
 
-    await this.checkForDuplicateAcc(user, allowlist);
+    await this.checkForDuplicateAcc(user, allowlistEntity);
 
-    if (allowlist.twitter_account) {
+    if (allowlistEntity.twitter_account) {
       const followAcc = this.followsAcc(
-        allowlist.twitter_account,
+        allowlistEntity.twitter_account,
         user.twitter_profile_id,
       );
       if (!followAcc) {
@@ -106,16 +126,22 @@ export class AllowlistService {
       }
     }
 
-    if (allowlist.tweet_to_like) {
-      const tweetId = allowlist.tweet_to_like.split('/').at(-1).split('?')[0];
+    if (allowlistEntity.tweet_to_like) {
+      const tweetId = allowlistEntity.tweet_to_like
+        .split('/')
+        .at(-1)
+        .split('?')[0];
       const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
       if (!liked) {
         throw new BadRequestException('Criteria not met');
       }
     }
 
-    if (allowlist.tweet_to_retweet) {
-      const tweetId = allowlist.tweet_to_like.split('/').at(-1).split('?')[0];
+    if (allowlistEntity.tweet_to_retweet) {
+      const tweetId = allowlistEntity.tweet_to_like
+        .split('/')
+        .at(-1)
+        .split('?')[0];
       const retweeted = await this.retweeted(
         user.twitter_profile_username,
         tweetId,
@@ -125,15 +151,15 @@ export class AllowlistService {
       }
     }
 
-    if (allowlist.discord_invite_link && allowlist.server_role) {
-      const inviteCode = allowlist.discord_invite_link.split('/').pop();
+    if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
+      const inviteCode = allowlistEntity.discord_invite_link.split('/').pop();
       const serverId = (
         await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
       ).data.guild.id;
 
       const hasRole = await this.hasRole(
         serverId,
-        allowlist.server_role,
+        allowlistEntity.server_role,
         user.discord_access_token,
       );
 
@@ -145,9 +171,12 @@ export class AllowlistService {
     return this.addToAllowlist(allowlistId, user.id, userEmail);
   }
 
-  private async checkForDuplicateAcc(user: User, allowlist: Allowlist) {
+  private async checkForDuplicateAcc(
+    user: UserEntity,
+    allowlistEntity: AllowlistEntity,
+  ) {
     const users = await Promise.all(
-      allowlist.users.map((entry) => {
+      allowlistEntity.users.map((entry) => {
         const { userId } = JSON.parse(entry);
         return this.userSerivice.findById(userId);
       }),
@@ -269,8 +298,8 @@ export class AllowlistService {
   }
 
   async getEntries(allowlistId: number) {
-    const allowlist = await this.allowlistModel.findByPk(allowlistId);
-    const entries = allowlist.users.map((entry) => JSON.parse(entry));
+    const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
+    const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
     return Promise.all(
       entries.map((entry) => {
         return this.userSerivice.findById(entry.userId).then((user) => {

@@ -2,7 +2,7 @@ import { Strategy } from 'passport-discord';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { User } from '../../user/user.model';
+import UserEntity from '../../user/entities/user.entity';
 
 @Injectable()
 export class DiscordStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +16,7 @@ export class DiscordStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(req, accessToken, refreshToken, profile): Promise<User> {
+  async validate(req, accessToken, refreshToken, profile): Promise<UserEntity> {
     const user = await this.authService.validateDiscordUser(
       req,
       accessToken,

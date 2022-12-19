@@ -1,0 +1,1 @@
+export const NOT_EXISTS_INT = -2147483648;

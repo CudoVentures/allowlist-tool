@@ -1,38 +1,48 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { User } from './user.model';
+import UserEntity from './entities/user.entity';
+import { UserRepo } from './repos/user.repo';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectModel(User)
-    private userModel: typeof User,
+    @InjectModel(UserRepo)
+    private userRepo: typeof UserRepo,
   ) {}
 
-  async findByAddress(address: string): Promise<User> {
-    return this.userModel.findOne({ where: { address } });
+  async findByAddress(address: string): Promise<UserEntity> {
+    const userRepo = await this.userRepo.findOne({ where: { address } });
+    return UserEntity.fromRepo(userRepo);
   }
 
-  async findByDiscordId(id: number): Promise<User> {
-    return this.userModel.findOne({ where: { discord_profile_id: id } });
+  async findByDiscordId(id: number): Promise<UserEntity> {
+    const userRepo = await this.userRepo.findOne({
+      where: { discord_profile_id: id },
+    });
+    return UserEntity.fromRepo(userRepo);
   }
 
-  async findByTwitterId(id: number): Promise<User> {
-    return this.userModel.findOne({ where: { twitter_profile_id: id } });
+  async findByTwitterId(id: number): Promise<UserEntity> {
+    const userRepo = await this.userRepo.findOne({
+      where: { twitter_profile_id: id },
+    });
+    return UserEntity.fromRepo(userRepo);
   }
 
-  async findById(id: number): Promise<User> {
-    return this.userModel.findByPk(id);
+  async findById(id: number): Promise<UserEntity> {
+    const userRepo = await this.userRepo.findByPk(id);
+    return UserEntity.fromRepo(userRepo);
   }
 
-  async createUser(params: any): Promise<User> {
-    return this.userModel.create({
+  async createUser(params: any): Promise<UserEntity> {
+    const userRepo = await this.userRepo.create({
       ...params,
     });
+    return UserEntity.fromRepo(userRepo);
   }
 
-  async updateUser(id: number, params: any): Promise<User> {
-    const [count, [user]] = await this.userModel.update(
+  async updateUser(id: number, params: any): Promise<UserEntity> {
+    const [count, [userRepo]] = await this.userRepo.update(
       {
         ...params,
       },
@@ -41,6 +51,6 @@ export class UserService {
         returning: true,
       },
     );
-    return user;
+    return UserEntity.fromRepo(userRepo);
   }
 }

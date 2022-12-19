@@ -13,7 +13,7 @@ import {
   freezeTableName: true,
   tableName: 'allowlists',
 })
-export class Allowlist extends Model {
+export class AllowlistRepo extends Model {
   @Unique
   @PrimaryKey
   @AutoIncrement
@@ -91,5 +91,5 @@ export class Allowlist extends Model {
 
   @AllowNull(true)
   @Column
-  require_email: string;
+  require_email: boolean;
 }

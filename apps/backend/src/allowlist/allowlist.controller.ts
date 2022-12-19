@@ -14,7 +14,6 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { LoggedInGuard } from '../auth/guards/loggedIn.guard';
 import { TransactionInterceptor } from '../common/common.interceptors';
-import { Allowlist } from './allowlist.model';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { JoinAllowlistDto } from './dto/join-allowlist.dto';
@@ -23,6 +22,7 @@ import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { CreateAllowlistPipe } from './pipes/create-allowlist.pipe';
 import { SignMessagePipe } from './pipes/sign-message.pipe';
+import AllowlistEntity from './entities/allowlist.entity';
 
 @ApiTags('Allowlist')
 @Controller('allowlist')
@@ -30,19 +30,19 @@ export class AllowlistController {
   constructor(private allowlistService: AllowlistService) {}
 
   @Get('all')
-  async findAll(): Promise<Allowlist[]> {
+  async findAll(): Promise<AllowlistEntity[]> {
     return this.allowlistService.findAll();
   }
 
   @Get(':customId')
   async findByCustomId(
     @Param('customId') customId: string,
-  ): Promise<Allowlist> {
+  ): Promise<AllowlistEntity> {
     return this.allowlistService.findByCustomId(customId);
   }
 
   @Get()
-  async findByAdmin(@Request() req): Promise<Allowlist[]> {
+  async findByAdmin(@Request() req): Promise<AllowlistEntity[]> {
     return this.allowlistService.findByAdmin(req.session.user.address);
   }
 
@@ -74,7 +74,7 @@ export class AllowlistController {
     @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
     @Body(CreateAllowlistPipe)
     createAllowlistDto: CreateAllowlistDto,
-  ): Promise<Allowlist> {
+  ): Promise<AllowlistEntity> {
     return this.allowlistService.createAllowlist(
       createAllowlistDto,
       signedMessageDto.address,
@@ -88,7 +88,7 @@ export class AllowlistController {
     @Param('id', ParseIntPipe) id: number,
     @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
     @Body() updateAllowlistDto: UpdateAllowlistDto,
-  ): Promise<Allowlist> {
+  ): Promise<AllowlistEntity> {
     return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
   }
 }
