@@ -1,9 +1,11 @@
 import React from 'react';
 import SVG from 'react-inlinesvg';
 import moment from "moment";
-import { Box, Typography } from '@mui/material';
+import { Box, Divider } from '@mui/material';
+import { JdenticonConfig, toSvg } from 'jdenticon';
 
 import { CHAIN_DETAILS } from '../../../utilities/Constants';
+import { COLORS_DARK_THEME } from '../../../theme/colors';
 import walletIcon from '../../../../public/assets/vectors/wallet-icon.svg';
 import arrowDown from '../../../../public/assets/vectors/arrow-down.svg';
 import userIcon from '../../../../public/assets/vectors/user-icon.svg';
@@ -21,11 +23,20 @@ import youTubeIcon from '../../../../public/assets/vectors/youtube.svg';
 import facebookIcon from '../../../../public/assets/vectors/facebook.svg';
 import spotifyIcon from '../../../../public/assets/vectors/spotify.svg';
 import logoHeader from '../../../../public/assets/vectors/logo-header.svg';
-import { JdenticonConfig, toSvg } from 'jdenticon';
+import logoFooter from '../../../../public/assets/vectors/logo-footer.svg';
+import frame1673 from '../../../../public/assets/vectors/frames/frame-1673.svg';
+import frame1674 from '../../../../public/assets/vectors/frames/frame-1674.svg';
+import plusIcon from '../../../../public/assets/vectors/plus-icon.svg';
+import minusIcon from '../../../../public/assets/vectors/minus-icon.svg';
+import smileyFaceIcon from '../../../../public/assets/vectors/smiley-face-icon.svg';
+import copyIcon from '../../../../public/assets/vectors/copy-icon.svg';
 
-import { helperStyles } from './styles';
+
+import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    AllowlistBackground = 'Allowlist background',
+    AllowlistAvatar = 'Allowlist avatar',
     ConnectWallet = 'Connect Wallet',
     GoToDashboard = 'Go to Dashboard',
     WalletLogo = 'Wallet logo',
@@ -44,11 +55,20 @@ export enum LAYOUT_CONTENT_TEXT {
     FacebookIcon = 'Facebook icon',
     SpotifyIcon = 'Spotifu icon',
     MainCudosLogo = 'Main Cudos Logo',
+    FooterCudosLogo = 'Footer Cudos Logo',
     CosmostationLogo = 'Cosmostation logo',
+    PlusIcon = 'Plus Icon',
+    MinusIcon = 'Minus Icon',
+    SmileyFaceIcon = 'Smiley face icon',
+    SvgImg = 'SVG Image',
+    CopyIcon = 'Copy icon',
     Logout = 'Logout'
 }
 
+
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.FooterCudosLogo]: logoFooter,
+    [LAYOUT_CONTENT_TEXT.CopyIcon]: copyIcon,
     [LAYOUT_CONTENT_TEXT.MainCudosLogo]: logoHeader,
     [LAYOUT_CONTENT_TEXT.Logout]: arrowRight,
     [LAYOUT_CONTENT_TEXT.UserIcon]: userIcon,
@@ -66,6 +86,9 @@ const SVG_SRC_MAPPER = {
     [LAYOUT_CONTENT_TEXT.YouTubeIcon]: youTubeIcon,
     [LAYOUT_CONTENT_TEXT.FacebookIcon]: facebookIcon,
     [LAYOUT_CONTENT_TEXT.SpotifyIcon]: spotifyIcon,
+    [LAYOUT_CONTENT_TEXT.PlusIcon]: plusIcon,
+    [LAYOUT_CONTENT_TEXT.MinusIcon]: minusIcon,
+    [LAYOUT_CONTENT_TEXT.SmileyFaceIcon]: smileyFaceIcon
 }
 
 const TEXT_MAPPER = {
@@ -84,19 +107,26 @@ export const SvgComponent = ({ type, style }: { type: LAYOUT_CONTENT_TEXT, style
     )
 }
 
-export const DropDownItem = ({ type, onClick }: { type: LAYOUT_CONTENT_TEXT, onClick: React.MouseEventHandler<HTMLDivElement> }): JSX.Element => {
+export const FOOTER_LOGO = () => {
+
     return (
-        <Box onClick={onClick} sx={helperStyles.dropDownItem}>
-            <SvgComponent type={type} style='default' />
-            <Typography fontWeight={600}>
-                {TEXT_MAPPER[type] || ''}
-            </Typography>
+        <Box gap={3} sx={helperStyles.footerLogo} >
+            <SvgComponent
+                style={{ height: '32px' }}
+                type={LAYOUT_CONTENT_TEXT.FooterCudosLogo}
+            />
+            <Divider
+                orientation='vertical'
+                sx={headerStyles.divider}
+            />
         </Box>
     )
 }
 
+const FOOTER_ICON_STYLE = { height: '22px', width: '22px' }
 export const FOOTER = {
     LEFT_LINKS: [
+        { text: <FOOTER_LOGO />, url: 'https://www.cudos.org' },
         { text: 'Terms & Conditions', url: 'https://www.cudos.org/terms-and-conditions/' },
         { text: 'Privacy Policy', url: 'https://www.cudos.org/privacy-policy' },
         { text: 'cudos.org', url: 'https://www.cudos.org/' },
@@ -104,14 +134,14 @@ export const FOOTER = {
         { text: `v${CHAIN_DETAILS.DEPLOYMENT_VERSION}`, url: `https://github.com/CudoVentures/cudos-allowlist-tool/releases/tag/v${CHAIN_DETAILS.DEPLOYMENT_VERSION}` }
     ],
     RIGHT_LINKS: [
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.TwitterIcon} />, url: 'https://twitter.com/CUDOS_' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.TelegramIcon} />, url: 'https://t.me/cudostelegram' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.DiscordIcon} />, url: 'https://discord.com/invite/t397SKqf4u' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.LinkedInIcon} />, url: 'https://www.linkedin.com/company/cudos1' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.MediumIcon} />, url: 'https://medium.com/cudos' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.YouTubeIcon} />, url: 'https://www.youtube.com/c/CUDOS' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.FacebookIcon} />, url: 'https://www.facebook.com/cudos.org' },
-        { icon: <SvgComponent style={'default'} type={LAYOUT_CONTENT_TEXT.SpotifyIcon} />, url: 'https://open.spotify.com/show/2lZuBXJ270g7taK06tnK35' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.TwitterIcon} />, url: 'https://twitter.com/CUDOS_' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.TelegramIcon} />, url: 'https://t.me/cudostelegram' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.DiscordIcon} />, url: 'https://discord.com/invite/t397SKqf4u' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.LinkedInIcon} />, url: 'https://www.linkedin.com/company/cudos1' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.MediumIcon} />, url: 'https://medium.com/cudos' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.YouTubeIcon} />, url: 'https://www.youtube.com/c/CUDOS' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.FacebookIcon} />, url: 'https://www.facebook.com/cudos.org' },
+        { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.SpotifyIcon} />, url: 'https://open.spotify.com/show/2lZuBXJ270g7taK06tnK35' },
 
     ]
 }
@@ -150,9 +180,8 @@ export const HashBasedUserAvatar = ({
     return (
         <Box sx={{
             ...helperStyles.imgHolder,
-            bgcolor: '#1F2436',
-            width: `${size + 4}px`,
-            height: `${size + 4}px`,
+            bgcolor: COLORS_DARK_THEME.DARK_BACKGROUND,
+            padding: `${size / 5}px`
         }}
         >
             <SVG
@@ -161,4 +190,9 @@ export const HashBasedUserAvatar = ({
             />
         </Box>
     )
+}
+
+export const SVG_FRAMES = {
+    frame1673: frame1673,
+    frame1674: frame1674
 }

@@ -99,58 +99,63 @@ module.exports = function () {
             new CleanWebpackPlugin(),
         ],
         module: {
-            rules: [{
-                test: /\.css$/,
-                exclude: [/node_modules/],
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        'loader': 'css-loader',
-                        'options': {
-                            'url': false,
+            rules: [
+                {
+                    test: /\.(woff2|woff|eot|ttf|otf)$/,
+                    use: ["file-loader"],
+                },
+                {
+                    test: /\.css$/,
+                    exclude: [/node_modules/],
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            'loader': 'css-loader',
+                            'options': {
+                                'url': false,
+                            },
+                        },
+                    ],
+                }, {
+                    test: /\.js$|\.jsx$|\.ts$|\.tsx$/,
+                    exclude: [/node_modules/],
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            'presets': [
+                                [
+                                    '@babel/env',
+                                    {
+                                        targets: {
+                                            chrome: '60',
+                                            safari: '10',
+                                            edge: '12',
+                                        },
+                                        useBuiltIns: 'entry',
+                                        corejs: { version: 2, proposals: false },
+                                    },
+                                ],
+                                '@babel/preset-react',
+                                '@babel/typescript',
+                            ],
+                            plugins: [
+                                ['@babel/plugin-proposal-decorators', { 'legacy': true }],
+                                ['@babel/plugin-proposal-class-properties', { 'loose': false }],
+                                '@babel/proposal-object-rest-spread',
+                                // '@babel/plugin-transform-regenerator',
+                            ],
+                            cacheDirectory: '/tmp',
+                            configFile: false,
+                            babelrc: false,
                         },
                     },
-                ],
-            }, {
-                test: /\.js$|\.jsx$|\.ts$|\.tsx$/,
-                exclude: [/node_modules/],
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        'presets': [
-                            [
-                                '@babel/env',
-                                {
-                                    targets: {
-                                        chrome: '60',
-                                        safari: '10',
-                                        edge: '12',
-                                    },
-                                    useBuiltIns: 'entry',
-                                    corejs: { version: 2, proposals: false },
-                                },
-                            ],
-                            '@babel/preset-react',
-                            '@babel/typescript',
-                        ],
-                        plugins: [
-                            ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-                            ['@babel/plugin-proposal-class-properties', { 'loose': false }],
-                            '@babel/proposal-object-rest-spread',
-                            // '@babel/plugin-transform-regenerator',
-                        ],
-                        cacheDirectory: '/tmp',
-                        configFile: false,
-                        babelrc: false,
+                }, {
+                    test: /\.svg$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'raw-loader',
                     },
-                },
-            }, {
-                test: /\.svg$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'raw-loader',
-                },
-            }],
+                }],
         },
         resolve: {
             extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],

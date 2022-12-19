@@ -5,7 +5,7 @@ import Footer from './Footer'
 import Header from './Header'
 import { layoutStyles } from './styles'
 
-const footerHeight = 50
+const footerHeight = 80
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
@@ -35,15 +35,16 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     return (
         <Box id='appWrapper' sx={layoutStyles.appWrapper} >
             <Header />
-            <Box minHeight={`${windowSize.height}px`} sx={layoutStyles.contentHolder}>
+            <Box sx={layoutStyles.contentHolder}>
                 <Box
+                    minHeight={`${windowSize.height}px`}
                     id='contentWrapper'
                     marginTop={10}
                     sx={layoutStyles.contentWrapper}>
                     {children}
+                    <Footer />
                 </Box>
             </Box>
-            <Footer />
         </Box>
     )
 }

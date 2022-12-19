@@ -14,6 +14,5 @@ export const formatAddress = (text: string, sliceIndex: number): string => {
 }
 
 export const isMainnetInstance = (): boolean => {
-  const network = CHAIN_DETAILS.DEFAULT_NETWORK
-  return CHAIN_DETAILS.CHAIN_ID[network!] === CHAIN_DETAILS.CHAIN_ID.MAINNET
+  return CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK] === CHAIN_DETAILS.CHAIN_ID.MAINNET
 }

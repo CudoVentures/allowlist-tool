@@ -1,38 +1,40 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+
 import theme from './core/theme';
 import Layout from './core/presentation/components/Layout';
+import AppRoutes from './features/app-routes/entities/AppRoutes';
+import Home from './features/app-routes/presentation/components/Home';
+import CreateAllowlistPage from './features/allowlists/presentation/pages/create-allowlist';
 
 const App = () => {
+
+  const location = useLocation()
 
   return (
     <Fragment>
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Layout>
-
-          {/* CONTENT PAGES HERE */}
-
-          {/* {'TEST CONTENT'.repeat(2000)} */}
-
-          {/* <Routes location={displayLocation}>
-        <Route path={AppRoutes.MAIN} element={<Home />} />
-        <Route
+          <Routes>
+            <Route path={AppRoutes.MAIN} element={<Home />} />
+            <Route
+              path={AppRoutes.CREATE_ALLOWLIST}
+              element={<CreateAllowlistPage />}
+            />
+            {/* <Route
           path={AppRoutes.ALLOWLIST}
           element={<AllowlistPage walletStore={walletStore} />}
         />
         <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
         <Route path={AppRoutes.NOT_FOUND} element={<NotFoundPage />} />
         <Route
-          path={AppRoutes.CREATE_ALLOWLIST}
-          element={<CreateAllowlistPage walletStore={walletStore} />}
-        />
-        <Route
           path={AppRoutes.MY_ALLOWLISTS}
           element={<MyAllowlistsPage walletStore={walletStore} />}
-        />
-      </Routes> */}
-
+        /> */}
+            <Route path="*" element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />} />
+          </Routes>
         </Layout>
       </ThemeProvider>
     </Fragment >
