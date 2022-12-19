@@ -1,5 +1,6 @@
 const Path = require('path');
 const Dotenv = require('dotenv');
+const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -37,7 +38,7 @@ if (!envs.error) {
     console.warn('There was an error parsing .env file', envs.error);
 }
 
-module.exports = function (options, webpack) {
+module.exports = function () {
     let devTool, optimization;
     if (process.env.NODE_ENV === 'production') {
         devTool = false;
@@ -56,7 +57,7 @@ module.exports = function (options, webpack) {
 
     return {
         target: 'web',
-        mode: process.env.APP_NODE_ENV,
+        mode: process.env.NODE_ENV,
         externals: [],
         devtool: devTool,
         optimization,
@@ -66,6 +67,9 @@ module.exports = function (options, webpack) {
             path: distPublicWebpackPath,
         },
         plugins: [
+            new webpack.ProvidePlugin({
+                Buffer: ['buffer', 'Buffer'],
+            }),
             new MiniCssExtractPlugin({
                 filename: '[name]-[fullhash].css',
             }),
@@ -73,7 +77,7 @@ module.exports = function (options, webpack) {
                 Config: JSON.stringify(ConfigFrontend),
                 process: {
                     env: {
-                        NODE_ENV: JSON.stringify(process.env.APP_NODE_ENV),
+                        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                     },
                 },
             }),
@@ -154,6 +158,7 @@ module.exports = function (options, webpack) {
                 'crypto': require.resolve('crypto-browserify'),
                 'stream': require.resolve('stream-browserify'),
                 'path': require.resolve('path-browserify'),
+                'buffer': require.resolve('buffer/'),
             },
         },
     };
