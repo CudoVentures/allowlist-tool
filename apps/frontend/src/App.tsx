@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { ParallaxProvider } from 'react-scroll-parallax';
 
 import theme from './core/theme';
 import Layout from './core/presentation/components/Layout';
@@ -16,14 +17,18 @@ const App = () => {
     <Fragment>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Layout>
-          <Routes>
-            <Route path={AppRoutes.MAIN} element={<Home />} />
-            <Route
-              path={AppRoutes.CREATE_ALLOWLIST}
-              element={<CreateAllowlistPage />}
-            />
-            {/* <Route
+        <ParallaxProvider>
+          <Layout>
+
+
+
+            <Routes>
+              <Route path={AppRoutes.MAIN} element={<Home />} />
+              <Route
+                path={AppRoutes.CREATE_ALLOWLIST}
+                element={<CreateAllowlistPage />}
+              />
+              {/* <Route
           path={AppRoutes.ALLOWLIST}
           element={<AllowlistPage walletStore={walletStore} />}
         />
@@ -33,9 +38,10 @@ const App = () => {
           path={AppRoutes.MY_ALLOWLISTS}
           element={<MyAllowlistsPage walletStore={walletStore} />}
         /> */}
-            <Route path="*" element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />} />
-          </Routes>
-        </Layout>
+              <Route path="*" element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />} />
+            </Routes>
+          </Layout>
+        </ParallaxProvider>
       </ThemeProvider>
     </Fragment >
   );

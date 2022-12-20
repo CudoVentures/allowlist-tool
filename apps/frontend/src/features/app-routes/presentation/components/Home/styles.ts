@@ -1,5 +1,110 @@
 import { COLORS_DARK_THEME } from "../../../../../core/theme/colors"
 
+export const forCollectorsStyles = {
+    avatar: {
+        padding: '10px 10px 0px 10px',
+        borderRadius: '8px',
+        border: "1px solid #F5FAFF",
+        position: 'absolute',
+        top: -5,
+        right: 55,
+        backdropFilter: 'blur(16px)',
+        background: 'gba(16, 18, 26, 0.8)',
+        height: '164px',
+        width: '164px'
+    },
+    yellowBox: {
+        borderRadius: '8px',
+        border: "1px solid #F5FAFF",
+        position: 'absolute',
+        top: 20,
+        right: 30,
+        background: 'rgba(218, 251, 51, 1)',
+        height: '164px',
+        width: '164px'
+    },
+    leftContent: {
+        position: 'relative',
+        width: '490px',
+        height: '480px'
+    },
+    holder: {
+        marginBottom: '4rem',
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    textHolder: {
+        flexDirection: 'column',
+        display: 'flex',
+        width: '551px'
+    },
+    btn: {
+        marginTop: '3rem',
+        width: '192px',
+        height: '56px',
+        borderRadius: '100px'
+    },
+    rightContent: {
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        display: 'flex',
+    },
+}
+
+export const forCreatorsStyles = {
+    avatar: {
+        padding: '10px 10px 0px 10px',
+        borderRadius: '8px',
+        border: "1px solid #F5FAFF",
+        position: 'absolute',
+        top: -5,
+        right: 55,
+        backdropFilter: 'blur(16px)',
+        background: 'gba(16, 18, 26, 0.8)',
+        height: '164px',
+        width: '164px'
+    },
+    yellowBox: {
+        borderRadius: '8px',
+        border: "1px solid #F5FAFF",
+        position: 'absolute',
+        top: 20,
+        right: 30,
+        background: 'rgba(218, 251, 51, 1)',
+        height: '164px',
+        width: '164px'
+    },
+    rightContent: {
+        position: 'relative',
+        width: '490px',
+        height: '480px'
+    },
+    holder: {
+        marginBottom: '4rem',
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    textHolder: {
+        flexDirection: 'column',
+        display: 'flex',
+        width: '551px'
+    },
+    btn: {
+        marginTop: '3rem',
+        width: '192px',
+        height: '56px',
+        borderRadius: '100px'
+    },
+    leftContent: {
+        justifyContent: 'space-between',
+        flexDirection: 'column',
+        display: 'flex',
+    },
+}
 export const homeStyles = {
     mainCardAndFeadturesHolder: {
         margin: '0rem 4rem',
@@ -16,7 +121,7 @@ export const homeStyles = {
 
 export const lowerSectionStyles = {
     holder: {
-        padding: '4rem 4rem 6rem 4rem',
+        padding: '6rem',
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
@@ -106,7 +211,7 @@ export const FAQStyle = {
         width: '100%',
         display: 'flex',
         borderRadius: '32px',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center'
     },
     accordion: {

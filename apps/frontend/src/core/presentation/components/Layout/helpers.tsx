@@ -30,7 +30,14 @@ import plusIcon from '../../../../public/assets/vectors/plus-icon.svg';
 import minusIcon from '../../../../public/assets/vectors/minus-icon.svg';
 import smileyFaceIcon from '../../../../public/assets/vectors/smiley-face-icon.svg';
 import copyIcon from '../../../../public/assets/vectors/copy-icon.svg';
-
+import bigPlusIcon from '../../../../public/assets/vectors/parallax/big-plus.svg';
+import sampleAllowListDetails from '../../../../public/assets/vectors/parallax/sample-allowlist-details.svg';
+import sampleAllowListMint from '../../../../public/assets/vectors/parallax/sample-allowlist-mint.svg';
+import sampleAllowListPage from '../../../../public/assets/vectors/parallax/sample-allowlist-page.svg';
+import sampleAllowListRegister from '../../../../public/assets/vectors/parallax/sample-allowlist-register.svg';
+import headImg from '../../../../public/assets/vectors/parallax/head.svg';
+import checkmark from '../../../../public/assets/vectors/parallax/checkmark.svg';
+import rectangularShade from '../../../../public/assets/vectors/parallax/rectangular-shade.svg';
 
 import { headerStyles, helperStyles } from './styles';
 
@@ -62,14 +69,31 @@ export enum LAYOUT_CONTENT_TEXT {
     SmileyFaceIcon = 'Smiley face icon',
     SvgImg = 'SVG Image',
     CopyIcon = 'Copy icon',
-    Logout = 'Logout'
+    BigPlusIcon = 'Big plus icon',
+    Logout = 'Logout',
+    HeadImg = 'Head image',
+    SampleAllowListDetails = 'Sample Allowlist details',
+    SampleAllowListMint = 'Sample Allowlist mint form',
+    SampleAllowListPage = 'Sample Allowlist page',
+    SampleAllowListRegister = 'Sample Allowlist registration form',
+    Checkmark = 'Checkmark icon',
+    RectangularShade = 'Shade element'
 }
 
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.Checkmark]: checkmark,
+    [LAYOUT_CONTENT_TEXT.RectangularShade]: rectangularShade,
+    [LAYOUT_CONTENT_TEXT.HeadImg]: headImg,
+    [LAYOUT_CONTENT_TEXT.SampleAllowListRegister]: sampleAllowListRegister,
+    [LAYOUT_CONTENT_TEXT.SampleAllowListPage]: sampleAllowListPage,
+    [LAYOUT_CONTENT_TEXT.SampleAllowListDetails]: sampleAllowListDetails,
+    [LAYOUT_CONTENT_TEXT.SampleAllowListMint]: sampleAllowListMint,
+    [LAYOUT_CONTENT_TEXT.BigPlusIcon]: bigPlusIcon,
     [LAYOUT_CONTENT_TEXT.FooterCudosLogo]: logoFooter,
     [LAYOUT_CONTENT_TEXT.CopyIcon]: copyIcon,
     [LAYOUT_CONTENT_TEXT.MainCudosLogo]: logoHeader,
+    [LAYOUT_CONTENT_TEXT.ArrowRight]: arrowRight,
     [LAYOUT_CONTENT_TEXT.Logout]: arrowRight,
     [LAYOUT_CONTENT_TEXT.UserIcon]: userIcon,
     [LAYOUT_CONTENT_TEXT.ArrowIcon]: arrowDown,
