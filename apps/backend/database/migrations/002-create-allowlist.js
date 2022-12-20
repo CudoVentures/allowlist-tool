@@ -66,28 +66,99 @@ module.exports = {
         twitter_account_to_follow: {
           allowNull: true,
           type: Sequelize.STRING,
+          validate: {
+            customValidator(value) {
+              if (
+                (!value &&
+                  !this.tweet_to_like &&
+                  !this.tweet_to_retweet &&
+                  !this.discord_invite_link &&
+                  !this.server_role) ||
+                (!this.discord_invite_link && this.server_role)
+              ) {
+                throw new Error('Missing allowlist criteria');
+              }
+            },
+          },
         },
         tweet_to_like: {
           allowNull: true,
           type: Sequelize.STRING,
+          validate: {
+            customValidator(value) {
+              if (
+                (!value &&
+                  !this.twitter_account_to_follow &&
+                  !this.tweet_to_retweet &&
+                  !this.discord_invite_link &&
+                  !this.server_role) ||
+                (!this.discord_invite_link && this.server_role)
+              ) {
+                throw new Error('Missing allowlist criteria');
+              }
+            },
+          },
         },
         tweet_to_retweet: {
           allowNull: true,
           type: Sequelize.STRING,
+          validate: {
+            customValidator(value) {
+              if (
+                (!value &&
+                  !this.twitter_account_to_follow &&
+                  !this.tweet_to_like &&
+                  !this.discord_invite_link &&
+                  !this.server_role) ||
+                (!this.discord_invite_link && this.server_role)
+              ) {
+                throw new Error('Missing allowlist criteria');
+              }
+            },
+          },
         },
         discord_invite_link: {
           allowNull: true,
           type: Sequelize.STRING,
+          validate: {
+            customValidator(value) {
+              if (
+                (!value &&
+                  !this.twitter_account_to_follow &&
+                  !this.tweet_to_like &&
+                  !this.tweet_to_retweet &&
+                  !this.server_role) ||
+                (!value && this.server_role)
+              ) {
+                throw new Error('Missing allowlist criteria');
+              }
+            },
+          },
         },
         server_role: {
           allowNull: true,
           type: Sequelize.STRING,
+          validate: {
+            customValidator(value) {
+              if (
+                (!value &&
+                  !this.twitter_account_to_follow &&
+                  !this.tweet_to_like &&
+                  !this.tweet_to_retweet &&
+                  !this.discord_invite_link) ||
+                (value && !this.discord_invite_link)
+              ) {
+                throw new Error('Missing allowlist criteria');
+              }
+            },
+          },
         },
         require_email: {
           allowNull: true,
           type: Sequelize.BOOLEAN,
           defaultValue: false,
         },
+
         createdAt: {
           allowNull: false,
           type: Sequelize.DATE,
