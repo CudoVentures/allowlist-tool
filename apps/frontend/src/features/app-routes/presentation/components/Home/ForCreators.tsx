@@ -68,10 +68,12 @@ const ForCreators = () => {
                 </Box>
                 <Box>
                     <Box sx={forCreatorsStyles.yellowBox} />
+                    <Parallax  translateY={["50px", "0px"]} speed={20}>
                     <Box sx={forCreatorsStyles.avatar}>
                         <SvgComponent type={LAYOUT_CONTENT_TEXT.HeadImg}
                             style={{ width: '100%', height: '100%' }} />
                     </Box>
+                    </Parallax>
                 </Box>
                 <Box sx={{ position: 'absolute', left: -60, bottom: 0 }}>
                     <Parallax speed={10}>
