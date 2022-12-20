@@ -1,13 +1,10 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { LoggedInGuard } from '../../auth/guards/loggedIn.guard';
 import { AllowlistService } from '../allowlist.service';
 import AllowlistEntity from '../entities/allowlist.entity';
 
 @Injectable()
-export class IsAdminGuard extends LoggedInGuard implements CanActivate {
-  constructor(private allowlistService: AllowlistService) {
-    super();
-  }
+export class IsAdminGuard implements CanActivate {
+  constructor(private allowlistService: AllowlistService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();

@@ -1,5 +1,10 @@
 import Path from 'path';
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -13,6 +18,8 @@ import { UserService } from './user/user.service';
 import { AllowlistModule } from './allowlist/allowlist.module';
 import { AllowlistService } from './allowlist/allowlist.service';
 import { AllowlistController } from './allowlist/allowlist.controller';
+import { AuthMiddleware } from './auth/auth.middleware';
+import { UserController } from './user/user.controller';
 
 @Module({
   imports: [
@@ -58,6 +65,13 @@ import { AllowlistController } from './allowlist/allowlist.controller';
     AllowlistModule,
   ],
   providers: [AppService, AuthService, UserService, AllowlistService],
-  controllers: [AuthController, AllowlistController],
+  controllers: [AuthController, AllowlistController, UserController],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(AuthMiddleware)
+      .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
+      .forRoutes('*');
+  }
+}

@@ -12,7 +12,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { LoggedInGuard } from '../auth/guards/loggedIn.guard';
 import { TransactionInterceptor } from '../common/common.interceptors';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
@@ -54,7 +53,6 @@ export class AllowlistController {
 
   @UseInterceptors(TransactionInterceptor)
   @Post('join/:id')
-  @UseGuards(LoggedInGuard)
   async join(
     @Param('id', ParseIntPipe) id: number,
     @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
@@ -69,7 +67,6 @@ export class AllowlistController {
 
   @UseInterceptors(TransactionInterceptor)
   @Post()
-  @UseGuards(LoggedInGuard)
   async create(
     @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
     @Body(CreateAllowlistPipe)
