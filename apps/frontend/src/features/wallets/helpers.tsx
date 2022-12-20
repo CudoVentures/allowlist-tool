@@ -34,8 +34,7 @@ export const connectWalletByType = async (walletType: SUPPORTED_WALLET) => {
 
 export const getOfflineSignerByType = async (walletType: SUPPORTED_WALLET): Promise<OfflineSigner | undefined> => {
 
-    const network = CHAIN_DETAILS.DEFAULT_NETWORK
-    const chainId = CHAIN_DETAILS.CHAIN_ID[network]
+    const chainId = CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK]
 
     if (walletType === SUPPORTED_WALLET.Keplr) {
         return window.keplr?.getOfflineSigner(chainId)
@@ -64,8 +63,7 @@ export const getSigningClient = async (walletType: SUPPORTED_WALLET): Promise<Si
         throw new Error("Invalid signing client");
     }
 
-    const network = CHAIN_DETAILS.DEFAULT_NETWORK
-    const rpcAddress = CHAIN_DETAILS.RPC_ADDRESS[network]
+    const rpcAddress = CHAIN_DETAILS.RPC_ADDRESS[CHAIN_DETAILS.DEFAULT_NETWORK]
 
     return SigningStargateClient.connectWithSigner(rpcAddress, offlineSigner)
 }
@@ -76,8 +74,7 @@ export const getQueryClient = async (rpcAddress: string): Promise<StargateClient
 }
 
 export const getAccountBalances = async (accountAddress: string): Promise<readonly Coin[]> => {
-    const network = CHAIN_DETAILS.DEFAULT_NETWORK
-    const rpcAddress = CHAIN_DETAILS.RPC_ADDRESS[network]
+    const rpcAddress = CHAIN_DETAILS.RPC_ADDRESS[CHAIN_DETAILS.DEFAULT_NETWORK]
     const queryClient = await getQueryClient(rpcAddress)
     return queryClient.getAllBalances(accountAddress)
 }

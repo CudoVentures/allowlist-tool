@@ -1,6 +1,7 @@
 import { darkScrollbar } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
 
+import CustomBit from '../../public/fonts/CustomBit.woff'
 import { COLORS_DARK_THEME } from './colors'
 
 const theme = createTheme({
@@ -54,13 +55,32 @@ const theme = createTheme({
         }
       }
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          "&.MuiPaper-root": {
+            borderRadius: "32px",
+          },
+          padding: '10px 10px 10px 20px',
+          background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_50
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
+        outlined: {
+          background: 'transparent',
+          fontWeight: 700,
+          textTransform: 'none',
+          color: 'white',
+          padding: '16px 24px 16px 24px',
+        },
         containedPrimary: {
+          fontWeight: 700,
           borderRadius: '26px',
           background: COLORS_DARK_THEME.PRIMARY_BLUE,
           color: 'white',
-          padding: '10px 20px 10px 20px',
+          padding: '16px 24px 16px 24px',
           textTransform: 'none',
           '&:hover': {
             background: COLORS_DARK_THEME.PRIMARY_BLUE_HOVER
@@ -75,8 +95,8 @@ const theme = createTheme({
         containedSecondary: {
           borderRadius: '26px',
           background: COLORS_DARK_THEME.SECONDARY_BLUE,
-          color: COLORS_DARK_THEME.PRIMARY_BLUE,
-          padding: '10px 20px 10px 20px',
+          color: 'red',
+          padding: '16px 24px 16px 24px',
           textTransform: 'none',
           '&:hover': {
             background: COLORS_DARK_THEME.SECONDARY_BLUE_HOVER
@@ -133,6 +153,14 @@ const theme = createTheme({
             background: COLORS_DARK_THEME.SECONDARY_TEXT,
             borderRadius: '2px'
           }
+        },
+        '@font-face': {
+          fontFamily: 'CudosBit',
+          fontStyle: 'normal',
+          fontDisplay: 'swap',
+          fontWeight: 400,
+          src: `url(${CustomBit}) format('woff')`,
+          unicodeRange: "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF"
         }
       }
     },

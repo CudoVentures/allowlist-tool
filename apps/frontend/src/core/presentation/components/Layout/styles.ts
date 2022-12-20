@@ -1,6 +1,11 @@
 import { COLORS_DARK_THEME } from "../../../theme/colors";
 
 export const headerStyles = {
+    disconnectBtn: {
+        width: '195px',
+        height: '45px',
+        borderRadius: '100px'
+    },
     logoGroup: {
         cursor: 'pointer',
         display: 'flex',
@@ -11,44 +16,45 @@ export const headerStyles = {
         backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
     },
     dropDownItemHolder: {
+        alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
         padding: '8px 0px'
     },
     dropDownContentHolder: {
+        padding: '10px 20px',
+        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
         fontSize: '14px',
         width: '100%',
         fontWeight: '500',
-        borderRadius: '8px',
+        borderRadius: '24px',
         display: 'flex',
         height: 'max-content',
         justifyContent: 'center',
     },
     collapse: {
         position: 'absolute',
-        marginTop: '25px',
+        marginTop: '24px',
         zIndex: '-1',
-        width: '192px',
+        width: '224px',
     },
     holderLowRes: {
-        padding: '16px 60px',
-        borderBottom: '1px solid #E1E1E1',
+        padding: '16px 4rem',
         justifyContent: 'space-between',
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        background: "rgba(16, 18, 26, 0.7)",
-        backdropFilter: 'blur(5px)'
+        background: "rgba(16, 18, 26, 0.8)",
+        backdropFilter: 'blur(12px)'
     },
     holder: {
-        padding: '16px 60px',
-        borderBottom: '1px solid #E1E1E1',
+        padding: '16px 4rem',
         justifyContent: 'space-between',
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',
-        background: "rgba(16, 18, 26, 0.7)",
-        backdropFilter: 'blur(5px)'
+        background: "rgba(16, 18, 26, 0.8)",
+        backdropFilter: 'blur(12px)'
     },
     btnHolder: {
         zIndex: '10',
@@ -66,37 +72,44 @@ export const headerStyles = {
 }
 export const footerStyles = {
     typography: {
-        fontWeight: 500,
-        color: "text.secondary",
+        fontWeight: 700,
+        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50,
         "&:hover": {
             color: COLORS_DARK_THEME.PRIMARY_BLUE
         }
     },
     holder: {
-        position: 'relative',
+        padding: '1rem 2rem',
+        position: 'absolute',
         bottom: 0,
         width: '100%',
-        height: '50px',
         alignItems: 'center',
         display: 'flex'
     },
     rightItem: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         cursor: 'pointer',
-        color: COLORS_DARK_THEME.SECONDARY_TEXT,
+        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50,
         '&:hover': {
             color: COLORS_DARK_THEME.PRIMARY_BLUE
         }
     },
     leftItem: {
-        padding: `0 0.5rem`,
-        '&:not(:last-child)': {
-            borderRight: `1px solid ${COLORS_DARK_THEME.SECONDARY_TEXT}`
-        },
         cursor: 'pointer'
     }
 }
 
 export const helperStyles = {
+    footerLogo: {
+        display: 'flex',
+        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50,
+        alignItems: 'center',
+        "&:hover": {
+            color: COLORS_DARK_THEME.PRIMARY_BLUE
+        }
+    },
     dropDownItem: {
         width: '100%',
         cursor: 'pointer',
@@ -119,12 +132,12 @@ export const helperStyles = {
 
 export const layoutStyles = {
     contentWrapper: {
-        marginBottom: '2rem',
-        maxWidth: '1320px',
+        position: 'absolute',
+        width: '100%',
         overflowWrap: 'break-word',
         overflow: 'auto',
-        padding: '0 2rem',
         display: 'flex',
+        flexDirection: 'column'
     },
     contentHolder: {
         display: 'flex',
@@ -134,6 +147,7 @@ export const layoutStyles = {
     appWrapper: {
         position: 'relative',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        minWidth: '650px'
     }
 }

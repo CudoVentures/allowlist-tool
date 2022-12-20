@@ -1,22 +1,24 @@
-import { Box, Grid, Typography } from '@mui/material'
-import { footerStyles } from './styles'
 import React from 'react'
+import { Box, Grid, Typography } from '@mui/material'
+
 import { FOOTER } from './helpers'
-import { useLowResCheck, useLowerResCheck } from '../../../utilities/CustomHooks/screenChecks'
+import { useIsScreenLessThan } from '../../../utilities/CustomHooks/screenChecks'
+
+import { footerStyles } from './styles'
 
 const Footer = () => {
 
-    const isLowRes = useLowResCheck()
-    const isLowerRes = useLowerResCheck()
+    const isUnder1200px = useIsScreenLessThan('1200px', 'width')
+    const isUnder800px = useIsScreenLessThan('800px', 'width')
 
     return (
         <Box
             id='footer'
             sx={footerStyles.holder}
-            flexDirection={isLowRes ? 'column' : 'row'}
+            flexDirection={isUnder1200px ? 'column' : 'row'}
             gap={1}
         >
-            <Box display="flex">
+            <Box gap={3} display="flex" alignItems={'center'} >
                 {FOOTER.LEFT_LINKS.map((link, idx) => (
                     <Grid
                         item
@@ -24,12 +26,13 @@ const Footer = () => {
                         sx={footerStyles.leftItem}
                         onClick={() => window.open(link.url, '_blank')?.focus()}
                     >
-                        <Typography
-                            sx={footerStyles.typography}
-                            fontSize={isLowerRes ? "0.5rem" : "0.8rem"}
-                        >
-                            {link.text}
-                        </Typography>
+                        {idx === 0 ? link.text :
+                            <Typography
+                                sx={footerStyles.typography}
+                                fontSize={isUnder800px ? "0.5rem" : "0.8rem"}
+                            >
+                                {link.text}
+                            </Typography>}
                     </Grid>
                 ))}
             </Box>
@@ -37,7 +40,7 @@ const Footer = () => {
                 alignItems="center"
                 display="flex"
                 gap={3}
-                sx={{ marginLeft: isLowRes ? 'none' : 'auto' }}
+                sx={{ marginLeft: isUnder1200px ? 'none' : 'auto' }}
             >
                 {FOOTER.RIGHT_LINKS.map((link) => (
                     <Grid

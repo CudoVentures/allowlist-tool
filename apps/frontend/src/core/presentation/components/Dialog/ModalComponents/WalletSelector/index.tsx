@@ -176,7 +176,7 @@ const WalletSelector = () => {
             {getSupportedWallets().map((wallet, idx) => {
               return (
                 <Tooltip key={idx} placement='right' title={btnTooltip(wallet)}>
-                  <Box>
+                  <Box width='100%'>
                     <LoadingButton
                       loadingIndicator={<LoadingButtonComponent />}
                       disabled={isDisabledBtn(wallet)}

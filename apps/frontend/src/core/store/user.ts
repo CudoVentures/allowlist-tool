@@ -1,7 +1,9 @@
 import { Coin, SUPPORTED_WALLET } from 'cudosjs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { CHAIN_DETAILS } from '../utilities/Constants'
 
 export interface userState {
+    connectedNetwork?: string,
     connectedAddress?: string
     accountName?: string
     balances: readonly Coin[],
@@ -10,6 +12,7 @@ export interface userState {
 }
 
 export const initialState: userState = {
+    connectedNetwork: CHAIN_DETAILS.DEFAULT_NETWORK,
     connectedAddress: '',
     accountName: '',
     nativeBalance: '',
