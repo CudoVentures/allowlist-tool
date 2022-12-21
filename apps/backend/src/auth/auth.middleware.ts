@@ -4,14 +4,23 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { Response, NextFunction } from 'express';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthMiddleware implements NestMiddleware {
+  constructor(private userService: UserService) {}
+
   async use(req: any, res: Response, next: NextFunction) {
-    console.log(req._parsedUrl);
-    if (req._parsedUrl.pathname.startsWith('/api') && !req.session.user) {
+    const user = req.session.user;
+    if (req.originalUrl.startsWith('/api') && !user) {
       throw new UnauthorizedException();
     }
+
+    const userExists = await this.userService.findById(user.id);
+    if (!userExists) {
+      throw new UnauthorizedException();
+    }
+
     next();
   }
 }
