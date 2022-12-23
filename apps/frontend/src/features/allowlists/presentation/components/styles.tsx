@@ -1,0 +1,181 @@
+import React from "react";
+import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
+import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
+
+export const allowListStyles = {
+  holder: {
+    alignItems: 'center',
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  contentHolder: {
+    margin: '0rem 4rem 6rem 4rem',
+    maxWidth: '1400px'
+  },
+}
+
+export const allowlistPreviewStyles = {
+  list: {
+    lineHeight: 'normal',
+    listStyleType: 'disc',
+    pl: 2
+  },
+  listItem: {
+    display: 'list-item',
+    fontSize: '14px', padding: '1px'
+  },
+  title: {
+    fontWeight: 600,
+    fontSize: '14px'
+  },
+  subTitle: {
+    color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20,
+    fontWeight: 600,
+    fontSize: '14px'
+  },
+  holder: {
+    display: 'flex',
+    flexDirection: 'column',
+    borderRadius: '24px',
+    width: '100%',
+  },
+}
+
+export const generalStyles = {
+  holder: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '32px',
+    borderRadius: '24px',
+    width: '100%',
+    background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80
+  },
+  input: {
+    marginTop: '10px',
+    padding: '16px 20px',
+    borderRadius: '8px',
+    width: '100%',
+    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
+  },
+  titleIcons: {
+    marginRight: '5px',
+    width: '24px',
+    height: '24px'
+  },
+}
+
+export const registrationCriteriaStyles = {
+  titleSwitchHolder: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+}
+
+export const allowlistDetailsStyles = {
+  dropDownPlaceholder: {
+    fontSize: '14px',
+    fontWeight: 600,
+    color: COLORS_DARK_THEME.SECONDARY_TEXT
+  },
+  datesHolder: {
+    alignItems: 'flex-end',
+    display: 'flex',
+    width: '100%'
+  },
+  dropIcon: {
+    width: '24px',
+    height: '24px',
+    color: COLORS_DARK_THEME.PRIMARY_BLUE
+  },
+  dropZone: {
+    backgroundBlendMode: 'overlay',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    backgroundSize: "100% 100%",
+    backgroundRepeat: "no-repeat",
+    display: 'flex',
+    alignItems: 'center',
+    cursor: 'pointer',
+    width: '100%',
+    height: '100%',
+    borderRadius: '8px',
+    border: "1px dashed #363E5A"
+  },
+  fileUploaderHolder: {
+    borderRadius: '16px',
+    marginTop: '10px',
+    width: '250px',
+    height: '250px'
+  },
+  bannerUploaderHolder: {
+    borderRadius: '16px',
+    marginTop: '10px',
+    width: '100%',
+    height: '190px'
+  },
+  tooltip: {
+    cursor: 'pointer',
+    color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50
+  },
+  dialogProps: {
+    PaperProps: {
+      sx: {
+        background: COLORS_DARK_THEME.DARK_BACKGROUND
+      }
+    }
+  },
+  timePickerInput: {
+    placeholder: "Pick up a time",
+    startAdornment: <SvgComponent
+      type={LAYOUT_CONTENT_TEXT.ClockIcon}
+      style={{ width: '24px', height: '24px', marginRight: '10px', color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+    />,
+    sx: {
+      "& .MuiOutlinedInput-notchedOutline": {
+        border: 'none'
+      },
+      borderRadius: '8px',
+      background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+    }
+  },
+  datePickerInput: {
+    placeholder: "Pick up a date",
+    startAdornment: <SvgComponent
+      type={LAYOUT_CONTENT_TEXT.CalendarIcon}
+      style={{ width: '24px', height: '24px', marginRight: '10px', color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+    />,
+    sx: {
+      "& .MuiOutlinedInput-notchedOutline": {
+        border: 'none'
+      },
+      borderRadius: '8px',
+      background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+    }
+  },
+  dropdownIcon: {
+    cursor: 'pointer',
+    color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20
+  },
+  defaultDropDown: {
+    fontWeight: 600,
+    fontSize: '14px',
+    marginTop: '10px',
+    padding: '16px 20px',
+    height: '64px',
+    borderRadius: '8px',
+    width: '100%',
+    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+    border: '0px',
+    outline: '0px',
+  },
+  holder: {
+    display: 'flex',
+    flexDirection: 'column',
+    padding: '32px',
+    borderRadius: '24px',
+    width: '100%',
+    background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80
+  }
+}

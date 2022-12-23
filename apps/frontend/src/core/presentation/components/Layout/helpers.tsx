@@ -27,9 +27,14 @@ import logoFooter from '../../../../public/assets/vectors/logo-footer.svg';
 import frame1673 from '../../../../public/assets/vectors/frames/frame-1673.svg';
 import frame1674 from '../../../../public/assets/vectors/frames/frame-1674.svg';
 import plusIcon from '../../../../public/assets/vectors/plus-icon.svg';
+import questionMarkIcon from '../../../../public/assets/vectors/questionmark-icon.svg';
+import globusIcon from '../../../../public/assets/vectors/globus-icon.svg';
 import minusIcon from '../../../../public/assets/vectors/minus-icon.svg';
 import smileyFaceIcon from '../../../../public/assets/vectors/smiley-face-icon.svg';
 import copyIcon from '../../../../public/assets/vectors/copy-icon.svg';
+import smallCheckmark from '../../../../public/assets/vectors/checkmark.svg';
+import calendarIcon from '../../../../public/assets/vectors/calendar-icon.svg';
+import clockIcon from '../../../../public/assets/vectors/clock-icon.svg';
 import bigPlusIcon from '../../../../public/assets/vectors/parallax/big-plus.svg';
 import sampleAllowListDetails from '../../../../public/assets/vectors/parallax/sample-allowlist-details.svg';
 import sampleAllowListMint from '../../../../public/assets/vectors/parallax/sample-allowlist-mint.svg';
@@ -38,10 +43,15 @@ import sampleAllowListRegister from '../../../../public/assets/vectors/parallax/
 import headImg from '../../../../public/assets/vectors/parallax/head.svg';
 import checkmark from '../../../../public/assets/vectors/parallax/checkmark.svg';
 import rectangularShade from '../../../../public/assets/vectors/parallax/rectangular-shade.svg';
+import stepOne from '../../../../public/assets/vectors/stepper/step-1.svg';
+import stepTwo from '../../../../public/assets/vectors/stepper/step-2.svg';
+import stepThree from '../../../../public/assets/vectors/stepper/step-3.svg';
+
 
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    QuestionmarkIcon = 'Questionmark icon',
     AllowlistBackground = 'Allowlist background',
     AllowlistAvatar = 'Allowlist avatar',
     ConnectWallet = 'Connect Wallet',
@@ -77,11 +87,25 @@ export enum LAYOUT_CONTENT_TEXT {
     SampleAllowListPage = 'Sample Allowlist page',
     SampleAllowListRegister = 'Sample Allowlist registration form',
     Checkmark = 'Checkmark icon',
-    RectangularShade = 'Shade element'
+    SmallCheckmark = 'Small checkmark icon',
+    RectangularShade = 'Shade element',
+    StepOne = 'Step One of Creating Allowlist',
+    StepTwo = 'Step two of Creating Allowlist',
+    StepThree = 'Step three of Creating Allowlist',
+    GlobusIcon = 'Globus icon',
+    CalendarIcon = 'Calendar icon',
+    ClockIcon = 'Clock icon'
 }
 
-
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.QuestionmarkIcon]: questionMarkIcon,
+    [LAYOUT_CONTENT_TEXT.ClockIcon]: clockIcon,
+    [LAYOUT_CONTENT_TEXT.CalendarIcon]: calendarIcon,
+    [LAYOUT_CONTENT_TEXT.GlobusIcon]: globusIcon,
+    [LAYOUT_CONTENT_TEXT.SmallCheckmark]: smallCheckmark,
+    [LAYOUT_CONTENT_TEXT.StepOne]: stepOne,
+    [LAYOUT_CONTENT_TEXT.StepTwo]: stepTwo,
+    [LAYOUT_CONTENT_TEXT.StepThree]: stepThree,
     [LAYOUT_CONTENT_TEXT.Checkmark]: checkmark,
     [LAYOUT_CONTENT_TEXT.RectangularShade]: rectangularShade,
     [LAYOUT_CONTENT_TEXT.HeadImg]: headImg,

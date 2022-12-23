@@ -2,13 +2,23 @@ import { Coin, SUPPORTED_WALLET } from 'cudosjs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { CHAIN_DETAILS } from '../utilities/Constants'
 
+export enum SOCIAL_MEDIA {
+    twitter = 'twitter',
+    discord = 'discord'
+}
+
+export type CONNECTED_SOCIAL_MEDIA = {
+    [key in SOCIAL_MEDIA]: string
+}
+
 export interface userState {
     connectedNetwork?: string,
     connectedAddress?: string
     accountName?: string
-    balances: readonly Coin[],
-    nativeBalance: string,
-    connectedWallet?: SUPPORTED_WALLET | undefined
+    balances?: readonly Coin[],
+    nativeBalance?: string,
+    connectedWallet?: SUPPORTED_WALLET | undefined,
+    connectedSocialMedia?: CONNECTED_SOCIAL_MEDIA
 }
 
 export const initialState: userState = {
@@ -18,6 +28,10 @@ export const initialState: userState = {
     nativeBalance: '',
     balances: [],
     connectedWallet: undefined,
+    connectedSocialMedia: {
+        [SOCIAL_MEDIA.twitter]: '',
+        [SOCIAL_MEDIA.discord]: '',
+    }
 }
 
 export const userStateSlice = createSlice({

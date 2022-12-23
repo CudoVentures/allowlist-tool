@@ -1,5 +1,6 @@
 import { darkScrollbar } from '@mui/material'
 import { createTheme } from '@mui/material/styles'
+import { fontSize, fontWeight } from '@mui/system'
 
 import CustomBit from '../../public/fonts/CustomBit.woff'
 import { COLORS_DARK_THEME } from './colors'
@@ -66,11 +67,19 @@ const theme = createTheme({
         }
       }
     },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          width: '100%'
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         outlined: {
           background: 'transparent',
           fontWeight: 700,
+          borderRadius: '26px',
           textTransform: 'none',
           color: 'white',
           padding: '16px 24px 16px 24px',
@@ -121,6 +130,14 @@ const theme = createTheme({
     },
     MuiInput: {
       styleOverrides: {
+        input: {
+          '&::placeholder': {
+            textOverflow: 'ellipsis !important',
+            color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20,
+            fontSize: '14px',
+            fontWeight: 600
+          }
+        },
         root: {
           '& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button':
           {
@@ -134,7 +151,7 @@ const theme = createTheme({
           },
           '& input[type=number]': {
             MozAppearance: 'textfield'
-          }
+          },
         }
       }
     },

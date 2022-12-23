@@ -18,8 +18,8 @@ function AllAllowlistsPage() {
       <h1 style={{ padding: '0 5% 0 5%' }}>Allowlists</h1>
       {allowlists &&
         allowlists.map((allowlist) => {
-          delete allowlist.createdAt;
-          delete allowlist.updatedAt;
+          delete allowlist.createdаt;
+          delete allowlist.updatedаt;
           return <Allowlist key={allowlist.id} {...allowlist}></Allowlist>;
         })}
     </div>
