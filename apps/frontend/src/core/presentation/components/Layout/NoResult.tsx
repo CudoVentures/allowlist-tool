@@ -10,7 +10,7 @@ import { LAYOUT_CONTENT_TEXT, SvgComponent } from "./helpers"
 const NoResult = ({ infoMsg }: { infoMsg?: string }) => {
 
     const navigate = useNavigate()
-    const [timer, setTimer] = useState<number>(3000)
+    const [timer, setTimer] = useState<number>(3)
 
     useEffect(() => {
         if (timer > 0) {

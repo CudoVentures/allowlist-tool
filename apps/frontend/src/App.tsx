@@ -12,6 +12,7 @@ import Home from './features/app-routes/presentation/components/Home';
 import CreateAllowlistPage from './features/allowlists/presentation/pages/CreateAllowlist';
 import AllowlistPage from './features/allowlists/presentation/pages/AllowlistPage';
 import EditAllowlistPage from './features/allowlists/presentation/pages/EditAllowlist';
+import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllowlistsPage';
 
 const App = () => {
 
@@ -38,11 +39,11 @@ const App = () => {
                   path={AppRoutes.ALLOWLIST}
                   element={<AllowlistPage />}
                 />
-                {/* <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
-        <Route
-          path={AppRoutes.MY_ALLOWLISTS}
-          element={<MyAllowlistsPage walletStore={walletStore} />}
-        /> */}
+                <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
+                {/* <Route
+                  path={AppRoutes.MY_ALLOWLISTS}
+                  element={<MyAllowlistsPage walletStore={walletStore} />}
+                /> */}
                 <Route path="*" element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />} />
               </Routes>
             </Layout>
