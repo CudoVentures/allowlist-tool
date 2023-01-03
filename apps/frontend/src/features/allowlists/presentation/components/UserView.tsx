@@ -36,7 +36,6 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
 
         const message = JSON.stringify(data);
-
         const {
             signature,
             chainId: chain_id,
@@ -53,7 +52,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                 account_number,
                 chain_id,
                 userEmail,
-            })
+            });
             alert('success');
         } catch (ex) {
             console.error(ex);

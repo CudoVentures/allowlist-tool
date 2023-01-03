@@ -1,48 +1,54 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Circles as CirclesSpinner } from 'svg-loaders-react';
+import { Box } from '@mui/material';
 
-import Allowlist from '../components/allowlist';
-import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
-import { GET_ALLOWLIST_DETAILS } from '../../../../core/api/calls';
-import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
+import { GET_ALL_ALLOWLISTS } from '../../../../core/api/calls';
+import NoResult from '../../../../core/presentation/components/Layout/NoResult';
+import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import CreatedAllowlistsPreview from './CreatedAllowlists';
+import JoinedAllowlistsPreview from './JoinedAllowlists';
 
-function AllowlistPage() {
+import { generalStyles } from './styles';
 
-  const { id } = useParams();
-  const [allowlist, setAllowlist] = useState<FetchedAllowlist>(null);
+const AllAllowlistsPage = () => {
+
+  const [allowlists, setAllowlists] = useState<FetchedAllowlist[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
   const contentHandler = useCallback((): JSX.Element => {
     if (loading) {
-      return <StyledCircleSpinner />
+      return <CirclesSpinner style={generalStyles.spinner}
+        fill={COLORS_DARK_THEME.PRIMARY_BLUE} />
     }
-    if (Object.keys(allowlist || {}).length) {
-      return <Allowlist props={{ ...allowlist, end_date: new Date(allowlist.end_date) }} />
+
+    if (allowlists.length) {
+      return (
+        <Box id='swipersHolder' gap={4} sx={generalStyles.swipersHolder}>
+          <CreatedAllowlistsPreview data={allowlists} />
+          <JoinedAllowlistsPreview data={allowlists} />
+        </Box>
+      )
     }
+
     return <NoResult />
-  }, [loading, allowlist])
+  }, [loading, allowlists])
+
+  const loadData = async () => {
+    try {
+      const data = await GET_ALL_ALLOWLISTS()
+      setAllowlists(data)
+
+    } finally {
+      setLoading(false)
+    }
+  }
 
   useEffect(() => {
-    const setAllowlistDetails = async () => {
-
-      try {
-        const res = await GET_ALLOWLIST_DETAILS(id)
-        const data = res.data;
-        delete data.createdAt;
-        delete data.updatedAt;
-        setAllowlist(data);
-
-      } catch (error) {
-        console.error(error.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-    setAllowlistDetails()
-  }, []);
+    loadData()
+  }, [])
 
   return contentHandler()
 }
 
-export default AllowlistPage;
+export default AllAllowlistsPage

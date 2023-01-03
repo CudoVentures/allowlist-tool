@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from "react"
 import { Typography } from "@mui/material"
 import { Box } from "@mui/system"
+import { useNavigate } from "react-router-dom"
 
 import AppRoutes from "./../../../../features/app-routes/entities/AppRoutes"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "./helpers"
-import useNavigateToRoute from "../../../utilities/CustomHooks/useNavigateToRoute"
 
 
 const NoResult = ({ infoMsg }: { infoMsg?: string }) => {
 
-    const navigateToRoute = useNavigateToRoute()
-    const [timer, setTimer] = useState<number>(3)
+    const navigate = useNavigate()
+    const [timer, setTimer] = useState<number>(3000)
 
     useEffect(() => {
         if (timer > 0) {
             setTimeout(() => { setTimer(timer - 1) }, 1000)
             return
         }
-        navigateToRoute(AppRoutes.MAIN)
+        navigate(AppRoutes.MAIN)
     }, [timer])
 
     return (

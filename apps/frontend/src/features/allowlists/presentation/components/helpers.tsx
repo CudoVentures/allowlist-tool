@@ -1,12 +1,12 @@
 import React, { Fragment } from "react";
 import { useSelector } from "react-redux";
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
 import { Box, Button, Checkbox, Divider, FormControlLabel, FormGroup, List, ListItem, Tooltip, Typography } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 import { RootState } from "../../../../core/store";
-import { CollectedData, FetchedAllowlist, OptionalAllowlistData } from "../../../../core/store/allowlist";
+import { CollectedData, FetchedAllowlist, OptionalAllowlistData, updateAllowlistObject } from "../../../../core/store/allowlist";
 import { SOCIAL_MEDIA } from "../../../../core/store/user";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
@@ -43,6 +43,30 @@ export const blobToBase64 = async (file: Blob) => {
 
 export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<string>>) => {
     stateFunc(e.target.value);
+};
+
+export const onImageChange = (
+    type: 'image' | 'banner',
+    file: Blob | MediaSource,
+    setState: Dispatch<AnyAction>,
+) => {
+
+    if (!file) {
+        if (type === 'image') {
+            setState(updateAllowlistObject({ image: '' }));
+            return
+        }
+        setState(updateAllowlistObject({ banner_image: '' }));
+        return;
+    }
+
+    fileToDataUri(file).then((data) => {
+        if (type === 'image') {
+            setState(updateAllowlistObject({ image: data as string }));
+        } else {
+            setState(updateAllowlistObject({ banner_image: data as string }));
+        }
+    });
 };
 
 export const addDiscordBot = () => {
