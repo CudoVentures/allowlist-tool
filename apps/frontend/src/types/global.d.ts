@@ -11,6 +11,13 @@ declare global {
         width: number;
         height: number;
     }
+
+    interface DetailedTime {
+        days: number;
+        hours: number;
+        minutes: number;
+        seconds: number;
+    }
 }
 
 declare module '@mui/material/styles' {

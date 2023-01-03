@@ -132,6 +132,7 @@ export const helperStyles = {
 
 export const layoutStyles = {
     contentWrapper: {
+        justifyContent: 'flex-start',
         position: 'absolute',
         width: '100%',
         overflowWrap: 'break-word',

@@ -4,6 +4,40 @@ export const delay = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
 
+export const getSum = (numbers: number[]): number => {
+  const sum = numbers.reduce(function (a, b) {
+    return a + b
+  }, 0)
+  return sum
+}
+
+export const handleLinkOut = (url: string) => {
+  if (url) {
+    window.open(url, '_blank', 'rel=noreferrer')?.focus()
+  }
+}
+
+export const getTimeFromNumber = (time: number): DetailedTime => {
+  const days = time / (24 * 60 * 60 * 1000)
+  const hours = (days % 1) * 24
+  const minutes = (hours % 1) * 60
+  const secs = (minutes % 1) * 60
+  return {
+    days: Math.floor(days),
+    hours: Math.floor(hours),
+    minutes: Math.floor(minutes),
+    seconds: Math.floor(secs)
+  }
+}
+
+export const getSeparateDateAndTime = (fullDate: Date): { date: string, time: string } => {
+  const period = fullDate?.toString().split(' ') || []
+  return {
+    date: period.slice(0, 4).join(' '),
+    time: period.slice(4).join(' '),
+  }
+}
+
 export const formatAddress = (text: string, sliceIndex: number): string => {
   if (!text) { return '' }
   const len = text.length

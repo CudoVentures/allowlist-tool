@@ -6,6 +6,8 @@ import copy from "copy-to-clipboard"
 import { RootState } from "../store"
 import { EXPLORER_ADDRESS_DETAILS } from "../api/endpoints"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
+import { COLORS_DARK_THEME } from "./colors"
+import { handleLinkOut } from "../utilities/ProjectUtils"
 
 import { themeStyles } from "./themeStyles"
 
@@ -55,9 +57,9 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
                 <Tooltip
                     title={copied ? 'Copied' : 'Copy to clipboard'}
                 >
-                    <Link onClick={() => handleCopy(address)} href="#">
-                        <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px' }} />
-                    </Link>
+                    <Box sx={{ cursor: 'pointer' }} onClick={() => handleCopy(address)}>
+                        <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px', color: COLORS_DARK_THEME.PRIMARY_BLUE }} />
+                    </Box>
                 </Tooltip>
             </Box>
             <Box sx={themeStyles.iconHolder}>
@@ -71,6 +73,17 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
                     </Link>
                 </Tooltip>
             </Box>
+        </Box>
+    )
+}
+
+export const LinkBox = ({ link, text }: { link: string, text?: string }) => {
+    return (
+        <Box
+            onClick={() => handleLinkOut(link)}
+            sx={{ cursor: 'pointer', color: COLORS_DARK_THEME.PRIMARY_BLUE }}
+        >
+            {text ? text : link}
         </Box>
     )
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Box, Button, Collapse, Typography, Paper, Divider, AppBar } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
 import { useDispatch, useSelector } from 'react-redux'
@@ -28,24 +27,6 @@ const Header = () => {
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const isMidLowerRes = useMidLowerResCheck()
-  const [user, setUser] = useState({
-    twitterUsername: '',
-    discordUsername: '',
-  });
-
-  const setSocialMediaUser = async () => {
-    const res = await axios.get('api/v1/user');
-    setUser({
-      twitterUsername: res.data.twitter_profile_username,
-      discordUsername: res.data.discord_profile_username,
-    })
-  }
-
-  // const onClickAuth = async (service: string) => {
-  //   const url = `api/v1/auth/${service}/login`;
-  //   window.open(url, '_self');
-  // };
-
 
   const handleClick = () => {
     if (isConnected) {
@@ -68,7 +49,6 @@ const Header = () => {
   useEffect(() => {
     if (connectedAddress) {
       setIsConnected(true)
-      setSocialMediaUser()
       return
     }
 
@@ -167,7 +147,7 @@ const Header = () => {
                   sx={headerStyles.disconnectBtn}
                   onClick={handleDisconnect}
                 >
-                  Disconect
+                  Disconnect
                 </Button>
               </Box>
             </Paper>
@@ -175,31 +155,6 @@ const Header = () => {
         </Box>
       </Box>
     </AppBar>
-
-    // <header
-    //   style={{
-    //     width: '100%',
-    //     display: 'flex',
-    //     justifyContent: 'flex-end',
-    //     alignItems: 'center',
-    //     gap: '1rem',
-    //     paddingTop: '1rem',
-    //   }}
-    // >
-    //   {isConnected && (
-    //     <button onClick={() => onClickAuth('twitter')}>
-    //       {user.twitterUsername ? user.twitterUsername : 'Twitter login'}
-    //     </button>
-    //   )}
-    //   {isConnected && (
-    //     <button onClick={() => onClickAuth('discord')}>
-    //       {user.discordUsername ? user.discordUsername : 'Discord login'}
-    //     </button>
-    //   )}
-    //   <button onClick={() => connectWallet()}>
-    //     {isConnected ? walletStore.getAddress() : 'Connect Keplr'}
-    //   </button>
-    // </header>
   );
 };
 
