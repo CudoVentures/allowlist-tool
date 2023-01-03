@@ -16,7 +16,6 @@ import { TransactionInterceptor } from '../common/common.interceptors';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { JoinAllowlistDto } from './dto/join-allowlist.dto';
-import { SignedMessageDto } from './dto/signed-message.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { CreateAllowlistPipe } from './pipes/create-allowlist.pipe';
@@ -55,12 +54,11 @@ export class AllowlistController {
   @Post('join/:id')
   async join(
     @Param('id', ParseIntPipe) id: number,
-    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
-    @Body() joinAllowlistDto: JoinAllowlistDto,
+    @Body(SignMessagePipe) joinAllowlistDto: JoinAllowlistDto,
   ) {
     return this.allowlistService.joinAllowlist(
       id,
-      signedMessageDto.address,
+      joinAllowlistDto.address,
       joinAllowlistDto.email,
     );
   }
@@ -68,14 +66,10 @@ export class AllowlistController {
   @UseInterceptors(TransactionInterceptor)
   @Post()
   async create(
-    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
-    @Body(CreateAllowlistPipe)
+    @Body(SignMessagePipe, CreateAllowlistPipe)
     createAllowlistDto: CreateAllowlistDto,
   ): Promise<AllowlistEntity> {
-    return this.allowlistService.createAllowlist(
-      createAllowlistDto,
-      signedMessageDto.address,
-    );
+    return this.allowlistService.createAllowlist(createAllowlistDto);
   }
 
   @UseInterceptors(TransactionInterceptor)
@@ -83,8 +77,7 @@ export class AllowlistController {
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
-    @Body() updateAllowlistDto: UpdateAllowlistDto,
+    @Body(SignMessagePipe) updateAllowlistDto: UpdateAllowlistDto,
   ): Promise<AllowlistEntity> {
     return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
   }

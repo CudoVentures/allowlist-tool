@@ -10,37 +10,39 @@ import { SignedMessageDto } from '../dto/signed-message.dto';
 @Injectable()
 export class SignMessagePipe implements PipeTransform {
   async transform(value: SignedMessageDto, metadata: ArgumentMetadata) {
-    if (
-      !value.signature ||
-      !value.address ||
-      !value.message ||
-      !value.sequence ||
-      !value.account_number ||
-      !value.chain_id
-    ) {
-      throw new BadRequestException('Missing data');
+    if (!value.signature) {
+      throw new BadRequestException('Missing signature');
     }
 
-    const val = {};
-    Object.keys(value).forEach((key) => {
-      if (key === 'sqeuence' || key === 'account_number') {
-        val[key] = +value[key];
-      } else if (key === 'signature') {
-        val[key] = JSON.parse(value[key] as string);
-      } else {
-        val[key] = value[key];
-      }
-    });
+    if (!value.address) {
+      throw new BadRequestException('Missing address');
+    }
+
+    if (!value.message) {
+      throw new BadRequestException('Missing message');
+    }
+
+    if (!value.sequence) {
+      throw new BadRequestException('Missing sequence');
+    }
+
+    if (!value.account_number) {
+      throw new BadRequestException('Missing account number');
+    }
+
+    if (!value.chain_id) {
+      throw new BadRequestException('Missing chain id');
+    }
 
     let validSignature;
     try {
       validSignature = await verifyNonceMsgSigner(
-        val['signature'] as StdSignature,
-        val['address'],
-        val['message'],
-        val['sequence'],
-        val['account_number'],
-        val['chain_id'],
+        value.signature as StdSignature,
+        value.address,
+        value.message,
+        value.sequence,
+        value.account_number,
+        value.chain_id,
       );
     } catch (error) {
       console.log(error);

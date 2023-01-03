@@ -45,7 +45,6 @@ export class AllowlistService {
 
   async createAllowlist(
     createAllowlistDTO: CreateAllowlistDto,
-    adminAddress: string,
   ): Promise<AllowlistEntity> {
     const duplicate = await this.findByCustomId(createAllowlistDTO.url);
     if (duplicate) {
@@ -54,7 +53,7 @@ export class AllowlistService {
 
     const allowlistRepo = await this.allowlistRepo.create({
       ...createAllowlistDTO,
-      admin: adminAddress,
+      admin: createAllowlistDTO.address,
     });
     return AllowlistEntity.fromRepo(allowlistRepo);
   }
