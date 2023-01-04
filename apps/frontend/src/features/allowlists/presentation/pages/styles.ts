@@ -88,6 +88,7 @@ export const generalStyles = {
         "&:hover": {
             transform: 'scale(1.025)'
         },
+        justifyContent: 'center',
         transition: "transform 0.5s ease, top 0.5s ease",
         cursor: 'pointer',
         alignItems: 'center',

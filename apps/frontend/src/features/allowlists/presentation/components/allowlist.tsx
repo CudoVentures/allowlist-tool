@@ -8,7 +8,7 @@ import AdminView from './AdminView';
 import SummaryView from './SummaryView';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { RootState } from '../../../../core/store';
-import { RemainingTimer } from './helpers';
+import { blobToBase64, RemainingTimer } from './helpers';
 import { useIsScreenLessThan } from '../../../../core/utilities/CustomHooks/screenChecks';
 
 import { allowListStyles } from './styles';
@@ -17,10 +17,34 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
 
   const isUnder1000px = useIsScreenLessThan('1000px', 'width');
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
   const [expired, setExpired] = useState<boolean>(false);
   const [remainingTime, setRemainingTime] = useState<number>(null)
   const [loading, setLoading] = useState<boolean>(true)
-  const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState);
+  const { connectedAddress } = useSelector((state: RootState) => state.userState);
+  const [bannerPreview, setBannerPreview] = useState<string>('')
+  const [avatarPreview, setAvatarPreview] = useState<string>('')
+
+  const setBlobToB64Img = async (imgData: Blob, setter: React.Dispatch<React.SetStateAction<string>>) => {
+    const b64ImgString = await blobToBase64(imgData)
+    setter(b64ImgString as string)
+  }
+
+  useEffect(() => {
+    if (props.banner_image) {
+      setBlobToB64Img(props.banner_image, setBannerPreview)
+      return
+    }
+    setBannerPreview('')
+  }, [props.banner_image])
+
+  useEffect(() => {
+    if (props.image) {
+      setBlobToB64Img(props.image, setAvatarPreview)
+      return
+    }
+    setAvatarPreview('')
+  }, [props.image])
 
   const panelContentHandler = useCallback((): JSX.Element => {
     if (expired && !isAdmin) {
@@ -31,8 +55,12 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
       return <AdminView props={props} />
     }
 
+    if (isSignedUp) {
+      return <Typography variant='h5' margin='50px 70px'>Already Signed Up</Typography>
+    }
+
     return <UserView props={props} />
-  }, [expired, isAdmin])
+  }, [expired, isAdmin, isSignedUp])
 
   useEffect(() => {
     const now = Date.now()
@@ -62,11 +90,15 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
 
   useEffect(() => {
     try {
-      if (connectedAddress && props.admin && connectedAddress === props.admin) {
-        setIsAdmin(true);
-        return;
+      if (connectedAddress) {
+        setIsSignedUp(props.users.includes(connectedAddress))
+        if (props.admin && connectedAddress === props.admin) {
+          setIsAdmin(true)
+        }
+        return
       }
-      setIsAdmin(false);
+      setIsSignedUp(false)
+      setIsAdmin(false)
 
     } finally {
       setLoading(false)
@@ -83,18 +115,18 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
         >
           {/* START-CONTENT */}
           {isUnder1000px ? (
-            <img style={allowListStyles.smallScreenBanner} src={props.banner_image} />
+            <img style={allowListStyles.smallScreenBanner} src={bannerPreview} />
           ) : (
             <ParallaxBanner style={{ ...allowListStyles.banner }}>
               <ParallaxBannerLayer
                 style={{ ...allowListStyles.bannerImg }}
-                image={props.banner_image}
+                image={bannerPreview}
                 speed={-20}
               />
             </ParallaxBanner>
           )}
           <img
-            src={props.image}
+            src={avatarPreview}
             style={
               isUnder1000px ?
                 allowListStyles.smallScreenProfile :

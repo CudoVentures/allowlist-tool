@@ -20,10 +20,18 @@ declare let Config: { REACT_APP_DISCORD_CLIENT_ID: any; };
 
 export const acceptedImgTypes = ['png', 'jpeg', 'jpg', 'svg']
 
-export const b64toBlob = (base64: string) =>
+export const isBlob = (data: any) => {
+    return data instanceof Blob
+}
+
+export const b64toBlob = async (base64: string) =>
     fetch(base64).then(res => res.blob())
 
 export const blobToBase64 = async (file: Blob) => {
+    // TODO: following check is a fix to have things running with Base64 dummy data from DB and due to be removed once we permanently start storing Blob format only in DB
+    if (!isBlob(file)) {
+        return file
+    }
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (event) => {
