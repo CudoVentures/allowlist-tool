@@ -1,5 +1,4 @@
 import React, { Fragment, useState } from 'react'
-import axios from 'axios'
 import { useSelector } from 'react-redux'
 import { Box, Typography, Divider, List, ListItem, Input, Button } from '@mui/material'
 
@@ -9,6 +8,7 @@ import { RootState } from '../../../../core/store'
 import { signNonceMsg } from '../../../wallets/helpers'
 import { FetchedAllowlist } from '../../../../core/store/allowlist'
 import { SocialMediaBoxes } from './helpers'
+import { GET_USER_DETAILS, JOIN_ALLOWLIST } from '../../../../core/api/calls'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
@@ -26,18 +26,17 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     }
 
     const signUp = async () => {
-        const userRes = await axios.get(`api/v1/user`);
+        const userDetails = await GET_USER_DETAILS();
         const data = {};
-        if (userRes.data.twitter_access_token) {
-            data['twitter_access_token'] = userRes.data.twitter_access_token;
+        if (userDetails.data.twitter_access_token) {
+            data['twitter_access_token'] = userDetails.data.twitter_access_token;
         }
-        if (userRes.data.discord_access_token) {
-            data['discord_access_token'] = userRes.data.discord_access_tokens;
+        if (userDetails.data.discord_access_token) {
+            data['discord_access_token'] = userDetails.data.discord_access_tokens;
         }
 
         const message = JSON.stringify(data);
 
-        const url = `/api/v1/allowlist/join/${props.id}`;
         const {
             signature,
             chainId: chain_id,
@@ -46,7 +45,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         } = await signNonceMsg(connectedAddress, connectedWallet, message);
 
         try {
-            await axios.post(url, {
+            await JOIN_ALLOWLIST(props.url, {
                 signature,
                 connectedAddress,
                 message,
@@ -54,7 +53,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                 account_number,
                 chain_id,
                 userEmail,
-            });
+            })
             alert('success');
         } catch (ex) {
             console.error(ex);

@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
-import axios from 'axios';
 import { Box, Button, Divider, Typography } from '@mui/material';
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { getRegistrationCriteriaArray } from './helpers';
+import { GET_ALLOWLIST_ENTRIES } from '../../../../core/api/calls';
 
 import { allowlistPreviewStyles, allowListStyles, generalStyles } from './styles';
 
@@ -16,7 +16,7 @@ enum Format {
 const AdminView = ({ props }: { props: FetchedAllowlist }) => {
 
     const exportEntries = async (format: Format) => {
-        const res = await axios.get(`api/v1/allowlist/entries/${props.id}`);
+        const res = await GET_ALLOWLIST_ENTRIES(props.url)
         if (format === Format.JSON) {
             downloadJSON(res.data);
         } else {

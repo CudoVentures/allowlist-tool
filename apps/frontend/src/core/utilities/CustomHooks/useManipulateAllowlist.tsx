@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import axios from 'axios';
 
 import { signNonceMsg } from "../../../features/wallets/helpers";
 import { RootState } from "../../store";
 import { CollectedData } from "../../store/allowlist";
+import { CREATE_ALLOWLIST, GET_USER_DETAILS, UPDATE_ALLOWLIST } from "../../api/calls";
 
 const useManipulateAllowlist = () => {
 
@@ -33,7 +33,7 @@ const useManipulateAllowlist = () => {
         };
 
         try {
-            const userDetails = await axios.get('api/v1/user');
+            const userDetails = await GET_USER_DETAILS();
             const messageObj = {};
             if (collectedData.twitter_account || collectedData.tweet) {
                 messageObj['twitter_access_token'] =
@@ -62,7 +62,7 @@ const useManipulateAllowlist = () => {
                 chain_id,
             };
 
-            await axios.put(`/api/v1/allowlist/${ID}`, reqData);
+            await UPDATE_ALLOWLIST(ID, reqData)
             return true
 
         } catch (ex) {
@@ -111,7 +111,7 @@ const useManipulateAllowlist = () => {
         };
 
         try {
-            await axios.post(`/api/v1/allowlist`, reqData);
+            await CREATE_ALLOWLIST(reqData)
             return true
 
         } catch (ex) {

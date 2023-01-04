@@ -1,6 +1,5 @@
 import React from "react"
 import BigNumber from "bignumber.js"
-import axios from 'axios'
 import { getOfflineSigner as cosmostationSigner } from "@cosmostation/cosmos-client"
 import {
     Coin,
@@ -16,6 +15,7 @@ import { CHAIN_DETAILS } from "../../core/utilities/Constants"
 import { connectCosmostationLedger } from "./Cosmostation"
 import { connectKeplrLedger } from "./Keplr"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../core/presentation/components/Layout/helpers"
+import { LOG_IN_USER } from "../../core/api/calls"
 
 import { styles } from "./styles"
 
@@ -103,14 +103,14 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
         accountNumber: account_number,
     } = await signNonceMsg(address, walletType, message)
 
-    await axios.post('api/v1/auth/login', {
+    await LOG_IN_USER({
         signature,
         address: address,
         message,
         sequence,
         account_number,
         chain_id,
-    });
+    })
 
     const connectedUser: userState = {
         accountName: accountName,
