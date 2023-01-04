@@ -29,7 +29,7 @@ import { UserController } from './user/user.controller';
         return {
           dialect: 'postgres',
           host: config.get('APP_DATABASE_HOST'),
-          port: 5434,
+          port: config.get('APP_DATABASE_PORT'),
           username: config.get('APP_DATABASE_USER'),
           password: config.get('APP_DATABASE_PASS'),
           database: config.get('APP_DATABASE_DB_NAME'),
