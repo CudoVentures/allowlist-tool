@@ -8,8 +8,8 @@ export interface RequiredAllowlistData {
     end_date: any;
     end_time: any;
     end_period: Date;
-    image: string;
-    banner_image: string;
+    image: Blob;
+    banner_image: Blob;
     require_email: boolean;
     description: string;
     checkedFields: Record<string, boolean>;
@@ -55,8 +55,8 @@ export const initialState: CollectedData = {
     end_date: undefined,
     end_time: undefined,
     end_period: undefined,
-    image: '',
-    banner_image: '',
+    image: undefined,
+    banner_image: undefined,
     require_email: false,
     tweet_to_like: undefined,
     tweet_to_retweet: undefined,

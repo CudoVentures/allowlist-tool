@@ -9,7 +9,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes, onImageChange, SocialMediaButtons } from './helpers';
+import { acceptedImgTypes, blobToBase64, SocialMediaButtons } from './helpers';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 
 import { allowlistDetailsStyles, generalStyles } from './styles';
@@ -19,7 +19,30 @@ const CreateAllowlistForm = () => {
   const dispatch = useDispatch()
   const [availableChainIDs, setAvailableChainIDs] = useState<string[]>([])
   const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
+  const [bannerPreview, setBannerPreview] = useState<string>('')
+  const [avatarPreview, setAvatarPreview] = useState<string>('')
   const allowlistState = useSelector((state: RootState) => state.allowlistState)
+
+  const setBlobToB64Img = async (imgData: Blob, setter: React.Dispatch<React.SetStateAction<string>>) => {
+    const b64ImgString = await blobToBase64(imgData)
+    setter(b64ImgString as string)
+  }
+
+  useEffect(() => {
+    if (allowlistState.banner_image) {
+      setBlobToB64Img(allowlistState.banner_image, setBannerPreview)
+      return
+    }
+    setBannerPreview('')
+  }, [allowlistState.banner_image])
+
+  useEffect(() => {
+    if (allowlistState.image) {
+      setBlobToB64Img(allowlistState.image, setAvatarPreview)
+      return
+    }
+    setAvatarPreview('')
+  }, [allowlistState.image])
 
   useEffect(() => {
     if (allowlistState.end_time && allowlistState.end_date) {
@@ -178,15 +201,15 @@ const CreateAllowlistForm = () => {
             </Typography>
             <Box sx={allowlistDetailsStyles.fileUploaderHolder}>
               <FileUploader
-                handleChange={(file: any) => onImageChange('image', file || null, dispatch)}
+                handleChange={(file: Blob) => dispatch(updateAllowlistObject({ image: file }))}
                 types={acceptedImgTypes}
                 children={
                   <Box
                     gap={2}
                     sx={{
                       ...allowlistDetailsStyles.dropZone,
-                      backgroundImage: allowlistState.image ?
-                        `url(${allowlistState.image}), linear-gradient(#1B2031, #1B2031)` : 'none'
+                      backgroundImage: avatarPreview ?
+                        `url(${avatarPreview}), linear-gradient(#1B2031, #1B2031)` : 'none'
                     }}
                   >
                     <SvgComponent
@@ -214,15 +237,15 @@ const CreateAllowlistForm = () => {
               This image will appear at the top of your allow list page. 1400 x 400 px recommended.            </Typography>
             <Box sx={allowlistDetailsStyles.bannerUploaderHolder}>
               <FileUploader
-                handleChange={(file: Blob) => onImageChange('banner', file || null, dispatch)}
+                handleChange={(file: Blob) => dispatch(updateAllowlistObject({ banner_image: file }))}
                 types={acceptedImgTypes}
                 children={
                   <Box
                     gap={2}
                     sx={{
                       ...allowlistDetailsStyles.dropZone,
-                      backgroundImage: allowlistState.banner_image ?
-                        `url(${allowlistState.banner_image}), linear-gradient(#1B2031, #1B2031)` : 'none'
+                      backgroundImage: bannerPreview ?
+                        `url(${bannerPreview}), linear-gradient(#1B2031, #1B2031)` : 'none'
                     }}
                   >
                     <SvgComponent
