@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../user/user.model';
+import UserEntity from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(private readonly usersService: UserService) {}
 
-  async login(address: string): Promise<User> {
+  async login(address: string): Promise<UserEntity> {
     const user = await this.usersService.findByAddress(address);
 
     if (!user) {
@@ -21,7 +21,7 @@ export class AuthService {
     accessToken: string,
     refreshToken: string,
     profile: any,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     const data = {};
     data['discord_access_token'] = accessToken;
     data['discord_refresh_token'] = refreshToken;
@@ -39,7 +39,7 @@ export class AuthService {
     accessToken: string,
     refreshToken: string,
     profile: any,
-  ): Promise<User> {
+  ): Promise<UserEntity> {
     const data = {};
     data['twitter_access_token'] = accessToken;
     data['twitter_refresh_token'] = refreshToken;

@@ -6,18 +6,21 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
   Request,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { LoggedInGuard } from '../auth/guards/loggedIn.guard';
-import { Allowlist } from './allowlist.model';
+import { TransactionInterceptor } from '../common/common.interceptors';
 import { AllowlistService } from './allowlist.service';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { JoinAllowlistDto } from './dto/join-allowlist.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
-import { SignedMessageGuard } from './guards/signed-message.guard';
+import { CreateAllowlistPipe } from './pipes/create-allowlist.pipe';
+import { SignMessagePipe } from './pipes/sign-message.pipe';
+import AllowlistEntity from './entities/allowlist.entity';
 
 @ApiTags('Allowlist')
 @Controller('allowlist')
@@ -25,17 +28,19 @@ export class AllowlistController {
   constructor(private allowlistService: AllowlistService) {}
 
   @Get('all')
-  async findAll(): Promise<Allowlist[]> {
+  async findAll(): Promise<AllowlistEntity[]> {
     return this.allowlistService.findAll();
   }
 
   @Get(':customId')
-  async findOne(@Param('customId') customId: string): Promise<Allowlist> {
+  async findByCustomId(
+    @Param('customId') customId: string,
+  ): Promise<AllowlistEntity> {
     return this.allowlistService.findByCustomId(customId);
   }
 
   @Get()
-  async findByAdmin(@Request() req): Promise<Allowlist[]> {
+  async findByAdmin(@Request() req): Promise<AllowlistEntity[]> {
     return this.allowlistService.findByAdmin(req.session.user.address);
   }
 
@@ -45,11 +50,11 @@ export class AllowlistController {
     return this.allowlistService.getEntries(id);
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @Post('join/:id')
-  @UseGuards(LoggedInGuard, SignedMessageGuard)
   async join(
     @Param('id', ParseIntPipe) id: number,
-    @Body() joinAllowlistDto: JoinAllowlistDto,
+    @Body(SignMessagePipe) joinAllowlistDto: JoinAllowlistDto,
   ) {
     return this.allowlistService.joinAllowlist(
       id,
@@ -58,20 +63,22 @@ export class AllowlistController {
     );
   }
 
+  @UseInterceptors(TransactionInterceptor)
   @Post()
-  @UseGuards(LoggedInGuard, SignedMessageGuard)
   async create(
-    @Body() createCollectionDto: CreateAllowlistDto,
-  ): Promise<Allowlist> {
-    return this.allowlistService.createAllowlist(createCollectionDto);
+    @Body(SignMessagePipe, CreateAllowlistPipe)
+    createAllowlistDto: CreateAllowlistDto,
+  ): Promise<AllowlistEntity> {
+    return this.allowlistService.createAllowlist(createAllowlistDto);
   }
 
-  @UseGuards(IsAdminGuard, SignedMessageGuard)
+  @UseInterceptors(TransactionInterceptor)
+  @UseGuards(IsAdminGuard)
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateAllowlistDto: UpdateAllowlistDto,
-  ): Promise<Allowlist> {
+    @Body(SignMessagePipe) updateAllowlistDto: UpdateAllowlistDto,
+  ): Promise<AllowlistEntity> {
     return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
   }
 }

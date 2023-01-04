@@ -4,27 +4,29 @@ import {
   Res,
   Get,
   UseGuards,
-  Body,
   Post,
+  UseInterceptors,
+  Query,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SignedMessageDto } from '../allowlist/dto/signed-message.dto';
-import { SignedMessageGuard } from '../allowlist/guards/signed-message.guard';
+import { SignMessagePipe } from '../allowlist/pipes/sign-message.pipe';
+import { TransactionInterceptor } from '../common/common.interceptors';
 import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
-@UseGuards(SignedMessageGuard)
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseInterceptors(TransactionInterceptor)
   @Post('login')
   async login(
     @Req() req,
     @Res() res,
-    @Body() signedMessageDto: SignedMessageDto,
+    @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
   ) {
     const user = await this.authService.login(signedMessageDto.address);
     req.session.user = user;

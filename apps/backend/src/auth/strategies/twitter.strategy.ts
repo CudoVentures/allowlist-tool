@@ -2,7 +2,7 @@ import { Strategy } from '@superfaceai/passport-twitter-oauth2';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from '../auth.service';
-import { User } from '../../user/user.model';
+import UserEntity from '../../user/entities/user.entity';
 
 @Injectable()
 export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
@@ -29,7 +29,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
     });
   }
 
-  async validate(req, accessToken, refreshToken, profile): Promise<User> {
+  async validate(req, accessToken, refreshToken, profile): Promise<UserEntity> {
     const user = await this.authService.validateTwitterUser(
       req,
       accessToken,
@@ -38,7 +38,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
     );
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('User not found');
     }
 
     return user;

@@ -28,7 +28,7 @@ const CreateAllowlistForm = ({ walletStore }) => {
 
   const addDiscordBot = () => {
     window.open(
-      `https://discord.com/api/oauth2/authorize?client_id=${Config.REACT_APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
+      `https://discord.com/api/oauth2/authorize?client_id=${Config.APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
     );
   };
 
@@ -82,8 +82,6 @@ const CreateAllowlistForm = ({ walletStore }) => {
       url: customUrl,
       cosmos_chain_id: projectChainId,
       end_date: endDate,
-      image: imageDataUri,
-      banner_image: bannerDataUri,
     };
 
     if (description) {
@@ -91,15 +89,15 @@ const CreateAllowlistForm = ({ walletStore }) => {
     }
 
     if (twitterAcc) {
-      data['twitter_account'] = twitterAcc;
+      data['twitter_account_to_follow'] = twitterAcc;
     }
 
     if (tweet) {
-      data['tweet'] = tweet;
+      data['tweet_to_like'] = tweet;
     }
 
     if (discordServer && serverRole) {
-      data['discord_server'] = discordServer;
+      data['discord_invite_link'] = discordServer;
       data['server_role'] = serverRole;
     }
 
@@ -119,6 +117,8 @@ const CreateAllowlistForm = ({ walletStore }) => {
 
     const reqData = {
       ...data,
+      image: imageDataUri,
+      banner_image: bannerDataUri,
       signature,
       address,
       message,
