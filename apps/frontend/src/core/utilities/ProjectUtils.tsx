@@ -1,209 +1,52 @@
-import S from './Main';
+import { CHAIN_DETAILS } from "./Constants"
 
-const QUERY_PATTERN = '?p=';
-
-export default class ProjectUtils {
-  static TRANSITION_DURATION = 400;
-
-  static makeBgImgStyle(url: string) {
-    return {
-      backgroundImage: `url("${url}")`,
-    };
-  }
-
-  static copyInput(inputN: HTMLElement) {
-    inputN.focus();
-    inputN.select();
-    document.execCommand('copy');
-    inputN.blur();
-  }
-
-  static copyText(text: string) {
-    if (navigator.clipboard !== undefined) {
-      navigator.clipboard.writeText(text);
-      return;
-    }
-
-    const inputN = document.createElement('textarea');
-    inputN.style.width = '0';
-    inputN.style.height = '0';
-    inputN.style.position = 'fixed';
-    inputN.style.overflow = 'hidden';
-    inputN.style.opacity = '0';
-    inputN.value = text;
-    document.body.appendChild(inputN);
-    ProjectUtils.copyInput(inputN);
-    document.body.removeChild(inputN);
-  }
-
-  static downloadUrl(url: string, filename = S.Strings.EMPTY) {
-    const hyperlink = document.createElement('a');
-    hyperlink.style.display = 'none';
-    hyperlink.href = url;
-    hyperlink.download = filename;
-    hyperlink.target = '_blank';
-    document.body.appendChild(hyperlink);
-    hyperlink.click();
-    document.body.removeChild(hyperlink);
-  }
-
-  static makeUrl(
-    page: string,
-    keys: string | string[],
-    values: string | string[],
-    wipe = false,
-  ) {
-    if (keys === undefined) {
-      window.location.href = page;
-    }
-
-    if (keys.splice === undefined) {
-      keys = [keys];
-      values = [values];
-    }
-
-    let i;
-    let pair;
-    const queryMap = new Map();
-    let queryArray;
-
-    for (i = keys.length; i-- > 0; ) {
-      keys[i] = encodeURIComponent(keys[i]);
-      values[i] = encodeURIComponent(values[i]);
-    }
-
-    if (wipe === false) {
-      queryArray = getQueryArray();
-      for (i = queryArray.length; i-- > 0; ) {
-        pair = queryArray[i].split('=');
-        queryMap.set(pair[0], pair[1]);
-      }
-    }
-    queryArray = [];
-    for (i = 0; i < keys.length; ++i) {
-      queryArray.push(`${keys[i]}=${values[i]}`);
-      queryMap.delete(keys[i]);
-    }
-
-    queryMap.forEach((value, key) => {
-      queryArray.push(`${key}=${value}`);
-    });
-
-    return page + QUERY_PATTERN + btoa(queryArray.join('&'));
-  }
-
-  static redirect(
-    page: string,
-    keys: string | string[],
-    values: string | string[],
-    wipe: boolean,
-  ) {
-    window.location.href = ProjectUtils.makeUrl(page, keys, values, wipe);
-  }
-
-  static getQueryParam(key: string) {
-    const queryArray = getQueryArray();
-    for (let pair, i = queryArray.length; i-- > 0; ) {
-      pair = queryArray[i].split('=');
-      if (decodeURIComponent(pair[0]) === key) {
-        return decodeURIComponent(pair[1]);
-      }
-    }
-
-    return null;
-  }
-
-  static redirectToUrl(url: string, newTab: boolean) {
-    if (newTab !== true) {
-      window.location.href = url;
-      return;
-    }
-
-    const hyperlink = document.createElement('a');
-    hyperlink.href = url;
-    hyperlink.target = '_blank';
-    hyperlink.rel = 'noopener noreferrer';
-    hyperlink.style.display = 'none';
-    document.body.appendChild(hyperlink);
-    hyperlink.click();
-  }
-
-  static stripHtml(html: string, node: HTMLElement) {
-    node = node !== undefined ? node : document.createElement('div');
-    node.innerHTML = html;
-    return (node.textContent || node.innerText || S.Strings.EMPTY).trim();
-  }
-
-  static isLandscape() {
-    return (
-      document.documentElement.clientWidth /
-        document.documentElement.clientHeight >
-      1.0
-    );
-  }
-
-  static isPortrait() {
-    return (
-      document.documentElement.clientWidth /
-        document.documentElement.clientHeight <
-      1.0
-    );
-  }
-
-  static requestAnimationFrame(callback: () => any) {
-    requestAnimationFrame(() => {
-      requestAnimationFrame(callback);
-    });
-  }
-
-  static async getKeplr(): Promise<any> {
-    if (window.keplr) {
-      return window.keplr;
-    }
-
-    if (document.readyState === 'complete') {
-      return window.keplr;
-    }
-
-    return new Promise((resolve) => {
-      const documentStateChange = (event: Event) => {
-        if (
-          event.target &&
-          (event.target as Document).readyState === 'complete'
-        ) {
-          resolve(window.keplr);
-          document.removeEventListener('readystatechange', documentStateChange);
-        }
-      };
-
-      document.addEventListener('readystatechange', documentStateChange);
-    });
-  }
-
-  static buffToString = (buffer) => {
-    const hex = [...new Uint8Array(buffer)]
-      .map((x) => x.toString(16).padStart(2, '0'))
-      .join('');
-
-    let str = '';
-    for (var i = 0; i < hex.length; i += 2)
-      str += String.fromCharCode(parseInt(hex.substr(i, 2), 16));
-    return str;
-  };
+export const delay = (ms: number) => {
+  return new Promise(resolve => setTimeout(resolve, ms))
 }
 
-function getQueryArray() {
-  const hashIndex = document.URL.indexOf('#');
-  const url =
-    hashIndex === -1 ? document.URL : document.URL.substring(0, hashIndex);
+export const getSum = (numbers: number[]): number => {
+  const sum = numbers.reduce(function (a, b) {
+    return a + b
+  }, 0)
+  return sum
+}
 
-  const queryStringStartIndex = url.indexOf(QUERY_PATTERN);
-  if (queryStringStartIndex === -1) {
-    return [];
+export const handleLinkOut = (url: string) => {
+  if (url) {
+    window.open(url, '_blank', 'rel=noreferrer')?.focus()
   }
+}
 
-  const queryString = url.substring(
-    queryStringStartIndex + QUERY_PATTERN.length,
-  );
-  return atob(queryString).split('&');
+export const getTimeFromNumber = (time: number): DetailedTime => {
+  const days = time / (24 * 60 * 60 * 1000)
+  const hours = (days % 1) * 24
+  const minutes = (hours % 1) * 60
+  const secs = (minutes % 1) * 60
+  return {
+    days: Math.floor(days),
+    hours: Math.floor(hours),
+    minutes: Math.floor(minutes),
+    seconds: Math.floor(secs)
+  }
+}
+
+export const getSeparateDateAndTime = (fullDate: Date): { date: string, time: string } => {
+  const period = fullDate?.toString().split(' ') || []
+  return {
+    date: period.slice(0, 4).join(' '),
+    time: period.slice(4).join(' '),
+  }
+}
+
+export const formatAddress = (text: string, sliceIndex: number): string => {
+  if (!text) { return '' }
+  const len = text.length
+  if (len < sliceIndex) {
+    return text
+  }
+  return `${text.slice(0, sliceIndex)}...${text.slice(len - 4, len)}`
+}
+
+export const isMainnetInstance = (): boolean => {
+  return CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK] === CHAIN_DETAILS.CHAIN_ID.MAINNET
 }
