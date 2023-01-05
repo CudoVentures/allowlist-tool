@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface modalState {
   selectWallet?: boolean
+  success?: boolean
 }
 
 export const initialState: modalState = {
     selectWallet: false,
+    success: false
 }
 
 export const modalStateSlice = createSlice({

@@ -38,6 +38,7 @@ import clockIcon from '../../../../public/assets/vectors/clock-icon.svg';
 import envelopIcon from '../../../../public/assets/vectors/envelop-icon.svg';
 import chainLinkIcon from '../../../../public/assets/vectors/chain-link-icon.svg';
 import editIcon from '../../../../public/assets/vectors/edit-icon.svg';
+import successIcon from '../../../../public/assets/vectors/success.svg';
 import bigPlusIcon from '../../../../public/assets/vectors/parallax/big-plus.svg';
 import sampleAllowListDetails from '../../../../public/assets/vectors/parallax/sample-allowlist-details.svg';
 import sampleAllowListMint from '../../../../public/assets/vectors/parallax/sample-allowlist-mint.svg';
@@ -54,6 +55,7 @@ import stepThree from '../../../../public/assets/vectors/stepper/step-3.svg';
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    SuccessIcon = 'Success icon',
     ChainLinkIcon = 'Chain link icon',
     EditIcon = 'Edit icon',
     EnvelopIcon = 'Envelop icon',
@@ -104,6 +106,7 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.SuccessIcon]: successIcon,
     [LAYOUT_CONTENT_TEXT.ChainLinkIcon]: chainLinkIcon,
     [LAYOUT_CONTENT_TEXT.EditIcon]: editIcon,
     [LAYOUT_CONTENT_TEXT.EnvelopIcon]: envelopIcon,
