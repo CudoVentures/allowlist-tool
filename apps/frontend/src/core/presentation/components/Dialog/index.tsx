@@ -3,12 +3,17 @@ import { useSelector } from 'react-redux';
 
 import WalletSelector from './ModalComponents/WalletSelector';
 import { RootState } from '../../../store';
+import Loading from './ModalComponents/Loading';
 
 
 const Dialog = () => {
-    const { selectWallet } = useSelector((state: RootState) => state.modalState)
+    const { selectWallet, success, pageTransitionLoading } = useSelector((state: RootState) => state.modalState)
 
     switch (true) {
+        case pageTransitionLoading:
+            return <Loading />
+        case success:
+            return <Success />
         case selectWallet:
             return <WalletSelector />
         default:

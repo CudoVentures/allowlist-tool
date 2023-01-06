@@ -1,3 +1,4 @@
+import { blobToBase64 } from "../../features/allowlists/presentation/components/helpers"
 import { CHAIN_DETAILS } from "./Constants"
 
 export const delay = (ms: number) => {
@@ -15,6 +16,11 @@ export const handleLinkOut = (url: string) => {
   if (url) {
     window.open(url, '_blank', 'rel=noreferrer')?.focus()
   }
+}
+
+export const setBlobToB64Img = async (imgData: Blob, setter: React.Dispatch<React.SetStateAction<string>>) => {
+  const b64ImgString = await blobToBase64(imgData)
+  setter(b64ImgString as string)
 }
 
 export const getTimeFromNumber = (time: number): DetailedTime => {

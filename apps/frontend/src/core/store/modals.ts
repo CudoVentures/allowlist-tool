@@ -1,10 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export interface modalState {
-  selectWallet?: boolean
+    pageTransitionLoading?: boolean
+    selectWallet?: boolean
+    success?: boolean
 }
 
 export const initialState: modalState = {
+    pageTransitionLoading: false,
     selectWallet: false,
 }
 

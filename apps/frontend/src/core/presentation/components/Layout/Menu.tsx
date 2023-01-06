@@ -1,21 +1,21 @@
 import React from "react"
-import { Link } from 'react-router-dom';
 import { Box, Typography } from "@mui/material"
 
 import AppRoutes from "../../../../features/app-routes/entities/AppRoutes";
+import useNavigateToRoute from "../../../utilities/CustomHooks/useNavigateToRoute";
 
 const Menu = (): JSX.Element => {
 
+    const navigateToRoute = useNavigateToRoute()
+    
     return (
-        <Box>
-            <Link
-                style={{ all: 'unset', cursor: 'pointer' }}
-                to={AppRoutes.CREATE_ALLOWLIST}
-            >
-                <Typography fontWeight={700}>
-                    Create
-                </Typography>
-            </Link>
+        <Box
+            onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
+            sx={{ cursor: 'pointer' }}
+        >
+            <Typography fontWeight={700}>
+                Create
+            </Typography>
         </Box>
     )
 }

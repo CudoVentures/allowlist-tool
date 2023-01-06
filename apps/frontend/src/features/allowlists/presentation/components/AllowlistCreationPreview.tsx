@@ -1,16 +1,18 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Box, Divider, Link, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 
 import { getRegistrationCriteriaArray } from './helpers'
 import { RootState } from '../../../../core/store'
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
-import { getSeparateDateAndTime } from '../../../../core/utilities/ProjectUtils'
+import { getSeparateDateAndTime, setBlobToB64Img } from '../../../../core/utilities/ProjectUtils'
 
 import { allowlistDetailsStyles, allowlistPreviewStyles } from './styles'
 
 export const AllowlistCreationPereview = () => {
 
+    const [bannerPreview, setBannerPreview] = useState<string>('')
+    const [avatarPreview, setAvatarPreview] = useState<string>('')
     const allowlistState = useSelector((state: RootState) => state.allowlistState)
     const { date, time } = getSeparateDateAndTime(allowlistState.end_period)
 
@@ -57,16 +59,32 @@ export const AllowlistCreationPereview = () => {
         {
             title: 'Profile Image',
             isDisabled: !allowlistState.image,
-            subtitle: <img src={allowlistState.image} style={allowlistDetailsStyles.fileUploaderHolder} />
+            subtitle: <img src={avatarPreview} style={allowlistDetailsStyles.fileUploaderHolder} />
         },
         {
             title: 'Banner Image',
             isDisabled: !allowlistState.banner_image,
-            subtitle: <img src={allowlistState.banner_image} style={allowlistDetailsStyles.bannerUploaderHolder} />
+            subtitle: <img src={bannerPreview} style={allowlistDetailsStyles.bannerUploaderHolder} />
         },
         { title: 'Registration End Date', isDisabled: !date, subtitle: date },
         { title: 'Registration End Time', isDisabled: !time, subtitle: time }
     ]
+
+    useEffect(() => {
+        if (allowlistState.banner_image) {
+            setBlobToB64Img(allowlistState.banner_image, setBannerPreview)
+            return
+        }
+        setBannerPreview('')
+    }, [allowlistState.banner_image])
+
+    useEffect(() => {
+        if (allowlistState.image) {
+            setBlobToB64Img(allowlistState.image, setAvatarPreview)
+            return
+        }
+        setAvatarPreview('')
+    }, [allowlistState.image])
 
     return (
         <Box id='creationPreviewPage' width='100%'>

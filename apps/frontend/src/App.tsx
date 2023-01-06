@@ -25,7 +25,7 @@ const App = () => {
           <CssBaseline />
           <ParallaxProvider>
             <Layout>
-              <Routes>
+              <Routes location={location} key={location.pathname}>
                 <Route path={AppRoutes.MAIN} element={<Home />} />
                 <Route
                   path={AppRoutes.CREATE_ALLOWLIST}

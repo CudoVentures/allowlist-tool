@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Box, Button, Collapse, Typography, Paper, Divider, AppBar } from '@mui/material';
 import { ClickAwayListener } from '@mui/base';
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom';
 
 import { formatAddress, isMainnetInstance } from '../../../utilities/ProjectUtils';
 import { HashBasedUserAvatar, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
@@ -17,12 +16,13 @@ import { COLORS_DARK_THEME } from '../../../theme/colors';
 import { useMidLowerResCheck } from '../../../utilities/CustomHooks/screenChecks';
 import Menu from './Menu';
 import { CopyAndFollowComponent } from '../../../theme/helpers';
+import useNavigateToRoute from '../../../utilities/CustomHooks/useNavigateToRoute';
 
 import { headerStyles } from './styles';
 
 const Header = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const navigateToRoute = useNavigateToRoute()
   const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -43,7 +43,7 @@ const Header = () => {
     dispatch(updateUser(initialUserState))
     dispatch(updateModalState(initialModalState))
     await disconnectWalletByType(connectedWallet!)
-    navigate(AppRoutes.MAIN)
+    navigateToRoute(AppRoutes.MAIN)
   }
 
   useEffect(() => {
@@ -65,7 +65,7 @@ const Header = () => {
       <Dialog />
       <Box
         id='leftNavContent'
-        onClick={() => navigate(AppRoutes.MAIN)}
+        onClick={() => navigateToRoute(AppRoutes.MAIN)}
         gap={1}
         sx={headerStyles.logoGroup}
       >

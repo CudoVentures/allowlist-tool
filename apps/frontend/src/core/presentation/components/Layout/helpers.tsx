@@ -3,6 +3,7 @@ import SVG from 'react-inlinesvg';
 import moment from "moment";
 import { Box, Divider } from '@mui/material';
 import { JdenticonConfig, toSvg } from 'jdenticon';
+import { Circles as CirclesSpinner } from 'svg-loaders-react';
 
 import { CHAIN_DETAILS } from '../../../utilities/Constants';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
@@ -50,7 +51,7 @@ import stepOne from '../../../../public/assets/vectors/stepper/step-1.svg';
 import stepTwo from '../../../../public/assets/vectors/stepper/step-2.svg';
 import stepThree from '../../../../public/assets/vectors/stepper/step-3.svg';
 
-
+import { generalStyles } from '../../../../features/allowlists/presentation/pages/styles';
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
@@ -252,4 +253,9 @@ export const HashBasedUserAvatar = ({
 export const SVG_FRAMES = {
     frame1673: frame1673,
     frame1674: frame1674
+}
+
+export const StyledCircleSpinner = () => {
+    return <CirclesSpinner style={generalStyles.spinner}
+        fill={COLORS_DARK_THEME.PRIMARY_BLUE} />
 }
