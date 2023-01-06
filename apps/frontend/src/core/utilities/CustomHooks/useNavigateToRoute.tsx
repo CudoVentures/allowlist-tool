@@ -18,10 +18,12 @@ const useNavigateToRoute = () => {
             }))
             setTimeout(() => {
                 navigate(route!)
+            }, 300)
+            setTimeout(() => {
                 dispatch(updateModalState({
                     pageTransitionLoading: false
                 }))
-            }, 500)
+            }, 600)
         }
     }, [location.pathname])
 }
