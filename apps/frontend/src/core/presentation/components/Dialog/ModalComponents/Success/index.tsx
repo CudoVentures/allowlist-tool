@@ -2,26 +2,26 @@ import React from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { Dialog as MuiDialog } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 
 import { RootState } from '../../../../../store'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../Layout/helpers'
 import { COLORS_DARK_THEME } from '../../../../../theme/colors'
 import { initialState, updateModalState } from '../../../../../store/modals'
 import AppRoutes from '../../../../../../features/app-routes/entities/AppRoutes'
+import useNavigateToRoute from '../../../../../../core/utilities/CustomHooks/useNavigateToRoute'
 
 import { CancelRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
 
 const Success = () => {
 
     const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const navigateToRoute = useNavigateToRoute()
 
     const { success } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = (path: AppRoutes) => {
         dispatch(updateModalState(initialState))
-        navigate(path)
+        navigateToRoute(path)
     }
 
     const closeModal = (event: {}, reason: string) => {

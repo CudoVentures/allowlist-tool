@@ -4,7 +4,6 @@ import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 
 import React, { Fragment, useEffect, useState } from 'react'
-import { useNavigate } from "react-router-dom";
 import { Pagination, Mousewheel } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Box, Typography } from '@mui/material'
@@ -14,19 +13,19 @@ import { FetchedAllowlist } from "../../../../core/store/allowlist";
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
 import { useIsScreenLessThan } from '../../../../core/utilities/CustomHooks/screenChecks'
 import AppRoutes from '../../../app-routes/entities/AppRoutes'
-import { getTimeFromNumber } from '../../../../core/utilities/ProjectUtils'
-import { blobToBase64 } from '../components/helpers'
+import { getTimeFromNumber, setBlobToB64Img } from '../../../../core/utilities/ProjectUtils'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers'
+import useNavigateToRoute from '../../../../core/utilities/CustomHooks/useNavigateToRoute'
 
 import { generalStyles } from './styles'
 
 const CreateBox = () => {
 
-    const navigate = useNavigate()
+    const navigateToRoute = useNavigateToRoute()
 
     return (
         <Box
-            onClick={() => navigate(AppRoutes.CREATE_ALLOWLIST)}
+            onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
             gap={1}
             sx={generalStyles.createBox}
         >
@@ -48,17 +47,12 @@ const CreateBox = () => {
 
 const SwiperCardContent = ({ allowlist }: { allowlist: FetchedAllowlist }) => {
 
-    const navigate = useNavigate()
+    const navigateToRoute = useNavigateToRoute()
     const [banner, setBanner] = useState<string>('')
     const [avatar, setAvatar] = useState<string>('')
     const [remainingTime, setRemainingTime] = useState<number>(0)
     const [loadingImgs, setLoadingImgs] = useState<boolean>(true)
     const [detailedTime, setDetailedTime] = useState<DetailedTime>(null)
-
-    const setBlobToB64Img = async (imgData: Blob, setter: React.Dispatch<React.SetStateAction<string>>) => {
-        const b64ImgString = await blobToBase64(imgData)
-        setter(b64ImgString as string)
-    }
 
     useEffect(() => {
         const now = Date.now()
@@ -96,7 +90,7 @@ const SwiperCardContent = ({ allowlist }: { allowlist: FetchedAllowlist }) => {
     }, [banner, avatar])
 
     return (
-        <Box onClick={() => navigate(`/${allowlist.url}`)} sx={generalStyles.swiperDataBox}>
+        <Box onClick={() => navigateToRoute(`/${allowlist.url}`)} sx={generalStyles.swiperDataBox}>
             {loadingImgs ? <TailSpinLoader /> :
                 <Fragment>
                     <Box sx={generalStyles.imgHolder}>

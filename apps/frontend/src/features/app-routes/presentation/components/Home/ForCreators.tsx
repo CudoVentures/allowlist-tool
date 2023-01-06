@@ -1,17 +1,18 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import { Parallax } from 'react-scroll-parallax';
 
 import { GradientText } from "../../../../../core/theme/helpers"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../../core/presentation/components/Layout/helpers"
 import { useIsScreenLessThan } from "../../../../../core/utilities/CustomHooks/screenChecks"
+import useNavigateToRoute from "../../../../../core/utilities/CustomHooks/useNavigateToRoute";
 import AppRoutes from "../../../entities/AppRoutes"
 
 import { forCreatorsStyles } from "./styles"
 
 const ForCreators = () => {
 
+    const navigateToRoute = useNavigateToRoute()
     const isUnder1200px = useIsScreenLessThan('1200px', 'width')
     const isUnder800px = useIsScreenLessThan('800px', 'width')
 
@@ -45,15 +46,17 @@ const ForCreators = () => {
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
                     </Typography>
                 </Box>
-                <Link style={{ textDecoration: 'none' }} to={AppRoutes.ALLOWLISTS}>
-                    <Button variant="contained" sx={forCreatorsStyles.btn} >
-                        Allowlists
-                        <SvgComponent
-                            type={LAYOUT_CONTENT_TEXT.ArrowRight}
-                            style={{ marginLeft: '10px', height: '24px' }}
-                        />
-                    </Button>
-                </Link>
+                <Button
+                    onClick={() => navigateToRoute(AppRoutes.ALLOWLISTS)}
+                    variant="contained"
+                    sx={forCreatorsStyles.btn}
+                >
+                    Allowlists
+                    <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.ArrowRight}
+                        style={{ marginLeft: '10px', height: '24px' }}
+                    />
+                </Button>
             </Box>
             <Box id='ForCreatorsRightContent' sx={forCreatorsStyles.rightContent} >
                 <Box>
@@ -68,11 +71,11 @@ const ForCreators = () => {
                 </Box>
                 <Box>
                     <Box sx={forCreatorsStyles.yellowBox} />
-                    <Parallax  translateY={["50px", "0px"]} speed={20}>
-                    <Box sx={forCreatorsStyles.avatar}>
-                        <SvgComponent type={LAYOUT_CONTENT_TEXT.HeadImg}
-                            style={{ width: '100%', height: '100%' }} />
-                    </Box>
+                    <Parallax translateY={["50px", "0px"]} speed={20}>
+                        <Box sx={forCreatorsStyles.avatar}>
+                            <SvgComponent type={LAYOUT_CONTENT_TEXT.HeadImg}
+                                style={{ width: '100%', height: '100%' }} />
+                        </Box>
                     </Parallax>
                 </Box>
                 <Box sx={{ position: 'absolute', left: -60, bottom: 0 }}>

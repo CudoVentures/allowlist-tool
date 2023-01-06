@@ -8,8 +8,10 @@ import AdminView from './AdminView';
 import SummaryView from './SummaryView';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { RootState } from '../../../../core/store';
-import { blobToBase64, RemainingTimer } from './helpers';
+import { RemainingTimer } from './helpers';
 import { useIsScreenLessThan } from '../../../../core/utilities/CustomHooks/screenChecks';
+import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
+import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
 
 import { allowListStyles } from './styles';
 
@@ -24,11 +26,6 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
   const { connectedAddress } = useSelector((state: RootState) => state.userState);
   const [bannerPreview, setBannerPreview] = useState<string>('')
   const [avatarPreview, setAvatarPreview] = useState<string>('')
-
-  const setBlobToB64Img = async (imgData: Blob, setter: React.Dispatch<React.SetStateAction<string>>) => {
-    const b64ImgString = await blobToBase64(imgData)
-    setter(b64ImgString as string)
-  }
 
   useEffect(() => {
     if (props.banner_image) {
@@ -105,7 +102,7 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
     }
   }, [connectedAddress, props.admin]);
 
-  return loading ? null : (
+  return loading ? <StyledCircleSpinner /> : (
     <Box id="allowlist" sx={allowListStyles.holder}>
       <Box id="allowlistHolder" gap={4} sx={allowListStyles.contentHolder}>
         <Box sx={

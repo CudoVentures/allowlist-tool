@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import SVG from 'react-inlinesvg';
 import { Box, Typography, Button } from "@mui/material";
 
@@ -7,11 +6,13 @@ import AppRoutes from "../../../entities/AppRoutes";
 import { GradientText } from "../../../../../core/theme/helpers";
 import { LAYOUT_CONTENT_TEXT, SVG_FRAMES, SvgComponent } from "../../../../../core/presentation/components/Layout/helpers";
 import { useIsScreenLessThan } from "../../../../../core/utilities/CustomHooks/screenChecks";
+import useNavigateToRoute from "../../../../../core/utilities/CustomHooks/useNavigateToRoute";
 
 import { mainCardStyles } from "./styles";
 
 const MainCard = () => {
 
+    const navigateToRoute = useNavigateToRoute()
     const isUnder1200px = useIsScreenLessThan('1200px', 'width')
     const isUnder800px = useIsScreenLessThan('800px', 'width')
 
@@ -64,15 +65,17 @@ const MainCard = () => {
                     <Button variant="outlined" sx={btnStyles} >
                         See Example
                     </Button>
-                    <Link style={{ textDecoration: 'none' }} to={AppRoutes.CREATE_ALLOWLIST}>
-                        <Button variant="contained" sx={btnStyles} >
-                            Create Allowlist
-                            <SvgComponent
-                                type={LAYOUT_CONTENT_TEXT.PlusIcon}
-                                style={{ height: '22px' }}
-                            />
-                        </Button>
-                    </Link>
+                    <Button
+                        onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
+                        variant="contained"
+                        sx={btnStyles}
+                    >
+                        Create Allowlist
+                        <SvgComponent
+                            type={LAYOUT_CONTENT_TEXT.PlusIcon}
+                            style={{ height: '22px' }}
+                        />
+                    </Button>
                 </Box>
             </Box>
             <Box id='mainCardRightContent' sx={mainCardStyles.rightContent}>

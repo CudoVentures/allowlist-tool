@@ -6,7 +6,6 @@ import { Parallax } from 'react-scroll-parallax';
 import { GradientText } from "../../../../../core/theme/helpers"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../../core/presentation/components/Layout/helpers"
 import { useIsScreenLessThan } from "../../../../../core/utilities/CustomHooks/screenChecks"
-import AppRoutes from "../../../entities/AppRoutes"
 
 import { forCollectorsStyles } from "./styles"
 

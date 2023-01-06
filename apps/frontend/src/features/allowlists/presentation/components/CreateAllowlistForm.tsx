@@ -9,8 +9,9 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes, blobToBase64, SocialMediaButtons } from './helpers';
+import { acceptedImgTypes, SocialMediaButtons } from './helpers';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
+import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 
 import { allowlistDetailsStyles, generalStyles } from './styles';
 
@@ -22,11 +23,6 @@ const CreateAllowlistForm = () => {
   const [bannerPreview, setBannerPreview] = useState<string>('')
   const [avatarPreview, setAvatarPreview] = useState<string>('')
   const allowlistState = useSelector((state: RootState) => state.allowlistState)
-
-  const setBlobToB64Img = async (imgData: Blob, setter: React.Dispatch<React.SetStateAction<string>>) => {
-    const b64ImgString = await blobToBase64(imgData)
-    setter(b64ImgString as string)
-  }
 
   useEffect(() => {
     if (allowlistState.banner_image) {
