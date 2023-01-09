@@ -8,7 +8,7 @@
   "scripts": {
     "format": "prettier --write \"apps/**/*.ts\" \"libs/**/*.ts\"",
     "prebuild:prod": "rimraf dist",
-    "build:prod": "nest build backed --webpack && npm run build:frontend:prod",
+    "build:prod": "nest build backend --webpack && npm run build:frontend:prod",
     "build:frontend:dev": "export NODE_ENV=development && npx webpack --config webpack-frontend.config.js --watch",
     "build:frontend:prod": "export NODE_ENV=production && npx webpack --config webpack-frontend.config.js",
     "start:backend:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch",
