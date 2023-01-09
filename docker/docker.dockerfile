@@ -29,9 +29,9 @@ COPY --from=builder "/usr/src/cudos-allowlist" ./
 
 COPY --from=builder "/usr/src/cudos-allowlist/config/.env" ./config/.env
 
-RUN chown -R node:node ${WORKING_DIR}
+# RUN chown -R node:node ${WORKING_DIR}
 
-USER node
+# USER node
 
 RUN npm i --omit=dev
 

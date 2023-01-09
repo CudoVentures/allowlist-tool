@@ -1,5 +1,5 @@
 {
-  "name": "cudos-aura-pool-service",
+  "name": "cudos-allow-list",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -19,7 +19,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/cudos-aura-pool-service/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/cudos-allow-list/test/jest-e2e.json"
   },
   "dependencies": {
     "@keplr-wallet/types": "^0.11.23",
