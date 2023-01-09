@@ -37,5 +37,5 @@ export class SignedMessageDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ required: true })
-  address: string;
+  connectedAddress: string;
 }

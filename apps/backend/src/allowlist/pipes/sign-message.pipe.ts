@@ -14,7 +14,7 @@ export class SignMessagePipe implements PipeTransform {
       throw new BadRequestException('Missing signature');
     }
 
-    if (!value.address) {
+    if (!value.connectedAddress) {
       throw new BadRequestException('Missing address');
     }
 
@@ -33,12 +33,12 @@ export class SignMessagePipe implements PipeTransform {
     if (!value.chain_id) {
       throw new BadRequestException('Missing chain id');
     }
-
+    
     let validSignature;
     try {
       validSignature = await verifyNonceMsgSigner(
         value.signature as StdSignature,
-        value.address,
+        value.connectedAddress,
         value.message,
         value.sequence,
         value.account_number,
