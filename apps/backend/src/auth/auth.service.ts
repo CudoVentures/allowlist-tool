@@ -4,7 +4,7 @@ import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UserService) {}
+  constructor(private readonly usersService: UserService) { }
 
   async login(address: string): Promise<UserEntity> {
     const user = await this.usersService.findByAddress(address);
@@ -29,9 +29,19 @@ export class AuthService {
     data[
       'discord_profile_username'
     ] = `${profile.username}#${profile.discriminator}`;
+    let user
+    try {
+      user = await this.usersService.findByDiscordId(profile.id);
+      //update user record 
+      user = await this.usersService.updateUser(user.id, data);
+    } catch (error) {
+      console.log(error)
+    }
 
-    let user = await this.usersService.findByAddress(req.session.user.address);
-    return this.usersService.updateUser(user.id, data);
+    if (!user) {
+      user = await this.usersService.createUser(data);
+    }
+    return user;
   }
 
   async validateTwitterUser(
@@ -46,7 +56,18 @@ export class AuthService {
     data['twitter_profile_id'] = profile.id;
     data['twitter_profile_username'] = profile.username;
 
-    let user = await this.usersService.findByAddress(req.session.user.address);
-    return this.usersService.updateUser(user.id, data);
+    let user
+    try {
+      user = await this.usersService.findByTwitterId(profile.id);
+      //update user record 
+      user = await this.usersService.updateUser(user.id, data);
+    } catch (error) {
+      console.log(error)
+    }
+
+    if (!user) {
+      user = await this.usersService.createUser(data);
+    }
+    return user;
   }
 }
