@@ -103,14 +103,6 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
         accountNumber: account_number,
     } = await signNonceMsg(address, walletType, message)
 
-    await LOG_IN_USER({
-        signature,
-        address: address,
-        message,
-        sequence,
-        account_number,
-        chain_id,
-    })
 
     const connectedUser: userState = {
         accountName: accountName,

@@ -16,7 +16,7 @@ enum Format {
 const AdminView = ({ props }: { props: FetchedAllowlist }) => {
 
     const exportEntries = async (format: Format) => {
-        const res = await GET_ALLOWLIST_ENTRIES(props.url)
+        const res = await GET_ALLOWLIST_ENTRIES(props.id)
         if (format === Format.JSON) {
             downloadJSON(res.data);
         } else {

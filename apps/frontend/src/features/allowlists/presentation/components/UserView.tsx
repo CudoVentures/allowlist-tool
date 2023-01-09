@@ -45,7 +45,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         } = await signNonceMsg(connectedAddress, connectedWallet, message);
 
         try {
-            await JOIN_ALLOWLIST(props.url, {
+            await JOIN_ALLOWLIST(props.id, {
                 signature,
                 connectedAddress,
                 message,

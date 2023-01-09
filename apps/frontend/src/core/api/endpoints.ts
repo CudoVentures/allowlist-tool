@@ -7,13 +7,13 @@ export const EXPLORER_ADDRESS_DETAILS = (connectedNetwork: string, accountAddres
 export const TX_HASH_DETAILS = (connectedNetwork: string, txHash: string) =>
   `${CHAIN_DETAILS.EXPLORER_URL[connectedNetwork]}/transactions/${txHash}`
 
-export const JOIN_ALLOWLIST_URL = (allowlistID: string) =>
+export const JOIN_ALLOWLIST_URL = (allowlistID: number) =>
   `/api/v1/allowlist/join/${allowlistID}`
 
 export const ALLOWLIST_DETAILS_URL = (allowlistID: string) =>
   `/api/v1/allowlist/${allowlistID}`
 
-export const ALLOWLIST_ENTRIES_URL = (allowlistID: string) =>
+export const ALLOWLIST_ENTRIES_URL = (allowlistID: number) =>
   `api/v1/allowlist/entries/${allowlistID}`
 
 export const SOCIAL_MEDIA_LOGIN_URL = (service: SOCIAL_MEDIA) =>
