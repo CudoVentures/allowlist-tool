@@ -33,18 +33,18 @@ const useManipulateAllowlist = () => {
         };
 
         try {
-            const userDetails = await GET_USER_DETAILS();
-            const messageObj = {};
-            if (collectedData.twitter_account || collectedData.tweet) {
-                messageObj['twitter_access_token'] =
-                    userDetails.data.twitter_access_token;
-            }
-            if (collectedData.discord_server) {
-                messageObj['discord_access_token'] =
-                    userDetails.data.discord_access_token;
-            }
-
-            const message = JSON.stringify(messageObj);
+            // const userDetails = await GET_USER_DETAILS();
+            // const messageObj = {};
+            // if (collectedData.twitter_account || collectedData.tweet) {
+            //     messageObj['twitter_access_token'] =
+            //         userDetails.data.twitter_access_token;
+            // }
+            // if (collectedData.discord_server) {
+            //     messageObj['discord_access_token'] =
+            //         userDetails.data.discord_access_token;
+            // }
+            // for now don't sign anything specific
+            const message = JSON.stringify({});
             const {
                 signature,
                 chainId: chain_id,

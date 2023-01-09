@@ -69,9 +69,10 @@ import { UserController } from './user/user.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
-      .forRoutes('/');
+    // remove auth middleware for now - we don't need it
+    // consumer
+    //   .apply(AuthMiddleware)
+    //   .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
+    //   .forRoutes('/');
   }
 }
