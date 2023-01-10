@@ -8,7 +8,7 @@ WORKDIR ${WORKING_DIR}
 
 RUN npm i
 
-RUN npm run build:prod
+RUN npm run build:prod --verbose
 
 FROM node:16-buster
 
