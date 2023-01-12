@@ -49,15 +49,14 @@ export class CreateAllowlistDto extends SignedMessageDto {
   @ApiProperty({ required: true })
   end_date: Date;
 
-  @IsObject()
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  image: Blob;
 
-  @IsObject()
   @IsNotEmpty()
   @ApiProperty({ required: true })
-  banner_image: Blob;
+  image: string;
+
+  @IsNotEmpty()
+  @ApiProperty({ required: true })
+  banner_image: string;
 
   @IsString()
   @IsOptional()

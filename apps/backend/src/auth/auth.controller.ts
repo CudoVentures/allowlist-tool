@@ -28,7 +28,7 @@ export class AuthController {
     @Res() res,
     @Query(SignMessagePipe) signedMessageDto: SignedMessageDto,
   ) {
-    const user = await this.authService.login(signedMessageDto.address);
+    const user = await this.authService.login(signedMessageDto.connectedAddress);
     req.session.user = user;
     res.status(200).send();
   }

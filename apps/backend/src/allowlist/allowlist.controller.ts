@@ -20,12 +20,13 @@ import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { CreateAllowlistPipe } from './pipes/create-allowlist.pipe';
 import { SignMessagePipe } from './pipes/sign-message.pipe';
+import { AdminSignMessagePipe } from './pipes/admin-sign-message.pipe';
 import AllowlistEntity from './entities/allowlist.entity';
 
 @ApiTags('Allowlist')
 @Controller('allowlist')
 export class AllowlistController {
-  constructor(private allowlistService: AllowlistService) {}
+  constructor(private allowlistService: AllowlistService) { }
 
   @Get('all')
   async findAll(): Promise<AllowlistEntity[]> {
@@ -58,7 +59,7 @@ export class AllowlistController {
   ) {
     return this.allowlistService.joinAllowlist(
       id,
-      joinAllowlistDto.address,
+      joinAllowlistDto.connectedAddress,
       joinAllowlistDto.email,
     );
   }
@@ -66,7 +67,7 @@ export class AllowlistController {
   @UseInterceptors(TransactionInterceptor)
   @Post()
   async create(
-    @Body(SignMessagePipe, CreateAllowlistPipe)
+    @Body(AdminSignMessagePipe, CreateAllowlistPipe)
     createAllowlistDto: CreateAllowlistDto,
   ): Promise<AllowlistEntity> {
     return this.allowlistService.createAllowlist(createAllowlistDto);

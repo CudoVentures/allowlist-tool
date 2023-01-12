@@ -1,125 +1,57 @@
-import React, { useEffect, StrictMode } from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { Provider } from 'mobx-react';
+import React, { Fragment } from 'react';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { ParallaxProvider } from 'react-scroll-parallax';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { LocalizationProvider } from '@mui/x-date-pickers';
 
-import S from './core/utilities/Main';
-
-import AppStore from './core/presentation/stores/AppStore';
-
-import AppRouter from './features/app-routes/presentation/components/AppRouter';
-import AlertStore from './core/presentation/stores/AlertStore';
-import WalletStore from './features/ledger/presentation/stores/WalletStore';
-
-const appStore = new AppStore();
-const alertStore = new AlertStore();
-const walletStore = new WalletStore();
+import theme from './core/theme';
+import Layout from './core/presentation/components/Layout';
+import AppRoutes from './features/app-routes/entities/AppRoutes';
+import Home from './features/app-routes/presentation/components/Home';
+import CreateAllowlistPage from './features/allowlists/presentation/pages/CreateAllowlist';
+import AllowlistPage from './features/allowlists/presentation/pages/AllowlistPage';
+import EditAllowlistPage from './features/allowlists/presentation/pages/EditAllowlist';
+import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllowlistsPage';
 
 const App = () => {
-  useEffect(() => {
-    initHover();
-    initOnBeforeUnload();
-    removeInitalPageLoading();
-  }, []);
+
+  const location = useLocation()
 
   return (
-    <StrictMode>
-      <Provider
-        appStore={appStore}
-        alertStore={alertStore}
-        walletStore={walletStore}
-      >
-        <BrowserRouter>
-          <AppRouter walletStore={walletStore} />
-        </BrowserRouter>
-      </Provider>
-    </StrictMode>
+    <Fragment>
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <ParallaxProvider>
+            <Layout>
+              <Routes location={location} key={location.pathname}>
+                <Route path={AppRoutes.MAIN} element={<Home />} />
+                <Route
+                  path={AppRoutes.CREATE_ALLOWLIST}
+                  element={<CreateAllowlistPage />}
+                />
+                <Route
+                  path={AppRoutes.EDIT_ALLOWLIST}
+                  element={<EditAllowlistPage />}
+                />
+                <Route
+                  path={AppRoutes.ALLOWLIST}
+                  element={<AllowlistPage />}
+                />
+                <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
+                {/* <Route
+                  path={AppRoutes.MY_ALLOWLISTS}
+                  element={<MyAllowlistsPage walletStore={walletStore} />}
+                /> */}
+                <Route path="*" element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />} />
+              </Routes>
+            </Layout>
+          </ParallaxProvider>
+        </ThemeProvider>
+      </LocalizationProvider>
+    </Fragment >
   );
 };
 
 export default App;
-
-function initHover() {
-  if (navigator.maxTouchPoints === 0 || navigator.msMaxTouchPoints === 0) {
-    return;
-  }
-
-  let touch = false;
-  let timerId: any = null;
-  const timerCallback = () => {
-    touch = false;
-  };
-
-  document.documentElement.addEventListener(
-    'mousemove',
-    (e) => {
-      if (touch === false) {
-        S.CSS.removeClass(document.documentElement, 'Touchable');
-      }
-    },
-    true,
-  );
-
-  document.documentElement.addEventListener(
-    'touchstart',
-    () => {
-      touch = true;
-      if (timerId !== null) {
-        clearTimeout(timerId);
-      }
-      S.CSS.addClass(document.documentElement, 'Touchable');
-    },
-    true,
-  );
-
-  document.documentElement.addEventListener('touchend', () => {
-    if (timerId !== null) {
-      clearTimeout(timerId);
-    }
-    timerId = setTimeout(timerCallback, 256);
-  });
-}
-
-function initOnBeforeUnload() {
-  let loadedFromCache = false;
-
-  window.onbeforeunload = (e: BeforeUnloadEvent) => {
-    const defaultReturnValue = e.returnValue;
-
-    if (S.Browser.instance_name === S.Browser.SAFARI) {
-      document.body.style.opacity = '0';
-    }
-
-    if (loadedFromCache === true) {
-      e.returnValue = defaultReturnValue;
-      return;
-    }
-
-    if (e.returnValue !== defaultReturnValue) {
-      setTimeout(() => {
-        setTimeout(() => {
-          setTimeout(() => {
-            setTimeout(() => {
-              setTimeout(() => {
-                if (S.Browser.instance_name === S.Browser.SAFARI) {
-                  document.body.style.opacity = '1';
-                }
-              }, 20);
-            }, 20);
-          }, 20);
-        }, 20);
-      }, 20);
-    }
-  };
-
-  window.onpageshow = (e: PageTransitionEvent) => {
-    loadedFromCache = e.persisted;
-    if (e.persisted) {
-      window.location.reload();
-    }
-  };
-}
-
-function removeInitalPageLoading() {
-  const pageLoadingN = document.getElementById('page_loading');
-  pageLoadingN?.parentNode?.removeChild(pageLoadingN);
-}

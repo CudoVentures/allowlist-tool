@@ -29,7 +29,7 @@ import { UserController } from './user/user.controller';
         return {
           dialect: 'postgres',
           host: config.get('APP_DATABASE_HOST'),
-          port: 5434,
+          port: config.get('APP_DATABASE_PORT'),
           username: config.get('APP_DATABASE_USER'),
           password: config.get('APP_DATABASE_PASS'),
           database: config.get('APP_DATABASE_DB_NAME'),
@@ -69,9 +69,10 @@ import { UserController } from './user/user.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(AuthMiddleware)
-      .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
-      .forRoutes('/');
+    // remove auth middleware for now - we don't need it
+    // consumer
+    //   .apply(AuthMiddleware)
+    //   .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
+    //   .forRoutes('/');
   }
 }
