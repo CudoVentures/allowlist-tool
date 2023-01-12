@@ -63,10 +63,10 @@ const MainCard = () => {
                 </Box>
                 <Box display='flex' justifyContent={isUnder1200px ? 'space-evenly' : 'flex-start'} gap={2}>
                     <Button variant="outlined" sx={btnStyles} >
-                        See Example
+                        Explore Allowlists
                     </Button>
                     <Button
-                        onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
+                        onClick={() => navigateToRoute(AppRoutes.ALLOWLISTS)}
                         variant="contained"
                         sx={btnStyles}
                     >
