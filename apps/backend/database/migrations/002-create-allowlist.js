@@ -56,11 +56,11 @@ module.exports = {
         },
         image: {
           allowNull: false,
-          type: Sequelize.BLOB("long")
+          type: Sequelize.STRING,
         },
         banner_image: {
           allowNull: false,
-          type: Sequelize.BLOB("long"),
+          type: Sequelize.STRING,
         },
 
         twitter_account_to_follow: {
