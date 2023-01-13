@@ -62,11 +62,15 @@ const MainCard = () => {
                     </Typography>
                 </Box>
                 <Box display='flex' justifyContent={isUnder1200px ? 'space-evenly' : 'flex-start'} gap={2}>
-                    <Button variant="outlined" sx={btnStyles} >
+                    <Button
+                        onClick={() => navigateToRoute(AppRoutes.ALLOWLISTS)}
+                        variant="outlined"
+                        sx={btnStyles}
+                    >
                         Explore Allowlists
                     </Button>
                     <Button
-                        onClick={() => navigateToRoute(AppRoutes.ALLOWLISTS)}
+                        onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
                         variant="contained"
                         sx={btnStyles}
                     >

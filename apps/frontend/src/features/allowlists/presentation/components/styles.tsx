@@ -2,6 +2,15 @@ import React from "react";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
 
+export const menuStyles = {
+  logoItem: {
+    width: '24px',
+    height: '24px',
+    marginRight: '5px',
+    color: 'white'
+  }
+}
+
 export const summaryViewStyles = {
   title: {
     display: 'flex',

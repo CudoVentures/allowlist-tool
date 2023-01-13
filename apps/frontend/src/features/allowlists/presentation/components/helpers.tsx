@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { Box, Button, Checkbox, Divider, FormControlLabel, FormGroup, List, ListItem, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Collapse, Divider, FormControlLabel, FormGroup, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
@@ -14,9 +14,10 @@ import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedi
 import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
 
-import { allowlistPreviewStyles, allowListStyles } from "./styles";
+import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
+import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
 
-declare let Config: { REACT_APP_DISCORD_CLIENT_ID: any; };
+declare let Config: { APP_DISCORD_CLIENT_ID: any; };
 
 export const acceptedImgTypes = ['png', 'jpeg', 'jpg', 'svg']
 
@@ -47,41 +48,64 @@ export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<
 
 export const addDiscordBot = () => {
     window.open(
-        `https://discord.com/api/oauth2/authorize?client_id=${Config.REACT_APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
+        `https://discord.com/api/oauth2/authorize?client_id=${Config.APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
     );
 };
 
 export const SocialMediaButtons = () => {
 
-    const { connectSocialMedia } = useSocialMedia()
+    const { connectSocialMedia, disconnectSocialMedia } = useSocialMedia()
     const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
 
+    const StyledTypography = ({ type, media }: { type: LAYOUT_CONTENT_TEXT, media: SOCIAL_MEDIA }) => {
+        const [openMenu, setOpenMenu] = useState<boolean>(false)
+        const isDisconnected = !connectedSocialMedia[media]
+        const displayName = media.charAt(0).toUpperCase() + media.slice(1)
+        return (
+            <Typography
+                fontWeight={700}
+                sx={{ minWidth: 'max-content', minHeight: 'max-content', position: 'relative', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
+                onClick={() => isDisconnected ? connectSocialMedia(media) : null}
+            >
+                <SvgComponent
+                    type={type}
+                    style={menuStyles.logoItem}
+                />
+                {isDisconnected ? `Connect ${displayName}` :
+                    `${connectedSocialMedia[media] || '@TestTwitter'}`}
+                {isDisconnected ? null :
+                    <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                        style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                    />}
+                <Collapse
+                    onMouseLeave={() => setOpenMenu(false)}
+                    sx={headerStyles.SMcollapse}
+                    in={openMenu}
+                >
+                    <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
+                        <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                            <Typography onClick={() => disconnectSocialMedia(media)}>
+                                {`Disconnect`}
+                            </Typography>
+                        </Box>
+                    </Paper>
+                </Collapse>
+            </Typography>
+        )
+    }
+
     return (
-        <Box gap={1} display='flex'>
-            <Tooltip title={`Login with Twitter`}>
-                <Button
-                    variant="text"
-                    sx={{ height: '40px' }}
-                    onClick={() => connectSocialMedia(SOCIAL_MEDIA.twitter)}
-                >
-                    <SvgComponent
-                        type={LAYOUT_CONTENT_TEXT.TwitterIcon}
-                        style={{ width: '25px', height: '25px', color: connectedSocialMedia?.twitter ? 'inherit' : COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50 }}
-                    />
-                </Button>
-            </Tooltip>
-            <Tooltip title={`${connectedSocialMedia?.discord ? 'Logged in' : 'Login'} with Discord`}>
-                <Button
-                    variant="text"
-                    sx={{ height: '40px', color: connectedSocialMedia?.discord ? 'inherit' : COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50 }}
-                    onClick={() => connectSocialMedia(SOCIAL_MEDIA.discord)}
-                >
-                    <SvgComponent
-                        type={LAYOUT_CONTENT_TEXT.DiscordIcon}
-                        style={{ width: '25px', height: '25px' }}
-                    />
-                </Button>
-            </Tooltip>
+        <Box gap={3} display='flex'>
+            <StyledTypography
+                type={LAYOUT_CONTENT_TEXT.TwitterIcon}
+                media={SOCIAL_MEDIA.twitter}
+            />
+            <StyledTypography
+                type={LAYOUT_CONTENT_TEXT.DiscordIcon}
+                media={SOCIAL_MEDIA.discord}
+            />
         </Box >
     )
 }

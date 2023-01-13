@@ -9,7 +9,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes, SocialMediaButtons } from './helpers';
+import { acceptedImgTypes } from './helpers';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 
@@ -86,7 +86,6 @@ const CreateAllowlistForm = () => {
           <Typography variant='h6' fontWeight={700}>
             Allowlist Details
           </Typography>
-          <SocialMediaButtons />
         </Box>
         <Divider sx={{ width: '100%' }} />
         <Fragment>

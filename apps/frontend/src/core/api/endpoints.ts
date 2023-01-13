@@ -14,15 +14,15 @@ export const ALLOWLIST_DETAILS_URL = (allowlistID: string) =>
   `/api/v1/allowlist/${allowlistID}`
 
 export const ALLOWLIST_ENTRIES_URL = (allowlistID: number) =>
-  `api/v1/allowlist/entries/${allowlistID}`
+  `/api/v1/allowlist/entries/${allowlistID}`
 
 export const SOCIAL_MEDIA_LOGIN_URL = (service: SOCIAL_MEDIA) =>
-  `api/v1/auth/${service}/login`
+  `/api/v1/auth/${service}/login`
 
-export const ALL_ALLOWLISTS_URL = `api/v1/allowlist/all`
+export const ALL_ALLOWLISTS_URL = `/api/v1/allowlist/all`
 
-export const USER_DETAILS_URL = `api/v1/user`
+export const USER_DETAILS_URL = `/api/v1/user`
 
 export const ALLOWLIST_URL = `/api/v1/allowlist`
 
-export const USER_LOGIN_URL = 'api/v1/auth/login'
+export const USER_LOGIN_URL = '/api/v1/auth/login'
