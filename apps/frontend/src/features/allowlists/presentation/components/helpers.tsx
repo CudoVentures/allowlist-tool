@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { Box, Button, Checkbox, Collapse, Divider, FormControlLabel, FormGroup, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Checkbox, ClickAwayListener, Collapse, Divider, FormControlLabel, FormGroup, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
@@ -13,6 +13,7 @@ import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
 import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedia";
 import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
+import { updateModalState } from "../../../../core/store/modals";
 
 import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
@@ -62,37 +63,43 @@ export const SocialMediaButtons = () => {
         const isDisconnected = !connectedSocialMedia[media]
         const displayName = media.charAt(0).toUpperCase() + media.slice(1)
         return (
-            <Typography
-                fontWeight={700}
-                sx={{ minWidth: 'max-content', minHeight: 'max-content', position: 'relative', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
-                onClick={() => isDisconnected ? connectSocialMedia(media) : null}
-            >
-                <SvgComponent
-                    type={type}
-                    style={menuStyles.logoItem}
-                />
-                {isDisconnected ? `Connect ${displayName}` :
-                    `${connectedSocialMedia[media] || '@TestTwitter'}`}
-                {isDisconnected ? null :
-                    <SvgComponent
-                        type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                        style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
-                    />}
-                <Collapse
-                    onMouseLeave={() => setOpenMenu(false)}
-                    sx={headerStyles.SMcollapse}
-                    in={openMenu}
-                >
-                    <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
-                        <Box gap={2} sx={headerStyles.dropDownItemHolder}>
-                            <Typography onClick={() => disconnectSocialMedia(media)}>
-                                {`Disconnect`}
-                            </Typography>
-                        </Box>
-                    </Paper>
-                </Collapse>
-            </Typography>
+            <ClickAwayListener
+                onClickAway={() => setOpenMenu(false)}
+                children={<Box sx={{ flexDirection: 'column', display: 'flex', position: 'relative' }}>
+                    <Typography
+                        fontWeight={700}
+                        sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
+                        onClick={() => isDisconnected ? connectSocialMedia(media) : null}
+                    >
+                        <SvgComponent
+                            type={type}
+                            style={menuStyles.logoItem}
+                        />
+                        {isDisconnected ? `Connect ${displayName}` :
+                            `${connectedSocialMedia[media] || '@TestTwitter'}`}
+                        {isDisconnected ? null :
+                            <SvgComponent
+                                type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                                style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                            />}
+                    </Typography>
+                    <Collapse
+                        onMouseLeave={() => setOpenMenu(false)}
+                        sx={headerStyles.SMcollapse}
+                        in={openMenu}
+                    >
+                        <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
+                            <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                                <Typography onClick={() => disconnectSocialMedia(media)}>
+                                    {`Disconnect`}
+                                </Typography>
+                            </Box>
+                        </Paper>
+                    </Collapse>
+                </Box>
+                }
+            />
         )
     }
 
@@ -154,131 +161,169 @@ export const SocialMediaBoxes = ({
     props: FetchedAllowlist
 }) => {
 
+    const dispatch = useDispatch()
     const { connectSocialMedia } = useSocialMedia()
-    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
+
+    const isDiscordRequired = !!props.server_role && !!props.discord_invite_link
+    const isTwitterRequired = !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet || !!props.twitter_account_to_follow
 
     return (
         <Fragment>
-            <Box id='allowlistTwitterBox' sx={allowListStyles.socialBox}>
-                <Box sx={allowListStyles.socialBoxHeader}>
-                    <Typography
-                        gap={1}
-                        variant='subtitle1'
-                        display='flex'
-                        alignItems='center'
-                    >
-                        <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />
-                        Twitter
-                    </Typography>
-                    {connectedSocialMedia.twitter ?
-                        <Box gap={1} sx={{ display: 'fex' }}>
-                            <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
-                                Connected:
+            {connectedAddress ? null :
+                <Fragment>
+                    <Box id='connectWalletBox' sx={allowListStyles.socialBox}>
+                        <Box sx={allowListStyles.socialBoxHeader}>
+                            <Typography
+                                gap={1}
+                                variant='subtitle1'
+                                display='flex'
+                                alignItems='center'
+                            >
+                                <SvgComponent type={LAYOUT_CONTENT_TEXT.WalletLogo} style='default' />
+                                Connect Wallet
                             </Typography>
-                            <Typography variant='subtitle2'>
-                                {connectedSocialMedia.twitter}
-                            </Typography>
+                            <Button
+                                variant="contained"
+                                sx={{ height: '40px', width: '104px' }}
+                                onClick={() => dispatch(updateModalState({ selectWallet: true }))}
+                            >
+                                Connect
+                            </Button>
                         </Box>
-                        :
-                        <Button
-                            variant="contained"
-                            sx={{ height: '40px', width: '104px' }}
-                            onClick={() => connectSocialMedia(SOCIAL_MEDIA.twitter)}
+                    </Box>
+                    <Divider sx={{ width: '100%' }} />
+                </Fragment>}
+            {!isTwitterRequired ? null :
+                <Box id='allowlistTwitterBox' sx={allowListStyles.socialBox}>
+                    <Box sx={allowListStyles.socialBoxHeader}>
+                        <Typography
+                            gap={1}
+                            variant='subtitle1'
+                            display='flex'
+                            alignItems='center'
                         >
-                            Connect
-                        </Button>}
-                </Box>
-                <FormGroup>
+                            <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />
+                            Twitter
+                        </Typography>
+                        {connectedSocialMedia.twitter ?
+                            <Box gap={1} sx={{ display: 'fex' }}>
+                                <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                                    Connected:
+                                </Typography>
+                                <Typography variant='subtitle2'>
+                                    {connectedSocialMedia.twitter}
+                                </Typography>
+                            </Box>
+                            :
+                            <Button
+                                disabled={!connectedAddress}
+                                variant="contained"
+                                sx={{ height: '40px', width: '104px' }}
+                                onClick={() => connectSocialMedia(SOCIAL_MEDIA.twitter)}
+                            >
+                                Connect
+                            </Button>}
+                    </Box>
+                    <FormGroup>
+                        <FormControlLabel
+                            sx={{ pointerEvents: 'none' }}
+                            disabled={!connectedSocialMedia.twitter}
+                            checked={!!connectedSocialMedia.twitter}
+                            control={<Checkbox
+                                onChange={handleCheckbox}
+                                value={`Follow ${props.twitter_account_to_follow}`}
+                                icon={<RadioButtonUncheckedIcon />}
+                                checkedIcon={<CheckCircleIcon />}
+                            />}
+                            label={<Typography
+                                lineHeight='normal'
+                                variant='subtitle2'
+                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                            >
+                                {`Follow ${props.twitter_account_to_follow}`}
+                            </Typography>}
+                        />
+                        <FormControlLabel
+                            sx={{ pointerEvents: 'none' }}
+                            disabled={!connectedSocialMedia.twitter}
+                            checked={!!connectedSocialMedia.twitter}
+                            control={<Checkbox
+                                onChange={handleCheckbox}
+                                value={`Like & retweet ${props.name}'s tweet`}
+                                icon={<RadioButtonUncheckedIcon />}
+                                checkedIcon={<CheckCircleIcon />}
+                            />}
+                            label={<Typography
+                                lineHeight='normal'
+                                variant='subtitle2'
+                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                            >
+                                {`Like & retweet ${props.tweet_to_retweet}`}
+                            </Typography>}
+                        />
+                    </FormGroup>
+                </Box>}
+            <Divider sx={{ width: '100%' }} />
+            {!isDiscordRequired ? null :
+                <Box id='allowlistDiscordBox' sx={allowListStyles.socialBox}>
+                    <Box sx={allowListStyles.socialBoxHeader}>
+                        <Typography
+                            gap={1}
+                            variant='subtitle1'
+                            display='flex'
+                            alignItems='center'
+                        >
+                            <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />
+                            Discord
+                        </Typography>
+                        {connectedSocialMedia.discord ?
+                            <Box gap={1} sx={{ display: 'fex' }}>
+                                <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                                    Connected:
+                                </Typography>
+                                <Typography variant='subtitle2'>
+                                    {connectedSocialMedia.discord}
+                                </Typography>
+                            </Box>
+                            :
+                            <Button
+                                disabled={!connectedAddress}
+                                variant="contained"
+                                sx={{ height: '40px', width: '104px' }}
+                                onClick={() => connectSocialMedia(SOCIAL_MEDIA.discord)}
+                            >
+                                Connect
+                            </Button>}
+                    </Box>
                     <FormControlLabel
-                        disabled={!connectedSocialMedia.twitter}
+                        sx={{ pointerEvents: 'none' }}
+                        disabled={!connectedSocialMedia.discord}
+                        checked={!!connectedSocialMedia.discord}
                         control={<Checkbox
                             onChange={handleCheckbox}
                             value={`Follow ${props.twitter_account_to_follow}`}
                             icon={<RadioButtonUncheckedIcon />}
                             checkedIcon={<CheckCircleIcon />}
                         />}
-                        label={<Typography
-                            lineHeight='normal'
-                            variant='subtitle2'
-                            color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
-                        >
-                            {`Follow ${props.twitter_account_to_follow}`}
-                        </Typography>}
-                    />
-                    <FormControlLabel
-                        disabled={!connectedSocialMedia.twitter}
-                        control={<Checkbox
-                            onChange={handleCheckbox}
-                            value={`Like & retweet ${props.tweet_to_retweet}`}
-                            icon={<RadioButtonUncheckedIcon />}
-                            checkedIcon={<CheckCircleIcon />}
-                        />}
-                        label={<Typography
-                            lineHeight='normal'
-                            variant='subtitle2'
-                            color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
-                        >
-                            {`Like & retweet ${props.tweet_to_retweet}`}
-                        </Typography>}
-                    />
-                </FormGroup>
-            </Box>
-            <Divider sx={{ width: '100%' }} />
-            <Box id='allowlistDiscordBox' sx={allowListStyles.socialBox}>
-                <Box sx={allowListStyles.socialBoxHeader}>
-                    <Typography
-                        gap={1}
-                        variant='subtitle1'
-                        display='flex'
-                        alignItems='center'
-                    >
-                        <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />
-                        Discord
-                    </Typography>
-                    {connectedSocialMedia.discord ?
-                        <Box gap={1} sx={{ display: 'fex' }}>
-                            <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
-                                Connected:
+                        label={<Box gap={1} display='flex'>
+                            <Typography
+                                lineHeight='normal'
+                                variant='subtitle2'
+                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                            >
+                                {`Join the ${props.name} server with role: `}
                             </Typography>
-                            <Typography variant='subtitle2'>
-                                {connectedSocialMedia.discord}
+                            <Typography
+                                color='text.primary'
+                                lineHeight='normal'
+                                variant='subtitle2'
+                            >
+                                {`${props.server_role}`}
                             </Typography>
-                        </Box>
-                        :
-                        <Button
-                            variant="contained"
-                            sx={{ height: '40px', width: '104px' }}
-                            onClick={() => connectSocialMedia(SOCIAL_MEDIA.discord)}
-                        >
-                            Connect
-                        </Button>}
-                </Box>
-                <FormControlLabel
-                    disabled={!connectedSocialMedia.discord}
-                    control={<Checkbox
-                        onChange={handleCheckbox}
-                        value={`Follow ${props.twitter_account_to_follow}`}
-                        icon={<RadioButtonUncheckedIcon />}
-                        checkedIcon={<CheckCircleIcon />}
-                    />}
-                    label={<Box gap={1} display='flex'>
-                        <Typography
-                            lineHeight='normal'
-                            variant='subtitle2'
-                            color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
-                        >
-                            {`Join the ${props.name} server with role: `}
-                        </Typography>
-                        <Typography
-                            color='text.primary'
-                            lineHeight='normal'
-                            variant='subtitle2'
-                        >
-                            {`${props.server_role}`}
-                        </Typography>
-                    </Box>}
-                />
-            </Box>
+                        </Box>}
+                    />
+                </Box>}
         </Fragment>
     )
 }

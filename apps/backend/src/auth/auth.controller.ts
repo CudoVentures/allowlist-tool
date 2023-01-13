@@ -40,8 +40,14 @@ export class AuthController {
   @Get('discord/callback')
   @UseGuards(DiscordAuthGuard)
   async discordCallback(@Req() req, @Res() res) {
-    req.session.user = req.user;
-    res.redirect(`/`);
+    if (req.session.user) {
+      req.session.user.discord = req.user;
+    } else {
+      req.session.user = {
+        discord: req.user 
+      }
+    }
+    res.send(`<script>window.close()</script>`);
   }
 
   @Get('twitter/login')
@@ -51,7 +57,11 @@ export class AuthController {
   @Get('twitter/callback')
   @UseGuards(TwitterAuthGuard)
   async twitterCallback(@Req() req, @Res() res) {
-    req.session.user = req.user;
-    res.redirect(`/`);
+    if (req.session.user) {
+      req.session.user.twitter = req.user;
+    } else {
+      req.session.user = { twitter: req.user }
+    }
+    res.send(`<script>window.close()</script>`);
   }
 }

@@ -39,8 +39,9 @@ export const headerStyles = {
         width: '224px',
     },
     SMcollapse: {
+        cursor: 'pointer',
         position: 'absolute',
-        marginTop: '100px',
+        marginTop: '55px',
         minWidth: '100%',
         zIndex: '-1',
     },

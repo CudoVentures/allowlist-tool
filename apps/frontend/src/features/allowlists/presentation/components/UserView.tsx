@@ -14,7 +14,7 @@ import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles
 
 const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
-    const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
+    const { connectedAddress, connectedWallet, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
     const [userEmail, setUserEmail] = useState<string>('')
     const [checkBoxes, setCheckBoxes] = useState<Record<string, boolean>>({})
 
@@ -60,6 +60,29 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
     };
 
+    const isSignUpDisabled = (): boolean => {
+        if (!connectedAddress) {
+            return true
+        }
+
+        //IsTwitterLogInRequired
+        if ((props.twitter_account_to_follow || props.tweet) && !connectedSocialMedia.twitter) {
+            return true
+        }
+
+        //IsDiscordLogInRequired
+        if (props.server_role && !connectedSocialMedia.discord) {
+            return true
+        }
+
+        //IsEmailRequired
+        if (props.require_email && !userEmail) {
+            return true
+        }
+
+        return false
+    }
+
     return (
         <Fragment>
             <Box sx={allowListStyles.title}>
@@ -101,6 +124,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                     </Box>
                 </Fragment>}
             <Button
+                disabled={isSignUpDisabled()}
                 variant="contained"
                 sx={{ height: '56px', width: '100%' }}
                 onClick={signUp}

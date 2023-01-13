@@ -21,11 +21,23 @@ const useSocialMedia = () => {
     }
 
     const connectSocialMedia = async (service: SOCIAL_MEDIA) => {
-        window.open(SOCIAL_MEDIA_LOGIN_URL(service), '_blank', `toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,width=900, height=800,top=0`);
-    };
+        const windowOptions = `toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,width=600, height=800,top=0`
+        const openedWindow = window.open(
+            SOCIAL_MEDIA_LOGIN_URL(service),
+            '_blank',
+            windowOptions
+        )
+        const timer = setInterval(async () => {
+            if (openedWindow.closed) {
+                clearInterval(timer)
+                await setConnectedSocialMedia()
+            }
+        }, 1000)
+    }
 
     const disconnectSocialMedia = async (service: SOCIAL_MEDIA) => {
-        //TODO:
+        //TODO
+        alert("Not implemented")
     }
 
     return {
