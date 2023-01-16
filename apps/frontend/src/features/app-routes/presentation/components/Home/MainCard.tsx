@@ -44,22 +44,58 @@ const MainCard = () => {
                             lineHeight={'normal'}
                         >
                             <GradientText
-                                text={'Discover new allowlists or'.toUpperCase()}
+                                text={'Interchain'.toUpperCase()}
                                 fontFamily='CudosBit'
                                 startColor={'rgba(245, 250, 255, 1)'}
                                 endColor={'rgba(245, 250, 255, 1)'}
                             />
+                            <Typography
+                                fontSize={'inherit'}
+                                display={'flex'}
+                                gap={2}
+                                flexDirection={'row'}
+                                lineHeight={'inherit'}
+                            >
+                                <GradientText
+                                    text={'allowlists'.toUpperCase()}
+                                    fontFamily='CudosBit'
+                                    startColor={'rgba(252, 247, 109, 1)'}
+                                    endColor={'rgba(255, 253, 202, 1)'}
+                                />
+                                <GradientText
+                                    text={'for'.toUpperCase()}
+                                    fontFamily='CudosBit'
+                                    startColor={'rgba(245, 250, 255, 1)'}
+                                    endColor={'rgba(245, 250, 255, 1)'}
+                                />
+                            </Typography>
                             <GradientText
-                                text={'Create your own'.toUpperCase()}
+                                text={'the Cosmos'.toUpperCase()}
                                 fontFamily='CudosBit'
-                                startColor={'rgba(252, 247, 109, 1)'}
-                                endColor={'rgba(255, 253, 202, 1)'}
+                                startColor={'rgba(245, 250, 255, 1)'}
+                                endColor={'rgba(245, 250, 255, 1)'}
                             />
                         </Typography>
                     </Box>
-                    <Typography fontSize={isUnder800px ? 10 : 16} color='text.secondary'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-                    </Typography>
+                    <Box>
+                        <Typography
+                            minWidth={'max-content'}
+                            gap={1}
+                            fontSize={isUnder800px ? 16 : 20}
+                            display={'flex'}
+                            lineHeight={'normal'}
+                        >
+                            Create NFT allowlists for any
+                            <GradientText
+                                style={{ fontWeight: 600 }}
+                                text={' Cosmos chain'}
+                                fontFamily='Poppins'
+                                startColor={'rgba(157, 231, 255, 1)'}
+                                endColor={'rgba(82, 166, 248, 1)'}
+                            />
+                            for free
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box display='flex' justifyContent={isUnder1200px ? 'space-evenly' : 'flex-start'} gap={2}>
                     <Button
