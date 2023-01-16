@@ -2,13 +2,14 @@ import axios from 'axios';
 
 import { FetchedAllowlist } from "../store/allowlist";
 import { blobToBase64 } from '../../features/allowlists/presentation/components/helpers';
-
+import { SOCIAL_MEDIA } from '../store/user';
 import {
     ALLOWLIST_DETAILS_URL,
     ALLOWLIST_ENTRIES_URL,
     ALLOWLIST_URL,
     ALL_ALLOWLISTS_URL,
     JOIN_ALLOWLIST_URL,
+    SOCIAL_MEDIA_LOGOUT_URL,
     USER_DETAILS_URL,
     USER_LOGIN_URL
 } from './endpoints';
@@ -46,4 +47,8 @@ export const GET_ALLOWLIST_ENTRIES = async (allowlistID: number) => {
 
 export const LOG_IN_USER = async (data: any) => {
     return axios.post(USER_LOGIN_URL, data);
+}
+
+export const LOG_OUT_MEDIA_USER = async (media: SOCIAL_MEDIA) => {
+    return axios.get(SOCIAL_MEDIA_LOGOUT_URL(media), { withCredentials: true });
 }

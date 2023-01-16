@@ -17,12 +17,14 @@ import { useIsScreenLessThan, useMidLowerResCheck } from '../../../utilities/Cus
 import Menu from './Menu';
 import { CopyAndFollowComponent } from '../../../theme/helpers';
 import useNavigateToRoute from '../../../utilities/CustomHooks/useNavigateToRoute';
+import useSocialMedia from '../../../utilities/CustomHooks/useSocialMedia';
 
 import { headerStyles } from './styles';
 
 const Header = () => {
   const dispatch = useDispatch()
   const navigateToRoute = useNavigateToRoute()
+  const { disconnectAllSocialMedias } = useSocialMedia()
   const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -42,9 +44,10 @@ const Header = () => {
   const handleDisconnect = async () => {
     sessionStorage.clear()
     localStorage.clear()
+    await disconnectWalletByType(connectedWallet!)
+    await disconnectAllSocialMedias()
     dispatch(updateUser(initialUserState))
     dispatch(updateModalState(initialModalState))
-    await disconnectWalletByType(connectedWallet!)
     navigateToRoute(AppRoutes.MAIN)
   }
 

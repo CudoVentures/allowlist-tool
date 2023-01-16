@@ -60,7 +60,7 @@ export const SocialMediaButtons = () => {
 
     const StyledTypography = ({ type, media }: { type: LAYOUT_CONTENT_TEXT, media: SOCIAL_MEDIA }) => {
         const [openMenu, setOpenMenu] = useState<boolean>(false)
-        const isDisconnected = !connectedSocialMedia[media]
+        const isDisconnected = !connectedSocialMedia[media].id
         const displayName = media.charAt(0).toUpperCase() + media.slice(1)
         return (
             <ClickAwayListener
@@ -77,7 +77,7 @@ export const SocialMediaButtons = () => {
                             style={menuStyles.logoItem}
                         />
                         {isDisconnected ? `Connect ${displayName}` :
-                            `${connectedSocialMedia[media] || '@TestTwitter'}`}
+                            `${connectedSocialMedia[media].userName}`}
                         {isDisconnected ? null :
                             <SvgComponent
                                 type={LAYOUT_CONTENT_TEXT.ArrowIcon}
@@ -206,13 +206,13 @@ export const SocialMediaBoxes = ({
                             <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />
                             Twitter
                         </Typography>
-                        {connectedSocialMedia.twitter ?
+                        {connectedSocialMedia.twitter.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
                                 <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
                                     Connected:
                                 </Typography>
                                 <Typography variant='subtitle2'>
-                                    {connectedSocialMedia.twitter}
+                                    {connectedSocialMedia.twitter.userName}
                                 </Typography>
                             </Box>
                             :
@@ -228,8 +228,8 @@ export const SocialMediaBoxes = ({
                     <FormGroup>
                         <FormControlLabel
                             sx={{ pointerEvents: 'none' }}
-                            disabled={!connectedSocialMedia.twitter}
-                            checked={!!connectedSocialMedia.twitter}
+                            disabled={!connectedSocialMedia.twitter.userName}
+                            checked={!!connectedSocialMedia.twitter.userName}
                             control={<Checkbox
                                 onChange={handleCheckbox}
                                 value={`Follow ${props.twitter_account_to_follow}`}
@@ -246,8 +246,8 @@ export const SocialMediaBoxes = ({
                         />
                         <FormControlLabel
                             sx={{ pointerEvents: 'none' }}
-                            disabled={!connectedSocialMedia.twitter}
-                            checked={!!connectedSocialMedia.twitter}
+                            disabled={!connectedSocialMedia.twitter.userName}
+                            checked={!!connectedSocialMedia.twitter.userName}
                             control={<Checkbox
                                 onChange={handleCheckbox}
                                 value={`Like & retweet ${props.name}'s tweet`}
@@ -277,13 +277,13 @@ export const SocialMediaBoxes = ({
                             <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />
                             Discord
                         </Typography>
-                        {connectedSocialMedia.discord ?
+                        {connectedSocialMedia.discord.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
                                 <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
                                     Connected:
                                 </Typography>
                                 <Typography variant='subtitle2'>
-                                    {connectedSocialMedia.discord}
+                                    {connectedSocialMedia.discord.userName}
                                 </Typography>
                             </Box>
                             :
@@ -298,8 +298,8 @@ export const SocialMediaBoxes = ({
                     </Box>
                     <FormControlLabel
                         sx={{ pointerEvents: 'none' }}
-                        disabled={!connectedSocialMedia.discord}
-                        checked={!!connectedSocialMedia.discord}
+                        disabled={!connectedSocialMedia.discord.userName}
+                        checked={!!connectedSocialMedia.discord.userName}
                         control={<Checkbox
                             onChange={handleCheckbox}
                             value={`Follow ${props.twitter_account_to_follow}`}

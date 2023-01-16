@@ -19,7 +19,7 @@ import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) { }
 
   @UseInterceptors(TransactionInterceptor)
   @Post('login')
@@ -35,7 +35,14 @@ export class AuthController {
 
   @Get('discord/login')
   @UseGuards(DiscordAuthGuard)
-  async discordLogin() {}
+  async discordLogin() { }
+
+  @Get('discord/logout')
+  async discordLogOut(@Req() req) {
+    if (req.session.user && req.session.user.discord) {
+      req.session.user.discord = undefined;
+    }
+  }
 
   @Get('discord/callback')
   @UseGuards(DiscordAuthGuard)
@@ -44,7 +51,7 @@ export class AuthController {
       req.session.user.discord = req.user;
     } else {
       req.session.user = {
-        discord: req.user 
+        discord: req.user
       }
     }
     res.send(`<script>window.close()</script>`);
@@ -52,7 +59,14 @@ export class AuthController {
 
   @Get('twitter/login')
   @UseGuards(TwitterAuthGuard)
-  async twitterLogin() {}
+  async twitterLogin() { }
+
+  @Get('twitter/logout')
+  async twitterLogOut(@Req() req) {
+    if (req.session.user && req.session.user.twitter) {
+      req.session.user.twitter = undefined;
+    }
+  }
 
   @Get('twitter/callback')
   @UseGuards(TwitterAuthGuard)

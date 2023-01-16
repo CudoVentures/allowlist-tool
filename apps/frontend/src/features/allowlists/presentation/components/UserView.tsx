@@ -66,12 +66,12 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
 
         //IsTwitterLogInRequired
-        if ((props.twitter_account_to_follow || props.tweet) && !connectedSocialMedia.twitter) {
+        if ((props.twitter_account_to_follow || props.tweet) && (!connectedSocialMedia.twitter.userName || !connectedSocialMedia.twitter.id)) {
             return true
         }
 
         //IsDiscordLogInRequired
-        if (props.server_role && !connectedSocialMedia.discord) {
+        if (props.server_role && (!connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)) {
             return true
         }
 

@@ -19,6 +19,9 @@ export const ALLOWLIST_ENTRIES_URL = (allowlistID: number) =>
 export const SOCIAL_MEDIA_LOGIN_URL = (service: SOCIAL_MEDIA) =>
   `/api/v1/auth/${service}/login`
 
+export const SOCIAL_MEDIA_LOGOUT_URL = (service: SOCIAL_MEDIA) =>
+  `/api/v1/auth/${service}/logout`
+
 export const ALL_ALLOWLISTS_URL = `/api/v1/allowlist/all`
 
 export const USER_DETAILS_URL = `/api/v1/user`
