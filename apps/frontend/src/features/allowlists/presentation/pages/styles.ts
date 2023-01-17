@@ -100,7 +100,7 @@ export const generalStyles = {
         width: '300px',
         height: '320px',
         borderRadius: '16px',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
+        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100
     },
     swiperBreakpoints: {
         1200: {
