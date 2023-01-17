@@ -24,11 +24,13 @@ export class UserController {
     return {
       twitter: {
         id: twitterUser?.twitter_profile_id || '',
-        userName: twitterUser?.twitter_profile_username || ''
+        userName: twitterUser?.twitter_profile_username || '',
+        accessToken: twitterUser?.twitter_access_token || ''
       },
       discord: {
         id: discordUser?.discord_profile_id || '',
-        userName: discordUser?.discord_profile_username || ''
+        userName: discordUser?.discord_profile_username || '',
+        accessToken: discordUser?.discord_access_token || ''
       }
     }
   }

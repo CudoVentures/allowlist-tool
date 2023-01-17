@@ -28,11 +28,11 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const signUp = async () => {
         const userDetails = await GET_USER_DETAILS();
         const data = {};
-        if (userDetails.data.twitter_access_token) {
-            data['twitter_access_token'] = userDetails.data.twitter_access_token;
+        if (userDetails.data.twitter) {
+            data['twitter_access_token'] = userDetails.data.twitter.accessToken;
         }
-        if (userDetails.data.discord_access_token) {
-            data['discord_access_token'] = userDetails.data.discord_access_tokens;
+        if (userDetails.data.discord) {
+            data['discord_access_token'] = userDetails.data.discord.accessToken;
         }
 
         const message = JSON.stringify(data);

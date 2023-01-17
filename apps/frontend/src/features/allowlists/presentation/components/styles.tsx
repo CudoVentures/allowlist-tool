@@ -88,6 +88,7 @@ export const allowListStyles = {
     alignSelf: 'end'
   },
   smallScreenPanel: {
+    alignItems: 'center',
     height: 'max-content',
     gridRow: 3,
     gridColumn: "1 / 3",
@@ -100,6 +101,7 @@ export const allowListStyles = {
     borderRadius: '24px',
   },
   panel: {
+    alignItems: 'center',
     height: 'max-content',
     gridRow: 2,
     gridColumn: 2,

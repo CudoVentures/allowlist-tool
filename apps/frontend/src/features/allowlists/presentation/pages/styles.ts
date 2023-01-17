@@ -35,9 +35,11 @@ export const generalStyles = {
         border: "2px solid #F5FAFF",
         borderRadius: '16px',
         padding: '5px',
+        minWidth: "128px",
+        minHeight: "128px",
         width: "128px",
         height: "128px",
-        objectFit: "contain" as 'contain'
+        objectFit: "fill" as 'fill'
     },
     banner: {
         borderRadius: '12px',
