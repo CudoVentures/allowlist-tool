@@ -13,20 +13,24 @@ import AppRoutes from '../../../../features/app-routes/entities/AppRoutes';
 import { updateModalState, initialState as initialModalState } from '../../../store/modals';
 import Dialog from '../Dialog';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
-import { useMidLowerResCheck } from '../../../utilities/CustomHooks/screenChecks';
+import { useIsScreenLessThan, useMidLowerResCheck } from '../../../utilities/CustomHooks/screenChecks';
 import Menu from './Menu';
 import { CopyAndFollowComponent } from '../../../theme/helpers';
 import useNavigateToRoute from '../../../utilities/CustomHooks/useNavigateToRoute';
+import useSocialMedia from '../../../utilities/CustomHooks/useSocialMedia';
 
 import { headerStyles } from './styles';
 
 const Header = () => {
   const dispatch = useDispatch()
   const navigateToRoute = useNavigateToRoute()
+  const { disconnectAllSocialMedias } = useSocialMedia()
   const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const isMidLowerRes = useMidLowerResCheck()
+  const isScreenLessThan1200px = useIsScreenLessThan('1200px', 'width')
+  const isScreenLessThan900px = useIsScreenLessThan('900px', 'width')
 
   const handleClick = () => {
     if (isConnected) {
@@ -40,9 +44,10 @@ const Header = () => {
   const handleDisconnect = async () => {
     sessionStorage.clear()
     localStorage.clear()
+    await disconnectWalletByType(connectedWallet!)
+    await disconnectAllSocialMedias()
     dispatch(updateUser(initialUserState))
     dispatch(updateModalState(initialModalState))
-    await disconnectWalletByType(connectedWallet!)
     navigateToRoute(AppRoutes.MAIN)
   }
 
@@ -59,7 +64,10 @@ const Header = () => {
     <AppBar
       id='header'
       elevation={0}
-      sx={isMidLowerRes ? headerStyles.holderLowRes : headerStyles.holder}
+      sx={
+        isMidLowerRes && !connectedAddress ||
+          connectedAddress && isScreenLessThan1200px ?
+          headerStyles.holderLowRes : headerStyles.holder}
       component="nav"
     >
       <Dialog />
@@ -92,12 +100,15 @@ const Header = () => {
       <Box
         id='rightNavContent'
         gap={2}
-        sx={{ display: 'flex', alignItems: 'center' }}>
+        marginTop={isScreenLessThan900px ? 2 : 0}
+        sx={{ display: 'flex', alignItems: 'center', flexDirection: isScreenLessThan900px ? 'column' : 'row' }}>
         <Menu />
-        <Divider
-          orientation='vertical'
-          sx={headerStyles.divider}
-        />
+        {isScreenLessThan900px ? null :
+          <Divider
+            orientation='vertical'
+            sx={headerStyles.divider}
+          />
+        }
         <Box sx={headerStyles.btnHolder}>
           <ClickAwayListener
             onClickAway={() => setOpenMenu(false)}

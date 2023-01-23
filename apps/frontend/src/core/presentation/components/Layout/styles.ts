@@ -38,6 +38,13 @@ export const headerStyles = {
         zIndex: '-1',
         width: '224px',
     },
+    SMcollapse: {
+        cursor: 'pointer',
+        position: 'absolute',
+        marginTop: '55px',
+        minWidth: '100%',
+        zIndex: '-1',
+    },
     holderLowRes: {
         padding: '16px 4rem',
         justifyContent: 'space-between',

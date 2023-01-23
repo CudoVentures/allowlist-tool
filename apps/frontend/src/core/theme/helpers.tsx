@@ -16,7 +16,9 @@ export const GradientText = ({
     startColor,
     endColor,
     fontFamily,
+    style
 }: {
+    style?: React.CSSProperties,
     text: string
     startColor: string,
     endColor: string,
@@ -26,6 +28,7 @@ export const GradientText = ({
     return (
         <span
             style={{
+                ...style,
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundImage: `-webkit-linear-gradient(${startColor}, ${endColor})`,

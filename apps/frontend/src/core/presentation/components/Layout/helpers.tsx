@@ -39,6 +39,8 @@ import clockIcon from '../../../../public/assets/vectors/clock-icon.svg';
 import envelopIcon from '../../../../public/assets/vectors/envelop-icon.svg';
 import chainLinkIcon from '../../../../public/assets/vectors/chain-link-icon.svg';
 import editIcon from '../../../../public/assets/vectors/edit-icon.svg';
+import rocketIcon from '../../../../public/assets/vectors/rocket-icon.svg';
+import cosmosLogo from '../../../../public/assets/vectors/cosmos-logo.svg';
 import bigPlusIcon from '../../../../public/assets/vectors/parallax/big-plus.svg';
 import sampleAllowListDetails from '../../../../public/assets/vectors/parallax/sample-allowlist-details.svg';
 import sampleAllowListMint from '../../../../public/assets/vectors/parallax/sample-allowlist-mint.svg';
@@ -55,6 +57,8 @@ import { generalStyles } from '../../../../features/allowlists/presentation/page
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    RocketIcon = 'Rocket icon',
+    CosmosLogo = 'Cosmos logo',
     ChainLinkIcon = 'Chain link icon',
     EditIcon = 'Edit icon',
     EnvelopIcon = 'Envelop icon',
@@ -105,6 +109,8 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.RocketIcon]: rocketIcon,
+    [LAYOUT_CONTENT_TEXT.CosmosLogo]: cosmosLogo,
     [LAYOUT_CONTENT_TEXT.ChainLinkIcon]: chainLinkIcon,
     [LAYOUT_CONTENT_TEXT.EditIcon]: editIcon,
     [LAYOUT_CONTENT_TEXT.EnvelopIcon]: envelopIcon,

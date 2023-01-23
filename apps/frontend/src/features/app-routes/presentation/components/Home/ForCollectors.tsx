@@ -59,7 +59,10 @@ const ForCollectors = () => {
                         </Typography>
                     </Box>
                     <Typography marginTop={'-20px'} fontSize={isUnder800px ? 10 : 16} color='text.secondary'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                        If you are using Cosmos already or just exploring new NFT frontiers the Cudos Allowlist is a hub for new opportunity and one of the best places to find alpha on new drops!
+                    </Typography>
+                    <Typography marginTop={'20px'} fontSize={isUnder800px ? 10 : 16} color='text.secondary'>
+                        Keep up to date with upcoming mints and find out how to participate in exciting communities. Plus keep your eyes peeled for an upcoming dashboard to keep track and explore new projects, all tracked by your interchain wallet.
                     </Typography>
                 </Box>
                 <Link style={{ textDecoration: 'none' }} to={"TODO: WHERE?"}>

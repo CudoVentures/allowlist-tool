@@ -91,8 +91,8 @@ export const getNativeBalance = (balances: readonly Coin[]): string => {
 
 export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userState> => {
 
-    const { address, accountName } = await connectWalletByType(walletType)
-    const currentBalances = await getAccountBalances(address)
+    const { address: connectedAddress, accountName } = await connectWalletByType(walletType)
+    const currentBalances = await getAccountBalances(connectedAddress)
     const userNativeBalance = getNativeBalance(currentBalances)
 
     const message = 'Allowlist tool login';
@@ -101,12 +101,23 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
         chainId: chain_id,
         sequence,
         accountNumber: account_number,
-    } = await signNonceMsg(address, walletType, message)
+    } = await signNonceMsg(connectedAddress, walletType, message)
 
+    // TODO: Why the F is this not working?
+    // const reqData = {
+    //     signature,
+    //     connectedAddress,
+    //     message,
+    //     sequence,
+    //     account_number,
+    //     chain_id,
+    // };
+
+    // const res = await LOG_IN_USER(reqData)
 
     const connectedUser: userState = {
         accountName: accountName,
-        connectedAddress: address,
+        connectedAddress: connectedAddress,
         balances: currentBalances,
         nativeBalance: userNativeBalance,
         connectedWallet: walletType,

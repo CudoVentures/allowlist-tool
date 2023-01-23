@@ -14,7 +14,7 @@ import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles
 
 const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
-    const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
+    const { connectedAddress, connectedWallet, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
     const [userEmail, setUserEmail] = useState<string>('')
     const [checkBoxes, setCheckBoxes] = useState<Record<string, boolean>>({})
 
@@ -28,11 +28,11 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const signUp = async () => {
         const userDetails = await GET_USER_DETAILS();
         const data = {};
-        if (userDetails.data.twitter_access_token) {
-            data['twitter_access_token'] = userDetails.data.twitter_access_token;
+        if (userDetails.data.twitter) {
+            data['twitter_access_token'] = userDetails.data.twitter.accessToken;
         }
-        if (userDetails.data.discord_access_token) {
-            data['discord_access_token'] = userDetails.data.discord_access_tokens;
+        if (userDetails.data.discord) {
+            data['discord_access_token'] = userDetails.data.discord.accessToken;
         }
 
         const message = JSON.stringify(data);
@@ -58,6 +58,29 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             console.error(ex);
         }
     };
+
+    const isSignUpDisabled = (): boolean => {
+        if (!connectedAddress) {
+            return true
+        }
+
+        //IsTwitterLogInRequired
+        if ((props.twitter_account_to_follow || props.tweet) && (!connectedSocialMedia.twitter.userName || !connectedSocialMedia.twitter.id)) {
+            return true
+        }
+
+        //IsDiscordLogInRequired
+        if (props.server_role && (!connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)) {
+            return true
+        }
+
+        //IsEmailRequired
+        if (props.require_email && !userEmail) {
+            return true
+        }
+
+        return false
+    }
 
     return (
         <Fragment>
@@ -100,6 +123,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                     </Box>
                 </Fragment>}
             <Button
+                disabled={isSignUpDisabled()}
                 variant="contained"
                 sx={{ height: '56px', width: '100%' }}
                 onClick={signUp}
