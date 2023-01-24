@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 import WalletSelector from './ModalComponents/WalletSelector';
+import Success from './ModalComponents/Success';
 import { RootState } from '../../../store';
 import Loading from './ModalComponents/Loading';
 

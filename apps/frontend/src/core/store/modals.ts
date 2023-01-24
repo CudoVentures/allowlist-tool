@@ -9,6 +9,7 @@ export interface modalState {
 export const initialState: modalState = {
     pageTransitionLoading: false,
     selectWallet: false,
+    success: false
 }
 
 export const modalStateSlice = createSlice({

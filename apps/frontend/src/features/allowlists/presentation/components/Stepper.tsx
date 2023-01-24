@@ -58,11 +58,14 @@ export const Controls = ({
                 return
             }
 
-            const result = allowlistState.editMode ?
+            const success = allowlistState.editMode ?
                 await updateAllowlist(allowlistState) :
                 await createAllowlist(allowlistState)
 
-            // TODO: implement success modal
+            if (success) {
+                dispatch(updateModalState({ success: true }))
+            }
+
             return
         }
 
