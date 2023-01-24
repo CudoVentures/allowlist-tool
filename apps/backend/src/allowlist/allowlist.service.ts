@@ -115,57 +115,57 @@ export class AllowlistService {
 
     await this.checkForDuplicateAcc(user, allowlistEntity);
 
-    // if (allowlistEntity.twitter_account) {
-    //   const followAcc = this.followsAcc(
-    //     allowlistEntity.twitter_account,
-    //     user.twitter_profile_id,
-    //   );
-    //   if (!followAcc) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+    if (allowlistEntity.twitter_account) {
+      const followAcc = this.followsAcc(
+        allowlistEntity.twitter_account,
+        user.twitter_profile_id,
+      );
+      if (!followAcc) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    // if (allowlistEntity.tweet_to_like) {
-    //   const tweetId = allowlistEntity.tweet_to_like
-    //     .split('/')
-    //     .at(-1)
-    //     .split('?')[0];
-    //   const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
-    //   if (!liked) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+    if (allowlistEntity.tweet_to_like) {
+      const tweetId = allowlistEntity.tweet_to_like
+        .split('/')
+        .at(-1)
+        .split('?')[0];
+      const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
+      if (!liked) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    // if (allowlistEntity.tweet_to_retweet) {
-    //   const tweetId = allowlistEntity.tweet_to_like
-    //     .split('/')
-    //     .at(-1)
-    //     .split('?')[0];
-    //   const retweeted = await this.retweeted(
-    //     user.twitter_profile_username,
-    //     tweetId,
-    //   );
-    //   if (!retweeted) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+    if (allowlistEntity.tweet_to_retweet) {
+      const tweetId = allowlistEntity.tweet_to_like
+        .split('/')
+        .at(-1)
+        .split('?')[0];
+      const retweeted = await this.retweeted(
+        user.twitter_profile_username,
+        tweetId,
+      );
+      if (!retweeted) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    // if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
-    //   const inviteCode = allowlistEntity.discord_invite_link.split('/').pop();
-    //   const serverId = (
-    //     await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
-    //   ).data.guild.id;
+    if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
+      const inviteCode = allowlistEntity.discord_invite_link.split('/').pop();
+      const serverId = (
+        await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
+      ).data.guild.id;
 
-    //   const hasRole = await this.hasRole(
-    //     serverId,
-    //     allowlistEntity.server_role,
-    //     user.discord_access_token,
-    //   );
+      const hasRole = await this.hasRole(
+        serverId,
+        allowlistEntity.server_role,
+        user.discord_access_token,
+      );
 
-    //   if (!hasRole) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+      if (!hasRole) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
     return this.addToAllowlist(allowlistId, 1, userEmail);
   }
