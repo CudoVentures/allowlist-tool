@@ -298,6 +298,9 @@ export class AllowlistService {
 
   async getEntries(allowlistId: number) {
     const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
+    if (!allowlistRepo.users){
+      return []
+    }
     const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
     return Promise.all(
       entries.map((entry) => {
