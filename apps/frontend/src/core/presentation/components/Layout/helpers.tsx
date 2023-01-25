@@ -52,11 +52,15 @@ import rectangularShade from '../../../../public/assets/vectors/parallax/rectang
 import stepOne from '../../../../public/assets/vectors/stepper/step-1.svg';
 import stepTwo from '../../../../public/assets/vectors/stepper/step-2.svg';
 import stepThree from '../../../../public/assets/vectors/stepper/step-3.svg';
+import successIcon from '../../../../public/assets/vectors/success.svg';
+import failureIcon from '../../../../public/assets/vectors/failure.svg';
 
 import { generalStyles } from '../../../../features/allowlists/presentation/pages/styles';
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    FailureIcon = 'Failure icon',
+    SuccessIcon = 'Success icon',
     RocketIcon = 'Rocket icon',
     CosmosLogo = 'Cosmos logo',
     ChainLinkIcon = 'Chain link icon',
@@ -109,6 +113,8 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.FailureIcon]: failureIcon,
+    [LAYOUT_CONTENT_TEXT.SuccessIcon]: successIcon,
     [LAYOUT_CONTENT_TEXT.RocketIcon]: rocketIcon,
     [LAYOUT_CONTENT_TEXT.CosmosLogo]: cosmosLogo,
     [LAYOUT_CONTENT_TEXT.ChainLinkIcon]: chainLinkIcon,

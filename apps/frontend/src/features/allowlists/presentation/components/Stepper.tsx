@@ -64,6 +64,8 @@ export const Controls = ({
 
             if (success) {
                 dispatch(updateModalState({ success: true }))
+            } else {
+                dispatch(updateModalState({ failure: true }))
             }
 
             return
