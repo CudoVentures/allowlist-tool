@@ -25,7 +25,7 @@ export class SignedMessageDto {
   @IsNotEmpty()
   @ApiProperty({ required: true })
   @ApiProperty()
-  signature: SignatureDto;
+  signature: Object;
 
   @IsNumber()
   @IsNotEmpty()

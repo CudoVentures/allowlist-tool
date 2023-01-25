@@ -22,7 +22,7 @@ export class SignMessagePipe implements PipeTransform {
       throw new BadRequestException('Missing message');
     }
 
-    if (!value.sequence) {
+    if (!(value.sequence > -1)) {
       throw new BadRequestException('Missing sequence');
     }
 
