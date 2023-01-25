@@ -127,7 +127,11 @@ const CreateAllowlistForm = () => {
           </Box>
           <Box id='allowlistCosmosBlockchainIDInput'>
             <Typography fontWeight={600}>Cosmos Blockchain ID</Typography>
-            <Select disableUnderline displayEmpty variant='standard'
+            <Select
+              disabled
+              disableUnderline
+              displayEmpty
+              variant='standard'
               open={dropDownOpen}
               onOpen={() => setDropDownOpen(true)}
               onClose={() => setDropDownOpen(false)}
@@ -139,16 +143,17 @@ const CreateAllowlistForm = () => {
               sx={allowlistDetailsStyles.defaultDropDown}
               value={allowlistState.cosmos_chain_id}
               onChange={(e) => dispatch(updateAllowlistObject({ cosmos_chain_id: e.target.value }))}
-              IconComponent={() =>
-                <Box
-                  sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
-                  onClick={() => setDropDownOpen(true)}
-                >
-                  <SvgComponent
-                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                    style={allowlistDetailsStyles.dropdownIcon}
-                  />
-                </Box>}
+              IconComponent={() => <Fragment></Fragment>
+                // <Box
+                //   sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
+                //   onClick={() => setDropDownOpen(true)}
+                // >
+                // <SvgComponent
+                //   type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                //   style={allowlistDetailsStyles.dropdownIcon}
+                // />
+                // </Box>
+              }
             >
               {availableChainIDs.map((CHAIN_ID, idx) => {
                 return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>

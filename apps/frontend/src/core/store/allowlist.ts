@@ -1,5 +1,6 @@
 import { StdSignature } from 'cudosjs'
-import { createAction, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
+import { CHAIN_DETAILS } from '../utilities/Constants'
 
 export interface RequiredAllowlistData {
     name: string;
@@ -51,7 +52,7 @@ export const initialState: CollectedData = {
     editMode: false,
     name: '',
     url: '',
-    cosmos_chain_id: '',
+    cosmos_chain_id: CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK],
     end_date: undefined,
     end_time: undefined,
     end_period: undefined,
