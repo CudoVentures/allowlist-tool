@@ -57,11 +57,13 @@ export class AllowlistController {
     @Param('id', ParseIntPipe) id: number,
     @Body(SignMessagePipe) joinAllowlistDto: JoinAllowlistDto,
   ) {
-    return this.allowlistService.joinAllowlist(
+    // update user record
+    let allowlistUser = await this.allowlistService.joinAllowlist(
       id,
       joinAllowlistDto.connectedAddress,
       joinAllowlistDto.email,
     );
+    return allowlistUser
   }
 
   @UseInterceptors(TransactionInterceptor)

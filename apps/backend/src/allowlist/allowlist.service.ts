@@ -50,9 +50,9 @@ export class AllowlistService {
     if (duplicate) {
       throw new BadRequestException('Allowlist with this url already exists');
     }
-    
-      const allowlistRepo = await this.allowlistRepo.create({
-        ...createAllowlistDTO,
+
+    const allowlistRepo = await this.allowlistRepo.create({
+      ...createAllowlistDTO,
       admin: createAllowlistDTO.connectedAddress,
     });
     return AllowlistEntity.fromRepo(allowlistRepo);
@@ -84,13 +84,10 @@ export class AllowlistService {
     if (registeredUsers.includes(userId)) {
       return allowlistEntity;
     }
-
-    const updatedList = allowlistEntity.users.concat([
-      JSON.stringify({ userId, email }),
-    ]);
+    const updatedList = allowlistEntity.users.push(`${userId}`);
 
     const [count, [updatedAllowlistRepo]] = await this.allowlistRepo.update(
-      { users: updatedList },
+      { users: allowlistEntity.users },
       { where: { id }, returning: true },
     );
 
@@ -116,8 +113,9 @@ export class AllowlistService {
     await this.checkForDuplicateAcc(user, allowlistEntity);
 
     if (allowlistEntity.twitter_account) {
-      const followAcc = this.followsAcc(
-        allowlistEntity.twitter_account,
+      const twitterAccountId = await this.getAccountID(allowlistEntity.twitter_account)
+      const followAcc = await this.followsAcc(
+        twitterAccountId,
         user.twitter_profile_id,
       );
       if (!followAcc) {
@@ -167,7 +165,7 @@ export class AllowlistService {
       }
     }
 
-    return this.addToAllowlist(allowlistId, 1, userEmail);
+    return this.addToAllowlist(allowlistId, user.id, userEmail);
   }
 
   private async checkForDuplicateAcc(
@@ -225,6 +223,13 @@ export class AllowlistService {
       `https://api.twitter.com/2/tweets/${tweetId}/retweeted_by`,
       twitterUsername,
     );
+  }
+
+  private async getAccountID(twitterUsername: string) {
+    let res = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
+      headers: { Authorization: process.env.App_Twitter_Bearer_Token }
+    });
+    return res.data.id
   }
 
   private async passCheck(url, target) {
@@ -298,7 +303,7 @@ export class AllowlistService {
 
   async getEntries(allowlistId: number) {
     const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
-    if (!allowlistRepo.users){
+    if (!allowlistRepo.users) {
       return []
     }
     const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
