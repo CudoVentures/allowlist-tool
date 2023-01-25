@@ -68,9 +68,12 @@ export const allowListStyles = {
     backdropFilter: 'blur(16px)',
     border: "2px solid #F5FAFF",
     borderRadius: '16px',
+    maxHeight: '400px',
+    minHeight: '200px',
     maxWidth: '400px',
     minWidth: '200px',
     width: '20%',
+    height: '20%',
     padding: '5px',
     alignSelf: 'end'
   },
@@ -81,9 +84,12 @@ export const allowListStyles = {
     backdropFilter: 'blur(16px)',
     border: "2px solid #F5FAFF",
     borderRadius: '16px',
+    maxHeight: '400px',
+    minHeight: '200px',
     maxWidth: '400px',
     minWidth: '200px',
     width: '30%',
+    height: '30%',
     padding: '5px',
     alignSelf: 'end'
   },
@@ -189,6 +195,7 @@ export const allowlistPreviewStyles = {
 
 export const generalStyles = {
   flexColumn: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column'
   },

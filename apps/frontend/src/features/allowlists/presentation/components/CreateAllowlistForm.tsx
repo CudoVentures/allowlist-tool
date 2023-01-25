@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Divider, Input, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Divider, Input, InputAdornment, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { chains } from 'chain-registry';
 import { FileUploader } from "react-drag-drop-files";
@@ -99,7 +99,18 @@ const CreateAllowlistForm = () => {
           </Box>
           <Box id='allowlistCustomURLInput'>
             <Typography fontWeight={600}>Custom URL</Typography>
-            <Input placeholder='allowlisttool.com/' disableUnderline type='text'
+            <Input disableUnderline type='text'
+              startAdornment={
+                <InputAdornment position="start">
+                  <Typography
+                    sx={{ marginRight: '-6px' }}
+                    fontWeight={600}
+                    variant='subtitle2'
+                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
+                    allowlisttool.com/
+                  </Typography>
+                </InputAdornment>
+              }
               sx={generalStyles.input}
               value={allowlistState.url}
               onChange={(e) => dispatch(updateAllowlistObject({ url: e.target.value }))}
