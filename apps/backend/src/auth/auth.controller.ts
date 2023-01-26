@@ -31,7 +31,10 @@ export class AuthController {
   ) {
     const user = await this.authService.login(signedMessageDto.connectedAddress);
     req.session.user = user;
-    res.status(200).send();
+    res.status(200)
+    res.send({
+      userId: user.id
+    })
   }
 
   @Get('discord/login')
