@@ -50,9 +50,9 @@ export class AllowlistService {
     if (duplicate) {
       throw new BadRequestException('Allowlist with this url already exists');
     }
-    
-      const allowlistRepo = await this.allowlistRepo.create({
-        ...createAllowlistDTO,
+
+    const allowlistRepo = await this.allowlistRepo.create({
+      ...createAllowlistDTO,
       admin: createAllowlistDTO.connectedAddress,
     });
     return AllowlistEntity.fromRepo(allowlistRepo);
@@ -72,8 +72,7 @@ export class AllowlistService {
 
   private async addToAllowlist(
     id: number,
-    userId: number,
-    email: string,
+    userId: number
   ): Promise<AllowlistEntity> {
     const allowlistRepo = await this.allowlistRepo.findByPk(id);
     const allowlistEntity = AllowlistEntity.fromRepo(allowlistRepo);
@@ -84,13 +83,10 @@ export class AllowlistService {
     if (registeredUsers.includes(userId)) {
       return allowlistEntity;
     }
-
-    const updatedList = allowlistEntity.users.concat([
-      JSON.stringify({ userId, email }),
-    ]);
+    const updatedList = allowlistEntity.users.push(`${userId}`);
 
     const [count, [updatedAllowlistRepo]] = await this.allowlistRepo.update(
-      { users: updatedList },
+      { users: allowlistEntity.users },
       { where: { id }, returning: true },
     );
 
@@ -100,8 +96,9 @@ export class AllowlistService {
   async joinAllowlist(
     allowlistId: number,
     userAddress: string,
-    userEmail: string,
+    sessionUser: any,
   ) {
+    console.log(sessionUser)
     const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
     const allowlistEntity = AllowlistEntity.fromRepo(allowlistRepo);
 
@@ -111,63 +108,65 @@ export class AllowlistService {
       throw new BadRequestException('Allowlist is closed for new entries');
     }
 
-    const user = await this.userSerivice.findByAddress(userAddress);
+    let user = await this.userSerivice.findByAddress(userAddress);
+    user = await this.updateUserInfo(user, sessionUser)
 
     await this.checkForDuplicateAcc(user, allowlistEntity);
 
-    // if (allowlistEntity.twitter_account) {
-    //   const followAcc = this.followsAcc(
-    //     allowlistEntity.twitter_account,
-    //     user.twitter_profile_id,
-    //   );
-    //   if (!followAcc) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+    if (allowlistEntity.twitter_account) {
+      const twitterAccountId = await this.getAccountID(allowlistEntity.twitter_account)
+      const followAcc = await this.followsAcc(
+        twitterAccountId,
+        user.twitter_profile_id,
+      );
+      if (!followAcc) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    // if (allowlistEntity.tweet_to_like) {
-    //   const tweetId = allowlistEntity.tweet_to_like
-    //     .split('/')
-    //     .at(-1)
-    //     .split('?')[0];
-    //   const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
-    //   if (!liked) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+    if (allowlistEntity.tweet_to_like) {
+      const tweetId = allowlistEntity.tweet_to_like
+        .split('/')
+        .at(-1)
+        .split('?')[0];
+      const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
+      if (!liked) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    // if (allowlistEntity.tweet_to_retweet) {
-    //   const tweetId = allowlistEntity.tweet_to_like
-    //     .split('/')
-    //     .at(-1)
-    //     .split('?')[0];
-    //   const retweeted = await this.retweeted(
-    //     user.twitter_profile_username,
-    //     tweetId,
-    //   );
-    //   if (!retweeted) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+    if (allowlistEntity.tweet_to_retweet) {
+      const tweetId = allowlistEntity.tweet_to_like
+        .split('/')
+        .at(-1)
+        .split('?')[0];
+      const retweeted = await this.retweeted(
+        user.twitter_profile_username,
+        tweetId,
+      );
+      if (!retweeted) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    // if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
-    //   const inviteCode = allowlistEntity.discord_invite_link.split('/').pop();
-    //   const serverId = (
-    //     await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
-    //   ).data.guild.id;
+    if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
+      const inviteCode = allowlistEntity.discord_invite_link.split('/').pop();
+      const serverId = (
+        await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
+      ).data.guild.id;
 
-    //   const hasRole = await this.hasRole(
-    //     serverId,
-    //     allowlistEntity.server_role,
-    //     user.discord_access_token,
-    //   );
+      const hasRole = await this.hasRole(
+        serverId,
+        allowlistEntity.server_role,
+        user.discord_access_token,
+      );
 
-    //   if (!hasRole) {
-    //     throw new BadRequestException('Criteria not met');
-    //   }
-    // }
+      if (!hasRole) {
+        throw new BadRequestException('Criteria not met');
+      }
+    }
 
-    return this.addToAllowlist(allowlistId, 1, userEmail);
+    return this.addToAllowlist(allowlistId, user.id);
   }
 
   private async checkForDuplicateAcc(
@@ -225,6 +224,13 @@ export class AllowlistService {
       `https://api.twitter.com/2/tweets/${tweetId}/retweeted_by`,
       twitterUsername,
     );
+  }
+
+  private async getAccountID(twitterUsername: string) {
+    let res = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
+      headers: { Authorization: process.env.App_Twitter_Bearer_Token }
+    });
+    return res.data.id
   }
 
   private async passCheck(url, target) {
@@ -298,6 +304,9 @@ export class AllowlistService {
 
   async getEntries(allowlistId: number) {
     const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
+    if (!allowlistRepo.users) {
+      return []
+    }
     const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
     return Promise.all(
       entries.map((entry) => {
@@ -312,5 +321,34 @@ export class AllowlistService {
         });
       }),
     );
+  }
+
+  async updateUserInfo(user, sessionUser){
+    const twitterInfo = sessionUser.twitter
+    const discordInfo = sessionUser.discord
+    let twitterUser, discordUser
+    if (twitterInfo){
+      twitterUser = await this.userSerivice.findByTwitterId(sessionUser.twitter.twitter_profile_id)
+      //const discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
+      delete twitterUser.id
+      delete twitterUser.address
+      delete twitterUser.discord_profile_username
+      delete twitterUser.discord_access_token
+      delete twitterUser.discord_profile_id
+      delete twitterUser.discord_refresh_token
+    } else if (discordInfo){
+      discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
+      delete discordUser.id
+      delete discordUser.address
+      delete discordUser.twitter_access_token
+      delete discordUser.twitter_account
+      delete discordUser.twitter_handle
+      delete discordUser.twitter_profile_username
+      delete discordUser.twitter_profile_username
+    }
+
+    const newUserInfo = Object.assign({},user,twitterUser)
+    delete newUserInfo.id
+    return await this.userSerivice.updateUser(user.id, newUserInfo)
   }
 }

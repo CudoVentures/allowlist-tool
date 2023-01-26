@@ -7,6 +7,7 @@ import {
   Post,
   Put,
   Query,
+  Req,
   Request,
   UseGuards,
   UseInterceptors,
@@ -55,13 +56,17 @@ export class AllowlistController {
   @Post('join/:id')
   async join(
     @Param('id', ParseIntPipe) id: number,
+    @Req() req,
     @Body(SignMessagePipe) joinAllowlistDto: JoinAllowlistDto,
   ) {
-    return this.allowlistService.joinAllowlist(
+    let sessionUser = req.session.user
+    // update user record
+    let allowlistUser = await this.allowlistService.joinAllowlist(
       id,
       joinAllowlistDto.connectedAddress,
-      joinAllowlistDto.email,
+      sessionUser
     );
+    return allowlistUser
   }
 
   @UseInterceptors(TransactionInterceptor)

@@ -1,20 +1,22 @@
 import React, { Fragment, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, Divider, List, ListItem, Input, Button } from '@mui/material'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
 import { RootState } from '../../../../core/store'
-import { signNonceMsg } from '../../../wallets/helpers'
+import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useManipulateAllowlist'
 import { FetchedAllowlist } from '../../../../core/store/allowlist'
 import { SocialMediaBoxes } from './helpers'
-import { GET_USER_DETAILS, JOIN_ALLOWLIST } from '../../../../core/api/calls'
+import { updateModalState } from '../../../../core/store/modals'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
 const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
-    const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
+    const dispatch = useDispatch()
+    const { joinAllowlist } = useManipulateAllowlist()
+    const { connectedAddress, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
     const [userEmail, setUserEmail] = useState<string>('')
     const [checkBoxes, setCheckBoxes] = useState<Record<string, boolean>>({})
 
@@ -26,39 +28,36 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     }
 
     const signUp = async () => {
-        const userDetails = await GET_USER_DETAILS();
-        const data = {};
-        if (userDetails.data.twitter_access_token) {
-            data['twitter_access_token'] = userDetails.data.twitter_access_token;
-        }
-        if (userDetails.data.discord_access_token) {
-            data['discord_access_token'] = userDetails.data.discord_access_tokens;
-        }
-
-        const message = JSON.stringify(data);
-
-        const {
-            signature,
-            chainId: chain_id,
-            sequence,
-            accountNumber: account_number,
-        } = await signNonceMsg(connectedAddress, connectedWallet, message);
-
-        try {
-            await JOIN_ALLOWLIST(props.id, {
-                signature,
-                connectedAddress,
-                message,
-                sequence,
-                account_number,
-                chain_id,
-                userEmail,
-            })
-            alert('success');
-        } catch (ex) {
-            console.error(ex);
+        const success = await joinAllowlist(props.id, userEmail)
+        if (success) {
+            dispatch(updateModalState({ success: true }))
+        } else {
+            dispatch(updateModalState({ failure: true }))
         }
     };
+
+    const isSignUpDisabled = (): boolean => {
+        if (!connectedAddress) {
+            return true
+        }
+
+        //IsTwitterLogInRequired
+        if ((props.twitter_account_to_follow || props.tweet) && (!connectedSocialMedia.twitter.userName || !connectedSocialMedia.twitter.id)) {
+            return true
+        }
+
+        //IsDiscordLogInRequired
+        if (props.server_role && (!connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)) {
+            return true
+        }
+
+        //IsEmailRequired
+        if (props.require_email && !userEmail) {
+            return true
+        }
+
+        return false
+    }
 
     return (
         <Fragment>
@@ -101,6 +100,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                     </Box>
                 </Fragment>}
             <Button
+                disabled={isSignUpDisabled()}
                 variant="contained"
                 sx={{ height: '56px', width: '100%' }}
                 onClick={signUp}

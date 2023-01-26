@@ -24,7 +24,7 @@
   "dependencies": {
     "@keplr-wallet/types": "^0.11.23",
     "@mui/x-date-pickers": "^5.0.11",
-    "@nestjs/cli": "^9.0.0",
+    "@nestjs/cli": "^9.1.9",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.0.0",

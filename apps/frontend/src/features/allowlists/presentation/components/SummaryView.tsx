@@ -90,7 +90,7 @@ export const SummaryView = ({
                 <Typography variant='h6' fontWeight={700}>
                     Description
                 </Typography>
-                <StyledTypography text={props.description.repeat(20)} />
+                <StyledTypography text={props.description} />
             </Box>
             <Box gap={1} sx={generalStyles.flexColumn}>
                 <Typography variant='h6' fontWeight={700}>

@@ -5,27 +5,22 @@ import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../../core/presentat
 import { featuresStyle } from './styles'
 import { GradientText } from '../../../../../core/theme/helpers'
 
-const iconStyle = {
-    width: '104px',
-    height: '104px'
-}
-
 const featuresArray = [
     {
-        img: <SvgComponent type={LAYOUT_CONTENT_TEXT.SmileyFaceIcon} style={iconStyle} />,
+        img: <SvgComponent type={LAYOUT_CONTENT_TEXT.RocketIcon} style={{}} />,
         title: {
-            partOne: 'Lorem ipsum',
-            partTwo: 'dolor sit amet'
+            partOne: 'Launch an',
+            partTwo: 'NFT allowlist'
         },
-        subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+        subtitle: 'You can create and launch an allowlist in under 5 minutes! Select social media requirements to help ensure the right collectors join your list and boost your reach.'
     },
     {
-        img: <SvgComponent type={LAYOUT_CONTENT_TEXT.SmileyFaceIcon} style={iconStyle} />,
+        img: <SvgComponent type={LAYOUT_CONTENT_TEXT.CosmosLogo} style={{}} />,
         title: {
-            partOne: 'Lorem ipsum',
-            partTwo: 'dolor sit amet'
+            partOne: 'configurable',
+            partTwo: 'Cosmos'
         },
-        subtitle: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.'
+        subtitle: 'Select which chain you want to launch on and start building a community right away with out of the box Keplr wallet support.'
     }
 ]
 
@@ -55,6 +50,8 @@ const Features = () => {
                                     gap={1}
                                     fontSize={24}
                                     display={'flex'}
+                                    justifyContent={idx === 1 ? 'flex-end' : 'flex-start'}
+                                    flexDirection={idx === 1 ? 'row-reverse' : 'row'}
                                     lineHeight={'normal'}
                                 >
                                     <GradientText

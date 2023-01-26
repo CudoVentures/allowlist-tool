@@ -2,6 +2,15 @@ import React from "react";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
 
+export const menuStyles = {
+  logoItem: {
+    width: '24px',
+    height: '24px',
+    marginRight: '5px',
+    color: 'white'
+  }
+}
+
 export const summaryViewStyles = {
   title: {
     display: 'flex',
@@ -59,9 +68,12 @@ export const allowListStyles = {
     backdropFilter: 'blur(16px)',
     border: "2px solid #F5FAFF",
     borderRadius: '16px',
+    maxHeight: '400px',
+    minHeight: '200px',
     maxWidth: '400px',
     minWidth: '200px',
     width: '20%',
+    height: '20%',
     padding: '5px',
     alignSelf: 'end'
   },
@@ -72,13 +84,17 @@ export const allowListStyles = {
     backdropFilter: 'blur(16px)',
     border: "2px solid #F5FAFF",
     borderRadius: '16px',
+    maxHeight: '400px',
+    minHeight: '200px',
     maxWidth: '400px',
     minWidth: '200px',
     width: '30%',
+    height: '30%',
     padding: '5px',
     alignSelf: 'end'
   },
   smallScreenPanel: {
+    alignItems: 'center',
     height: 'max-content',
     gridRow: 3,
     gridColumn: "1 / 3",
@@ -91,6 +107,7 @@ export const allowListStyles = {
     borderRadius: '24px',
   },
   panel: {
+    alignItems: 'center',
     height: 'max-content',
     gridRow: 2,
     gridColumn: 2,
@@ -178,6 +195,7 @@ export const allowlistPreviewStyles = {
 
 export const generalStyles = {
   flexColumn: {
+    width: '100%',
     display: 'flex',
     flexDirection: 'column'
   },

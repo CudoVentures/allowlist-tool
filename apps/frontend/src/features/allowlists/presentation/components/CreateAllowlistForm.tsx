@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Divider, Input, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Divider, Input, InputAdornment, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { chains } from 'chain-registry';
 import { FileUploader } from "react-drag-drop-files";
@@ -9,7 +9,7 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes, SocialMediaButtons } from './helpers';
+import { acceptedImgTypes } from './helpers';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 
@@ -86,7 +86,6 @@ const CreateAllowlistForm = () => {
           <Typography variant='h6' fontWeight={700}>
             Allowlist Details
           </Typography>
-          <SocialMediaButtons />
         </Box>
         <Divider sx={{ width: '100%' }} />
         <Fragment>
@@ -100,7 +99,18 @@ const CreateAllowlistForm = () => {
           </Box>
           <Box id='allowlistCustomURLInput'>
             <Typography fontWeight={600}>Custom URL</Typography>
-            <Input placeholder='allowlisttool.com/' disableUnderline type='text'
+            <Input disableUnderline type='text'
+              startAdornment={
+                <InputAdornment position="start">
+                  <Typography
+                    sx={{ marginRight: '-6px' }}
+                    fontWeight={600}
+                    variant='subtitle2'
+                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
+                    {`${window.location.origin.replace('http://' || 'https://', '')}/`}
+                  </Typography>
+                </InputAdornment>
+              }
               sx={generalStyles.input}
               value={allowlistState.url}
               onChange={(e) => dispatch(updateAllowlistObject({ url: e.target.value }))}
@@ -117,7 +127,11 @@ const CreateAllowlistForm = () => {
           </Box>
           <Box id='allowlistCosmosBlockchainIDInput'>
             <Typography fontWeight={600}>Cosmos Blockchain ID</Typography>
-            <Select disableUnderline displayEmpty variant='standard'
+            <Select
+              disabled
+              disableUnderline
+              displayEmpty
+              variant='standard'
               open={dropDownOpen}
               onOpen={() => setDropDownOpen(true)}
               onClose={() => setDropDownOpen(false)}
@@ -129,16 +143,17 @@ const CreateAllowlistForm = () => {
               sx={allowlistDetailsStyles.defaultDropDown}
               value={allowlistState.cosmos_chain_id}
               onChange={(e) => dispatch(updateAllowlistObject({ cosmos_chain_id: e.target.value }))}
-              IconComponent={() =>
-                <Box
-                  sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
-                  onClick={() => setDropDownOpen(true)}
-                >
-                  <SvgComponent
-                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                    style={allowlistDetailsStyles.dropdownIcon}
-                  />
-                </Box>}
+              IconComponent={() => <Fragment></Fragment>
+                // <Box
+                //   sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
+                //   onClick={() => setDropDownOpen(true)}
+                // >
+                // <SvgComponent
+                //   type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                //   style={allowlistDetailsStyles.dropdownIcon}
+                // />
+                // </Box>
+              }
             >
               {availableChainIDs.map((CHAIN_ID, idx) => {
                 return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>

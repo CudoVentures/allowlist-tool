@@ -4,13 +4,56 @@ import { useSelector } from "react-redux";
 import { signNonceMsg } from "../../../features/wallets/helpers";
 import { RootState } from "../../store";
 import { CollectedData } from "../../store/allowlist";
-import { CREATE_ALLOWLIST, GET_USER_DETAILS, UPDATE_ALLOWLIST } from "../../api/calls";
+import {
+    CREATE_ALLOWLIST,
+    GET_USER_DETAILS,
+    JOIN_ALLOWLIST,
+    UPDATE_ALLOWLIST
+} from "../../api/calls";
 
 const useManipulateAllowlist = () => {
 
     const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
 
-    const updateAllowlist = async (collectedData: CollectedData) => {
+    const joinAllowlist = useCallback(async (allowlistId: number, userEmail: string) => {
+
+        const userDetails = await GET_USER_DETAILS();
+        const data = {};
+        if (userDetails.data.twitter) {
+            data['twitter_access_token'] = userDetails.data.twitter.accessToken;
+        }
+        if (userDetails.data.discord) {
+            data['discord_access_token'] = userDetails.data.discord.accessToken;
+        }
+
+        const message = JSON.stringify(data);
+        const {
+            signature,
+            chainId: chain_id,
+            sequence,
+            accountNumber: account_number,
+        } = await signNonceMsg(connectedAddress, connectedWallet, message);
+
+        try {
+            await JOIN_ALLOWLIST(allowlistId, {
+                signature,
+                connectedAddress,
+                message,
+                sequence,
+                account_number,
+                chain_id,
+                userEmail,
+            });
+            return true
+
+        } catch (ex) {
+            console.error(ex);
+            return false
+        }
+    }, [connectedWallet, connectedAddress])
+
+
+    const updateAllowlist = useCallback(async (collectedData: CollectedData) => {
 
         const ID = collectedData.url
         const data = {
@@ -69,7 +112,7 @@ const useManipulateAllowlist = () => {
             console.error(ex);
             return false
         }
-    }
+    }, [connectedWallet, connectedAddress])
 
     const createAllowlist = useCallback(async (collectedData: CollectedData): Promise<boolean> => {
 
@@ -92,25 +135,25 @@ const useManipulateAllowlist = () => {
             banner_image: collectedData.banner_image
         };
 
-        const message = JSON.stringify(data);
-        const {
-            signature,
-            chainId: chain_id,
-            sequence,
-            accountNumber: account_number,
-        } = await signNonceMsg(connectedAddress, connectedWallet, message);
-
-        const reqData = {
-            ...data,
-            signature,
-            connectedAddress,
-            message,
-            sequence,
-            account_number,
-            chain_id,
-        };
-
         try {
+            const message = JSON.stringify(data);
+            const {
+                signature,
+                chainId: chain_id,
+                sequence,
+                accountNumber: account_number,
+            } = await signNonceMsg(connectedAddress, connectedWallet, message);
+
+            const reqData = {
+                ...data,
+                signature,
+                connectedAddress,
+                message,
+                sequence,
+                account_number,
+                chain_id,
+            };
+
             await CREATE_ALLOWLIST(reqData)
             return true
 
@@ -120,7 +163,7 @@ const useManipulateAllowlist = () => {
         }
     }, [connectedWallet, connectedAddress])
 
-    return { createAllowlist, updateAllowlist }
+    return { createAllowlist, updateAllowlist, joinAllowlist }
 };
 
 export default useManipulateAllowlist

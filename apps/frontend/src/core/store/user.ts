@@ -7,8 +7,13 @@ export enum SOCIAL_MEDIA {
     discord = 'discord'
 }
 
+interface SOCIAL_MEDIA_DETAILS {
+    id: string,
+    userName: string
+}
+
 export type CONNECTED_SOCIAL_MEDIA = {
-    [key in SOCIAL_MEDIA]: string
+    [key in SOCIAL_MEDIA]: SOCIAL_MEDIA_DETAILS
 }
 
 export interface userState {
@@ -29,8 +34,8 @@ export const initialState: userState = {
     balances: [],
     connectedWallet: undefined,
     connectedSocialMedia: {
-        [SOCIAL_MEDIA.twitter]: '',
-        [SOCIAL_MEDIA.discord]: '',
+        [SOCIAL_MEDIA.twitter]: { id: '', userName: '' },
+        [SOCIAL_MEDIA.discord]: { id: '', userName: '' },
     }
 }
 

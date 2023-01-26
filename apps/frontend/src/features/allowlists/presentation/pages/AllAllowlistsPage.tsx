@@ -4,7 +4,6 @@ import { Box } from '@mui/material';
 
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { GET_ALL_ALLOWLISTS } from '../../../../core/api/calls';
-import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import CreatedAllowlistsPreview from './CreatedAllowlists';
 import JoinedAllowlistsPreview from './JoinedAllowlists';
@@ -22,16 +21,12 @@ const AllAllowlistsPage = () => {
         fill={COLORS_DARK_THEME.PRIMARY_BLUE} />
     }
 
-    if (allowlists.length) {
-      return (
-        <Box id='swipersHolder' gap={4} sx={generalStyles.swipersHolder}>
-          <CreatedAllowlistsPreview data={allowlists} />
-          <JoinedAllowlistsPreview data={allowlists} />
-        </Box>
-      )
-    }
-
-    return <NoResult />
+    return (
+      <Box id='swipersHolder' gap={4} sx={generalStyles.swipersHolder}>
+        <CreatedAllowlistsPreview data={allowlists} />
+        <JoinedAllowlistsPreview data={allowlists} />
+      </Box>
+    )
   }, [loading, allowlists])
 
   const loadData = async () => {

@@ -4,11 +4,14 @@ export interface modalState {
     pageTransitionLoading?: boolean
     selectWallet?: boolean
     success?: boolean
+    failure?: boolean
 }
 
 export const initialState: modalState = {
     pageTransitionLoading: false,
     selectWallet: false,
+    success: false,
+    failure: false
 }
 
 export const modalStateSlice = createSlice({

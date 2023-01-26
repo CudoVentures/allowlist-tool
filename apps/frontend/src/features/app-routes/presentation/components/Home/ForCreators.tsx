@@ -43,7 +43,10 @@ const ForCreators = () => {
                         </Typography>
                     </Box>
                     <Typography marginTop={'-20px'} fontSize={isUnder800px ? 10 : 16} color='text.secondary'>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+                        NFTs and new projects launching in the interchain need web3 tools we come to expect in other ecosystems so the Cosmos-native Allowlist tool from Cudos is setting out to bring parity to interchain creators.
+                    </Typography>
+                    <Typography marginTop={'20px'} fontSize={isUnder800px ? 10 : 16} color='text.secondary'>
+                        Set specific allowlist requirements, including Twitter and Discord integration, to design community incentives and securely build out an audience using cryptographic signatures.
                     </Typography>
                 </Box>
                 <Button

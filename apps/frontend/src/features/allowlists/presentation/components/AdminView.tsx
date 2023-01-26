@@ -71,7 +71,7 @@ const AdminView = ({ props }: { props: FetchedAllowlist }) => {
             <Divider sx={{ width: '100%' }} />
             {getRegistrationCriteriaArray(props).map((FIELD, idx) => {
                 return FIELD.isDisabled ? null : (
-                    <Box key={idx}>
+                    <Box key={idx} sx={{ alignSelf: 'flex-start' }}>
                         <Typography sx={allowlistPreviewStyles.title}>
                             {FIELD.icon}
                             {FIELD.title}

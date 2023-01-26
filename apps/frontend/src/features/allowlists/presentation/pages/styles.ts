@@ -35,9 +35,11 @@ export const generalStyles = {
         border: "2px solid #F5FAFF",
         borderRadius: '16px',
         padding: '5px',
+        minWidth: "128px",
+        minHeight: "128px",
         width: "128px",
         height: "128px",
-        objectFit: "contain" as 'contain'
+        objectFit: "fill" as 'fill'
     },
     banner: {
         borderRadius: '12px',
@@ -98,7 +100,7 @@ export const generalStyles = {
         width: '300px',
         height: '320px',
         borderRadius: '16px',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
+        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100
     },
     swiperBreakpoints: {
         1200: {
