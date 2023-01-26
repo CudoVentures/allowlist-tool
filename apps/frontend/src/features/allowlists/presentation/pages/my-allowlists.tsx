@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import Allowlist from '../components/allowlist';
+import Allowlist from '../components/Allowlist';
 
 function MyAllowlistsPage({ walletStore }) {
   const [allowlists, setAllowlists] = useState([]);
