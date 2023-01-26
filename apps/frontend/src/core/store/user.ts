@@ -17,6 +17,7 @@ export type CONNECTED_SOCIAL_MEDIA = {
 }
 
 export interface userState {
+    userId?: string,
     connectedNetwork?: string,
     connectedAddress?: string
     accountName?: string
@@ -27,6 +28,7 @@ export interface userState {
 }
 
 export const initialState: userState = {
+    userId: '',
     connectedNetwork: CHAIN_DETAILS.DEFAULT_NETWORK,
     connectedAddress: '',
     accountName: '',

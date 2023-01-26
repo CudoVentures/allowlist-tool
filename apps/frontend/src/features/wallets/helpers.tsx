@@ -115,6 +115,7 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
     const res = await LOG_IN_USER(reqData)
 
     const connectedUser: userState = {
+        userId: res.data.userId,
         accountName: accountName,
         connectedAddress: connectedAddress,
         balances: currentBalances,

@@ -102,36 +102,6 @@ export const generalStyles = {
         borderRadius: '16px',
         background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100
     },
-    swiperBreakpoints: {
-        1200: {
-            slidesPerView: 2,
-            spaceBetween: 20
-        },
-        1560: {
-            slidesPerView: 3,
-            spaceBetween: 20
-        },
-        2000: {
-            slidesPerView: 4,
-            spaceBetween: 20
-        },
-        2300: {
-            slidesPerView: 5,
-            spaceBetween: 20
-        },
-        2700: {
-            slidesPerView: 6,
-            spaceBetween: 20
-        },
-        3100: {
-            slidesPerView: 7,
-            spaceBetween: 20
-        },
-        3600: {
-            slidesPerView: 8,
-            spaceBetween: 20
-        }
-    },
     swiperCard: {
         marginTop: '5px',
         borderRadius: '10px',
@@ -145,5 +115,43 @@ export const generalStyles = {
         height: '80vh',
         display: 'flex',
         alignSelf: 'center'
+    }
+}
+
+export const swiperBreakpoints = (withBox: boolean) => {
+    const extraSpace = withBox ? 0 : 1
+    return {
+        850: {
+            slidesPerView: 1 + extraSpace,
+            spaceBetween: 20
+        },
+        1200: {
+            slidesPerView: 2 + extraSpace,
+            spaceBetween: 20
+        },
+        1560: {
+            slidesPerView: 3 + extraSpace,
+            spaceBetween: 20
+        },
+        2000: {
+            slidesPerView: 4 + extraSpace,
+            spaceBetween: 20
+        },
+        2300: {
+            slidesPerView: 5 + extraSpace,
+            spaceBetween: 20
+        },
+        2700: {
+            slidesPerView: 6 + extraSpace,
+            spaceBetween: 20
+        },
+        3100: {
+            slidesPerView: 7 + extraSpace,
+            spaceBetween: 20
+        },
+        3600: {
+            slidesPerView: 8 + extraSpace,
+            spaceBetween: 20
+        }
     }
 }
