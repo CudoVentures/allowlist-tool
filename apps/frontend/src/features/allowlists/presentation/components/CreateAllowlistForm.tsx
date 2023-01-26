@@ -107,7 +107,7 @@ const CreateAllowlistForm = () => {
                     fontWeight={600}
                     variant='subtitle2'
                     color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
-                    allowlisttool.com/
+                    {`${window.location.origin.replace('http://' || 'https://', '')}/`}
                   </Typography>
                 </InputAdornment>
               }
