@@ -31,6 +31,9 @@ export class AuthController {
   ) {
     const user = await this.authService.login(signedMessageDto.connectedAddress);
     req.session.user = user;
+    res.body = {
+      id : user.id
+    }
     res.status(200).send();
   }
 
