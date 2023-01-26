@@ -8,9 +8,9 @@ WORKDIR ${WORKING_DIR}
 
 RUN npm i
 
-RUN npm run build:frontend:prod
-
 RUN npm run build:prod
+
+RUN npm run build:frontend:prod
 
 FROM node:16-buster
 
@@ -26,7 +26,7 @@ RUN if [ $USER_NAME != 'root' ]; then \
 WORKDIR ${WORKING_DIR}
 COPY --from=builder "/usr/src/cudos-allowlist" ./
 
-# COPY --from=builder "/usr/src/cudos-allowlist/package.json" ./package.json
+COPY --from=builder "/usr/src/cudos-allowlist/package.json" ./package.json
 
 
 COPY --from=builder "/usr/src/cudos-allowlist/config/.env" ./config/.env
