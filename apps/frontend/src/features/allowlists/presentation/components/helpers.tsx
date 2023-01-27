@@ -47,30 +47,6 @@ export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<
     stateFunc(e.target.value);
 };
 
-export const onImageChange = (
-    type: 'image' | 'banner',
-    file: Blob | MediaSource,
-    setState: Dispatch<AnyAction>,
-) => {
-
-    if (!file) {
-        if (type === 'image') {
-            setState(updateAllowlistObject({ image: '' }));
-            return
-        }
-        setState(updateAllowlistObject({ banner_image: '' }));
-        return;
-    }
-
-    fileToDataUri(file).then((data) => {
-        if (type === 'image') {
-            setState(updateAllowlistObject({ image: data as string }));
-        } else {
-            setState(updateAllowlistObject({ banner_image: data as string }));
-        }
-    });
-};
-
 export const addDiscordBot = () => {
     window.open(
         `https://discord.com/api/oauth2/authorize?client_id=${Config.APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
