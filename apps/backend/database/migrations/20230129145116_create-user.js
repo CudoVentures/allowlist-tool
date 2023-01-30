@@ -15,11 +15,6 @@ module.exports = {
             unique: true,
             allowNull: true,
           },
-          twitter_profile_username: {
-            type: Sequelize.STRING,
-            unique: true,
-            allowNull: true,
-          },
           discord_profile_id: {
             type: Sequelize.STRING,
             unique: true,

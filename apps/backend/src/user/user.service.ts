@@ -1,13 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import TwitterUserEntity from './entities/twitter_user.entity';
 import UserEntity from './entities/user.entity';
+import { TwitterUserRepo } from './repos/twitter_user.repo';
 import { UserRepo } from './repos/user.repo';
+import { DiscordUserRepo } from './repos/discord_user.repo';
+import DiscordUserEntity from './entities/discord_user.entity';
+
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectModel(UserRepo)
     private userRepo: typeof UserRepo,
+    @InjectModel(TwitterUserRepo)
+    private twitterRepo: typeof TwitterUserRepo,
+    @InjectModel(DiscordUserRepo)
+    private discorddRepo: typeof DiscordUserRepo
   ) {}
 
   async findByAddress(address: string): Promise<UserEntity> {
@@ -15,23 +24,18 @@ export class UserService {
     return UserEntity.fromRepo(userRepo);
   }
 
-  async findByDiscordId(id: number): Promise<UserEntity> {
-    const userRepo = await this.userRepo.findOne({
+  async findByDiscordId(id: number): Promise<DiscordUserEntity> {
+    const userRepo = await this.discorddRepo.findOne({
       where: { discord_profile_id: id },
     });
-    return UserEntity.fromRepo(userRepo);
+    return DiscordUserEntity.fromRepo(userRepo);
   }
 
-  async findByTwitterId(id: number): Promise<UserEntity> {
-    const userRepo = await this.userRepo.findOne({
+  async findByTwitterId(id: number): Promise<TwitterUserEntity> {
+    const userRepo = await this.twitterRepo.findOne({
       where: { twitter_profile_id: id },
     });
-    return UserEntity.fromRepo(userRepo);
-  }
-
-  async findById(id: number): Promise<UserEntity> {
-    const userRepo = await this.userRepo.findByPk(id);
-    return UserEntity.fromRepo(userRepo);
+    return TwitterUserEntity.fromRepo(userRepo);
   }
 
   async createUser(params: any): Promise<UserEntity> {

@@ -1,6 +1,8 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import UserEntity from './entities/user.entity';
+import TwitterEntity from './entities/twitter_user.entity'
+import DiscordEntity from './entities/discord_user.entity'
 import { UserService } from './user.service';
 
 @ApiTags('User')
@@ -10,8 +12,8 @@ export class UserController {
 
   @Get()
   async getUser(@Req() req) {
-    let twitterUser: UserEntity = undefined
-    let discordUser: UserEntity = undefined
+    let twitterUser: TwitterEntity = undefined
+    let discordUser: DiscordEntity = undefined
 
     if (req.session.user.twitter) {
       twitterUser = await this.userService.findByTwitterId(req.session.user.twitter.twitter_profile_id)

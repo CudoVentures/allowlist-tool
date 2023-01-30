@@ -1,12 +1,20 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class UserJSONValidator {
-  @IsNumber()
-  id: number;
-
+  @IsNotEmpty()
   @IsString()
   address: string;
 
+  @IsString()
+  twitter_profile_id: string;
+
+  @IsString()
+  discord_profile_id: string;
+}
+
+export class TwitterUserJSONValidator {
+
+  @IsNotEmpty()
   @IsString()
   twitter_profile_id: string;
 
@@ -17,8 +25,13 @@ export class UserJSONValidator {
   twitter_access_token: string;
 
   @IsString()
-  twitter_refresh_token: string;
+  twitter_refresh_token : string;
+}
 
+
+export class DiscordUserJSONValidator {
+
+  @IsNotEmpty()
   @IsString()
   discord_profile_id: string;
 
