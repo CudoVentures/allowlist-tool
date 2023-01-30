@@ -87,7 +87,7 @@ const Header = () => {
           {!isMainnetInstance() ?
             <Typography
               marginLeft={1}
-              color='#E89518'
+              color={COLORS_DARK_THEME.TESTNET_ORANGE}
               fontWeight={300}
               component="span"
               fontSize={18}

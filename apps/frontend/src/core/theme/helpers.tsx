@@ -7,7 +7,6 @@ import { RootState } from "../store"
 import { EXPLORER_ADDRESS_DETAILS } from "../api/endpoints"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
 import { COLORS_DARK_THEME } from "./colors"
-import { handleLinkOut } from "../utilities/ProjectUtils"
 
 import { themeStyles } from "./themeStyles"
 
@@ -70,7 +69,7 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
                     <Link
                         href={EXPLORER_ADDRESS_DETAILS(connectedNetwork, address)}
                         rel="noreferrer"
-                        target='_blank'
+                        target='Checking address on explorer'
                     >
                         <SvgComponent type={LAYOUT_CONTENT_TEXT.LinkIcon} style={{ height: '24px' }} />
                     </Link>
@@ -80,13 +79,15 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
     )
 }
 
-export const LinkBox = ({ link, text }: { link: string, text?: string }) => {
+export const LinkBox = ({ link, text, children }: { link: string, text?: string, children?: React.ReactNode }) => {
     return (
-        <Box
-            onClick={() => handleLinkOut(link)}
-            sx={{ cursor: 'pointer', color: COLORS_DARK_THEME.PRIMARY_BLUE }}
+        <Link variant='inherit' target={link}
+            href={link}
+            rel="noreferrer"
+            underline="none"
+            color={COLORS_DARK_THEME.PRIMARY_BLUE}
         >
             {text ? text : link}
-        </Box>
+        </Link>
     )
 }

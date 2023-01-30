@@ -14,7 +14,7 @@ export const getSum = (numbers: number[]): number => {
 
 export const handleLinkOut = (url: string) => {
   if (url) {
-    window.open(url, '_blank', 'rel=noreferrer')?.focus()
+    window.open(url, url, 'rel=noreferrer')?.focus()
   }
 }
 

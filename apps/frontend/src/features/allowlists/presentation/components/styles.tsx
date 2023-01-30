@@ -208,6 +208,7 @@ export const generalStyles = {
     background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80
   },
   input: {
+    border: '0.1px solid transparent',
     marginTop: '10px',
     padding: '16px 20px',
     borderRadius: '8px',
@@ -219,6 +220,42 @@ export const generalStyles = {
     width: '24px',
     height: '24px'
   },
+}
+
+export const validationStyles = {
+  invalidInput: {
+    ...generalStyles.input,
+    border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`,
+  },
+  tooltipProps: {
+    tooltip: {
+      sx: {
+        marginTop: '-50px',
+        background: 'transparent',
+        color: COLORS_DARK_THEME.TESTNET_ORANGE
+      },
+    },
+  },
+  tooltipPopper: {
+    sx: {
+      zIndex: '1'
+    },
+    modifiers: [
+      {
+        name: "offset",
+        options: {
+          offset: [0, -10]
+        },
+      },
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['bottom-start'],
+          flipVariations: false, // true by default
+        },
+      },
+    ],
+  }
 }
 
 export const registrationCriteriaStyles = {

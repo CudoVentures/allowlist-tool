@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Divider, Input, InputAdornment, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { chains } from 'chain-registry';
 import { FileUploader } from "react-drag-drop-files";
@@ -9,9 +9,10 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes } from './helpers';
+import { acceptedImgTypes, BaseURL, FormField, getStartAdornment } from './helpers';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
+import CreationField from './CreationField';
 
 import { allowlistDetailsStyles, generalStyles } from './styles';
 
@@ -89,42 +90,21 @@ const CreateAllowlistForm = () => {
         </Box>
         <Divider sx={{ width: '100%' }} />
         <Fragment>
-          <Box id='allowlistNameInput'>
-            <Typography fontWeight={600}>Allowlist Name</Typography>
-            <Input placeholder='Enter Allowlist Name' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.name}
-              onChange={(e) => dispatch(updateAllowlistObject({ name: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistCustomURLInput'>
-            <Typography fontWeight={600}>Custom URL</Typography>
-            <Input disableUnderline type='text'
-              startAdornment={
-                <InputAdornment position="start">
-                  <Typography
-                    sx={{ marginRight: '-6px' }}
-                    fontWeight={600}
-                    variant='subtitle2'
-                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
-                    {`${window.location.origin.replace('http://' || 'https://', '')}/`}
-                  </Typography>
-                </InputAdornment>
-              }
-              sx={generalStyles.input}
-              value={allowlistState.url}
-              onChange={(e) => dispatch(updateAllowlistObject({ url: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistDescriptionInput'>
-            <Typography fontWeight={600}>Description</Typography>
-            <Input placeholder='Enter Description' disableUnderline type='text'
-              multiline rows={3}
-              sx={generalStyles.input}
-              value={allowlistState.description}
-              onChange={(e) => dispatch(updateAllowlistObject({ description: e.target.value }))}
-            />
-          </Box>
+          <CreationField
+            type={FormField.name}
+            text='Allowlist Name'
+            placeholder='Enter Allowlist Name'
+          />
+          <CreationField
+            type={FormField.url}
+            text='Custom URL'
+            startAdornment={getStartAdornment(`${window.location.origin.replace('https://' || 'http://', '')}/`)}
+          />
+          <CreationField
+            type={FormField.description}
+            text='Description'
+            placeholder='Enter Description'
+          />
           <Box id='allowlistCosmosBlockchainIDInput'>
             <Typography fontWeight={600}>Cosmos Blockchain ID</Typography>
             <Select
@@ -160,48 +140,33 @@ const CreateAllowlistForm = () => {
               })}
             </Select>
           </Box>
-          <Box id='allowlistWebsiteURLInput'>
-            <Typography display={'flex'} alignItems='center' fontWeight={600}>
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.GlobusIcon}
-                style={generalStyles.titleIcons}
-              />
-              Website URL
-            </Typography>
-            <Input placeholder='Enter Website URL' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.website}
-              onChange={(e) => dispatch(updateAllowlistObject({ website: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistDiscordURLInput'>
-            <Typography display={'flex'} alignItems='center' fontWeight={600}>
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.DiscordIcon}
-                style={generalStyles.titleIcons}
-              />
-              Discord URL
-            </Typography>
-            <Input placeholder='Enter Discord URL' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.discord_url}
-              onChange={(e) => dispatch(updateAllowlistObject({ discord_url: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistTwitterAccountInput'>
-            <Typography display={'flex'} alignItems='center' fontWeight={600}>
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.TwitterIcon}
-                style={generalStyles.titleIcons}
-              />
-              Twitter Account
-            </Typography>
-            <Input placeholder='Enter @TwitterAccount' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.twitter_account}
-              onChange={(e) => dispatch(updateAllowlistObject({ twitter_account: e.target.value }))}
-            />
-          </Box>
+          <CreationField
+            type={FormField.website}
+            text='Website URL'
+            placeholder='Enter Website URL'
+            svgIcon={<SvgComponent
+              type={LAYOUT_CONTENT_TEXT.GlobusIcon}
+              style={generalStyles.titleIcons}
+            />}
+          />
+          <CreationField
+            type={FormField.discord_url}
+            text='Discord Server URL'
+            startAdornment={getStartAdornment(BaseURL.discord_server)}
+            svgIcon={<SvgComponent
+              style={generalStyles.titleIcons}
+              type={LAYOUT_CONTENT_TEXT.DiscordIcon}
+            />}
+          />
+          <CreationField
+            type={FormField.twitter_account}
+            text='Twitter Account'
+            startAdornment={getStartAdornment(BaseURL.twitter_acc)}
+            svgIcon={<SvgComponent
+              type={LAYOUT_CONTENT_TEXT.TwitterIcon}
+              style={generalStyles.titleIcons}
+            />}
+          />
           <Box id='allowlistProfileImageInput'>
             <Typography fontWeight={600}>Profile Image</Typography>
             <Typography
