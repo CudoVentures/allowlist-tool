@@ -13,7 +13,7 @@
     "build:frontend:prod": "export NODE_ENV=production && npx webpack --config webpack-frontend.config.js",
     "start:backend:dev": "nest build --webpack --webpackPath webpack-hmr.config.js --watch",
     "start:backend:debug": "nest start backend --debug --watch",
-    "start:backend:prod": "node dist/apps/backend/main.js",
+    "start:backend:prod": "npm run migration && node dist/apps/backend/main.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "migration":"npx sequelize db:migrate --config apps/backend/database/config/config.js --migrations-path apps/backend/database/migrations",
     "test": "jest",
