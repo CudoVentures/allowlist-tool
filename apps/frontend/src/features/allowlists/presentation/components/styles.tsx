@@ -221,42 +221,6 @@ export const generalStyles = {
   },
 }
 
-export const validationStyles = {
-  invalidInput: {
-    ...generalStyles.input,
-    border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`,
-  },
-  tooltipProps: {
-    tooltip: {
-      sx: {
-        marginTop: '-50px',
-        background: 'transparent',
-        color: COLORS_DARK_THEME.TESTNET_ORANGE
-      },
-    },
-  },
-  tooltipPopper: {
-    sx: {
-      zIndex: '1'
-    },
-    modifiers: [
-      {
-        name: "offset",
-        options: {
-          offset: [0, -10]
-        },
-      },
-      {
-        name: 'flip',
-        options: {
-          fallbackPlacements: ['bottom-start'],
-          flipVariations: false, // true by default
-        },
-      },
-    ],
-  }
-}
-
 export const registrationCriteriaStyles = {
   titleSwitchHolder: {
     width: '100%',
@@ -328,6 +292,7 @@ export const allowlistDetailsStyles = {
       "& .MuiOutlinedInput-notchedOutline": {
         border: 'none'
       },
+      border: '0.1px solid transparent',
       borderRadius: '8px',
       background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
     }
@@ -343,6 +308,7 @@ export const allowlistDetailsStyles = {
         border: 'none'
       },
       borderRadius: '8px',
+      border: '0.1px solid transparent',
       background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
     }
   },
@@ -369,5 +335,55 @@ export const allowlistDetailsStyles = {
     borderRadius: '24px',
     width: '100%',
     background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80
+  }
+}
+
+export const validationStyles = {
+  invalidDatePickerInput: {
+    ...allowlistDetailsStyles.datePickerInput,
+    sx: {
+      ...allowlistDetailsStyles.datePickerInput.sx,
+      border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`
+    }
+  },
+  invalidTimerPickerInput: {
+    ...allowlistDetailsStyles.timePickerInput,
+    sx: {
+      ...allowlistDetailsStyles.timePickerInput.sx,
+      border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`
+    }
+  },
+  invalidInput: {
+    ...generalStyles.input,
+    border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`,
+  },
+  tooltipProps: {
+    tooltip: {
+      sx: {
+        marginTop: '-50px',
+        background: 'transparent',
+        color: COLORS_DARK_THEME.TESTNET_ORANGE
+      },
+    },
+  },
+  tooltipPopper: {
+    sx: {
+      zIndex: '1'
+    },
+    modifiers: [
+      {
+        name: "offset",
+        options: {
+          offset: [0, -10]
+        },
+      },
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['bottom-start'],
+          flipVariations: false, // true by default
+        },
+      },
+    ],
   }
 }

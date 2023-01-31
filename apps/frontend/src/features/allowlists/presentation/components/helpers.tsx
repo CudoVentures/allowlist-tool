@@ -26,7 +26,8 @@ export enum FormFieldErrors {
     url = 'Invalid URL format',
     twitterAcc = 'Invalid Twitter Account',
     discordServer = 'Invalid Discord Server',
-    tweet = 'Invalid tweet format. Should be: https://twitter.com/{$TwitterAcc}/status/{$PostId} '
+    tweet = 'Invalid tweet format. Should be: https://twitter.com/{$TwitterAcc}/status/{$PostId} ',
+    endPeriod = 'End period cannot be in the past'
 }
 
 export enum BaseURL {
@@ -35,6 +36,7 @@ export enum BaseURL {
 }
 
 export enum FormField {
+    end_period = 'end_period',
     tweet = 'tweet',
     name = 'name',
     url = 'url',
@@ -57,6 +59,7 @@ export const FieldTooltips = {
     [FormField.discord_url]: FormFieldErrors.discordServer,
     [FormField.discord_server]: FormFieldErrors.discordServer,
     [FormField.tweet]: FormFieldErrors.tweet,
+    [FormField.end_period]: FormFieldErrors.endPeriod,
 }
 
 export const getStartAdornment = (text: string): JSX.Element => {

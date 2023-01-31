@@ -9,12 +9,13 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes, BaseURL, FormField, getStartAdornment } from './helpers';
+import { acceptedImgTypes, BaseURL, FieldTooltips, FormField, getStartAdornment } from './helpers';
+import { isValidEndPeriod } from '../../validation';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 import CreationField from './CreationField';
 
-import { allowlistDetailsStyles, generalStyles } from './styles';
+import { allowlistDetailsStyles, generalStyles, validationStyles } from './styles';
 
 const CreateAllowlistForm = () => {
 
@@ -246,39 +247,55 @@ const CreateAllowlistForm = () => {
               />
             </Box>
           </Box>
-          <Box gap={2} id='datesHolder' sx={allowlistDetailsStyles.datesHolder}>
-            <Box id='allowlistRegistrationEndDateInput' sx={{ width: '50%' }}>
-              <Box marginBottom='8px' gap={1} display='flex' alignItems='flex-start'>
-                <Typography fontWeight={600}> Registration End Date </Typography>
-                <Tooltip
-                  placement='right'
-                  followCursor
-                  title={'Tooltip text'}
-                  children={<Box><SvgComponent
-                    type={LAYOUT_CONTENT_TEXT.InfoIcon}
-                    style={allowlistDetailsStyles.tooltip}
-                  /></Box>}
+          <Tooltip
+            placement='bottom-start'
+            PopperProps={validationStyles.tooltipPopper}
+            componentsProps={validationStyles.tooltipProps}
+            open={!isValidEndPeriod(allowlistState.end_period)}
+            title={FieldTooltips.end_period}
+          >
+            <Box
+              gap={2}
+              id='datesHolder'
+              sx={allowlistDetailsStyles.datesHolder}
+            >
+              <Box id='allowlistRegistrationEndDateInput' sx={{ width: '50%' }}>
+                <Box marginBottom='8px' gap={1} display='flex' alignItems='flex-start'>
+                  <Typography fontWeight={600}> Registration End Date </Typography>
+                  <Tooltip
+                    placement='right'
+                    followCursor
+                    title={'Tooltip text'}
+                    children={<Box><SvgComponent
+                      type={LAYOUT_CONTENT_TEXT.InfoIcon}
+                      style={allowlistDetailsStyles.tooltip}
+                    /></Box>}
+                  />
+                </Box>
+                <MobileDatePicker
+                  DialogProps={allowlistDetailsStyles.dialogProps}
+                  InputProps={!isValidEndPeriod(allowlistState.end_period) ?
+                    validationStyles.invalidDatePickerInput :
+                    allowlistDetailsStyles.datePickerInput}
+                  value={allowlistState.end_date ?? null}
+                  onChange={(newValue) => dispatch(updateAllowlistObject({ end_date: newValue }))}
+                  renderInput={(params) => <TextField {...params} />}
                 />
               </Box>
-              <MobileDatePicker
-                DialogProps={allowlistDetailsStyles.dialogProps}
-                InputProps={allowlistDetailsStyles.datePickerInput}
-                value={allowlistState.end_date ?? null}
-                onChange={(newValue) => dispatch(updateAllowlistObject({ end_date: newValue }))}
-                renderInput={(params) => <TextField {...params} />}
-              />
+              <Box id='allowlistRegistrationEndTimeInput' sx={{ width: '50%' }}>
+                <Typography marginBottom='10px' fontWeight={600}> Registration End Time </Typography>
+                <MobileTimePicker
+                  DialogProps={allowlistDetailsStyles.dialogProps}
+                  InputProps={!isValidEndPeriod(allowlistState.end_period) ?
+                    validationStyles.invalidTimerPickerInput :
+                    allowlistDetailsStyles.timePickerInput}
+                  value={allowlistState.end_time ?? null}
+                  onChange={(newValue: any) => dispatch(updateAllowlistObject({ end_time: newValue }))}
+                  renderInput={(params: any) => <TextField {...params} />}
+                />
+              </Box>
             </Box>
-            <Box id='allowlistRegistrationEndTimeInput' sx={{ width: '50%' }}>
-              <Typography marginBottom='10px' fontWeight={600}> Registration End Time </Typography>
-              <MobileTimePicker
-                DialogProps={allowlistDetailsStyles.dialogProps}
-                InputProps={allowlistDetailsStyles.timePickerInput}
-                value={allowlistState.end_time ?? null}
-                onChange={(newValue: any) => dispatch(updateAllowlistObject({ end_time: newValue }))}
-                renderInput={(params: any) => <TextField {...params} />}
-              />
-            </Box>
-          </Box>
+          </Tooltip>
         </Fragment>
       </Box>
     </Box>

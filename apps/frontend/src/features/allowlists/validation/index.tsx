@@ -17,7 +17,7 @@ let urlOptions: IsURLOptions = {
     disallow_auth: false
 }
 
-export const isZeroLength = (data: string): boolean => data.length === 0
+export const isZeroLength = (data: any): boolean => !data
 
 export const isValidLength = (data: string, spec?: { min?: number, max?: number }): boolean => {
     const { min, max } = spec
@@ -54,6 +54,10 @@ export const isValidDescription = (description: string): boolean => {
     return isZeroLength(description) || isValidLength(description, { min: 19, max: 100 })
 }
 
+export const isValidEndPeriod = (end_period: Date) => {
+    return isZeroLength(end_period) || Date.now() < end_period.valueOf()
+}
+
 export const getFieldisValid = (fieldType: FormField, value: any): boolean => {
     switch (fieldType) {
         case FormField.name:
@@ -79,6 +83,9 @@ export const getFieldisValid = (fieldType: FormField, value: any): boolean => {
         case FormField.tweet:
             return isValidTweetUrl(value)
 
+        case FormField.end_period:
+            return isValidEndPeriod(value)
+
         default:
             return true
     }
@@ -96,7 +103,8 @@ export const isValidStepOne = (data: CollectedData): boolean => {
         data.image &&
         data.banner_image &&
         data.end_date &&
-        data.end_time
+        data.end_time &&
+        (data.end_period && getFieldisValid(FormField.end_period, data.end_period))
     ) { return true }
 
     return false
