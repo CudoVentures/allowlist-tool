@@ -24,7 +24,7 @@ const Footer = () => {
                         item
                         key={idx}
                         sx={footerStyles.leftItem}
-                        onClick={() => window.open(link.url, '_blank')?.focus()}
+                        onClick={() => window.open(link.url, `${link.text}`)?.focus()}
                     >
                         {idx === 0 ? link.text :
                             <Typography
@@ -45,7 +45,7 @@ const Footer = () => {
                 {FOOTER.RIGHT_LINKS.map((link) => (
                     <Grid
                         key={link.url}
-                        onClick={() => window.open(link.url, '_blank')?.focus()}
+                        onClick={() => window.open(link.url, link.url)?.focus()}
                         sx={footerStyles.rightItem}
                     >
                         {link.icon}

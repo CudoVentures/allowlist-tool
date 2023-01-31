@@ -1,12 +1,12 @@
 import React, { Fragment, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
-import { Box, Button, Checkbox, ClickAwayListener, Collapse, Divider, FormControlLabel, FormGroup, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Checkbox, ClickAwayListener, Collapse, Divider, FormControlLabel, FormGroup, InputAdornment, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 import { RootState } from "../../../../core/store";
-import { CollectedData, FetchedAllowlist, OptionalAllowlistData, updateAllowlistObject } from "../../../../core/store/allowlist";
+import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
 import { SOCIAL_MEDIA } from "../../../../core/store/user";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
@@ -19,6 +19,62 @@ import { headerStyles } from "../../../../core/presentation/components/Layout/st
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
 
 declare let Config: { APP_DISCORD_CLIENT_ID: any; };
+
+export enum FormFieldErrors {
+    description = 'Have to be between 20 and 100 characters',
+    minimumFiveChars = 'Have to be minimum 5 characters',
+    url = 'Invalid URL format',
+    twitterAcc = 'Invalid Twitter Account',
+    discordServer = 'Invalid Discord Server',
+    tweet = 'Invalid tweet format. Should be: https://twitter.com/{$TwitterAcc}/status/{$PostId} ',
+    endPeriod = 'End period cannot be in the past'
+}
+
+export enum BaseURL {
+    discord_server = 'https://discord.gg/',
+    twitter_acc = 'https://twitter.com/'
+}
+
+export enum FormField {
+    end_period = 'end_period',
+    tweet = 'tweet',
+    name = 'name',
+    url = 'url',
+    website = 'website',
+    twitter_account = 'twitter_account',
+    discord_server = 'discord_server',
+    server_role = 'server_role',
+    twitter_account_to_follow = 'twitter_account_to_follow',
+    discord_url = 'discord_url',
+    description = 'description'
+}
+
+export const FieldTooltips = {
+    [FormField.name]: FormFieldErrors.minimumFiveChars,
+    [FormField.url]: FormFieldErrors.minimumFiveChars,
+    [FormField.website]: FormFieldErrors.url,
+    [FormField.twitter_account]: FormFieldErrors.twitterAcc,
+    [FormField.twitter_account_to_follow]: FormFieldErrors.twitterAcc,
+    [FormField.description]: FormFieldErrors.description,
+    [FormField.discord_url]: FormFieldErrors.discordServer,
+    [FormField.discord_server]: FormFieldErrors.discordServer,
+    [FormField.tweet]: FormFieldErrors.tweet,
+    [FormField.end_period]: FormFieldErrors.endPeriod,
+}
+
+export const getStartAdornment = (text: string): JSX.Element => {
+    return (
+        <InputAdornment position="start">
+            <Typography
+                sx={{ marginRight: '-6px' }}
+                fontWeight={600}
+                variant='subtitle2'
+                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
+                {text}
+            </Typography>
+        </InputAdornment>
+    )
+}
 
 export const acceptedImgTypes = ['png', 'jpeg', 'jpg', 'svg']
 
@@ -45,30 +101,6 @@ export const blobToBase64 = async (file: Blob) => {
 
 export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<string>>) => {
     stateFunc(e.target.value);
-};
-
-export const onImageChange = (
-    type: 'image' | 'banner',
-    file: Blob | MediaSource,
-    setState: Dispatch<AnyAction>,
-) => {
-
-    if (!file) {
-        if (type === 'image') {
-            setState(updateAllowlistObject({ image: '' }));
-            return
-        }
-        setState(updateAllowlistObject({ banner_image: '' }));
-        return;
-    }
-
-    fileToDataUri(file).then((data) => {
-        if (type === 'image') {
-            setState(updateAllowlistObject({ image: data as string }));
-        } else {
-            setState(updateAllowlistObject({ banner_image: data as string }));
-        }
-    });
 };
 
 export const addDiscordBot = () => {
@@ -139,43 +171,6 @@ export const SocialMediaButtons = () => {
             />
         </Box >
     )
-}
-
-export const isValidStepOne = (data: CollectedData): boolean => {
-    if (
-        data.name &&
-        data.url &&
-        data.description &&
-        data.cosmos_chain_id &&
-        data.website &&
-        data.discord_url &&
-        data.twitter_account &&
-        data.image &&
-        data.banner_image &&
-        data.end_date
-    ) { return true }
-
-    return false
-}
-
-export const isValidStepTwo = (data: CollectedData) => {
-
-    if (
-        data.twitter_account_to_follow ||
-        data.tweet ||
-        data.discord_server && data.server_role ||
-        data.require_email
-    ) {
-        return true
-    }
-
-    return false
-}
-
-export const isValidOptionalData = (data: OptionalAllowlistData): boolean => {
-
-    //TODO: What are the criteria for the optional data?
-    return true
 }
 
 export const SocialMediaBoxes = ({
@@ -395,7 +390,7 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
         }
 
         if (isCollectedData) {
-            return props.checkedFields['tweet_to-_retweet'] ? true : false
+            return props.checkedFields['tweet_to_retweet'] ? true : false
         }
         return props.tweet_to_retweet !== '' ? true : false
     }
@@ -405,7 +400,7 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />,
             title: 'Twitter Page to Follow',
             isDisabled: !props.twitter_account_to_follow,
-            subtitle: <LinkBox link={props.twitter_account_to_follow} />
+            subtitle: <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />,
@@ -427,13 +422,16 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />,
-            title: 'Discord Group to Join',
+            title: 'Discord Server to Join',
             isDisabled: isCollectedData ? !props.discord_server : !props.discord_invite_link,
-            subtitle: <LinkBox link={isCollectedData ? props.discord_server : props.discord_invite_link} />
+            subtitle: <LinkBox
+                link={isCollectedData ? `${BaseURL.discord_server}${props.discord_server}` : props.discord_invite_link}
+                text={isCollectedData ? props.discord_server : props.discord_invite_link}
+            />
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />,
-            title: 'Discord Group Roles',
+            title: 'Discord Server Roles',
             isDisabled: !props.server_role,
             subtitle: props.server_role
         },

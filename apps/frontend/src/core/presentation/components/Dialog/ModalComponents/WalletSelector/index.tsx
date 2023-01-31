@@ -33,7 +33,7 @@ const WalletSelector = () => {
 
   const redirectToExtension = (extensionUrl: string | undefined) => {
     if (extensionUrl) {
-      window.open(extensionUrl, '_blank')?.focus()
+      window.open(extensionUrl, 'get-wallet-extension')?.focus()
     }
   }
 

@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers"
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
 import { RootState } from '../../../../core/store'
-import { isValidStepOne, isValidStepTwo } from './helpers'
+import { isValidStepOne, isValidStepTwo } from '../../validation'
 import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useManipulateAllowlist'
 import { updateModalState } from '../../../../core/store/modals'
 

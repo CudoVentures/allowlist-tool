@@ -24,7 +24,7 @@ const useSocialMedia = () => {
         const windowOptions = `toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,width=600, height=800,top=0`
         const openedWindow = window.open(
             SOCIAL_MEDIA_LOGIN_URL(service),
-            '_blank',
+            `${service} Log In`,
             windowOptions
         )
         const timer = setInterval(async () => {

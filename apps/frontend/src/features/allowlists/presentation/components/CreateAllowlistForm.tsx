@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Divider, Input, InputAdornment, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Divider, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { chains } from 'chain-registry';
 import { FileUploader } from "react-drag-drop-files";
@@ -9,11 +9,13 @@ import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
-import { acceptedImgTypes } from './helpers';
+import { acceptedImgTypes, BaseURL, FieldTooltips, FormField, getStartAdornment } from './helpers';
+import { isValidEndPeriod } from '../../validation';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
+import CreationField from './CreationField';
 
-import { allowlistDetailsStyles, generalStyles } from './styles';
+import { allowlistDetailsStyles, generalStyles, validationStyles } from './styles';
 
 const CreateAllowlistForm = () => {
 
@@ -89,42 +91,21 @@ const CreateAllowlistForm = () => {
         </Box>
         <Divider sx={{ width: '100%' }} />
         <Fragment>
-          <Box id='allowlistNameInput'>
-            <Typography fontWeight={600}>Allowlist Name</Typography>
-            <Input placeholder='Enter Allowlist Name' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.name}
-              onChange={(e) => dispatch(updateAllowlistObject({ name: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistCustomURLInput'>
-            <Typography fontWeight={600}>Custom URL</Typography>
-            <Input disableUnderline type='text'
-              startAdornment={
-                <InputAdornment position="start">
-                  <Typography
-                    sx={{ marginRight: '-6px' }}
-                    fontWeight={600}
-                    variant='subtitle2'
-                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
-                    {`${window.location.origin.replace('http://' || 'https://', '')}/`}
-                  </Typography>
-                </InputAdornment>
-              }
-              sx={generalStyles.input}
-              value={allowlistState.url}
-              onChange={(e) => dispatch(updateAllowlistObject({ url: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistDescriptionInput'>
-            <Typography fontWeight={600}>Description</Typography>
-            <Input placeholder='Enter Description' disableUnderline type='text'
-              multiline rows={3}
-              sx={generalStyles.input}
-              value={allowlistState.description}
-              onChange={(e) => dispatch(updateAllowlistObject({ description: e.target.value }))}
-            />
-          </Box>
+          <CreationField
+            type={FormField.name}
+            text='Allowlist Name'
+            placeholder='Enter Allowlist Name'
+          />
+          <CreationField
+            type={FormField.url}
+            text='Custom URL'
+            startAdornment={getStartAdornment(`${window.location.origin.replace('https://' || 'http://', '')}/`)}
+          />
+          <CreationField
+            type={FormField.description}
+            text='Description'
+            placeholder='Enter Description'
+          />
           <Box id='allowlistCosmosBlockchainIDInput'>
             <Typography fontWeight={600}>Cosmos Blockchain ID</Typography>
             <Select
@@ -155,53 +136,44 @@ const CreateAllowlistForm = () => {
                 // </Box>
               }
             >
-              {availableChainIDs.map((CHAIN_ID, idx) => {
+              <MenuItem
+                key={allowlistState.cosmos_chain_id}
+                value={allowlistState.cosmos_chain_id}
+              >
+                {allowlistState.cosmos_chain_id}
+              </MenuItem>
+              {/* {availableChainIDs.map((CHAIN_ID, idx) => {
                 return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>
-              })}
+              })} */}
             </Select>
           </Box>
-          <Box id='allowlistWebsiteURLInput'>
-            <Typography display={'flex'} alignItems='center' fontWeight={600}>
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.GlobusIcon}
-                style={generalStyles.titleIcons}
-              />
-              Website URL
-            </Typography>
-            <Input placeholder='Enter Website URL' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.website}
-              onChange={(e) => dispatch(updateAllowlistObject({ website: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistDiscordURLInput'>
-            <Typography display={'flex'} alignItems='center' fontWeight={600}>
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.DiscordIcon}
-                style={generalStyles.titleIcons}
-              />
-              Discord URL
-            </Typography>
-            <Input placeholder='Enter Discord URL' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.discord_url}
-              onChange={(e) => dispatch(updateAllowlistObject({ discord_url: e.target.value }))}
-            />
-          </Box>
-          <Box id='allowlistTwitterAccountInput'>
-            <Typography display={'flex'} alignItems='center' fontWeight={600}>
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.TwitterIcon}
-                style={generalStyles.titleIcons}
-              />
-              Twitter Account
-            </Typography>
-            <Input placeholder='Enter @TwitterAccount' disableUnderline type='text'
-              sx={generalStyles.input}
-              value={allowlistState.twitter_account}
-              onChange={(e) => dispatch(updateAllowlistObject({ twitter_account: e.target.value }))}
-            />
-          </Box>
+          <CreationField
+            type={FormField.website}
+            text='Website URL'
+            placeholder='Enter Website URL'
+            svgIcon={<SvgComponent
+              type={LAYOUT_CONTENT_TEXT.GlobusIcon}
+              style={generalStyles.titleIcons}
+            />}
+          />
+          <CreationField
+            type={FormField.discord_url}
+            text='Discord Server URL'
+            startAdornment={getStartAdornment(BaseURL.discord_server)}
+            svgIcon={<SvgComponent
+              style={generalStyles.titleIcons}
+              type={LAYOUT_CONTENT_TEXT.DiscordIcon}
+            />}
+          />
+          <CreationField
+            type={FormField.twitter_account}
+            text='Twitter Account'
+            startAdornment={getStartAdornment(BaseURL.twitter_acc)}
+            svgIcon={<SvgComponent
+              type={LAYOUT_CONTENT_TEXT.TwitterIcon}
+              style={generalStyles.titleIcons}
+            />}
+          />
           <Box id='allowlistProfileImageInput'>
             <Typography fontWeight={600}>Profile Image</Typography>
             <Typography
@@ -275,39 +247,55 @@ const CreateAllowlistForm = () => {
               />
             </Box>
           </Box>
-          <Box gap={2} id='datesHolder' sx={allowlistDetailsStyles.datesHolder}>
-            <Box id='allowlistRegistrationEndDateInput' sx={{ width: '50%' }}>
-              <Box marginBottom='8px' gap={1} display='flex' alignItems='flex-start'>
-                <Typography fontWeight={600}> Registration End Date </Typography>
-                <Tooltip
-                  placement='right'
-                  followCursor
-                  title={'Tooltip text'}
-                  children={<Box><SvgComponent
-                    type={LAYOUT_CONTENT_TEXT.InfoIcon}
-                    style={allowlistDetailsStyles.tooltip}
-                  /></Box>}
+          <Tooltip
+            placement='bottom-start'
+            PopperProps={validationStyles.tooltipPopper}
+            componentsProps={validationStyles.tooltipProps}
+            open={!isValidEndPeriod(allowlistState.end_period)}
+            title={FieldTooltips.end_period}
+          >
+            <Box
+              gap={2}
+              id='datesHolder'
+              sx={allowlistDetailsStyles.datesHolder}
+            >
+              <Box id='allowlistRegistrationEndDateInput' sx={{ width: '50%' }}>
+                <Box marginBottom='8px' gap={1} display='flex' alignItems='flex-start'>
+                  <Typography fontWeight={600}> Registration End Date </Typography>
+                  <Tooltip
+                    placement='right'
+                    followCursor
+                    title={'Tooltip text'}
+                    children={<Box><SvgComponent
+                      type={LAYOUT_CONTENT_TEXT.InfoIcon}
+                      style={allowlistDetailsStyles.tooltip}
+                    /></Box>}
+                  />
+                </Box>
+                <MobileDatePicker
+                  DialogProps={allowlistDetailsStyles.dialogProps}
+                  InputProps={!isValidEndPeriod(allowlistState.end_period) ?
+                    validationStyles.invalidDatePickerInput :
+                    allowlistDetailsStyles.datePickerInput}
+                  value={allowlistState.end_date ?? null}
+                  onChange={(newValue) => dispatch(updateAllowlistObject({ end_date: newValue }))}
+                  renderInput={(params) => <TextField {...params} />}
                 />
               </Box>
-              <MobileDatePicker
-                DialogProps={allowlistDetailsStyles.dialogProps}
-                InputProps={allowlistDetailsStyles.datePickerInput}
-                value={allowlistState.end_date ?? null}
-                onChange={(newValue) => dispatch(updateAllowlistObject({ end_date: newValue }))}
-                renderInput={(params) => <TextField {...params} />}
-              />
+              <Box id='allowlistRegistrationEndTimeInput' sx={{ width: '50%' }}>
+                <Typography marginBottom='10px' fontWeight={600}> Registration End Time </Typography>
+                <MobileTimePicker
+                  DialogProps={allowlistDetailsStyles.dialogProps}
+                  InputProps={!isValidEndPeriod(allowlistState.end_period) ?
+                    validationStyles.invalidTimerPickerInput :
+                    allowlistDetailsStyles.timePickerInput}
+                  value={allowlistState.end_time ?? null}
+                  onChange={(newValue: any) => dispatch(updateAllowlistObject({ end_time: newValue }))}
+                  renderInput={(params: any) => <TextField {...params} />}
+                />
+              </Box>
             </Box>
-            <Box id='allowlistRegistrationEndTimeInput' sx={{ width: '50%' }}>
-              <Typography marginBottom='10px' fontWeight={600}> Registration End Time </Typography>
-              <MobileTimePicker
-                DialogProps={allowlistDetailsStyles.dialogProps}
-                InputProps={allowlistDetailsStyles.timePickerInput}
-                value={allowlistState.end_time ?? null}
-                onChange={(newValue: any) => dispatch(updateAllowlistObject({ end_time: newValue }))}
-                renderInput={(params: any) => <TextField {...params} />}
-              />
-            </Box>
-          </Box>
+          </Tooltip>
         </Fragment>
       </Box>
     </Box>
