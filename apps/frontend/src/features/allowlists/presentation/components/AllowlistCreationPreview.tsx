@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { Box, Divider, Link, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
 
-import { getRegistrationCriteriaArray } from './helpers'
+import { BaseURL, getRegistrationCriteriaArray } from './helpers'
 import { RootState } from '../../../../core/store'
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
 import { getSeparateDateAndTime, setBlobToB64Img } from '../../../../core/utilities/ProjectUtils'
 
 import { allowlistDetailsStyles, allowlistPreviewStyles } from './styles'
 
-export const AllowlistCreationPereview = () => {
+export const AllowlistCreationPreview = () => {
 
     const [bannerPreview, setBannerPreview] = useState<string>('')
     const [avatarPreview, setAvatarPreview] = useState<string>('')
@@ -36,24 +36,24 @@ export const AllowlistCreationPereview = () => {
             title: 'Twitter Account',
             isDisabled: !allowlistState.twitter_account,
             subtitle: <Link variant='inherit' target="_blank"
-                href={allowlistState.twitter_account}
+                href={`${BaseURL.twitter_acc}${allowlistState.twitter_account}`}
                 rel="noreferrer"
                 underline="none"
                 color={COLORS_DARK_THEME.PRIMARY_BLUE}
             >
-                Twitter Account
+                {allowlistState.twitter_account}
             </Link>
         },
         {
-            title: 'Discord URL',
+            title: 'Discord Server',
             isDisabled: !allowlistState.discord_url,
             subtitle: <Link variant='inherit' target="_blank"
-                href={allowlistState.discord_url}
+                href={`${BaseURL.discord_server}${allowlistState.discord_url}`}
                 rel="noreferrer"
                 underline="none"
                 color={COLORS_DARK_THEME.PRIMARY_BLUE}
             >
-                Discord URL
+                {allowlistState.discord_url}
             </Link>
         },
         {
@@ -115,11 +115,11 @@ export const AllowlistCreationPereview = () => {
                 {getRegistrationCriteriaArray(allowlistState).map((FIELD, idx) => {
                     return FIELD.isDisabled ? null : (
                         <Box key={idx}>
-                            <Typography sx={allowlistPreviewStyles.title}>
+                            <Typography component={'div'} sx={allowlistPreviewStyles.title}>
                                 {FIELD.icon}
                                 {FIELD.title}
                             </Typography>
-                            <Typography sx={allowlistPreviewStyles.subTitle}>
+                            <Typography component={'div'} sx={allowlistPreviewStyles.subTitle}>
                                 {FIELD.subtitle}
                             </Typography>
                         </Box>
@@ -130,4 +130,4 @@ export const AllowlistCreationPereview = () => {
         </Box>
     )
 }
-export default AllowlistCreationPereview
+export default AllowlistCreationPreview

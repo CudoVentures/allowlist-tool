@@ -30,7 +30,7 @@ const useEditMode = () => {
                 twitter_account_to_follow: props.twitter_account_to_follow !== '',
                 tweet: props.tweet_to_retweet !== '' || props.tweet_to_like !== '',
                 twitter_account: props.twitter_account !== '',
-                discord_server: false,
+                discord_server: props.discord_invite_link !== '',
                 server_role: props.server_role !== ''
             },
             tweet: props.tweet_to_retweet || props.tweet_to_like || '',
@@ -38,9 +38,8 @@ const useEditMode = () => {
             website: props.website,
             discord_url: props.discord_url,
             twitter_account: props.twitter_account,
-            discord_server: '',
-            server_role: props.server_role,
-            discord_invite_link: props.discord_invite_link
+            discord_server: props.discord_invite_link,
+            server_role: props.server_role
         }
 
         dispatch(updateAllowlistObject(fetchedToCollectedData))

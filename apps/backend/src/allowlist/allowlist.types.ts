@@ -70,5 +70,6 @@ export class AllowlistJSONValidator {
   server_role: string;
 
   @IsBoolean()
+  @IsOptional()
   require_email: boolean;
 }

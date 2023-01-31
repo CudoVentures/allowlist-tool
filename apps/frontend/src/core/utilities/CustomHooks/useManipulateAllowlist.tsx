@@ -15,7 +15,7 @@ const useManipulateAllowlist = () => {
 
     const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
 
-    const joinAllowlist = useCallback(async (allowlistId: number, userEmail: string) => {
+    const joinAllowlist = useCallback(async (allowlistId: number, userEmail: string): Promise<{ success: boolean, message: string }> => {
 
         const userDetails = await GET_USER_DETAILS();
         const data = {};
@@ -44,16 +44,16 @@ const useManipulateAllowlist = () => {
                 chain_id,
                 userEmail,
             });
-            return true
+            return { success: true, message: '' }
 
         } catch (ex) {
             console.error(ex);
-            return false
+            return { success: false, message: ex.response.data.message }
         }
     }, [connectedWallet, connectedAddress])
 
 
-    const updateAllowlist = useCallback(async (collectedData: CollectedData) => {
+    const updateAllowlist = useCallback(async (collectedData: CollectedData): Promise<{ success: boolean, message: string }> => {
 
         const ID = collectedData.url
         const data = {
@@ -68,7 +68,7 @@ const useManipulateAllowlist = () => {
             twitter_account_to_follow: collectedData.twitter_account_to_follow,
             tweet_to_like: collectedData.checkedFields['tweet_to_like'] ? collectedData.tweet : '',
             tweet_to_retweet: collectedData.checkedFields['tweet_to_retweet'] ? collectedData.tweet : '',
-            discord_invite_link: collectedData.discord_invite_link,
+            discord_invite_link: collectedData.discord_server,
             server_role: collectedData.server_role,
             require_email: collectedData.require_email,
             image: collectedData.image,
@@ -106,15 +106,15 @@ const useManipulateAllowlist = () => {
             };
 
             await UPDATE_ALLOWLIST(ID, reqData)
-            return true
+            return { success: true, message: '' }
 
         } catch (ex) {
             console.error(ex);
-            return false
+            return { success: false, message: ex.response.data.message }
         }
     }, [connectedWallet, connectedAddress])
 
-    const createAllowlist = useCallback(async (collectedData: CollectedData): Promise<boolean> => {
+    const createAllowlist = useCallback(async (collectedData: CollectedData): Promise<{ success: boolean, message: string }> => {
 
         const data = {
             name: collectedData.name,
@@ -128,7 +128,7 @@ const useManipulateAllowlist = () => {
             twitter_account_to_follow: collectedData.twitter_account_to_follow,
             tweet_to_like: collectedData.checkedFields['tweet_to_like'] ? collectedData.tweet : '',
             tweet_to_retweet: collectedData.checkedFields['tweet_to_retweet'] ? collectedData.tweet : '',
-            discord_invite_link: collectedData.discord_invite_link,
+            discord_invite_link: collectedData.discord_server,
             server_role: collectedData.server_role,
             require_email: collectedData.require_email,
             image: collectedData.image,
@@ -155,11 +155,11 @@ const useManipulateAllowlist = () => {
             };
 
             await CREATE_ALLOWLIST(reqData)
-            return true
+            return { success: true, message: '' }
 
         } catch (ex) {
             console.error(ex);
-            return false
+            return { success: false, message: ex.response.data.message }
         }
     }, [connectedWallet, connectedAddress])
 

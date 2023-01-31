@@ -4,7 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsDateString,
-  IsObject,
+  IsBoolean,
 } from 'class-validator';
 import { SignedMessageDto } from './signed-message.dto';
 
@@ -83,8 +83,8 @@ export class CreateAllowlistDto extends SignedMessageDto {
   @ApiProperty({ required: false })
   server_role: string;
 
-  @IsString()
+  @IsBoolean()
   @IsOptional()
   @ApiProperty({ required: false })
-  require_email: string;
+  require_email: boolean;
 }

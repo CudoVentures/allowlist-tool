@@ -38,6 +38,7 @@ const MainCard = () => {
                 <Box gap={1} sx={mainCardStyles.textHolder}>
                     <Box>
                         <Typography
+                            component={'div'}
                             fontSize={isUnder800px ? 44 : 88}
                             display={'flex'}
                             flexDirection={'column'}
@@ -50,6 +51,7 @@ const MainCard = () => {
                                 endColor={'rgba(245, 250, 255, 1)'}
                             />
                             <Typography
+                                component={'div'}
                                 fontSize={'inherit'}
                                 display={'flex'}
                                 gap={2}
@@ -79,6 +81,7 @@ const MainCard = () => {
                     </Box>
                     <Box>
                         <Typography
+                            component={'div'}
                             minWidth={'max-content'}
                             gap={1}
                             fontSize={isUnder800px ? 16 : 20}
