@@ -9,7 +9,7 @@ import { getSeparateDateAndTime, setBlobToB64Img } from '../../../../core/utilit
 
 import { allowlistDetailsStyles, allowlistPreviewStyles } from './styles'
 
-export const AllowlistCreationPereview = () => {
+export const AllowlistCreationPreview = () => {
 
     const [bannerPreview, setBannerPreview] = useState<string>('')
     const [avatarPreview, setAvatarPreview] = useState<string>('')
@@ -115,11 +115,11 @@ export const AllowlistCreationPereview = () => {
                 {getRegistrationCriteriaArray(allowlistState).map((FIELD, idx) => {
                     return FIELD.isDisabled ? null : (
                         <Box key={idx}>
-                            <Typography sx={allowlistPreviewStyles.title}>
+                            <Typography component={'div'} sx={allowlistPreviewStyles.title}>
                                 {FIELD.icon}
                                 {FIELD.title}
                             </Typography>
-                            <Typography sx={allowlistPreviewStyles.subTitle}>
+                            <Typography component={'div'} sx={allowlistPreviewStyles.subTitle}>
                                 {FIELD.subtitle}
                             </Typography>
                         </Box>
@@ -130,4 +130,4 @@ export const AllowlistCreationPereview = () => {
         </Box>
     )
 }
-export default AllowlistCreationPereview
+export default AllowlistCreationPreview

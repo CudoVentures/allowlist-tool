@@ -5,13 +5,15 @@ export interface modalState {
     selectWallet?: boolean
     success?: boolean
     failure?: boolean
+    message?: string
 }
 
 export const initialState: modalState = {
     pageTransitionLoading: false,
     selectWallet: false,
     success: false,
-    failure: false
+    failure: false,
+    message: ''
 }
 
 export const modalStateSlice = createSlice({
