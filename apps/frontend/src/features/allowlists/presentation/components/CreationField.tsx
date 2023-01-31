@@ -77,7 +77,7 @@ const CreationField = ({
                         disableUnderline
                         type='text'
                         sx={isValid ? generalStyles.input : validationStyles.invalidInput}
-                        value={allowlistState[type]}
+                        value={allowlistState[type] || ''}
                         onChange={handleChange}
                         onPaste={() => setPastedData(true)}
                     />
