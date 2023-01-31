@@ -28,11 +28,11 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     }
 
     const signUp = async () => {
-        const success = await joinAllowlist(props.id, userEmail)
+        const { success, message } = await joinAllowlist(props.id, userEmail)
         if (success) {
             dispatch(updateModalState({ success: true }))
         } else {
-            dispatch(updateModalState({ failure: true }))
+            dispatch(updateModalState({ failure: true, message }))
         }
     };
 

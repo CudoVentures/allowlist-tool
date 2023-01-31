@@ -12,7 +12,7 @@ import { CancelRoundedIcon, ModalContainer, styles as defaultStyles } from '../.
 const Failure = () => {
 
     const dispatch = useDispatch()
-    const { failure } = useSelector((state: RootState) => state.modalState)
+    const { failure, message } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {
         dispatch(updateModalState(initialState))
@@ -45,7 +45,7 @@ const Failure = () => {
                     color='text.secondary'
                     variant="subtitle1"
                 >
-                    Something went wrong
+                    {message ? message : "Something went wrong"}
                 </Typography>
                 <Button
                     variant="contained"
