@@ -9,7 +9,7 @@ import { getSeparateDateAndTime, setBlobToB64Img } from '../../../../core/utilit
 
 import { allowlistDetailsStyles, allowlistPreviewStyles } from './styles'
 
-export const AllowlistCreationPereview = () => {
+export const AllowlistCreationPreview = () => {
 
     const [bannerPreview, setBannerPreview] = useState<string>('')
     const [avatarPreview, setAvatarPreview] = useState<string>('')
@@ -130,4 +130,4 @@ export const AllowlistCreationPereview = () => {
         </Box>
     )
 }
-export default AllowlistCreationPereview
+export default AllowlistCreationPreview
