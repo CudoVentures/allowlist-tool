@@ -95,7 +95,8 @@ export const isValidStepOne = (data: CollectedData): boolean => {
         data.cosmos_chain_id &&
         data.image &&
         data.banner_image &&
-        data.end_date
+        data.end_date &&
+        data.end_time
     ) { return true }
 
     return false
