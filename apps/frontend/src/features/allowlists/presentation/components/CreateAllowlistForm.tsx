@@ -135,9 +135,15 @@ const CreateAllowlistForm = () => {
                 // </Box>
               }
             >
-              {availableChainIDs.map((CHAIN_ID, idx) => {
+              <MenuItem
+                key={allowlistState.cosmos_chain_id}
+                value={allowlistState.cosmos_chain_id}
+              >
+                {allowlistState.cosmos_chain_id}
+              </MenuItem>
+              {/* {availableChainIDs.map((CHAIN_ID, idx) => {
                 return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>
-              })}
+              })} */}
             </Select>
           </Box>
           <CreationField
