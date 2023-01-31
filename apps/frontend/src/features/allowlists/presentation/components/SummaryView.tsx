@@ -6,6 +6,7 @@ import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { getSeparateDateAndTime, handleLinkOut } from '../../../../core/utilities/ProjectUtils';
 import useEditMode from '../../../../core/utilities/CustomHooks/useEditMode';
+import { LinkBox } from '../../../../core/theme/helpers';
 import { BaseURL } from './helpers';
 
 import { generalStyles, summaryViewStyles } from './styles';
@@ -97,17 +98,26 @@ export const SummaryView = ({
                 <Typography variant='h6' fontWeight={700}>
                     Links
                 </Typography>
-                <Box onClick={() => handleLinkOut(props.url)} sx={summaryViewStyles.linkHolder} >
+                <Box sx={summaryViewStyles.linkHolder} >
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.ChainLinkIcon} style={'default'} />
-                    <StyledTypography text={props.url} />
+                    <LinkBox
+                        link={props.website}
+                        text={<StyledTypography text={props.website} />}
+                    />
                 </Box>
-                <Box onClick={() => handleLinkOut(`${BaseURL.twitter_acc}${props.twitter_account}`)} sx={summaryViewStyles.linkHolder} >
+                <Box sx={summaryViewStyles.linkHolder} >
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
-                    <StyledTypography text={props.twitter_account} />
+                    <LinkBox
+                        link={`${BaseURL.twitter_acc}${props.twitter_account}`}
+                        text={<StyledTypography text={props.twitter_account} />}
+                    />
                 </Box>
-                <Box onClick={() => handleLinkOut(`${BaseURL.discord_server}${props.discord_url}`)} sx={summaryViewStyles.linkHolder}>
-                    <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style={'default'} />
-                    <StyledTypography text={props.discord_url} />
+                <Box sx={summaryViewStyles.linkHolder} >
+                    <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
+                    <LinkBox
+                        link={`${BaseURL.discord_server}${props.discord_url}`}
+                        text={<StyledTypography text={props.discord_url} />}
+                    />
                 </Box>
             </Box>
             <Box gap={1} sx={generalStyles.flexColumn}>

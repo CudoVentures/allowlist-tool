@@ -18,7 +18,6 @@ export const summaryViewStyles = {
     width: '100%'
   },
   linkHolder: {
-    cursor: 'pointer',
     display: 'flex',
     alignItems: 'center'
   },

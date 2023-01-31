@@ -79,9 +79,11 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
     )
 }
 
-export const LinkBox = ({ link, text, children }: { link: string, text?: string, children?: React.ReactNode }) => {
+export const LinkBox = ({ link, text, children }: { link: string, text?: string | JSX.Element, children?: React.ReactNode }) => {
     return (
-        <Link variant='inherit' target={link}
+        <Link
+            variant='inherit'
+            target={link}
             href={link}
             rel="noreferrer"
             underline="none"
