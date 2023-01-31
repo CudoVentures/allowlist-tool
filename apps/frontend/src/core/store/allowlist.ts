@@ -27,7 +27,6 @@ export interface OptionalAllowlistData {
     tweet?: string | undefined;
     discord_server?: string | undefined;
     server_role?: string | undefined;
-    discord_invite_link?: string | undefined;
 }
 
 export type CollectedData = RequiredAllowlistData & OptionalAllowlistData
@@ -37,6 +36,7 @@ export interface FetchedAllowlist extends Omit<CollectedData, 'checkedFields' | 
     admin: string;
     users: string[];
     end_date: Date;
+    discord_invite_link?: string
 }
 
 export interface AllowlistCreationData extends CollectedData {
@@ -69,7 +69,6 @@ export const initialState: CollectedData = {
     tweet: undefined,
     discord_server: undefined,
     server_role: undefined,
-    discord_invite_link: undefined,
     checkedFields: {
         tweet_to_like: false,
         tweet_to_retweet: false,
