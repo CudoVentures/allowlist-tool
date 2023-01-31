@@ -115,11 +115,11 @@ export const AllowlistCreationPreview = () => {
                 {getRegistrationCriteriaArray(allowlistState).map((FIELD, idx) => {
                     return FIELD.isDisabled ? null : (
                         <Box key={idx}>
-                            <Typography sx={allowlistPreviewStyles.title}>
+                            <Typography component={'div'} sx={allowlistPreviewStyles.title}>
                                 {FIELD.icon}
                                 {FIELD.title}
                             </Typography>
-                            <Typography sx={allowlistPreviewStyles.subTitle}>
+                            <Typography component={'div'} sx={allowlistPreviewStyles.subTitle}>
                                 {FIELD.subtitle}
                             </Typography>
                         </Box>
