@@ -186,6 +186,7 @@ export const SocialMediaBoxes = ({
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link
     const isTwitterRequired = !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet || !!props.twitter_account_to_follow
+    const twitterActions = [props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null]
 
     return (
         <Fragment>
@@ -279,7 +280,9 @@ export const SocialMediaBoxes = ({
                                 variant='subtitle2'
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
-                                {`${[props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null].join('& ')}`}
+                                {`${twitterActions
+                                    .filter((action) => action !== null)
+                                    .join('& ')}`}
                                 <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
                             </Typography>}
                         />

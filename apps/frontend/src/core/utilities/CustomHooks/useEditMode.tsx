@@ -14,6 +14,7 @@ const useEditMode = () => {
         const allowlistID = props.url
         const fetchedToCollectedData: CollectedData = {
             editMode: true,
+            id: props.id,
             name: props.name,
             url: props.url,
             cosmos_chain_id: props.cosmos_chain_id,

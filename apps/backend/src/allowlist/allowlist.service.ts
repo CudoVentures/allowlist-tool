@@ -98,7 +98,6 @@ export class AllowlistService {
     userAddress: string,
     sessionUser: any,
   ) {
-    console.log(sessionUser)
     const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
     const allowlistEntity = AllowlistEntity.fromRepo(allowlistRepo);
 
@@ -323,11 +322,11 @@ export class AllowlistService {
     );
   }
 
-  async updateUserInfo(user, sessionUser){
+  async updateUserInfo(user, sessionUser) {
     const twitterInfo = sessionUser.twitter
     const discordInfo = sessionUser.discord
     let twitterUser, discordUser
-    if (twitterInfo){
+    if (twitterInfo) {
       twitterUser = await this.userSerivice.findByTwitterId(sessionUser.twitter.twitter_profile_id)
       //const discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
       delete twitterUser.id
@@ -336,7 +335,7 @@ export class AllowlistService {
       delete twitterUser.discord_access_token
       delete twitterUser.discord_profile_id
       delete twitterUser.discord_refresh_token
-    } else if (discordInfo){
+    } else if (discordInfo) {
       discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
       delete discordUser.id
       delete discordUser.address
@@ -347,7 +346,7 @@ export class AllowlistService {
       delete discordUser.twitter_profile_username
     }
 
-    const newUserInfo = Object.assign({},user,twitterUser)
+    const newUserInfo = Object.assign({}, user, twitterUser)
     delete newUserInfo.id
     return await this.userSerivice.updateUser(user.id, newUserInfo)
   }

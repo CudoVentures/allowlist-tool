@@ -102,7 +102,7 @@ export default class AllowlistEntity {
     entity.twitter_account_to_follow =
       repoJson.twitter_account_to_follow ?? entity.twitter_account_to_follow;
     entity.tweet_to_like = repoJson.tweet_to_like ?? entity.tweet_to_like;
-    entity.tweet_to_retweet = repoJson.tweet_to_like ?? entity.tweet_to_like;
+    entity.tweet_to_retweet = repoJson.tweet_to_retweet ?? entity.tweet_to_retweet;
     entity.discord_invite_link =
       repoJson.discord_invite_link ?? entity.discord_invite_link;
     entity.server_role = repoJson.server_role ?? entity.server_role;

@@ -10,7 +10,7 @@ export const TX_HASH_DETAILS = (connectedNetwork: string, txHash: string) =>
 export const JOIN_ALLOWLIST_URL = (allowlistID: number) =>
   `/api/v1/allowlist/join/${allowlistID}`
 
-export const ALLOWLIST_DETAILS_URL = (allowlistID: string) =>
+export const ALLOWLIST_DETAILS_URL = (allowlistID: string | number) =>
   `/api/v1/allowlist/${allowlistID}`
 
 export const ALLOWLIST_ENTRIES_URL = (allowlistID: number) =>
