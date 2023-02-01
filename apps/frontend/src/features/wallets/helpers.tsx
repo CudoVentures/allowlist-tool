@@ -96,20 +96,12 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
     const userNativeBalance = getNativeBalance(currentBalances)
 
     const message = 'Allowlist tool login';
-    const {
-        signature,
-        chainId: chain_id,
-        sequence,
-        accountNumber: account_number,
-    } = await signNonceMsg(connectedAddress, walletType, message)
+    const { signature } = await signArbitrary(walletType, connectedAddress, message)
 
     const reqData = {
         signature,
         connectedAddress,
         message,
-        sequence,
-        account_number,
-        chain_id,
     };
 
     const res = await LOG_IN_USER(reqData)
@@ -141,18 +133,24 @@ export const disconnectWalletByType = async (walletType: SUPPORTED_WALLET) => {
     }
 }
 
-export const signNonceMsg = async (
-    signingAddress: string,
+export const signArbitrary = async (
     walletType: SUPPORTED_WALLET,
+    signingAddress: string,
     message: string
-): Promise<{
-    signature: StdSignature;
-    chainId: string;
-    sequence: number;
-    accountNumber: number;
-}> => {
-    const client = await getSigningClient(walletType)
-    return client.signNonceMsg(signingAddress, message);
+): Promise<{ signature: StdSignature }> => {
+    const chainId = CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK]
+    let signature: StdSignature = {
+        pub_key: undefined,
+        signature: ""
+    }
+    if (walletType === SUPPORTED_WALLET.Keplr) {
+        signature = await window.keplr!.signArbitrary(chainId, signingAddress, message)
+    }
+
+    if (walletType === SUPPORTED_WALLET.Cosmostation) {
+        signature = await window.cosmostation.keplr!.signArbitrary(chainId, signingAddress, message)
+    }
+    return { signature }
 }
 
 export const SUPPORTED_WALLET_LOGOS = {

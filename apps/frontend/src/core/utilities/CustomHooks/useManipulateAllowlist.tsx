@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useSelector } from "react-redux";
 
-import { signNonceMsg } from "../../../features/wallets/helpers";
+import { signArbitrary } from "../../../features/wallets/helpers";
 import { RootState } from "../../store";
 import { CollectedData } from "../../store/allowlist";
 import {
@@ -27,21 +27,13 @@ const useManipulateAllowlist = () => {
         }
 
         const message = JSON.stringify(data);
-        const {
-            signature,
-            chainId: chain_id,
-            sequence,
-            accountNumber: account_number,
-        } = await signNonceMsg(connectedAddress, connectedWallet, message);
+        const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
 
         try {
             await JOIN_ALLOWLIST(allowlistId, {
                 signature,
                 connectedAddress,
                 message,
-                sequence,
-                account_number,
-                chain_id,
                 userEmail,
             });
             return { success: true, message: '' }
@@ -88,21 +80,13 @@ const useManipulateAllowlist = () => {
             // }
             // for now don't sign anything specific
             const message = JSON.stringify({});
-            const {
-                signature,
-                chainId: chain_id,
-                sequence,
-                accountNumber: account_number,
-            } = await signNonceMsg(connectedAddress, connectedWallet, message);
+            const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
 
             const reqData = {
                 ...data,
                 signature,
                 connectedAddress,
                 message,
-                sequence,
-                account_number,
-                chain_id,
             };
 
             await UPDATE_ALLOWLIST(ID, reqData)
@@ -137,21 +121,13 @@ const useManipulateAllowlist = () => {
 
         try {
             const message = JSON.stringify(data);
-            const {
-                signature,
-                chainId: chain_id,
-                sequence,
-                accountNumber: account_number,
-            } = await signNonceMsg(connectedAddress, connectedWallet, message);
+            const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
 
             const reqData = {
                 ...data,
                 signature,
                 connectedAddress,
-                message,
-                sequence,
-                account_number,
-                chain_id,
+                message
             };
 
             await CREATE_ALLOWLIST(reqData)
