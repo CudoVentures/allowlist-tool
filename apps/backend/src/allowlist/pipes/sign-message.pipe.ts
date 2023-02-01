@@ -4,7 +4,8 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { StdSignature, verifyNonceMsgSigner } from 'cudosjs';
+import { StdSignature } from 'cudosjs';
+import { isValidSignature } from '../../common/utils';
 import { SignedMessageDto } from '../dto/signed-message.dto';
 
 @Injectable()
@@ -22,28 +23,13 @@ export class SignMessagePipe implements PipeTransform {
       throw new BadRequestException('Missing message');
     }
 
-    if (!(value.sequence > -1)) {
-      throw new BadRequestException('Missing sequence');
-    }
-
-    if (!value.account_number) {
-      throw new BadRequestException('Missing account number');
-    }
-
-    if (!value.chain_id) {
-      throw new BadRequestException('Missing chain id');
-    }
-    
     let validSignature;
     try {
-      validSignature = await verifyNonceMsgSigner(
+      validSignature = isValidSignature(
         value.signature as StdSignature,
         value.connectedAddress,
-        value.message,
-        value.sequence,
-        value.account_number,
-        value.chain_id,
-      );
+        value.message
+      )
     } catch (error) {
       console.log(error);
       throw error;

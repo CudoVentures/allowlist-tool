@@ -22,6 +22,7 @@
     "test:e2e": "jest --config ./apps/cudos-allow-list/test/jest-e2e.json"
   },
   "dependencies": {
+    "@keplr-wallet/cosmos": "^0.11.38",
     "@keplr-wallet/types": "^0.11.23",
     "@mui/x-date-pickers": "^5.0.11",
     "@nestjs/cli": "^9.1.9",
@@ -44,7 +45,7 @@
     "chain-registry": "^1.6.0",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.13.2",
-    "cudosjs": "^1.2.5",
+    "cudosjs": "^1.2.6",
     "dotenv": "^16.0.1",
     "express-session": "^1.17.3",
     "jdenticon": "^3.2.0",
