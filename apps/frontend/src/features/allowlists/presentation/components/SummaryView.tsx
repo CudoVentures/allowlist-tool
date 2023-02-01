@@ -113,7 +113,7 @@ export const SummaryView = ({
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >
-                    <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
+                    <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style={'default'} />
                     <LinkBox
                         link={`${BaseURL.discord_server}${props.discord_url}`}
                         text={<StyledTypography text={props.discord_url} />}
