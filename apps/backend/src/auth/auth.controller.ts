@@ -33,7 +33,7 @@ export class AuthController {
     req.session.user = user;
     res.status(200)
     res.send({
-      userId: user.id
+      address: user.address
     })
   }
 

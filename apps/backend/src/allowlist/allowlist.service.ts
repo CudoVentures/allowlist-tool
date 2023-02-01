@@ -72,7 +72,7 @@ export class AllowlistService {
 
   private async addToAllowlist(
     id: number,
-    userId: number
+    userId: string
   ): Promise<AllowlistEntity> {
     const allowlistRepo = await this.allowlistRepo.findByPk(id);
     const allowlistEntity = AllowlistEntity.fromRepo(allowlistRepo);
@@ -141,7 +141,7 @@ export class AllowlistService {
         .at(-1)
         .split('?')[0];
       const retweeted = await this.retweeted(
-        user.twitter_profile_username,
+        'user.twitter_profile_username',
         tweetId,
       );
       if (!retweeted) {
@@ -158,7 +158,7 @@ export class AllowlistService {
       const hasRole = await this.hasRole(
         serverId,
         allowlistEntity.server_role,
-        user.discord_access_token,
+        'user.discord_access_token',
       );
 
       if (!hasRole) {
@@ -166,7 +166,7 @@ export class AllowlistService {
       }
     }
 
-    return this.addToAllowlist(allowlistId, user.id);
+    return this.addToAllowlist(allowlistId, user.address);
   }
 
   private async checkForDuplicateAcc(
@@ -175,8 +175,8 @@ export class AllowlistService {
   ) {
     const users = await Promise.all(
       allowlistEntity.users.map((entry) => {
-        const { userId } = JSON.parse(entry);
-        return this.userSerivice.findById(userId);
+        const { address } = JSON.parse(entry);
+        return this.userSerivice.findByAddress(address);
       }),
     );
 
@@ -310,9 +310,8 @@ export class AllowlistService {
     const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
     return Promise.all(
       entries.map((entry) => {
-        return this.userSerivice.findById(entry.userId).then((user) => {
+        return this.userSerivice.findByAddress(entry.address).then((user) => {
           return {
-            id: user.id,
             address: user.address,
             email: entry.email,
             twitter_handle: user.twitter_profile_id,
@@ -329,26 +328,12 @@ export class AllowlistService {
     let twitterUser, discordUser
     if (twitterInfo){
       twitterUser = await this.userSerivice.findByTwitterId(sessionUser.twitter.twitter_profile_id)
-      //const discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
-      delete twitterUser.id
-      delete twitterUser.address
-      delete twitterUser.discord_profile_username
-      delete twitterUser.discord_access_token
-      delete twitterUser.discord_profile_id
-      delete twitterUser.discord_refresh_token
+      const discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
     } else if (discordInfo){
       discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
-      delete discordUser.id
-      delete discordUser.address
-      delete discordUser.twitter_access_token
-      delete discordUser.twitter_account
-      delete discordUser.twitter_handle
-      delete discordUser.twitter_profile_username
-      delete discordUser.twitter_profile_username
     }
 
-    const newUserInfo = Object.assign({},user,twitterUser)
-    delete newUserInfo.id
+    const newUserInfo = Object.assign({},user,twitterUser,discordUser)
     return await this.userSerivice.updateUser(user.id, newUserInfo)
   }
 }

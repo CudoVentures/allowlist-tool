@@ -34,7 +34,7 @@ import { UserController } from './user/user.controller';
           password: config.get('APP_DATABASE_PASS'),
           database: config.get('APP_DATABASE_DB_NAME'),
           autoLoadModels: true,
-          synchronize: true,
+          // synchronize: true,
         };
       },
     }),
@@ -69,10 +69,10 @@ import { UserController } from './user/user.controller';
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    // remove auth middleware for now - we don't need it
     // consumer
     //   .apply(AuthMiddleware)
-    //   .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
+    //   .exclude({ path: '/api/v1/auth/*', method: RequestMethod.POST },{ path: '/api/v1/auth/*', method: RequestMethod.GET }, { path: '/api/v1/allowlists', method: RequestMethod.GET })
     //   .forRoutes('/');
+      
   }
 }

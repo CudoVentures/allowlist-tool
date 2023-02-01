@@ -11,16 +11,16 @@ export class AuthMiddleware implements NestMiddleware {
   constructor(private userService: UserService) {}
 
   async use(req: any, res: Response, next: NextFunction) {
-    // const user = req.session.user;
-    // if (req.originalUrl.startsWith('/api') && !user) {
-    //   throw new UnauthorizedException();
-    // }
+    const user = req.session.user;
+    if (req.originalUrl.startsWith('/api') && !req.originalUrl.startsWith('/api/v1/auth') && !user) {
+      // throw new UnauthorizedException();
+    }
 
-    // const userExists = await this.userService.findById(user.id);
+    // const userExists = await this.userService.findByAddress(user.address);
     // if (!userExists) {
     //   throw new UnauthorizedException();
     // }
-    // auth middleware should be completely rewriten
+
     next();
   }
 }

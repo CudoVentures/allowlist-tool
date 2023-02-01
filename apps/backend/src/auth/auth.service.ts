@@ -60,14 +60,13 @@ export class AuthService {
     try {
       user = await this.usersService.findByTwitterId(profile.id);
       //update user record 
-      user = await this.usersService.updateUser(user.id, data);
+      user = await this.usersService.updateUser(profile.id, data);
     } catch (error) {
-      console.log(error)
+      if (!user) {
+        user = await this.usersService.createTwitterUser(data);
+      }
     }
 
-    if (!user) {
-      user = await this.usersService.createUser(data);
-    }
     return user;
   }
 }

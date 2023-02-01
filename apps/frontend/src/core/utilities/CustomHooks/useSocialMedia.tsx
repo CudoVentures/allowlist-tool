@@ -8,11 +8,16 @@ const useSocialMedia = () => {
     const dispatch = useDispatch()
 
     const getConnectedSocialMedia = async (): Promise<CONNECTED_SOCIAL_MEDIA> => {
-        const userDetails = await GET_USER_DETAILS();
-        return {
-            [SOCIAL_MEDIA.twitter]: userDetails.data.twitter,
-            [SOCIAL_MEDIA.discord]: userDetails.data.discord
+        try{
+            const userDetails = await GET_USER_DETAILS();
+            return {
+                [SOCIAL_MEDIA.twitter]: userDetails.data.twitter,
+                [SOCIAL_MEDIA.discord]: userDetails.data.discord
+            }
+        } catch(error){
+            console.log(error)
         }
+
     }
 
     const setConnectedSocialMedia = async (): Promise<void> => {

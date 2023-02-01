@@ -15,12 +15,14 @@ export class UserController {
     let twitterUser: TwitterEntity = undefined
     let discordUser: DiscordEntity = undefined
 
-    if (req.session.user.twitter) {
-      twitterUser = await this.userService.findByTwitterId(req.session.user.twitter.twitter_profile_id)
-    }
-
-    if (req.session.user.discord) {
-      discordUser = await this.userService.findByDiscordId(req.session.user.discord.discord_profile_id)
+    if (req.session.user){
+      if (req.session.user.twitter) {
+        twitterUser = await this.userService.findByTwitterId(req.session.user.twitter.twitter_profile_id)
+      }
+  
+      if (req.session.user.discord) {
+        discordUser = await this.userService.findByDiscordId(req.session.user.discord.discord_profile_id)
+      }
     }
 
     return {

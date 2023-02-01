@@ -45,16 +45,36 @@ export class UserService {
     return UserEntity.fromRepo(userRepo);
   }
 
-  async updateUser(id: number, params: any): Promise<UserEntity> {
+  async createTwitterUser(params: any): Promise<TwitterUserEntity> {
+    const userRepo = await this.twitterRepo.create({
+      ...params,
+    });
+    return TwitterUserEntity.fromRepo(userRepo);
+  }
+
+  async updateUser(address: string, params: any): Promise<UserEntity> {
     const [count, [userRepo]] = await this.userRepo.update(
       {
         ...params,
       },
       {
-        where: { id },
+        where: { address },
         returning: true,
       },
     );
     return UserEntity.fromRepo(userRepo);
+  }
+
+  async updateTwitterUser(twitter_profile_id: string, params: any): Promise<TwitterUserEntity> {
+    const [count, [userRepo]] = await this.twitterRepo.update(
+      {
+        ...params,
+      },
+      {
+        where: { twitter_profile_id },
+        returning: true,
+      },
+    );
+    return TwitterUserEntity.fromRepo(userRepo);
   }
 }
