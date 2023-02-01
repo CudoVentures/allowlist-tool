@@ -9,6 +9,7 @@ import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useMa
 import { FetchedAllowlist } from '../../../../core/store/allowlist'
 import { SocialMediaBoxes } from './helpers'
 import { updateModalState } from '../../../../core/store/modals'
+import { isValidEmail } from '../../validation'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
@@ -52,7 +53,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
 
         //IsEmailRequired
-        if (props.require_email && !userEmail) {
+        if (props.require_email && (!userEmail || !isValidEmail(userEmail))) {
             return true
         }
 
@@ -88,7 +89,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                                     The collection creator will send you updates via email
                                 </ListItem>
                                 <ListItem sx={allowlistPreviewStyles.listItem}>
-                                    {`${props.website} will send you a confirmation by email if you make the ${props.name} successfully`}
+                                    {`${props.website} will send you a confirmation by email upon successful completion of ${props.name} allowlist criteria`}
                                 </ListItem>
                             </List>
                         </Box>

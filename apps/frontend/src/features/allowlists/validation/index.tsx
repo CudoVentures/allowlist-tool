@@ -1,8 +1,9 @@
 import isURL, { IsURLOptions } from 'validator/lib/isURL'
+import isEmail from "validator/lib/isEmail"
 import { CollectedData, OptionalAllowlistData } from "../../../core/store/allowlist"
 import { FormField } from "../presentation/components/helpers"
 
-let urlOptions: IsURLOptions = {
+const urlOptions: IsURLOptions = {
     protocols: [
         'http',
         'https'
@@ -54,8 +55,12 @@ export const isValidDescription = (description: string): boolean => {
     return isZeroLength(description) || isValidLength(description, { min: 19, max: 100 })
 }
 
-export const isValidEndPeriod = (end_period: Date) => {
+export const isValidEndPeriod = (end_period: Date): boolean => {
     return isZeroLength(end_period) || Date.now() < end_period.valueOf()
+}
+
+export const isValidEmail = (email: string): boolean => {
+    return isEmail(email)
 }
 
 export const getFieldisValid = (fieldType: FormField, value: any): boolean => {

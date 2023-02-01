@@ -260,7 +260,8 @@ export const SocialMediaBoxes = ({
                                 variant='subtitle2'
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
-                                {`Follow ${props.twitter_account_to_follow}`}
+                                {`Follow `}
+                                <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
                             </Typography>}
                         />
                         <FormControlLabel
@@ -278,7 +279,8 @@ export const SocialMediaBoxes = ({
                                 variant='subtitle2'
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
-                                {`Like & retweet ${props.tweet_to_retweet}`}
+                                {`${[props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null].join('& ')}`}
+                                <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
                             </Typography>}
                         />
                     </FormGroup>
@@ -321,24 +323,29 @@ export const SocialMediaBoxes = ({
                         checked={!!connectedSocialMedia.discord.userName}
                         control={<Checkbox
                             onChange={handleCheckbox}
-                            value={`Follow ${props.twitter_account_to_follow}`}
+                            value={`Join ${props.discord_invite_link}`}
                             icon={<RadioButtonUncheckedIcon />}
                             checkedIcon={<CheckCircleIcon />}
                         />}
                         label={<Box gap={1} display='flex'>
                             <Typography
+                                component={"div"}
                                 lineHeight='normal'
                                 variant='subtitle2'
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
-                                {`Join the ${props.name} server with role: `}
-                            </Typography>
-                            <Typography
-                                color='text.primary'
-                                lineHeight='normal'
-                                variant='subtitle2'
-                            >
-                                {`${props.server_role}`}
+                                {`Join `}
+                                <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_invite_link} />
+                                {` server with `}
+                                <Typography
+                                    component={"span"}
+                                    color='text.primary'
+                                    lineHeight='normal'
+                                    variant='subtitle2'
+                                >
+                                    {`${props.server_role} `}
+                                </Typography>
+                                {`role`}
                             </Typography>
                         </Box>}
                     />
@@ -407,7 +414,10 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             title: 'Interact With Twitter Post',
             isDisabled: isCollectedData ? !props.tweet : !props.tweet_to_like && !props.tweet_to_retweet,
             subtitle: <Box>
-                <LinkBox link={props.tweet} />
+                <LinkBox
+                    link={props.tweet || props.tweet_to_like || props.tweet_to_retweet}
+                    text={'@Tweet'}
+                />
                 <List sx={allowlistPreviewStyles.list}>
                     {tweetInteraction(Interactions.Like) ?
                         <ListItem sx={allowlistPreviewStyles.listItem}>
@@ -425,7 +435,7 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             title: 'Discord Server to Join',
             isDisabled: isCollectedData ? !props.discord_server : !props.discord_invite_link,
             subtitle: <LinkBox
-                link={isCollectedData ? `${BaseURL.discord_server}${props.discord_server}` : props.discord_invite_link}
+                link={`${BaseURL.discord_server}${isCollectedData ? props.discord_server : props.discord_invite_link}`}
                 text={isCollectedData ? props.discord_server : props.discord_invite_link}
             />
         },
