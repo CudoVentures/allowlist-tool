@@ -47,7 +47,6 @@ const useManipulateAllowlist = () => {
 
     const updateAllowlist = useCallback(async (collectedData: CollectedData): Promise<{ success: boolean, message: string }> => {
 
-        const ID = collectedData.url
         const data = {
             name: collectedData.name,
             url: collectedData.url,
@@ -79,7 +78,7 @@ const useManipulateAllowlist = () => {
             //         userDetails.data.discord_access_token;
             // }
             // for now don't sign anything specific
-            const message = JSON.stringify({});
+            const message = `Updating ${data.name} Allowlist`
             const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
 
             const reqData = {
@@ -88,8 +87,7 @@ const useManipulateAllowlist = () => {
                 connectedAddress,
                 message,
             };
-
-            await UPDATE_ALLOWLIST(ID, reqData)
+            await UPDATE_ALLOWLIST(collectedData.id, reqData)
             return { success: true, message: '' }
 
         } catch (ex) {

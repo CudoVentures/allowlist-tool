@@ -74,7 +74,6 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             <SocialMediaBoxes handleCheckbox={handleCheckbox} props={props} />
             {!props.require_email ? null :
                 <Fragment>
-                    <Divider sx={{ width: '100%' }} />
                     <Box id='userEmailInput'>
                         <Box>
                             <Typography display={'flex'} alignItems='center' fontWeight={600}>

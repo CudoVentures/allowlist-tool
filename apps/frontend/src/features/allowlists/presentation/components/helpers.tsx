@@ -186,6 +186,7 @@ export const SocialMediaBoxes = ({
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link
     const isTwitterRequired = !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet || !!props.twitter_account_to_follow
+    const twitterActions = [props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null].filter((action) => action !== null)
 
     return (
         <Fragment>
@@ -264,28 +265,29 @@ export const SocialMediaBoxes = ({
                                 <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
                             </Typography>}
                         />
-                        <FormControlLabel
-                            sx={{ pointerEvents: 'none' }}
-                            disabled={!connectedSocialMedia.twitter.userName}
-                            checked={!!connectedSocialMedia.twitter.userName}
-                            control={<Checkbox
-                                onChange={handleCheckbox}
-                                value={`Like & retweet ${props.name}'s tweet`}
-                                icon={<RadioButtonUncheckedIcon />}
-                                checkedIcon={<CheckCircleIcon />}
-                            />}
-                            label={<Typography
-                                lineHeight='normal'
-                                variant='subtitle2'
-                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
-                            >
-                                {`${[props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null].join('& ')}`}
-                                <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
-                            </Typography>}
-                        />
+                        {twitterActions.length ?
+                            <FormControlLabel
+                                sx={{ pointerEvents: 'none' }}
+                                disabled={!connectedSocialMedia.twitter.userName}
+                                checked={!!connectedSocialMedia.twitter.userName}
+                                control={<Checkbox
+                                    onChange={handleCheckbox}
+                                    value={`Like & retweet ${props.name}'s tweet`}
+                                    icon={<RadioButtonUncheckedIcon />}
+                                    checkedIcon={<CheckCircleIcon />}
+                                />}
+                                label={<Typography
+                                    lineHeight='normal'
+                                    variant='subtitle2'
+                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                >
+                                    {`${twitterActions.join('& ')}`}
+                                    <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
+                                </Typography>}
+                            /> : null}
                     </FormGroup>
+                    <Divider sx={{ marginTop: '20px', width: '100%' }} />
                 </Box>}
-            <Divider sx={{ width: '100%' }} />
             {!isDiscordRequired ? null :
                 <Box id='allowlistDiscordBox' sx={allowListStyles.socialBox}>
                     <Box sx={allowListStyles.socialBoxHeader}>
@@ -349,6 +351,7 @@ export const SocialMediaBoxes = ({
                             </Typography>
                         </Box>}
                     />
+                    <Divider sx={{ marginTop: '20px', width: '100%' }} />
                 </Box>}
         </Fragment>
     )

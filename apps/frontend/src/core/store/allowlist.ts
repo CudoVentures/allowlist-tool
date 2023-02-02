@@ -17,6 +17,7 @@ export interface RequiredAllowlistData {
 }
 
 export interface OptionalAllowlistData {
+    id: number,
     editMode?: boolean,
     tweet_to_like?: string | undefined
     tweet_to_retweet?: string | undefined
@@ -32,7 +33,6 @@ export interface OptionalAllowlistData {
 export type CollectedData = RequiredAllowlistData & OptionalAllowlistData
 
 export interface FetchedAllowlist extends Omit<CollectedData, 'checkedFields' | 'end_time' | 'end_date' | 'end_period' | 'discord_server'> {
-    id: number;
     admin: string;
     users: string[];
     end_date: Date;
@@ -49,6 +49,7 @@ export interface AllowlistCreationData extends CollectedData {
 }
 
 export const initialState: CollectedData = {
+    id: undefined,
     editMode: false,
     name: '',
     url: '',

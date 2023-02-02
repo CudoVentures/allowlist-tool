@@ -39,7 +39,6 @@ export class AdminSignMessagePipe implements PipeTransform {
     if (!validSignature) {
       throw new BadRequestException('Invalid signature');
     }
-    console.log("Admin check")
     return value;
   }
 }

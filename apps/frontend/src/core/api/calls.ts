@@ -37,7 +37,7 @@ export const CREATE_ALLOWLIST = async (data: any) => {
     return axios.post(ALLOWLIST_URL, data);
 }
 
-export const UPDATE_ALLOWLIST = async (allowlistID: string, data: any) => {
+export const UPDATE_ALLOWLIST = async (allowlistID: number, data: any) => {
     return axios.put(ALLOWLIST_DETAILS_URL(allowlistID), data);
 }
 
