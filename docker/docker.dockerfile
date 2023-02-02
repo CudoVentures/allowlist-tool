@@ -8,9 +8,9 @@ WORKDIR ${WORKING_DIR}
 
 RUN npm i
 
-RUN npm run build:frontend:prod
-
 RUN npm run build:prod
+
+RUN npm run build:frontend:prod
 
 FROM node:16-buster
 
