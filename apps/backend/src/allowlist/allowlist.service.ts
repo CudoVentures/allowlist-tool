@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, flatten, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import axios from 'axios';
 import { UserService } from '../user/user.service';
@@ -112,7 +112,7 @@ export class AllowlistService {
 
     await this.checkForDuplicateAcc(user, allowlistEntity);
 
-    if (allowlistEntity.twitter_account) {
+    if (allowlistEntity.twitter_account_to_follow) {
       const twitterAccountId = await this.getAccountID(allowlistEntity.twitter_account)
       const followAcc = await this.followsAcc(
         twitterAccountId,
@@ -226,10 +226,10 @@ export class AllowlistService {
   }
 
   private async getAccountID(twitterUsername: string) {
-    let res = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
+    let { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
       headers: { Authorization: process.env.App_Twitter_Bearer_Token }
     });
-    return res.data.id
+    return data.data.id
   }
 
   private async passCheck(url, target) {
@@ -289,16 +289,16 @@ export class AllowlistService {
       headers: { Authorization: process.env.App_Discord_Bot_Token },
     });
 
-    const roleId = guildRoleRes.data.find(
+    const roleIfo = guildRoleRes.data.find(
       (guildRole) => guildRole.name.toLowerCase() === role.toLowerCase(),
-    ).id;
+    );
 
-    if (!roleId) {
-      return false;
+    if (!roleIfo) {
+      return false
     }
 
     const userRoles = guildMemberRes.data.roles;
-    return userRoles.includes(roleId);
+    return userRoles.includes(roleIfo.id);
   }
 
   async getEntries(allowlistId: number) {
@@ -325,16 +325,16 @@ export class AllowlistService {
   async updateUserInfo(user, sessionUser) {
     const twitterInfo = sessionUser.twitter
     const discordInfo = sessionUser.discord
-    let twitterUser, discordUser
+    let twitterUser, discordUser, newUserInfo
     if (twitterInfo) {
       twitterUser = await this.userSerivice.findByTwitterId(sessionUser.twitter.twitter_profile_id)
-      //const discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
       delete twitterUser.id
       delete twitterUser.address
       delete twitterUser.discord_profile_username
       delete twitterUser.discord_access_token
       delete twitterUser.discord_profile_id
       delete twitterUser.discord_refresh_token
+      newUserInfo = Object.assign({}, user, twitterUser)
     } else if (discordInfo) {
       discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
       delete discordUser.id
@@ -344,9 +344,8 @@ export class AllowlistService {
       delete discordUser.twitter_handle
       delete discordUser.twitter_profile_username
       delete discordUser.twitter_profile_username
+      newUserInfo = Object.assign({}, user, discordUser)
     }
-
-    const newUserInfo = Object.assign({}, user, twitterUser)
     delete newUserInfo.id
     return await this.userSerivice.updateUser(user.id, newUserInfo)
   }
