@@ -110,7 +110,7 @@ const CreationField = ({
                         rows={type === FormField.description ? 3 : 1}
                         disableUnderline
                         type='text'
-                        sx={isValid ? generalStyles.input : isConnectedDiscordServer() ? validationStyles.connectedInput : validationStyles.invalidInput}
+                        sx={isValid ? isConnectedDiscordServer() ? validationStyles.connectedInput : generalStyles.input : validationStyles.invalidInput}
                         value={handleValue()}
                         onChange={handleChange}
                         onPaste={() => setPastedData(true)}
