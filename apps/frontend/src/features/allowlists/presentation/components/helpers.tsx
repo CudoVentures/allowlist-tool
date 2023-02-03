@@ -7,7 +7,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
-import { SOCIAL_MEDIA } from "../../../../core/store/user";
+import { SOCIAL_MEDIA } from "../../../../../../common/interfaces";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
 import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedia";
@@ -17,8 +17,6 @@ import { updateModalState } from "../../../../core/store/modals";
 
 import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
-
-declare let Config: { APP_DISCORD_CLIENT_ID: any; };
 
 export enum FormFieldErrors {
     description = 'Have to be between 20 and 100 characters',
@@ -101,12 +99,6 @@ export const blobToBase64 = async (file: Blob) => {
 
 export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<string>>) => {
     stateFunc(e.target.value);
-};
-
-export const addDiscordBot = () => {
-    window.open(
-        `https://discord.com/api/oauth2/authorize?client_id=${Config.APP_DISCORD_CLIENT_ID}&permissions=0&scope=bot`,
-    );
 };
 
 export const SocialMediaButtons = () => {

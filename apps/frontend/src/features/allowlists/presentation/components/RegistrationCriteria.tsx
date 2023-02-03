@@ -1,10 +1,20 @@
-import React, { Fragment } from 'react';
+import
+React,
+{
+    Fragment,
+    useCallback,
+    useEffect,
+    useState
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Box,
+    Button,
     Divider,
     FormControlLabel,
     FormGroup,
+    MenuItem,
+    Select,
     Switch,
     Typography
 } from '@mui/material';
@@ -13,10 +23,14 @@ import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { RootState } from '../../../../core/store';
-import { addDiscordBot, BaseURL, FormField, getStartAdornment } from './helpers';
+import { BaseURL, FormField, getStartAdornment } from './helpers';
 import CreationField from './CreationField';
+import useSocialMedia from '../../../../core/utilities/CustomHooks/useSocialMedia';
+import { emptyGuildInfo, SOCIAL_MEDIA } from '../../../../../../common/interfaces';
+import { updateUser } from '../../../../core/store/user';
 
 import {
+    allowlistDetailsStyles,
     generalStyles,
     registrationCriteriaStyles
 } from './styles';
@@ -25,6 +39,9 @@ const RegistrationCriteriaForm = (): JSX.Element => {
 
     const dispatch = useDispatch()
     const allowlistState = useSelector((state: RootState) => state.allowlistState)
+    const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
+    const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
+    const { addDiscordBot, connectSocialMedia } = useSocialMedia()
 
     const handleSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
         dispatch(updateAllowlistObject({
@@ -35,11 +52,56 @@ const RegistrationCriteriaForm = (): JSX.Element => {
             }
         }))
 
-        if (e.target.value === 'discord_server' && e.target.checked) {
-            //TODO: Need an endpoint from the BE to handle it
-            addDiscordBot()
+        if (e.target.value === 'discord_server') {
+
+            if (e.target.checked) {
+                addDiscordBot()
+            } else {
+                dispatch(updateUser({
+                    connectedSocialMedia: {
+                        twitter: connectedSocialMedia.twitter,
+                        discord: {
+                            id: connectedSocialMedia.discord.id,
+                            userName: connectedSocialMedia.discord.userName,
+                            guild: emptyGuildInfo
+                        }
+                    }
+                }))
+            }
+
         }
+
     }
+
+    const TwitterBtn = useCallback(() => {
+        return <Button
+            disabled={!connectedAddress}
+            variant="contained"
+            sx={{ height: '38px', width: '104px' }}
+            onClick={() => connectSocialMedia(SOCIAL_MEDIA.twitter)}
+        >
+            Connect
+        </Button>
+    }, [connectedAddress, connectedSocialMedia.twitter.userName])
+
+    const DiscordBtn = useCallback(() => {
+        return <Button
+            disabled={!connectedAddress}
+            variant="contained"
+            sx={{ height: '38px', width: '104px' }}
+            onClick={() => connectSocialMedia(SOCIAL_MEDIA.discord)}
+        >
+            Connect
+        </Button>
+    }, [connectedAddress, connectedSocialMedia.discord.userName])
+
+    useEffect(() => {
+        if (connectedSocialMedia.discord.guild.inviteCode) {
+            dispatch(updateAllowlistObject({
+                discord_server: connectedSocialMedia.discord.guild.inviteCode
+            }))
+        }
+    }, [connectedSocialMedia.discord.guild.inviteCode])
 
     return (
         <Box id='registrationCriteriaForm' width='100%'>
@@ -66,11 +128,14 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                             type={LAYOUT_CONTENT_TEXT.TwitterIcon}
                             style={generalStyles.titleIcons}
                         />}
-                        switchElement={<Switch
-                            checked={allowlistState.checkedFields['twitter_account_to_follow']}
-                            value={'twitter_account_to_follow'}
-                            onChange={((e) => handleSwitch(e))}
-                        />}
+                        switchElement={connectedSocialMedia.twitter.userName ?
+                            <Switch
+                                checked={allowlistState.checkedFields['twitter_account_to_follow']}
+                                value={'twitter_account_to_follow'}
+                                onChange={((e) => handleSwitch(e))}
+                            /> :
+                            <TwitterBtn />
+                        }
                         isDisabled={!allowlistState.checkedFields['twitter_account_to_follow']}
                     />
                     <Fragment>
@@ -82,11 +147,13 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                                 type={LAYOUT_CONTENT_TEXT.TwitterIcon}
                                 style={generalStyles.titleIcons}
                             />}
-                            switchElement={<Switch
-                                checked={allowlistState.checkedFields['tweet']}
-                                value={'tweet'}
-                                onChange={((e) => handleSwitch(e))}
-                            />
+                            switchElement={connectedSocialMedia.twitter.userName ?
+                                <Switch
+                                    checked={allowlistState.checkedFields['tweet']}
+                                    value={'tweet'}
+                                    onChange={((e) => handleSwitch(e))}
+                                /> :
+                                <TwitterBtn />
                             }
                             isDisabled={!allowlistState.checkedFields['tweet']}
                         />
@@ -118,33 +185,72 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                     <CreationField
                         type={FormField.discord_server}
                         text='Discord Server to Join'
-                        startAdornment={getStartAdornment(BaseURL.discord_server)}
+                        placeholder='Connect a server'
                         svgIcon={<SvgComponent
                             style={generalStyles.titleIcons}
                             type={LAYOUT_CONTENT_TEXT.DiscordIcon}
                         />}
-                        switchElement={<Switch
-                            checked={allowlistState.checkedFields['discord_server']}
-                            value={'discord_server'}
-                            onChange={((e) => handleSwitch(e))}
-                        />}
-                        isDisabled={!allowlistState.checkedFields['discord_server']}
+                        switchElement={connectedSocialMedia.discord.userName ?
+                            <Switch
+                                checked={allowlistState.checkedFields['discord_server']}
+                                value={'discord_server'}
+                                onChange={((e) => handleSwitch(e))}
+                            /> :
+                            <DiscordBtn />
+                        }
+                        isDisabled={true}
                     />
-                    <CreationField
-                        type={FormField.server_role}
-                        text='Discord Server Role'
-                        placeholder='Enter a Server Role'
-                        svgIcon={<SvgComponent
-                            style={generalStyles.titleIcons}
-                            type={LAYOUT_CONTENT_TEXT.DiscordIcon}
-                        />}
-                        switchElement={<Switch
-                            checked={allowlistState.checkedFields['server_role']}
-                            disabled={!allowlistState.checkedFields['discord_server'] || !allowlistState.discord_server} value={'server_role'}
-                            onChange={((e) => handleSwitch(e))}
-                        />}
-                        isDisabled={!allowlistState.checkedFields['server_role']}
-                    />
+                    <Box id='allowlistServerRoleInput'>
+                        <Box display='flex'>
+                            <SvgComponent
+                                style={generalStyles.titleIcons}
+                                type={LAYOUT_CONTENT_TEXT.DiscordIcon}
+                            />
+                            <Typography fontWeight={600}>Discord Server Role</Typography>
+                        </Box>
+                        <Select
+                            disabled={!allowlistState.checkedFields['discord_server'] || !allowlistState.discord_server}
+                            disableUnderline
+                            displayEmpty
+                            variant='standard'
+                            open={dropDownOpen}
+                            onOpen={() => setDropDownOpen(true)}
+                            onClose={() => setDropDownOpen(false)}
+                            renderValue={() =>
+                                allowlistState.server_role ?
+                                    allowlistState.server_role :
+                                    <Typography sx={allowlistState.checkedFields['discord_server'] && allowlistState.discord_server ?
+                                        allowlistDetailsStyles.enabledDropDownPlaceholder :
+                                        allowlistDetailsStyles.dropDownPlaceholder}
+                                    >
+                                        @everyone
+                                    </Typography>
+                            }
+                            sx={allowlistDetailsStyles.defaultDropDown}
+                            value={allowlistState.server_role || '@everyone'}
+                            onChange={(e) => dispatch(updateAllowlistObject({ server_role: e.target.value }))}
+                            IconComponent={() => <Box
+                                sx={{
+                                    pointerEvents: allowlistState.checkedFields['discord_server'] &&
+                                        allowlistState.discord_server ? 'auto' : 'none',
+                                    transform: dropDownOpen ? 'rotate(180deg)' : 'none'
+                                }}
+                                onClick={() => setDropDownOpen(true)}
+                            >
+                                <SvgComponent
+                                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                                    style={allowlistDetailsStyles.dropdownIcon}
+                                />
+                            </Box>}
+                        >
+                            {connectedSocialMedia.discord.guild.guildRoles.length ?
+                                connectedSocialMedia.discord.guild.guildRoles.map((role, idx) => {
+                                    return <MenuItem key={idx} value={role}>{role}</MenuItem>
+                                }) :
+                                <MenuItem key={'@everyone'} value={'@everyone'}>{'@everyone'}</MenuItem>
+                            }
+                        </Select>
+                    </Box>
                     <Box id='AllowlistProvideEmailSwitch' sx={registrationCriteriaStyles.titleSwitchHolder}>
                         <Typography display={'flex'} alignItems='center' fontWeight={600}>
                             <SvgComponent
@@ -156,8 +262,8 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                         <Switch checked={allowlistState.require_email} value={'require_email'} onChange={((e) => dispatch(updateAllowlistObject({ require_email: e.target.checked })))} />
                     </Box>
                 </Fragment>
-            </Box>
-        </Box>
+            </Box >
+        </Box >
     )
 }
 

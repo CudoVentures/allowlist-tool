@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Input, Tooltip, Typography } from '@mui/material'
 
-import { FieldTooltips, FormField } from './helpers'
+import { BaseURL, FieldTooltips, FormField } from './helpers'
 import { RootState } from '../../../../core/store';
 import { getFieldisValid } from '../../validation';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
@@ -23,7 +23,7 @@ const CreationField = ({
     placeholder?: string,
     startAdornment?: React.ReactNode,
     svgIcon?: React.ReactNode,
-    switchElement?: React.ReactNode
+    switchElement?: React.ReactNode,
     isDisabled?: boolean
 }) => {
 
@@ -31,6 +31,7 @@ const CreationField = ({
     const [isValid, setIsValid] = useState<boolean>(true)
     const [pastedData, setPastedData] = useState<boolean>(false)
     const allowlistState = useSelector((state: RootState) => state.allowlistState)
+    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let value = e.target.value
@@ -45,6 +46,34 @@ const CreationField = ({
         setIsValid(getFieldisValid(type, value))
         setPastedData(false)
         dispatch(updateAllowlistObject({ [type]: value }))
+
+        if (type === FormField.discord_server && !value) {
+            dispatch(updateAllowlistObject({ server_role: value }))
+        }
+    }
+
+    const handleValue = () => {
+        if (!allowlistState[type]) {
+            return ''
+        }
+
+        if (type === FormField.discord_server) {
+            return `${BaseURL.discord_server}${allowlistState[type]}`
+        }
+
+        return allowlistState[type]
+    }
+
+    const isConnectedDiscordServer = (): boolean => {
+        if (
+            type === FormField.discord_server &&
+            !!connectedSocialMedia.discord.guild.guildName &&
+            !!connectedSocialMedia.discord.guild.inviteCode &&
+            !!allowlistState.discord_server
+        ) {
+            return true
+        }
+        return false
     }
 
     return (
@@ -64,9 +93,14 @@ const CreationField = ({
                 <Tooltip
                     placement='bottom-start'
                     PopperProps={validationStyles.tooltipPopper}
-                    componentsProps={validationStyles.tooltipProps}
-                    open={!isValid}
-                    title={FieldTooltips[type]}
+                    componentsProps={isConnectedDiscordServer() ?
+                        validationStyles.connectedTooltipProps :
+                        validationStyles.tooltipProps}
+                    open={!isValid || isConnectedDiscordServer()}
+                    title={!isValid ?
+                        FieldTooltips[type] : isConnectedDiscordServer() ?
+                            `Connected to ${connectedSocialMedia.discord.guild.guildName}` :
+                            ''}
                 >
                     <Input
                         disabled={isDisabled}
@@ -76,8 +110,8 @@ const CreationField = ({
                         rows={type === FormField.description ? 3 : 1}
                         disableUnderline
                         type='text'
-                        sx={isValid ? generalStyles.input : validationStyles.invalidInput}
-                        value={allowlistState[type] || ''}
+                        sx={isValid ? generalStyles.input : isConnectedDiscordServer() ? validationStyles.connectedInput : validationStyles.invalidInput}
+                        value={handleValue()}
                         onChange={handleChange}
                         onPaste={() => setPastedData(true)}
                     />

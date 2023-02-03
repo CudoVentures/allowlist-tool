@@ -1,5 +1,7 @@
 import { Controller, Get, Req } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { CONNECTED_SOCIAL_MEDIA_INFO, emptyGuildInfo } from '../../../common/interfaces';
+
 import UserEntity from './entities/user.entity';
 import { UserService } from './user.service';
 
@@ -21,17 +23,19 @@ export class UserController {
       discordUser = await this.userService.findByDiscordId(req.session.user.discord.discord_profile_id)
     }
 
-    return {
+    const response: CONNECTED_SOCIAL_MEDIA_INFO = {
       twitter: {
         id: twitterUser?.twitter_profile_id || '',
         userName: twitterUser?.twitter_profile_username || '',
-        accessToken: twitterUser?.twitter_access_token || ''
+        guild: emptyGuildInfo //We won't have this field for Twitter
       },
       discord: {
         id: discordUser?.discord_profile_id || '',
         userName: discordUser?.discord_profile_username || '',
-        accessToken: discordUser?.discord_access_token || ''
+        guild: req.session.user.discord?.guild || emptyGuildInfo
       }
     }
+
+    return response
   }
 }

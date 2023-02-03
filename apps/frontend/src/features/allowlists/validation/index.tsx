@@ -48,7 +48,7 @@ export const isValidDiscorServerName = (discordServerName: string): boolean => {
 }
 
 export const isValidTweetUrl = (tweet: string): boolean => {
-    return /^https:\/\/twitter\.com\/@?[A-Za-z0-9_]{1,15}\/status\/[\d]+$/gm.test(tweet)
+    return /^https:\/\/twitter\.com\/@?[A-Za-z0-9_]{1,15}\/status\/[\d]{19}[?]?.*$/gm.test(tweet)
 }
 
 export const isValidDescription = (description: string): boolean => {
@@ -119,9 +119,7 @@ export const isValidStepTwo = (data: CollectedData) => {
     if (
         (data.twitter_account_to_follow && isValidTwitterAccount(data.twitter_account_to_follow)) ||
         (data.tweet && isValidTweetUrl(data.tweet) && (data.tweet_to_like || data.tweet_to_retweet)) ||
-        (data.discord_server && isValidDiscorServerName(data.discord_server)) ||
-        data.server_role ||
-        data.require_email
+        (data.discord_server && isValidDiscorServerName(data.discord_server))
     ) { return true }
 
     return false
