@@ -1,9 +1,11 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback, useEffect } from 'react';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { ParallaxProvider } from 'react-scroll-parallax';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
+import { isExtensionEnabled, SUPPORTED_WALLET } from 'cudosjs';
+import { useDispatch } from 'react-redux';
 
 import theme from './core/theme';
 import Layout from './core/presentation/components/Layout';
@@ -13,10 +15,46 @@ import CreateAllowlistPage from './features/allowlists/presentation/pages/Create
 import AllowlistPage from './features/allowlists/presentation/pages/AllowlistPage';
 import EditAllowlistPage from './features/allowlists/presentation/pages/EditAllowlist';
 import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllowlistsPage';
+import { updateModalState } from './core/store/modals';
+import { connectUser } from './features/wallets/helpers';
+import { updateUser } from './core/store/user';
 
 const App = () => {
 
   const location = useLocation()
+  const dispatch = useDispatch()
+
+  const connectAccount = useCallback(async (ledgerType: SUPPORTED_WALLET) => {
+    try {
+      dispatch(updateModalState({ pageTransitionLoading: true }))
+      const connectedUser = await connectUser(ledgerType)
+      dispatch(updateUser(connectedUser))
+
+    } catch (error) {
+      console.error((error as Error).message)
+
+    } finally {
+      dispatch(updateModalState({ pageTransitionLoading: false }))
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isExtensionEnabled(SUPPORTED_WALLET.Keplr)) {
+      window.addEventListener("keplr_keystorechange",
+        async () => {
+          await connectAccount(SUPPORTED_WALLET.Keplr)
+          return
+        });
+    }
+
+    if (isExtensionEnabled(SUPPORTED_WALLET.Cosmostation)) {
+      window.cosmostation.cosmos.on("accountChanged",
+        async () => {
+          await connectAccount(SUPPORTED_WALLET.Cosmostation)
+          return
+        });
+    }
+  }, [connectAccount])
 
   return (
     <Fragment>

@@ -148,7 +148,7 @@ export const signArbitrary = async (
     }
 
     if (walletType === SUPPORTED_WALLET.Cosmostation) {
-        signature = await window.cosmostation.keplr!.signArbitrary(chainId, signingAddress, message)
+        signature = await window.cosmostation.providers.keplr.signArbitrary(chainId, signingAddress, message)
     }
     return { signature }
 }
