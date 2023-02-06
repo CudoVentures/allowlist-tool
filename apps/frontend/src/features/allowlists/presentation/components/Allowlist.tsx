@@ -8,7 +8,6 @@ import AdminView from './AdminView';
 import SummaryView from './SummaryView';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { RootState } from '../../../../core/store';
-import { RemainingTimer } from './helpers';
 import { useIsScreenLessThan } from '../../../../core/utilities/CustomHooks/screenChecks';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
@@ -147,7 +146,7 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
                 allowListStyles.smallScreenPanel :
                 allowListStyles.panel}
           >
-            <RemainingTimer time={remainingTime} />
+            {/* <RemainingTimer time={remainingTime} /> */}
             {panelContentHandler()}
           </Box>
           {/* END-CONTENT */}

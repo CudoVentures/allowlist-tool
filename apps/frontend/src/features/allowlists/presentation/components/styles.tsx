@@ -235,6 +235,10 @@ export const allowlistDetailsStyles = {
     fontWeight: 600,
     color: COLORS_DARK_THEME.SECONDARY_TEXT
   },
+  enabledDropDownPlaceholder: {
+    fontSize: '14px',
+    fontWeight: 600
+  },
   datesHolder: {
     alignItems: 'flex-end',
     display: 'flex',
@@ -356,6 +360,19 @@ export const validationStyles = {
   invalidInput: {
     ...generalStyles.input,
     border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`,
+  },
+  connectedInput: {
+    ...generalStyles.input,
+    border: `0.1px solid ${COLORS_DARK_THEME.PRIMARY_BLUE}`,
+  },
+  connectedTooltipProps: {
+    tooltip: {
+      sx: {
+        marginTop: '-50px',
+        background: 'transparent',
+        color: COLORS_DARK_THEME.PRIMARY_BLUE
+      },
+    },
   },
   tooltipProps: {
     tooltip: {

@@ -1,5 +1,11 @@
 import { blobToBase64 } from "../../features/allowlists/presentation/components/helpers"
+import { GET_INVITE_BY_CODE } from "../api/calls"
 import { CHAIN_DETAILS } from "./Constants"
+
+export const getDiscordGuildNameByInviteCode = async (inviteCode: string): Promise<string> => {
+  const invite = await GET_INVITE_BY_CODE(inviteCode)
+  return invite.guild?.name || 'Discord Server'
+}
 
 export const delay = (ms: number) => {
   return new Promise(resolve => setTimeout(resolve, ms))

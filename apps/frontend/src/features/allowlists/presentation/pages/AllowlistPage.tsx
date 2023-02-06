@@ -6,6 +6,7 @@ import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { GET_ALLOWLIST_DETAILS } from '../../../../core/api/calls';
 import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
+import { getDiscordGuildNameByInviteCode } from '../../../../core/utilities/ProjectUtils';
 
 function AllowlistPage() {
 
@@ -31,6 +32,9 @@ function AllowlistPage() {
         const data = res.data;
         delete data.createdAt;
         delete data.updatedAt;
+        if (data.discord_invite_link) {
+          data.discord_server_name = await getDiscordGuildNameByInviteCode(data.discord_invite_link)
+        }
         setAllowlist(data);
 
       } catch (error) {

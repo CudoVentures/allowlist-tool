@@ -1,10 +1,12 @@
 import React, { Fragment } from 'react';
+import { useSelector } from 'react-redux';
 import { Box, Button, Divider, Typography } from '@mui/material';
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { getRegistrationCriteriaArray } from './helpers';
 import { GET_ALLOWLIST_ENTRIES } from '../../../../core/api/calls';
+import { RootState } from '../../../../core/store';
 
 import { allowlistPreviewStyles, allowListStyles, generalStyles } from './styles';
 
@@ -15,6 +17,8 @@ enum Format {
 
 const AdminView = ({ props }: { props: FetchedAllowlist }) => {
 
+    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    
     const exportEntries = async (format: Format) => {
         const res = await GET_ALLOWLIST_ENTRIES(props.id)
         if (format === Format.JSON) {
@@ -69,7 +73,7 @@ const AdminView = ({ props }: { props: FetchedAllowlist }) => {
                 </Typography>
             </Box>
             <Divider sx={{ width: '100%' }} />
-            {getRegistrationCriteriaArray(props).map((FIELD, idx) => {
+            {getRegistrationCriteriaArray(props, connectedSocialMedia).map((FIELD, idx) => {
                 return FIELD.isDisabled ? null : (
                     <Box key={idx} sx={{ alignSelf: 'flex-start' }}>
                         <Typography component={'div'} sx={allowlistPreviewStyles.title}>

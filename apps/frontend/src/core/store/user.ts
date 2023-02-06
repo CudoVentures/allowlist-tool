@@ -1,20 +1,8 @@
 import { Coin, SUPPORTED_WALLET } from 'cudosjs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import { CHAIN_DETAILS } from '../utilities/Constants'
-
-export enum SOCIAL_MEDIA {
-    twitter = 'twitter',
-    discord = 'discord'
-}
-
-interface SOCIAL_MEDIA_DETAILS {
-    id: string,
-    userName: string
-}
-
-export type CONNECTED_SOCIAL_MEDIA = {
-    [key in SOCIAL_MEDIA]: SOCIAL_MEDIA_DETAILS
-}
+import { CONNECTED_SOCIAL_MEDIA, emptySocialMedia, SOCIAL_MEDIA } from '../../../../common/interfaces'
 
 export interface userState {
     userId?: string,
@@ -36,8 +24,8 @@ export const initialState: userState = {
     balances: [],
     connectedWallet: undefined,
     connectedSocialMedia: {
-        [SOCIAL_MEDIA.twitter]: { id: '', userName: '' },
-        [SOCIAL_MEDIA.discord]: { id: '', userName: '' },
+        [SOCIAL_MEDIA.twitter]: emptySocialMedia,
+        [SOCIAL_MEDIA.discord]: emptySocialMedia,
     }
 }
 

@@ -1,6 +1,7 @@
 import { StdSignature } from 'cudosjs'
 import { createSlice } from '@reduxjs/toolkit'
 import { CHAIN_DETAILS } from '../utilities/Constants'
+import { DISCORD_SERVER_ROLES } from '../../../../common/interfaces'
 
 export interface RequiredAllowlistData {
     name: string;
@@ -36,7 +37,8 @@ export interface FetchedAllowlist extends Omit<CollectedData, 'checkedFields' | 
     admin: string;
     users: string[];
     end_date: Date;
-    discord_invite_link?: string
+    discord_invite_link?: string;
+    discord_server_name?: string;
 }
 
 export interface AllowlistCreationData extends CollectedData {
@@ -69,7 +71,7 @@ export const initialState: CollectedData = {
     twitter_account: undefined,
     tweet: undefined,
     discord_server: undefined,
-    server_role: undefined,
+    server_role: DISCORD_SERVER_ROLES.default,
     checkedFields: {
         tweet_to_like: false,
         tweet_to_retweet: false,
