@@ -62,7 +62,7 @@ const AllAllowlistsPage = () => {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [connectedAddress])
 
   return contentHandler()
 }
