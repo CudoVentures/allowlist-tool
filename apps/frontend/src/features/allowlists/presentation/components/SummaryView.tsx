@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
-import { getSeparateDateAndTime, handleLinkOut } from '../../../../core/utilities/ProjectUtils';
+import { getSeparateDateAndTime } from '../../../../core/utilities/ProjectUtils';
 import useEditMode from '../../../../core/utilities/CustomHooks/useEditMode';
 import { LinkBox } from '../../../../core/theme/helpers';
 import { BaseURL } from './helpers';
@@ -102,21 +102,21 @@ export const SummaryView = ({
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.ChainLinkIcon} style={'default'} />
                     <LinkBox
                         link={props.website}
-                        text={<StyledTypography text={props.website} />}
+                        text={<StyledTypography text='Website' />}
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
                     <LinkBox
                         link={`${BaseURL.twitter_acc}${props.twitter_account}`}
-                        text={<StyledTypography text={props.twitter_account} />}
+                        text={<StyledTypography text='Twitter' />}
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style={'default'} />
                     <LinkBox
                         link={`${BaseURL.discord_server}${props.discord_url}`}
-                        text={<StyledTypography text={props.discord_url} />}
+                        text={<StyledTypography text='Discord' />}
                     />
                 </Box>
             </Box>

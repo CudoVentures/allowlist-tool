@@ -284,7 +284,7 @@ export class AllowlistService {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    const guildRolesURL = `https://discord.com/api//guilds/${guild.id}/roles`;
+    const guildRolesURL = `https://discord.com/api/guilds/${guild.id}/roles`;
     const guildRoleRes = await axios.get(guildRolesURL, {
       headers: { Authorization: process.env.App_Discord_Bot_Token },
     });

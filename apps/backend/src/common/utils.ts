@@ -38,7 +38,7 @@ export const getInviteCodeByIDs = async (guildId: string, systemChannelId: strin
 }
 
 export const getGuildRolesFromId = async (guildId: string): Promise<string[]> => {
-    const guildRolesURL = `https://discord.com/api//guilds/${guildId}/roles`;
+    const guildRolesURL = `https://discord.com/api/guilds/${guildId}/roles`;
     const response = await axios.get(guildRolesURL, {
         headers: { Authorization: process.env.App_Discord_Bot_Token },
     });
@@ -49,7 +49,7 @@ export const getGuildRolesFromId = async (guildId: string): Promise<string[]> =>
 }
 
 export const getNameAndSystemChannelId = async (guildId: string): Promise<{ systemChannelId: string, guildName: string }> => {
-    const guildRolesURL = `https://discord.com/api//guilds/${guildId}`;
+    const guildRolesURL = `https://discord.com/api/guilds/${guildId}`;
     const response = await axios.get(guildRolesURL, {
         headers: { Authorization: process.env.App_Discord_Bot_Token },
     });

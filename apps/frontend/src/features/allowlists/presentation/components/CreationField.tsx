@@ -99,7 +99,7 @@ const CreationField = ({
                     open={!isValid || isConnectedDiscordServer()}
                     title={!isValid ?
                         FieldTooltips[type] : isConnectedDiscordServer() ?
-                            `Connected to ${connectedSocialMedia.discord.guild.guildName}` :
+                            `Connected to ${connectedSocialMedia.discord.guild.guildName} server` :
                             ''}
                 >
                     <Input
