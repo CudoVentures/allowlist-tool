@@ -38,3 +38,7 @@ export const emptySocialMedia = {
     userName: '',
     guild: emptyGuildInfo
 }
+
+export enum DISCORD_SERVER_ROLES {
+    default = '@everyone'
+}

@@ -2,17 +2,24 @@ import axios from 'axios';
 
 import { FetchedAllowlist } from "../store/allowlist";
 import { blobToBase64 } from '../../features/allowlists/presentation/components/helpers';
-import { SOCIAL_MEDIA } from '../store/user';
+import { SOCIAL_MEDIA } from '../../../../common/interfaces';
+
 import {
     ALLOWLIST_DETAILS_URL,
     ALLOWLIST_ENTRIES_URL,
     ALLOWLIST_URL,
     ALL_ALLOWLISTS_URL,
+    INVITE_URL,
     JOIN_ALLOWLIST_URL,
     SOCIAL_MEDIA_LOGOUT_URL,
     USER_DETAILS_URL,
     USER_LOGIN_URL
 } from './endpoints';
+
+export const GET_INVITE_BY_CODE = async (inviteCode: string): Promise<any> => {
+    const result = await axios.get(INVITE_URL(inviteCode))
+    return result.data
+}
 
 export const GET_ALL_ALLOWLISTS = async (): Promise<FetchedAllowlist[]> => {
     const result = await axios.get(ALL_ALLOWLISTS_URL)

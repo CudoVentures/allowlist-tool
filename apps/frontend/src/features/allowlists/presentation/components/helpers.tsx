@@ -7,7 +7,7 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 
 import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
-import { SOCIAL_MEDIA } from "../../../../../../common/interfaces";
+import { CONNECTED_SOCIAL_MEDIA, SOCIAL_MEDIA } from "../../../../../../common/interfaces";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
 import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedia";
@@ -329,7 +329,7 @@ export const SocialMediaBoxes = ({
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
                                 {`Join `}
-                                <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_invite_link} />
+                                <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
                                 {` server with `}
                                 <Typography
                                     component={"span"}
@@ -365,7 +365,7 @@ export const RemainingTimer = ({ time }: { time: number }): JSX.Element => {
     )
 }
 
-export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllowlist): {
+export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllowlist, connectedSocialMedia: CONNECTED_SOCIAL_MEDIA): {
     icon: JSX.Element,
     title: string;
     isDisabled: boolean;
@@ -431,12 +431,14 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             isDisabled: isCollectedData ? !props.discord_server : !props.discord_invite_link,
             subtitle: <LinkBox
                 link={`${BaseURL.discord_server}${isCollectedData ? props.discord_server : props.discord_invite_link}`}
-                text={isCollectedData ? props.discord_server : props.discord_invite_link}
+                text={isCollectedData ?
+                    connectedSocialMedia.discord.guild.guildName || props.discord_server :
+                    props.discord_invite_link}
             />
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />,
-            title: 'Discord Server Roles',
+            title: 'Discord Server Role',
             isDisabled: !props.server_role,
             subtitle: props.server_role
         },

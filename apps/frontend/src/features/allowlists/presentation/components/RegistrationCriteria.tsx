@@ -26,7 +26,7 @@ import { RootState } from '../../../../core/store';
 import { BaseURL, FormField, getStartAdornment } from './helpers';
 import CreationField from './CreationField';
 import useSocialMedia from '../../../../core/utilities/CustomHooks/useSocialMedia';
-import { emptyGuildInfo, SOCIAL_MEDIA } from '../../../../../../common/interfaces';
+import { emptyGuildInfo, DISCORD_SERVER_ROLES, SOCIAL_MEDIA } from '../../../../../../common/interfaces';
 import { updateUser } from '../../../../core/store/user';
 
 import {
@@ -227,7 +227,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                                     </Typography>
                             }
                             sx={allowlistDetailsStyles.defaultDropDown}
-                            value={allowlistState.server_role || '@everyone'}
+                            value={allowlistState.server_role}
                             onChange={(e) => dispatch(updateAllowlistObject({ server_role: e.target.value }))}
                             IconComponent={() => <Box
                                 sx={{
@@ -247,7 +247,12 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                                 connectedSocialMedia.discord.guild.guildRoles.map((role, idx) => {
                                     return <MenuItem key={idx} value={role}>{role}</MenuItem>
                                 }) :
-                                <MenuItem key={'@everyone'} value={'@everyone'}>{'@everyone'}</MenuItem>
+                                <MenuItem
+                                    key={DISCORD_SERVER_ROLES.default}
+                                    value={DISCORD_SERVER_ROLES.default}
+                                >
+                                    {DISCORD_SERVER_ROLES.default}
+                                </MenuItem>
                             }
                         </Select>
                     </Box>

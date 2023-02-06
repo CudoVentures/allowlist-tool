@@ -14,6 +14,7 @@ export const AllowlistCreationPreview = () => {
     const [bannerPreview, setBannerPreview] = useState<string>('')
     const [avatarPreview, setAvatarPreview] = useState<string>('')
     const allowlistState = useSelector((state: RootState) => state.allowlistState)
+    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
     const { date, time } = getSeparateDateAndTime(allowlistState.end_period)
 
     const DETAIL_FIELDS = [
@@ -112,7 +113,7 @@ export const AllowlistCreationPreview = () => {
                 <Typography variant='h6' fontWeight={700}>
                     Registration Criteria
                 </Typography>
-                {getRegistrationCriteriaArray(allowlistState).map((FIELD, idx) => {
+                {getRegistrationCriteriaArray(allowlistState, connectedSocialMedia).map((FIELD, idx) => {
                     return FIELD.isDisabled ? null : (
                         <Box key={idx}>
                             <Typography component={'div'} sx={allowlistPreviewStyles.title}>
