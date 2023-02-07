@@ -433,7 +433,7 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
                 link={`${BaseURL.discord_server}${isCollectedData ? props.discord_server : props.discord_invite_link}`}
                 text={isCollectedData ?
                     connectedSocialMedia.discord.guild.guildName || props.discord_server :
-                    props.discord_invite_link}
+                    props.discord_server_name || props.discord_invite_link}
             />
         },
         {

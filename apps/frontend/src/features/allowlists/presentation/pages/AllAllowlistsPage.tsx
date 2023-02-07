@@ -8,6 +8,7 @@ import { GET_ALL_ALLOWLISTS } from '../../../../core/api/calls';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
 import CreatedAllowlistsPreview from './CreatedAllowlists';
 import JoinedAllowlistsPreview from './JoinedAllowlists';
+import AllAllowlistsPreview from './AllAllowlists';
 import { RootState } from '../../../../core/store';
 
 import { generalStyles } from './styles';
@@ -16,8 +17,9 @@ const AllAllowlistsPage = () => {
 
   const [allowlists, setAllowlists] = useState<FetchedAllowlist[]>([])
   const [joinedAllowlists, setJoinedAllowlists] = useState<FetchedAllowlist[]>([])
+  const [createdAllowlists, setCreatedAllowlists] = useState<FetchedAllowlist[]>([])
   const [loading, setLoading] = useState<boolean>(true)
-  const { userId } = useSelector((state: RootState) => state.userState)
+  const { userId, connectedAddress } = useSelector((state: RootState) => state.userState)
 
   const contentHandler = useCallback((): JSX.Element => {
     if (loading) {
@@ -27,25 +29,31 @@ const AllAllowlistsPage = () => {
 
     return (
       <Box id='swipersHolder' gap={4} sx={generalStyles.swipersHolder}>
-        <CreatedAllowlistsPreview data={allowlists} />
+        <CreatedAllowlistsPreview data={createdAllowlists} />
         <JoinedAllowlistsPreview data={joinedAllowlists} />
+        <AllAllowlistsPreview data={allowlists} />
       </Box>
     )
   }, [loading, allowlists, joinedAllowlists])
 
   const loadData = async () => {
     try {
-      const data = await GET_ALL_ALLOWLISTS()
+      const allAllowlists = await GET_ALL_ALLOWLISTS()
       const joined = []
+      const created = []
       if (userId) {
-        data.forEach((record) => {
+        allAllowlists.forEach((record) => {
           if (record.users.includes(userId)) {
             joined.push(record)
           }
+          if (connectedAddress && record.admin === connectedAddress) {
+            created.push(record)
+          }
         })
       }
-      setAllowlists(data)
+      setAllowlists(allAllowlists)
       setJoinedAllowlists(joined)
+      setCreatedAllowlists(created)
 
     } finally {
       setLoading(false)
@@ -54,7 +62,7 @@ const AllAllowlistsPage = () => {
 
   useEffect(() => {
     loadData()
-  }, [])
+  }, [connectedAddress])
 
   return contentHandler()
 }

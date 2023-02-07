@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Allowlist from '../components/Allowlist';
 import NoResult from '../../../../core/presentation/components/Layout/NoResult';
@@ -7,12 +8,14 @@ import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { GET_ALLOWLIST_DETAILS } from '../../../../core/api/calls';
 import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
 import { getDiscordGuildNameByInviteCode } from '../../../../core/utilities/ProjectUtils';
+import { RootState } from '../../../../core/store';
 
 function AllowlistPage() {
 
   const { id } = useParams();
   const [allowlist, setAllowlist] = useState<FetchedAllowlist>(null);
   const [loading, setLoading] = useState<boolean>(true)
+  const { connectedAddress } = useSelector((state: RootState) => state.userState)
 
   const contentHandler = useCallback((): JSX.Element => {
     if (loading) {
@@ -28,6 +31,7 @@ function AllowlistPage() {
     const setAllowlistDetails = async () => {
 
       try {
+        setLoading(true)
         const res = await GET_ALLOWLIST_DETAILS(id)
         const data = res.data;
         delete data.createdAt;
@@ -44,7 +48,7 @@ function AllowlistPage() {
       }
     }
     setAllowlistDetails()
-  }, []);
+  }, [connectedAddress]);
 
   return contentHandler()
 }
