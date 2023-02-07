@@ -27,7 +27,14 @@ export const getInviteCodeByIDs = async (guildId: string, systemChannelId: strin
         client.on('ready', async () => {
             const guild = await client.guilds.fetch(guildId)
             const channel = await guild.channels.fetch(systemChannelId) as TextChannel
-            const invite = await channel.createInvite()
+            const inviteOptions = {
+                maxAge: 0,
+                maxUses: 0,
+                unique: false,
+                temporary: false,
+                reason: `Welcome to ${guild.name}`,
+            }
+            const invite = await channel.createInvite(inviteOptions)
             resolve(invite.code)
         })
         client.on('error', (error: any) => {

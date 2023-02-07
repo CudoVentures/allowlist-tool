@@ -42,3 +42,7 @@ export const emptySocialMedia = {
 export enum DISCORD_SERVER_ROLES {
     default = '@everyone'
 }
+
+export const DISCORD_API_MSGS = {
+    ExpiredOrUnknownInvite: 'Expired or Invalid invite'
+}

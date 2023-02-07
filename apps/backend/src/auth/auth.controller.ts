@@ -7,6 +7,8 @@ import {
   Post,
   UseInterceptors,
   Body,
+  Param,
+  BadRequestException
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SignedMessageDto } from '../allowlist/dto/signed-message.dto';
@@ -16,11 +18,24 @@ import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 import { getGuildInfoByGuildId } from '../common/utils';
+import { DISCORD_API_MSGS } from '../../../common/interfaces';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) { }
+
+  @Get('discord/invite/:code')
+  async getInviteByCode(
+    @Param('code') code: string
+  ): Promise<any> {
+    try {
+      const result = await this.authService.getInviteByCode(code);
+      return { ...result } // Don't ask why...
+    } catch {
+      throw new BadRequestException(DISCORD_API_MSGS.ExpiredOrUnknownInvite)
+    }
+  }
 
   @UseInterceptors(TransactionInterceptor)
   @Post('login')

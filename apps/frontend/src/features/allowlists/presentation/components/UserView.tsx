@@ -10,6 +10,7 @@ import { FetchedAllowlist } from '../../../../core/store/allowlist'
 import { SocialMediaBoxes } from './helpers'
 import { updateModalState } from '../../../../core/store/modals'
 import { isValidEmail } from '../../validation'
+import { DISCORD_API_MSGS } from '../../../../../../common/interfaces'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
@@ -48,7 +49,10 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
 
         //IsDiscordLogInRequired
-        if (props.server_role && (!connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)) {
+        if (props.discord_server_name && (
+            props.discord_server_name === DISCORD_API_MSGS.ExpiredOrUnknownInvite ||
+            !connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)
+        ) {
             return true
         }
 

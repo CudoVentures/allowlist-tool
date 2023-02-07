@@ -9,7 +9,7 @@ import {
     ALLOWLIST_ENTRIES_URL,
     ALLOWLIST_URL,
     ALL_ALLOWLISTS_URL,
-    INVITE_URL,
+    DISCORD_INVITE_URL,
     JOIN_ALLOWLIST_URL,
     SOCIAL_MEDIA_LOGOUT_URL,
     USER_DETAILS_URL,
@@ -17,7 +17,7 @@ import {
 } from './endpoints';
 
 export const GET_INVITE_BY_CODE = async (inviteCode: string): Promise<any> => {
-    const result = await axios.get(INVITE_URL(inviteCode))
+    const result = await axios.get(DISCORD_INVITE_URL(inviteCode), { withCredentials: true })
     return result.data
 }
 

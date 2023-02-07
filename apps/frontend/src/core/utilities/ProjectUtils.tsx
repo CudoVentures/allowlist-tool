@@ -1,10 +1,16 @@
+import { DISCORD_API_MSGS } from "../../../../common/interfaces"
 import { blobToBase64 } from "../../features/allowlists/presentation/components/helpers"
 import { GET_INVITE_BY_CODE } from "../api/calls"
 import { CHAIN_DETAILS } from "./Constants"
 
 export const getDiscordGuildNameByInviteCode = async (inviteCode: string): Promise<string> => {
-  const invite = await GET_INVITE_BY_CODE(inviteCode)
-  return invite.guild?.name || 'Discord Server'
+  try {
+    const invite = await GET_INVITE_BY_CODE(inviteCode)
+    return invite.guild?.name || DISCORD_API_MSGS.ExpiredOrUnknownInvite
+  } catch (error) {
+    console.error(error.response?.data?.message)
+    return DISCORD_API_MSGS.ExpiredOrUnknownInvite
+  }
 }
 
 export const delay = (ms: number) => {

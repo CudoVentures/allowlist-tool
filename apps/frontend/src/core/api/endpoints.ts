@@ -22,8 +22,8 @@ export const SOCIAL_MEDIA_LOGIN_URL = (service: SOCIAL_MEDIA) =>
 export const SOCIAL_MEDIA_LOGOUT_URL = (service: SOCIAL_MEDIA) =>
   `/api/v1/auth/${service}/logout`
 
-export const INVITE_URL = (inviteCode: string) =>
-  `https://discord.com/api/invites/${inviteCode}`
+export const DISCORD_INVITE_URL = (inviteCode: string) =>
+  `/api/v1/auth/discord/invite/${inviteCode}` 
 
 export const ADD_DISCORD_BOT_URL = (clientId: string) =>
   `https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=0&scope=bot&response_type=code`
