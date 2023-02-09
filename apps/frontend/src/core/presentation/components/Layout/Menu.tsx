@@ -33,8 +33,8 @@ const Menu = (): JSX.Element => {
 
     return (
         <Box gap={2} sx={{ display: 'flex', alignItems: 'center' }} >
-            {MENU_ITEMS.map((item) => {
-                return <MenuItem route={item.route} text={item.text} />
+            {MENU_ITEMS.map((item, idx) => {
+                return <MenuItem key={idx} route={item.route} text={item.text} />
             })}
             {connectedAddress ?
                 <Fragment>
