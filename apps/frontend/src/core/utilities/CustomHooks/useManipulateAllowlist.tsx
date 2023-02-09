@@ -19,10 +19,10 @@ const useManipulateAllowlist = () => {
 
         const userDetails = await GET_USER_DETAILS();
         const data = {};
-        if (userDetails.data.twitter) {
+        if (userDetails.data.twitter?.accessToken) {
             data['twitter_access_token'] = userDetails.data.twitter.accessToken;
         }
-        if (userDetails.data.discord) {
+        if (userDetails.data.discord?.accessToken) {
             data['discord_access_token'] = userDetails.data.discord.accessToken;
         }
 

@@ -7,7 +7,7 @@ import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { GET_ALLOWLIST_DETAILS } from '../../../../core/api/calls';
 import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
-import { getDiscordGuildNameByInviteCode } from '../../../../core/utilities/ProjectUtils';
+import { getDiscordGuildNameByInviteCode, getServerRoleNameByRoleId } from '../../../../core/utilities/ProjectUtils';
 import { RootState } from '../../../../core/store';
 
 function AllowlistPage() {
@@ -38,6 +38,9 @@ function AllowlistPage() {
         delete data.updatedAt;
         if (data.discord_invite_link) {
           data.discord_server_name = await getDiscordGuildNameByInviteCode(data.discord_invite_link)
+          if (data.server_role) {
+            data.server_role = await getServerRoleNameByRoleId(data.discord_invite_link, data.server_role)
+          }
         }
         setAllowlist(data);
 

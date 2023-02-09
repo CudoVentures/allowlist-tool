@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
+import { DiscordModule } from '../discord/discord.module';
 import { UserModule } from '../user/user.module';
 import { UserService } from '../user/user.service';
 import { AuthController } from './auth.controller';
@@ -8,7 +9,7 @@ import { DiscordStrategy } from './strategies/discord.strategy';
 import { TwitterStrategy } from './strategies/twitter.strategy';
 
 @Module({
-  imports: [UserModule, PassportModule],
+  imports: [UserModule, PassportModule, DiscordModule],
   providers: [AuthService, DiscordStrategy, TwitterStrategy, UserService],
   controllers: [AuthController],
   exports: [AuthService],

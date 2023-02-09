@@ -6,7 +6,7 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
-import { CONNECTED_SOCIAL_MEDIA, SOCIAL_MEDIA } from "../../../../../../common/interfaces";
+import { CONNECTED_SOCIAL_MEDIA, DISCORD_SERVER_ROLES, SOCIAL_MEDIA } from "../../../../../../common/interfaces";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
 import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedia";
@@ -439,7 +439,7 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />,
             title: 'Discord Server Role',
             isDisabled: !props.server_role,
-            subtitle: props.server_role
+            subtitle: isCollectedData ? connectedSocialMedia.discord.guild.guildRoles[props.server_role] || DISCORD_SERVER_ROLES.default : props.server_role || DISCORD_SERVER_ROLES.default
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.EnvelopIcon} style='default' />,

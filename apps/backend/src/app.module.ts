@@ -3,7 +3,7 @@ import {
   MiddlewareConsumer,
   Module,
   NestModule,
-  RequestMethod,
+  OnModuleInit,
 } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -20,6 +20,9 @@ import { AllowlistService } from './allowlist/allowlist.service';
 import { AllowlistController } from './allowlist/allowlist.controller';
 import { AuthMiddleware } from './auth/auth.middleware';
 import { UserController } from './user/user.controller';
+import { DiscordService } from './discord/discord.service';
+import { DiscordModule } from './discord/discord.module';
+import { DiscordController } from './discord/discord.controller';
 
 @Module({
   imports: [
@@ -63,11 +66,19 @@ import { UserController } from './user/user.controller';
     UserModule,
     PassportModule.register({ session: true }),
     AllowlistModule,
+    DiscordModule
   ],
-  providers: [AppService, AuthService, UserService, AllowlistService],
-  controllers: [AuthController, AllowlistController, UserController],
+  providers: [AppService, AuthService, UserService, AllowlistService, DiscordService],
+  controllers: [AuthController, AllowlistController, UserController, DiscordController],
 })
-export class AppModule implements NestModule {
+
+export class AppModule implements NestModule, OnModuleInit {
+  constructor(private readonly discordService: DiscordService) { }
+
+  async onModuleInit() {
+    await this.discordService.connect();
+  }
+
   configure(consumer: MiddlewareConsumer) {
     // remove auth middleware for now - we don't need it
     // consumer

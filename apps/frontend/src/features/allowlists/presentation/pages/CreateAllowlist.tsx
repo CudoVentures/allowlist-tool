@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Box, Typography } from '@mui/material';
 
 import CreateAllowlistForm from '../components/CreateAllowlistForm';
@@ -8,6 +8,9 @@ import RegistrationCriteriaForm from '../components/RegistrationCriteria';
 import AllowlistCreationPreview from '../components/AllowlistCreationPreview';
 import { initialState as initialAllowlistState, updateAllowlistObject } from '../../../../core/store/allowlist';
 import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
+import { updateUser } from '../../../../core/store/user';
+import { RootState } from '../../../../core/store';
+import { emptyGuildInfo } from '../../../../../../common/interfaces';
 
 import { createAllowlistStyles } from './styles';
 
@@ -16,6 +19,7 @@ const CreateAllowlistPage = () => {
   const dispatch = useDispatch()
   const [currentCreationStep, setCurrentCreationStep] = useState<number>(0)
   const [loading, setLoading] = useState<boolean>(true)
+  const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
 
   const contentHandler = useCallback((step: number): JSX.Element => {
     switch (step) {
@@ -30,13 +34,29 @@ const CreateAllowlistPage = () => {
     }
   }, [currentCreationStep])
 
+  const cleanUp = () => {
+    dispatch(updateAllowlistObject(initialAllowlistState))
+    dispatch(updateUser({
+      connectedSocialMedia: {
+        twitter: {
+          id: connectedSocialMedia.twitter.id,
+          userName: connectedSocialMedia.twitter.userName,
+          guild: emptyGuildInfo
+        },
+        discord: {
+          id: connectedSocialMedia.discord.id,
+          userName: connectedSocialMedia.discord.userName,
+          guild: emptyGuildInfo
+        }
+      }
+    }))
+  }
+
   // CLEAN-UP
   useEffect(() => {
     try {
-      dispatch(updateAllowlistObject(initialAllowlistState))
-      return () => {
-        dispatch(updateAllowlistObject(initialAllowlistState))
-      }
+      cleanUp()
+      return () => cleanUp()
 
     } finally {
       setTimeout(() => {

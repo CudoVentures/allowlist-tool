@@ -1,12 +1,21 @@
-import { DISCORD_API_MSGS } from "../../../../common/interfaces"
+import { DISCORD_API_MSGS, DISCORD_SERVER_ROLES } from "../../../../common/interfaces"
 import { blobToBase64 } from "../../features/allowlists/presentation/components/helpers"
-import { GET_INVITE_BY_CODE } from "../api/calls"
+import { GET_GUILD_NAME_BY_INVITE_CODE, GET_ROLE_NAME_BY_ROLE_ID } from "../api/calls"
 import { CHAIN_DETAILS } from "./Constants"
 
+export const getServerRoleNameByRoleId = async (inviteCode: string, roleId: string): Promise<string> => {
+  try {
+    const roleName = await GET_ROLE_NAME_BY_ROLE_ID(inviteCode, roleId)
+    return roleName || DISCORD_SERVER_ROLES.default
+  } catch (error) {
+    console.error(error.response?.data?.message)
+    return DISCORD_SERVER_ROLES.default
+  }
+}
 export const getDiscordGuildNameByInviteCode = async (inviteCode: string): Promise<string> => {
   try {
-    const invite = await GET_INVITE_BY_CODE(inviteCode)
-    return invite.guild?.name || DISCORD_API_MSGS.ExpiredOrUnknownInvite
+    const guildName = await GET_GUILD_NAME_BY_INVITE_CODE(inviteCode)
+    return guildName || DISCORD_API_MSGS.ExpiredOrUnknownInvite
   } catch (error) {
     console.error(error.response?.data?.message)
     return DISCORD_API_MSGS.ExpiredOrUnknownInvite

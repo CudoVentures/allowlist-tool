@@ -2,12 +2,13 @@ export interface GuildInfo {
     guildId: string;
     guildName: string;
     systemChannelId: string;
-    guildRoles: string[];
+    guildRoles: Record<string, string>;
     inviteCode: string
 }
 
 export interface SOCIAL_MEDIA_DETAILS {
     id: string,
+    accessToken: string,
     userName: string,
     guild: GuildInfo,
 }
@@ -24,7 +25,7 @@ export const emptyGuildInfo: GuildInfo = {
     guildId: '',
     guildName: '',
     systemChannelId: '',
-    guildRoles: [],
+    guildRoles: {},
     inviteCode: ''
 }
 
@@ -36,6 +37,7 @@ export enum SOCIAL_MEDIA {
 export const emptySocialMedia = {
     id: '',
     userName: '',
+    accessToken: '',
     guild: emptyGuildInfo
 }
 

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { Invite, Client } from 'discord.js';
 import UserEntity from '../user/entities/user.entity';
 import { UserService } from '../user/user.service';
 
@@ -15,20 +14,6 @@ export class AuthService {
     }
 
     return user;
-  }
-
-  async getInviteByCode(code: string): Promise<Invite> {
-    return new Promise((resolve, reject) => {
-      const client = new Client({ intents: 1 << 0 })
-      client.once('ready', async () => {
-        const invite = await client.fetchInvite(code)
-        resolve(invite)
-      })
-      client.on('error', (error: any) => {
-        reject(error)
-      })
-      client.login(process.env.App_Discord_Bot_Token)
-    })
   }
 
   async validateDiscordUser(

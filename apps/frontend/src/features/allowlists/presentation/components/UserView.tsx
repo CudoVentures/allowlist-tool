@@ -11,6 +11,8 @@ import { SocialMediaBoxes } from './helpers'
 import { updateModalState } from '../../../../core/store/modals'
 import { isValidEmail } from '../../validation'
 import { DISCORD_API_MSGS } from '../../../../../../common/interfaces'
+import { IS_JOINED_DISCORD_SERVER } from '../../../../core/api/calls'
+import Dialog from '../../../../core/presentation/components/Dialog'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
@@ -22,6 +24,8 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const [userEmail, setUserEmail] = useState<string>('')
     const [checkBoxes, setCheckBoxes] = useState<Record<string, boolean>>({})
 
+    const isDiscordRequired = !!props.server_role && !!props.discord_invite_link && !!props.discord_server_name
+
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>, isOn: boolean) => {
         setCheckBoxes({
             ...checkBoxes,
@@ -30,13 +34,48 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     }
 
     const signUp = async () => {
-        const { success, message } = await joinAllowlist(props.id, userEmail)
-        if (success) {
-            dispatch(updateModalState({ success: true }))
-        } else {
-            dispatch(updateModalState({ failure: true, message }))
+
+        dispatch(updateModalState({ pageTransitionLoading: true }))
+        let modalObject = {}
+
+        try {
+            if (isDiscordRequired) {
+                if (!connectedSocialMedia.discord.id) {
+                    modalObject = {
+                        pageTransitionLoading: false,
+                        failure: true,
+                        message: 'Please connect Discord account'
+                    }
+                    return
+                }
+
+                if (!IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)) {
+                    modalObject = {
+                        pageTransitionLoading: false,
+                        failure: true,
+                        message: `Discord server ${props.discord_server_name} not joined`
+                    }
+                    return
+                }
+            }
+
+            const { success, message } = await joinAllowlist(props.id, userEmail)
+            if (!success) { throw new Error(message) }
+            modalObject = {
+                pageTransitionLoading: false,
+                success: true
+            }
+
+        } catch (error) {
+            modalObject = {
+                pageTransitionLoading: false,
+                failure: true,
+                message: error.message
+            }
+        } finally {
+            dispatch(updateModalState(modalObject))
         }
-    };
+    }
 
     const isSignUpDisabled = (): boolean => {
         if (!connectedAddress) {
@@ -49,7 +88,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
 
         //IsDiscordLogInRequired
-        if (props.discord_server_name && (
+        if (isDiscordRequired && (
             props.discord_server_name === DISCORD_API_MSGS.ExpiredOrUnknownInvite ||
             !connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)
         ) {
@@ -66,6 +105,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
     return (
         <Fragment>
+            <Dialog />
             <Box sx={allowListStyles.title}>
                 <Typography variant='h6' fontWeight={700}>
                     Register for Allowlist Name
