@@ -79,16 +79,17 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
     )
 }
 
-export const LinkBox = ({ link, text, children }: { link: string, text?: string | JSX.Element, children?: React.ReactNode }) => {
+export const LinkBox = ({ link, text, children }: { link: 'none' | string, text?: string | JSX.Element, children?: React.ReactNode }) => {
+    const noLink = link === 'none'
     return (
         <Link
-            sx={{ pointerEvents: 'auto' }}
+            sx={{ pointerEvents: noLink ? link : 'auto' }}
             variant='inherit'
             target={link}
             href={link}
             rel="noreferrer"
             underline="none"
-            color={COLORS_DARK_THEME.PRIMARY_BLUE}
+            color={noLink ? 'inherit' : COLORS_DARK_THEME.PRIMARY_BLUE}
         >
             {text ? text : link}
         </Link>

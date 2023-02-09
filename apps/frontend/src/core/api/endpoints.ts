@@ -13,6 +13,9 @@ export const JOIN_ALLOWLIST_URL = (allowlistID: number) =>
 export const ALLOWLIST_DETAILS_URL = (allowlistID: string | number) =>
   `/api/v1/allowlist/${allowlistID}`
 
+export const USER_JOINED_ALLOWLIST_URL = (allowlistID: number) =>
+  `/api/v1/allowlist/${allowlistID}/user/joined`
+
 export const ALLOWLIST_ENTRIES_URL = (allowlistID: number) =>
   `/api/v1/allowlist/entries/${allowlistID}`
 

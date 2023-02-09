@@ -15,12 +15,18 @@ import {
     JOIN_ALLOWLIST_URL,
     SOCIAL_MEDIA_LOGOUT_URL,
     USER_DETAILS_URL,
+    USER_JOINED_ALLOWLIST_URL,
     USER_LOGIN_URL
 } from './endpoints';
 
 export const IS_JOINED_DISCORD_SERVER = async (inviteCode: string, userId: string): Promise<boolean> => {
     const result = await axios.get(DISCORD_MEMBER_JOINED_SERVER_URL(inviteCode, userId))
     return result.data.isUserJoinedDiscordGuild
+}
+
+export const IS_USER_JOINED_ALLOWLIST = async (allowlistID: number): Promise<boolean> => {
+    const result = await axios.get(USER_JOINED_ALLOWLIST_URL(allowlistID))
+    return result.data
 }
 
 export const GET_ROLE_NAME_BY_ROLE_ID = async (inviteCode: string, roleId: string): Promise<string> => {

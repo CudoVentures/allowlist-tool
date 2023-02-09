@@ -21,6 +21,17 @@ export class AllowlistService {
     private discordService: DiscordService
   ) { }
 
+  async isUserJoinedAllowlist(allowListId: number, userId: number): Promise<boolean> {
+    if (!userId) {
+      throw new BadRequestException('Invalid user');
+    }
+    const allowList = await this.allowlistRepo.findByPk(allowListId)
+    if (!allowList) {
+      throw new BadRequestException('Invalid data');
+    }
+    return allowList.users.includes(userId.toString())
+  }
+
   async findAll() {
     const allowlistRepos = await this.allowlistRepo.findAll();
     return allowlistRepos.map((allowlistRepo) =>

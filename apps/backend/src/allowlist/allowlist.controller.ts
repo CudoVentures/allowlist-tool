@@ -34,6 +34,15 @@ export class AllowlistController {
     return this.allowlistService.findAll();
   }
 
+  @Get(':allowlistId/user/joined')
+  async isUserJoinedAllowlist(
+    @Req() req,
+    @Param('allowlistId') allowlistId: number
+  ): Promise<boolean> {
+    const sessionUserId = req.session.user?.id as number
+    return this.allowlistService.isUserJoinedAllowlist(allowlistId, sessionUserId);
+  }
+
   @Get(':customId')
   async findByCustomId(
     @Param('customId') customId: string,

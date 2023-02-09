@@ -1,9 +1,10 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { Box, Button, Checkbox, ClickAwayListener, Collapse, Divider, FormControlLabel, FormGroup, InputAdornment, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
 import { CONNECTED_SOCIAL_MEDIA, DISCORD_SERVER_ROLES, SOCIAL_MEDIA } from "../../../../../../common/interfaces";
@@ -165,10 +166,13 @@ export const SocialMediaButtons = () => {
 }
 
 export const SocialMediaBoxes = ({
-    handleCheckbox, props
+    handleCheckbox,
+    props,
+    isUserJoinedAllowlist
 }: {
     handleCheckbox: (e: React.ChangeEvent<HTMLInputElement>, isOn: boolean) => void,
     props: FetchedAllowlist
+    isUserJoinedAllowlist?: boolean
 }) => {
 
     const dispatch = useDispatch()
@@ -178,6 +182,13 @@ export const SocialMediaBoxes = ({
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link
     const isTwitterRequired = !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet || !!props.twitter_account_to_follow
     const twitterActions = [props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null].filter((action) => action !== null)
+
+    const getCheckedIcon = useCallback(() => {
+        if (isUserJoinedAllowlist) {
+            return <CheckCircleIcon />
+        }
+        return <RadioButtonCheckedIcon />
+    }, [isUserJoinedAllowlist])
 
     return (
         <Fragment>
@@ -217,7 +228,7 @@ export const SocialMediaBoxes = ({
                             <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />
                             Twitter
                         </Typography>
-                        {connectedSocialMedia.twitter.userName ?
+                        {isUserJoinedAllowlist ? null : connectedSocialMedia.twitter.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
                                 <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
                                     Connected:
@@ -239,13 +250,13 @@ export const SocialMediaBoxes = ({
                     <FormGroup>
                         <FormControlLabel
                             sx={{ pointerEvents: 'none' }}
-                            disabled={!connectedSocialMedia.twitter.userName}
-                            checked={!!connectedSocialMedia.twitter.userName}
+                            disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
+                            checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
                             control={<Checkbox
                                 onChange={handleCheckbox}
                                 value={`Follow ${props.twitter_account_to_follow}`}
                                 icon={<RadioButtonUncheckedIcon />}
-                                checkedIcon={<RadioButtonCheckedIcon />}
+                                checkedIcon={getCheckedIcon()}
                             />}
                             label={<Typography
                                 lineHeight='normal'
@@ -253,19 +264,19 @@ export const SocialMediaBoxes = ({
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
                                 {`Follow `}
-                                <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
+                                <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
                             </Typography>}
                         />
                         {twitterActions.length ?
                             <FormControlLabel
                                 sx={{ pointerEvents: 'none' }}
-                                disabled={!connectedSocialMedia.twitter.userName}
-                                checked={!!connectedSocialMedia.twitter.userName}
+                                disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
+                                checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
                                 control={<Checkbox
                                     onChange={handleCheckbox}
                                     value={`Like & retweet ${props.name}'s tweet`}
                                     icon={<RadioButtonUncheckedIcon />}
-                                    checkedIcon={<RadioButtonCheckedIcon />}
+                                    checkedIcon={getCheckedIcon()}
                                 />}
                                 label={<Typography
                                     lineHeight='normal'
@@ -273,7 +284,7 @@ export const SocialMediaBoxes = ({
                                     color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                                 >
                                     {`${twitterActions.join('& ')}`}
-                                    <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
+                                    <LinkBox link={isUserJoinedAllowlist ? 'none' : `${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
                                 </Typography>}
                             /> : null}
                     </FormGroup>
@@ -291,7 +302,7 @@ export const SocialMediaBoxes = ({
                             <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />
                             Discord
                         </Typography>
-                        {connectedSocialMedia.discord.userName ?
+                        {isUserJoinedAllowlist ? null : connectedSocialMedia.discord.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
                                 <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
                                     Connected:
@@ -312,13 +323,13 @@ export const SocialMediaBoxes = ({
                     </Box>
                     <FormControlLabel
                         sx={{ pointerEvents: 'none' }}
-                        disabled={!connectedSocialMedia.discord.userName}
-                        checked={!!connectedSocialMedia.discord.userName}
+                        disabled={!isUserJoinedAllowlist && !connectedSocialMedia.discord.userName}
+                        checked={isUserJoinedAllowlist || !!connectedSocialMedia.discord.userName}
                         control={<Checkbox
                             onChange={handleCheckbox}
                             value={`Join ${props.discord_invite_link}`}
                             icon={<RadioButtonUncheckedIcon />}
-                            checkedIcon={<RadioButtonCheckedIcon />}
+                            checkedIcon={getCheckedIcon()}
                         />}
                         label={<Box gap={1} display='flex'>
                             <Typography
@@ -328,7 +339,7 @@ export const SocialMediaBoxes = ({
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
                                 {`Join `}
-                                <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
+                                <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
                                 {` server with `}
                                 <Typography
                                     component={"span"}
@@ -342,7 +353,7 @@ export const SocialMediaBoxes = ({
                             </Typography>
                         </Box>}
                     />
-                    <Divider sx={{ marginTop: '20px', width: '100%' }} />
+                    {isUserJoinedAllowlist ? null : <Divider sx={{ marginTop: '20px', width: '100%' }} />}
                 </Box>}
         </Fragment>
     )

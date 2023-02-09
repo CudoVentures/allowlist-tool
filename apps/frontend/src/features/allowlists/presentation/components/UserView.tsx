@@ -1,6 +1,7 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, Divider, List, ListItem, Input, Button } from '@mui/material'
+import { TailSpin as TailSpinLoader } from 'svg-loaders-react'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
@@ -11,8 +12,9 @@ import { SocialMediaBoxes } from './helpers'
 import { updateModalState } from '../../../../core/store/modals'
 import { isValidEmail } from '../../validation'
 import { DISCORD_API_MSGS } from '../../../../../../common/interfaces'
-import { IS_JOINED_DISCORD_SERVER } from '../../../../core/api/calls'
+import { IS_JOINED_DISCORD_SERVER, IS_USER_JOINED_ALLOWLIST } from '../../../../core/api/calls'
 import Dialog from '../../../../core/presentation/components/Dialog'
+import { delay } from '../../../../core/utilities/ProjectUtils'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
@@ -23,6 +25,8 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const { connectedAddress, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
     const [userEmail, setUserEmail] = useState<string>('')
     const [checkBoxes, setCheckBoxes] = useState<Record<string, boolean>>({})
+    const [loading, setLoading] = useState<boolean>(true)
+    const [isUserJoined, setisUserJoined] = useState<boolean>(false)
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link && !!props.discord_server_name
 
@@ -31,6 +35,13 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             ...checkBoxes,
             [e.target.value]: isOn
         })
+    }
+
+    const handleUserIsJoined = async (allowlistID: number) => {
+        const result = await IS_USER_JOINED_ALLOWLIST(allowlistID)
+        setisUserJoined(result && !!connectedAddress)
+        await delay(500)
+        setLoading(false)
     }
 
     const signUp = async () => {
@@ -103,19 +114,23 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         return false
     }
 
-    return (
+    useEffect(() => {
+        handleUserIsJoined(props.id)
+    }, [props.id, connectedAddress])
+
+    return loading ? <TailSpinLoader /> : (
         <Fragment>
             <Dialog />
-            <Box sx={allowListStyles.title}>
+            <Box sx={allowListStyles.title} style={{ flexDirection: isUserJoined ? 'column-reverse' : 'column' }}>
                 <Typography variant='h6' fontWeight={700}>
-                    Register for Allowlist Name
+                    {isUserJoined ? 'Registered' : "Register for Allowlist Name"}
                 </Typography>
                 <Typography variant='subtitle1' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
-                    Complete the following to register.
+                    {isUserJoined ? 'Status:' : "Complete the following to register"}
                 </Typography>
             </Box>
             <Divider sx={{ width: '100%' }} />
-            <SocialMediaBoxes handleCheckbox={handleCheckbox} props={props} />
+            <SocialMediaBoxes handleCheckbox={handleCheckbox} props={props} isUserJoinedAllowlist={isUserJoined} />
             {!props.require_email ? null :
                 <Fragment>
                     <Box id='userEmailInput'>
@@ -143,14 +158,15 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                         />
                     </Box>
                 </Fragment>}
-            <Button
-                disabled={isSignUpDisabled()}
-                variant="contained"
-                sx={{ height: '56px', width: '100%' }}
-                onClick={signUp}
-            >
-                SignUp
-            </Button>
+            {isUserJoined ? null :
+                <Button
+                    disabled={isSignUpDisabled()}
+                    variant="contained"
+                    sx={{ height: '56px', width: '100%' }}
+                    onClick={signUp}
+                >
+                    SignUp
+                </Button>}
         </Fragment>
     )
 }
