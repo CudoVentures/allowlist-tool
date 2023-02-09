@@ -6,7 +6,7 @@ import {
   UseGuards,
   Post,
   UseInterceptors,
-  Body,
+  Body
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { SignedMessageDto } from '../allowlist/dto/signed-message.dto';
@@ -15,12 +15,15 @@ import { TransactionInterceptor } from '../common/common.interceptors';
 import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
-import { getGuildInfoByGuildId } from '../common/utils';
+import { DiscordService } from '../discord/discord.service';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) { }
+  constructor(
+    private authService: AuthService,
+    private discordService: DiscordService
+  ) { }
 
   @UseInterceptors(TransactionInterceptor)
   @Post('login')
@@ -53,7 +56,7 @@ export class AuthController {
   async discordCallback(@Req() req, @Res() res) {
     const user = req.user
     if (req.query?.guild_id) {
-      user.guild = await getGuildInfoByGuildId(req.query.guild_id)
+      user.guild = await this.discordService.getGuildInfoByGuildId(req.query.guild_id)
     }
     if (req.session.user) {
       req.session.user.discord = user;

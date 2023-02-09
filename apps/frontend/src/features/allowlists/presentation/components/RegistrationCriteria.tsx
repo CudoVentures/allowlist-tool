@@ -217,8 +217,8 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                             onOpen={() => setDropDownOpen(true)}
                             onClose={() => setDropDownOpen(false)}
                             renderValue={() =>
-                                allowlistState.server_role ?
-                                    allowlistState.server_role :
+                                connectedSocialMedia.discord.guild.guildRoles[allowlistState.server_role] ?
+                                    connectedSocialMedia.discord.guild.guildRoles[allowlistState.server_role] :
                                     <Typography sx={allowlistState.checkedFields['discord_server'] && allowlistState.discord_server ?
                                         allowlistDetailsStyles.enabledDropDownPlaceholder :
                                         allowlistDetailsStyles.dropDownPlaceholder}
@@ -243,9 +243,9 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                                 />
                             </Box>}
                         >
-                            {connectedSocialMedia.discord.guild.guildRoles.length ?
-                                connectedSocialMedia.discord.guild.guildRoles.map((role, idx) => {
-                                    return <MenuItem key={idx} value={role}>{role}</MenuItem>
+                            {connectedSocialMedia.discord.guild.guildRoles ?
+                                Object.entries(connectedSocialMedia.discord.guild.guildRoles).map(([key, value], idx) => {
+                                    return <MenuItem key={idx} value={key}>{value}</MenuItem>
                                 }) :
                                 <MenuItem
                                     key={DISCORD_SERVER_ROLES.default}

@@ -4,7 +4,8 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import AppRoutes from 'apps/frontend/src/features/app-routes/entities/AppRoutes';
+
+import AppRoutes from '../../../../frontend/src/features/app-routes/entities/AppRoutes';
 import { CreateAllowlistDto } from '../dto/create-allowlist.dto';
 
 @Injectable()

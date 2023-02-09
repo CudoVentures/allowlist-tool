@@ -43,7 +43,7 @@ const AllAllowlistsPage = () => {
       const created = []
       if (userId) {
         allAllowlists.forEach((record) => {
-          if (record.users.includes(userId)) {
+          if (record.users.includes(userId.toString())) {
             joined.push(record)
           }
           if (connectedAddress && record.admin === connectedAddress) {

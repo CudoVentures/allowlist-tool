@@ -1,18 +1,24 @@
-import { BadRequestException, flatten, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import axios from 'axios';
+import { Guild, Role } from 'discord.js';
+
 import { UserService } from '../user/user.service';
 import { AllowlistRepo } from './repos/allowlist.repo';
 import { CreateAllowlistDto } from './dto/create-allowlist.dto';
 import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import AllowlistEntity from './entities/allowlist.entity';
 import UserEntity from '../user/entities/user.entity';
+import { DiscordService } from '../discord/discord.service';
+import { DISCORD_SERVER_ROLES } from '../../../common/interfaces';
+
 @Injectable()
 export class AllowlistService {
   constructor(
     @InjectModel(AllowlistRepo)
     private allowlistRepo: typeof AllowlistRepo,
-    private userSerivice: UserService,
+    private userService: UserService,
+    private discordService: DiscordService
   ) { }
 
   async findAll() {
@@ -107,7 +113,7 @@ export class AllowlistService {
       throw new BadRequestException('Allowlist is closed for new entries');
     }
 
-    let user = await this.userSerivice.findByAddress(userAddress);
+    let user = await this.userService.findByAddress(userAddress);
     user = await this.updateUserInfo(user, sessionUser)
 
     await this.checkForDuplicateAcc(user, allowlistEntity);
@@ -149,19 +155,19 @@ export class AllowlistService {
     }
 
     if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
-      const inviteCode = allowlistEntity.discord_invite_link.split('/').pop();
-      const serverId = (
-        await axios.get(`https://discord.com/api/v8/invites/${inviteCode}`)
-      ).data.guild.id;
+      const inviteCode = allowlistEntity.discord_invite_link
+      const serverId = await this.discordService.getGuildIdByInviteCode(inviteCode)
 
-      const hasRole = await this.hasRole(
-        serverId,
-        allowlistEntity.server_role,
-        user.discord_access_token,
-      );
+      if (allowlistEntity.server_role !== DISCORD_SERVER_ROLES.default) {
+        const hasRole = await this.hasRole(
+          serverId,
+          allowlistEntity.server_role,
+          user.discord_access_token,
+        );
 
-      if (!hasRole) {
-        throw new BadRequestException('Criteria not met');
+        if (!hasRole) {
+          throw new BadRequestException('Criteria not met');
+        }
       }
     }
 
@@ -175,7 +181,7 @@ export class AllowlistService {
     const users = await Promise.all(
       allowlistEntity.users.map((entry) => {
         const { userId } = JSON.parse(entry);
-        return this.userSerivice.findById(userId);
+        return this.userService.findById(userId);
       }),
     );
 
@@ -263,8 +269,8 @@ export class AllowlistService {
 
   private async hasRole(
     serverId: string,
-    role: string,
-    accessToken,
+    roleId: string,
+    accessToken: string,
   ): Promise<boolean> {
     const userGuildsURL = `https://discord.com/api/users/@me/guilds`;
     const userGuildsRes = await axios.get(userGuildsURL, {
@@ -273,7 +279,7 @@ export class AllowlistService {
     });
 
     const guild = userGuildsRes.data.find(
-      (guild) => guild.id.toString() === serverId,
+      (guild: Guild) => guild.id.toString() === serverId,
     );
     if (!guild) {
       return false;
@@ -290,7 +296,7 @@ export class AllowlistService {
     });
 
     const roleIfo = guildRoleRes.data.find(
-      (guildRole) => guildRole.name.toLowerCase() === role.toLowerCase(),
+      (guildRole: Role) => guildRole.id === roleId,
     );
 
     if (!roleIfo) {
@@ -309,7 +315,7 @@ export class AllowlistService {
     const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
     return Promise.all(
       entries.map((entry) => {
-        return this.userSerivice.findById(entry.userId).then((user) => {
+        return this.userService.findById(entry.userId).then((user) => {
           return {
             id: user.id,
             address: user.address,
@@ -327,7 +333,7 @@ export class AllowlistService {
     const discordInfo = sessionUser.discord
     let twitterUser, discordUser, newUserInfo
     if (twitterInfo) {
-      twitterUser = await this.userSerivice.findByTwitterId(sessionUser.twitter.twitter_profile_id)
+      twitterUser = await this.userService.findByTwitterId(sessionUser.twitter.twitter_profile_id)
       delete twitterUser.id
       delete twitterUser.address
       delete twitterUser.discord_profile_username
@@ -336,7 +342,7 @@ export class AllowlistService {
       delete twitterUser.discord_refresh_token
       newUserInfo = Object.assign({}, user, twitterUser)
     } else if (discordInfo) {
-      discordUser = await this.userSerivice.findByDiscordId(sessionUser.discord.discord_profile_id)
+      discordUser = await this.userService.findByDiscordId(sessionUser.discord.discord_profile_id)
       delete discordUser.id
       delete discordUser.address
       delete discordUser.twitter_access_token
@@ -347,6 +353,6 @@ export class AllowlistService {
       newUserInfo = Object.assign({}, user, discordUser)
     }
     delete newUserInfo.id
-    return await this.userSerivice.updateUser(user.id, newUserInfo)
+    return await this.userService.updateUser(user.id, newUserInfo)
   }
 }

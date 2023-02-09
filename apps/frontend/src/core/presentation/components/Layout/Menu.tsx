@@ -9,20 +9,33 @@ import { SocialMediaButtons } from "../../../../features/allowlists/presentation
 
 import { headerStyles } from "./styles";
 
+const MENU_ITEMS = [
+    { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST },
+    { text: 'Explore', route: AppRoutes.ALLOWLISTS }
+]
+
 const Menu = (): JSX.Element => {
 
     const navigateToRoute = useNavigateToRoute()
     const { connectedAddress } = useSelector((state: RootState) => state.userState)
 
-    return (
-        <Box gap={2} sx={{ display: 'flex', alignItems: 'center' }} >
+    const MenuItem = ({ route, text }: { route: AppRoutes, text: string }) => {
+        return (
             <Typography
                 fontWeight={700}
                 sx={{ cursor: 'pointer' }}
-                onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
+                onClick={() => navigateToRoute(route)}
             >
-                Create
+                {text}
             </Typography>
+        )
+    }
+
+    return (
+        <Box gap={2} sx={{ display: 'flex', alignItems: 'center' }} >
+            {MENU_ITEMS.map((item, idx) => {
+                return <MenuItem key={idx} route={item.route} text={item.text} />
+            })}
             {connectedAddress ?
                 <Fragment>
                     <Divider orientation='vertical' sx={headerStyles.divider} />
