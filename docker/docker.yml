@@ -9,8 +9,6 @@ volumes:
     driver: local
 
 services:
-
-
   cudos-allowlist:
     image: cudos-allowlist
     container_name: cudos-allowlist
@@ -40,12 +38,12 @@ services:
   cloudsql-proxy:
     container_name: cloudsql-proxy
     image: gcr.io/cloudsql-docker/gce-proxy:1.11
-    command: /cloud_sql_proxy --dir=/cloudsql -instances=${GCLOUD_INSTANCE_CONNECTION_NAME}=tcp:0.0.0.0:5432
+    command: /cloud_sql_proxy --dir=/cloudsql -instances=${GCLOUD_INSTANCE_CONNECTION_NAME}=tcp:0.0.0.0:5432 -credential_file /config/key.json
+    volumes:
+      - ./key.json:/config/key.json
     ports:
-      - 5432:5432
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: ${GCLOUD_INSTANCE_CONNECTION_NAME}
+      - 127.0.0.1:5432:5432
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: always
-
+    
