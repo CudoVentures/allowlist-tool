@@ -34,8 +34,8 @@ export const DISCORD_GUILD_NAME_FROM_INVITE_CODE_URL = (inviteCode: string) =>
 export const DISCORD_MEMBER_JOINED_SERVER_URL = (inviteCode: string, userId: string) =>
   `/api/v1/discord/guild/${inviteCode}/${userId}`
 
-export const ADD_DISCORD_BOT_URL = (clientId: string) =>
-  `https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=0&scope=bot&response_type=code`
+export const ADD_DISCORD_BOT_URL = (clientId: string, callBackUrl: string) =>
+  `https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=0&redirect_uri=${encodeURIComponent(callBackUrl)}&response_type=code&scope=bot%20identify%20email%20guilds%20guilds.members.read`
 
 export const ALL_ALLOWLISTS_URL = `/api/v1/allowlist/all`
 

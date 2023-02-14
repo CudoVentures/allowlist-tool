@@ -7,7 +7,7 @@ import { updateUser } from '../../store/user';
 
 const windowOptions = `toolbar=0,scrollbars=0,location=0,statusbar=0,menubar=0,resizable=1,width=600, height=800,top=0`
 
-declare let Config: { APP_DISCORD_CLIENT_ID: any; };
+declare let Config: { APP_DISCORD_CLIENT_ID: any; APP_DISCORD_CALLBACK_URL: any };
 
 const useSocialMedia = () => {
 
@@ -42,7 +42,7 @@ const useSocialMedia = () => {
 
     const addDiscordBot = async () => {
         const openedWindow = window.open(
-            ADD_DISCORD_BOT_URL(Config.APP_DISCORD_CLIENT_ID),
+            ADD_DISCORD_BOT_URL(Config.APP_DISCORD_CLIENT_ID, Config.APP_DISCORD_CALLBACK_URL),
             `Adding Discord Bot`,
             windowOptions
         )
