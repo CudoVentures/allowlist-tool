@@ -191,8 +191,7 @@ export class AllowlistService {
   ) {
     const users = await Promise.all(
       allowlistEntity.users.map((entry) => {
-        const { userId } = JSON.parse(entry);
-        return this.userService.findById(userId);
+        return this.userService.findById(Number(entry));
       }),
     );
 

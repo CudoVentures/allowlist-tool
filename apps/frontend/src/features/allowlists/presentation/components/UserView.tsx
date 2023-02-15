@@ -131,7 +131,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             </Box>
             <Divider sx={{ width: '100%' }} />
             <SocialMediaBoxes handleCheckbox={handleCheckbox} props={props} isUserJoinedAllowlist={isUserJoined} />
-            {!props.require_email ? null :
+            {isUserJoined || !props.require_email ? null :
                 <Fragment>
                     <Box id='userEmailInput'>
                         <Box>
