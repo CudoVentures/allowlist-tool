@@ -23,13 +23,13 @@ export class AllowlistService {
 
   async isUserJoinedAllowlist(allowListId: number, userId: number): Promise<boolean> {
     if (!userId) {
-      throw new BadRequestException('Invalid user');
+      return false
     }
     const allowList = await this.allowlistRepo.findByPk(allowListId)
     if (!allowList) {
       throw new BadRequestException('Invalid data');
     }
-    return allowList.users.includes(userId.toString())
+    return allowList.users?.includes(userId.toString())
   }
 
   async findAll() {
