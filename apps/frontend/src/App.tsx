@@ -18,16 +18,19 @@ import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllow
 import { updateModalState } from './core/store/modals';
 import { connectUser } from './features/wallets/helpers';
 import { updateUser } from './core/store/user';
+import useSocialMedia from './core/utilities/CustomHooks/useSocialMedia';
 
 const App = () => {
 
   const location = useLocation()
   const dispatch = useDispatch()
+  const { disconnectAllSocialMedias } = useSocialMedia()
 
-  const connectAccount = useCallback(async (ledgerType: SUPPORTED_WALLET) => {
+  const reconnectUser = useCallback(async (ledgerType: SUPPORTED_WALLET) => {
     try {
       dispatch(updateModalState({ pageTransitionLoading: true }))
       const connectedUser = await connectUser(ledgerType)
+      await disconnectAllSocialMedias()
       dispatch(updateUser(connectedUser))
 
     } catch (error) {
@@ -42,7 +45,7 @@ const App = () => {
     if (isExtensionEnabled(SUPPORTED_WALLET.Keplr)) {
       window.addEventListener("keplr_keystorechange",
         async () => {
-          await connectAccount(SUPPORTED_WALLET.Keplr)
+          await reconnectUser(SUPPORTED_WALLET.Keplr)
           return
         });
     }
@@ -50,11 +53,11 @@ const App = () => {
     if (isExtensionEnabled(SUPPORTED_WALLET.Cosmostation)) {
       window.cosmostation.cosmos.on("accountChanged",
         async () => {
-          await connectAccount(SUPPORTED_WALLET.Cosmostation)
+          await reconnectUser(SUPPORTED_WALLET.Cosmostation)
           return
         });
     }
-  }, [connectAccount])
+  }, [reconnectUser])
 
   return (
     <Fragment>
@@ -77,12 +80,14 @@ const App = () => {
                   path={AppRoutes.ALLOWLIST}
                   element={<AllowlistPage />}
                 />
-                <Route path={AppRoutes.ALLOWLISTS} element={<AllAllowlistsPage />} />
-                {/* <Route
-                  path={AppRoutes.MY_ALLOWLISTS}
-                  element={<MyAllowlistsPage walletStore={walletStore} />}
-                /> */}
-                <Route path="*" element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />} />
+                <Route
+                  path={AppRoutes.ALLOWLISTS}
+                  element={<AllAllowlistsPage />}
+                />
+                <Route
+                  path="*"
+                  element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />}
+                />
               </Routes>
             </Layout>
           </ParallaxProvider>
