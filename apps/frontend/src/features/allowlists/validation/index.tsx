@@ -52,7 +52,7 @@ export const isValidTweetUrl = (tweet: string): boolean => {
 }
 
 export const isValidDescription = (description: string): boolean => {
-    return isZeroLength(description) || isValidLength(description, { min: 19, max: 100 })
+    return isZeroLength(description) || isValidLength(description, { min: 19, max: 200 })
 }
 
 export const isValidEndPeriod = (end_period: Date): boolean => {

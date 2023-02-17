@@ -19,7 +19,7 @@ import { headerStyles } from "../../../../core/presentation/components/Layout/st
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
 
 export enum FormFieldErrors {
-    description = 'Have to be between 20 and 100 characters',
+    description = 'Have to be between 20 and 200 characters',
     minimumFiveChars = 'Have to be minimum 5 characters',
     url = 'Invalid URL format',
     twitterAcc = 'Invalid Twitter Account',
