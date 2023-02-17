@@ -21,6 +21,7 @@ import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
 export enum FormFieldErrors {
     description = 'Have to be between 20 and 200 characters',
     minimumFiveChars = 'Have to be minimum 5 characters',
+    invalidCustomUrl = 'Invalid format. Have to be 5 to 20 letters with no special characters and spaces',
     url = 'Invalid URL format',
     twitterAcc = 'Invalid Twitter Account',
     discordServer = 'Invalid Discord Server',
@@ -49,7 +50,7 @@ export enum FormField {
 
 export const FieldTooltips = {
     [FormField.name]: FormFieldErrors.minimumFiveChars,
-    [FormField.url]: FormFieldErrors.minimumFiveChars,
+    [FormField.url]: FormFieldErrors.invalidCustomUrl,
     [FormField.website]: FormFieldErrors.url,
     [FormField.twitter_account]: FormFieldErrors.twitterAcc,
     [FormField.twitter_account_to_follow]: FormFieldErrors.twitterAcc,

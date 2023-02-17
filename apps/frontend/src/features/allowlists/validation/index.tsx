@@ -30,7 +30,7 @@ export const isValidAllowlistName = (name: string): boolean => {
 }
 
 export const isValidAllowlistUrl = (url: string): boolean => {
-    return isZeroLength(url) || isValidAllowlistName(url)
+    return isZeroLength(url) || url.match(/^[a-zA-Z]+$/g) !== null && isValidLength(url, { min: 4, max: 20 })
 }
 
 export const isValidUrl = (url: string): boolean => {
