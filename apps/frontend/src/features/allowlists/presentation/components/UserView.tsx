@@ -123,7 +123,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             <Dialog />
             <Box sx={allowListStyles.title} style={{ flexDirection: isUserJoined ? 'column-reverse' : 'column' }}>
                 <Typography variant='h6' fontWeight={700}>
-                    {isUserJoined ? 'Registered' : "Register for Allowlist Name"}
+                    {isUserJoined ? 'Registered' : `Register for ${props.name}`}
                 </Typography>
                 <Typography variant='subtitle1' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
                     {isUserJoined ? 'Status:' : "Complete the following to register"}
