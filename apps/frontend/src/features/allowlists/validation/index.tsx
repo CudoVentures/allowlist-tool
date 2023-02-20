@@ -30,7 +30,7 @@ export const isValidAllowlistName = (name: string): boolean => {
 }
 
 export const isValidAllowlistUrl = (url: string): boolean => {
-    return isZeroLength(url) || isValidAllowlistName(url)
+    return isZeroLength(url) || url.match(/^[a-zA-Z]+$/g) !== null && isValidLength(url, { min: 4, max: 20 })
 }
 
 export const isValidUrl = (url: string): boolean => {
@@ -52,7 +52,7 @@ export const isValidTweetUrl = (tweet: string): boolean => {
 }
 
 export const isValidDescription = (description: string): boolean => {
-    return isZeroLength(description) || isValidLength(description, { min: 19, max: 100 })
+    return isZeroLength(description) || isValidLength(description, { min: 19, max: 200 })
 }
 
 export const isValidEndPeriod = (end_period: Date): boolean => {

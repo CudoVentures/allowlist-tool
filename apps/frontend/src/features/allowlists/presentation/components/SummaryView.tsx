@@ -102,14 +102,14 @@ export const SummaryView = ({
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.ChainLinkIcon} style={'default'} />
                     <LinkBox
                         link={props.website}
-                        text={<StyledTypography text='Website' />}
+                        text={<StyledTypography text={props.website} />}
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
                     <LinkBox
                         link={`${BaseURL.twitter_acc}${props.twitter_account}`}
-                        text={<StyledTypography text='Twitter' />}
+                        text={<StyledTypography text={`@${props.twitter_account}`} />}
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >

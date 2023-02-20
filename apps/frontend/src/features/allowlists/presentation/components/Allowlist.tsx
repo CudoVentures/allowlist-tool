@@ -123,10 +123,7 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
           )}
           <img
             src={avatarPreview}
-            style={
-              isUnder1000px ?
-                allowListStyles.smallScreenProfile :
-                allowListStyles.profile}
+            style={allowListStyles.profile}
           />
           <Box
             sx={
