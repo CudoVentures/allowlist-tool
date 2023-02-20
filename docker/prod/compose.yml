@@ -15,8 +15,8 @@ services:
     image: cudos-allowlist
     container_name: cudos-allowlist
     build:
-      dockerfile: docker/docker.dockerfile
-      context: ../
+      dockerfile: docker/prod/docker.prod.dockerfile
+      context: ../../
       args:
         args:
         USER_ID: "$USER_ID"
@@ -25,7 +25,7 @@ services:
         GROUP_NAME: "$GROUP_NAME"
     restart: unless-stopped
     volumes:
-      - "../:/usr/cudos-allowlist"
+      - "../../:/usr/src/cudos-allowlist"
     ports:
       - "$HOST_PORT:$DOCKER_PORT"
     networks:

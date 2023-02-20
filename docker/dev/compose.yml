@@ -33,11 +33,11 @@ services:
       retries: 5
 
   cudos-allowlist:
-    image: cudos-allowlist
-    container_name: cudos-allowlist
+    image: cudos-allowlist-dev
+    container_name: cudos-allowlist-dev
     build:
-      dockerfile: docker/docker.dockerfile
-      context: ../
+      dockerfile: docker/dev/docker.dev.dockerfile
+      context: ../../
       args:
         args:
         USER_ID: "$USER_ID"
@@ -46,7 +46,7 @@ services:
         GROUP_NAME: "$GROUP_NAME"
     restart: unless-stopped
     volumes:
-      - "../:/usr/cudos-allowlist"
+      - "../../:/usr/cudos-allowlist"
     ports:
       - "$HOST_PORT:$DOCKER_PORT"
     networks:
