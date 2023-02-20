@@ -39,21 +39,30 @@ const AllAllowlistsPage = () => {
   const loadData = async () => {
     try {
       const allAllowlists = await GET_ALL_ALLOWLISTS()
+      if (!userId || !connectedAddress) {
+        setAllowlists(allAllowlists)
+        return
+      }
+
+      const all = []
       const joined = []
       const created = []
-      if (userId) {
-        allAllowlists.forEach((record) => {
-          if (record.users.includes(userId.toString())) {
-            joined.push(record)
-          }
-          if (connectedAddress && record.admin === connectedAddress) {
-            created.push(record)
-          }
-        })
-      }
-      setAllowlists(allAllowlists)
+
+      allAllowlists.forEach((record) => {
+        if (userId && record.users.includes(userId.toString())) {
+          joined.push(record)
+          return
+        }
+        if (connectedAddress && record.admin === connectedAddress) {
+          created.push(record)
+          return
+        }
+        all.push(record)
+      })
+
       setJoinedAllowlists(joined)
       setCreatedAllowlists(created)
+      setAllowlists(all)
 
     } finally {
       setLoading(false)
