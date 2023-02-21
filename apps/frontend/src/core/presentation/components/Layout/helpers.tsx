@@ -201,7 +201,7 @@ export const FOOTER = {
         { text: 'Privacy Policy', url: 'https://www.cudos.org/privacy-policy' },
         { text: 'cudos.org', url: 'https://www.cudos.org/' },
         { text: `License © 2018 - ${moment().year()}`, url: 'https://www.cudos.org/' },
-        { text: `${CHAIN_DETAILS.DEPLOYMENT_VERSION}`, url: `https://github.com/CudoVentures/cudos-allowlist-tool/releases/tag/v${CHAIN_DETAILS.DEPLOYMENT_VERSION}` }
+        { text: `${CHAIN_DETAILS.DEPLOYMENT_VERSION}`, url: `https://github.com/CudoVentures/cudos-allowlist-tool/releases/tag/${CHAIN_DETAILS.DEPLOYMENT_VERSION}` }
     ],
     RIGHT_LINKS: [
         { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.TwitterIcon} />, url: 'https://twitter.com/CUDOS_' },
