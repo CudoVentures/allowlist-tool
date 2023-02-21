@@ -78,8 +78,6 @@ export class AllowlistService {
             throw new BadRequestException('Allowlist with this url already exists');
         }
 
-        createAllowlistDTO.banner_image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png'
-        createAllowlistDTO.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png'
         const allowlistRepo = await this.allowlistRepo.create({
             ...createAllowlistDTO,
             admin: createAllowlistDTO.connectedAddress,
