@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { Pagination, Mousewheel } from 'swiper'
+import { Pagination, Navigation } from 'swiper'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist"
@@ -7,6 +7,7 @@ import SwiperCardContent from './SwiperCard'
 import CreateBox from './CreateBox'
 
 import { generalStyles, swiperBreakpoints } from '../pages/styles'
+import './swiper.css';
 
 const SwiperList = ({ data, withCreateBox }: { data: FetchedAllowlist[], withCreateBox?: boolean }) => {
     return (
@@ -14,8 +15,8 @@ const SwiperList = ({ data, withCreateBox }: { data: FetchedAllowlist[], withCre
             {withCreateBox ? <CreateBox /> : null}
             <Swiper
                 breakpoints={swiperBreakpoints(withCreateBox)}
-                modules={[Pagination, Mousewheel]}
-                mousewheel
+                modules={[Pagination, Navigation]}
+                navigation
                 spaceBetween={20}
                 style={generalStyles.swiper}
                 pagination={{ clickable: true }}
