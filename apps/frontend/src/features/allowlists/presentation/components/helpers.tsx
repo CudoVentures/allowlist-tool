@@ -19,7 +19,7 @@ import { headerStyles } from "../../../../core/presentation/components/Layout/st
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
 
 export enum FormFieldErrors {
-    description = 'Have to be between 20 and 200 characters',
+    description = 'Have to be between 20 and 500 characters',
     minimumFiveChars = 'Have to be minimum 5 characters',
     invalidCustomUrl = 'Invalid format. Have to be 5 to 20 letters with no special characters and spaces',
     url = 'Invalid URL format',
