@@ -123,6 +123,7 @@ export class AllowlistService {
     async joinAllowlist(
         allowlistId: number,
         userAddress: string,
+        userEmail: string,
         sessionUser: any,
     ) {
         const allowlistRepo = await this.allowlistRepo.findByPk(allowlistId);
@@ -175,11 +176,16 @@ export class AllowlistService {
             }
         }
 
-        if (allowlistEntity.discord_invite_link && allowlistEntity.server_role) {
+        if (allowlistEntity.discord_invite_link) {
             const inviteCode = allowlistEntity.discord_invite_link
-            const serverId = await this.discordService.getGuildIdByInviteCode(inviteCode)
+            const isJoinedDiscord = await this.discordService.isUserJoinedByInvite(inviteCode, user.discord_profile_id);
 
-            if (allowlistEntity.server_role !== DISCORD_SERVER_ROLES.default) {
+            if (!isJoinedDiscord) {
+                throw new BadRequestException('Criteria not met: Discord server not joined');
+            }
+
+            if (allowlistEntity.server_role && allowlistEntity.server_role !== DISCORD_SERVER_ROLES.default) {
+                const serverId = await this.discordService.getGuildIdByInviteCode(inviteCode);
                 const hasRole = await this.hasRole(
                     serverId,
                     allowlistEntity.server_role,
@@ -187,9 +193,17 @@ export class AllowlistService {
                 );
 
                 if (!hasRole) {
-                    throw new BadRequestException('Criteria not met');
+                    throw new BadRequestException('Criteria not met: invalid role');
                 }
             }
+        }
+
+        if (allowlistEntity.require_email) {
+            if (!userEmail) {
+                throw new BadRequestException('Criteria not met: e-mail is missing');
+            }
+            const data = { email: userEmail }
+            user = await this.userService.updateUser(user.id, data)
         }
 
         return this.addToAllowlist(allowlistId, user.id);
@@ -339,7 +353,7 @@ export class AllowlistService {
                     return {
                         id: user.id,
                         address: user.address,
-                        email: entry.email || "Not provided",
+                        email: user.email || "Not provided",
                         twitter_handle: user.twitter_profile_id || "Not provided",
                         discord_handle: user.discord_profile_id || "Not provided",
                     };

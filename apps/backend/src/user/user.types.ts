@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from 'class-validator';
+import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class UserJSONValidator {
   @IsNumber()
@@ -6,6 +6,10 @@ export class UserJSONValidator {
 
   @IsString()
   address: string;
+
+  @IsEmail()
+  @IsString()
+  email: string;
 
   @IsString()
   twitter_profile_id: string;

@@ -16,6 +16,11 @@ module.exports = {
           unique: true,
           allowNull: true,
         },
+        email: {
+          type: Sequelize.STRING,
+          unique: true,
+          allowNull: true,
+        },
         twitter_profile_id: {
           type: Sequelize.STRING,
           unique: true,

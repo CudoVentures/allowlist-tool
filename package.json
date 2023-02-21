@@ -15,6 +15,7 @@
     "start:backend:debug": "nest start backend --debug --watch",
     "start:backend:prod": "node dist/apps/backend/main.js",
     "migrate": "npx sequelize db:migrate --config=./apps/backend/database/config/config.js --migrations-path=./apps/backend/database/migrations",
+    "migration:status": "npx sequelize-cli db:migrate:status --config=./apps/backend/database/config/config.js --migrations-path=./apps/backend/database/migrations",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
