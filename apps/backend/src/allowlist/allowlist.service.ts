@@ -337,13 +337,13 @@ export class AllowlistService {
         const entries = allowlistRepo.users.map((entry) => JSON.parse(entry));
         return Promise.all(
             entries.map((entry) => {
-                return this.userService.findById(entry.userId).then((user) => {
+                return this.userService.findById(entry).then((user) => {
                     return {
                         id: user.id,
                         address: user.address,
-                        email: entry.email,
-                        twitter_handle: user.twitter_profile_id,
-                        discord_handle: user.discord_profile_id,
+                        email: entry.email || "Not provided",
+                        twitter_handle: user.twitter_profile_id || "Not provided",
+                        discord_handle: user.discord_profile_id || "Not provided",
                     };
                 });
             }),
