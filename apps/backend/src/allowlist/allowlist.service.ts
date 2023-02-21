@@ -16,10 +16,10 @@ import e from 'express';
 @Injectable()
 export class AllowlistService {
     constructor(
-    @InjectModel(AllowlistRepo)
-    private allowlistRepo: typeof AllowlistRepo,
-    private userService: UserService,
-    private discordService: DiscordService,
+        @InjectModel(AllowlistRepo)
+        private allowlistRepo: typeof AllowlistRepo,
+        private userService: UserService,
+        private discordService: DiscordService,
     ) { }
 
     async getUserByAllowlistIdAndAddress(allowlistId: number, address: string): Promise<UserEntity> {
@@ -47,8 +47,6 @@ export class AllowlistService {
         const allowlistRepos = await this.allowlistRepo.findAll();
         return allowlistRepos.map((allowlistRepo) => {
             const e = AllowlistEntity.fromRepo(allowlistRepo)
-            e.banner_image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png';
-            e.image = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/800px-Image_created_with_a_mobile_phone.png';
             return e;
         });
     }
@@ -212,13 +210,13 @@ export class AllowlistService {
         for (const u of users) {
             if (
                 user.discord_profile_id
-        && user.discord_profile_id === u.discord_profile_id
+                && user.discord_profile_id === u.discord_profile_id
             ) {
                 throw new BadRequestException('Discord profile is already registered');
             }
             if (
                 user.twitter_profile_id
-        && user.twitter_profile_id === u.twitter_profile_id
+                && user.twitter_profile_id === u.twitter_profile_id
             ) {
                 throw new BadRequestException('Twitter profile is already registered');
             }
