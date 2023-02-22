@@ -12,25 +12,27 @@ import './swiper.css';
 const SwiperList = ({ data, withCreateBox }: { data: FetchedAllowlist[], withCreateBox?: boolean }) => {
     return (
         <Fragment>
-            {withCreateBox ? <CreateBox /> : null}
             <Swiper
-                breakpoints={swiperBreakpoints(withCreateBox)}
+                breakpoints={swiperBreakpoints()}
                 modules={[Pagination, Navigation]}
                 navigation
                 spaceBetween={20}
                 style={generalStyles.swiper}
                 pagination={{ clickable: true }}
             >
+                {withCreateBox ?
+                    <SwiperSlide key={"CreateBox"} style={generalStyles.swiperSlide}>
+                        <CreateBox />
+                    </SwiperSlide> : null}
                 {data.map((allowlist, idx) => {
                     return (
-                        <SwiperSlide key={idx} style={{ display: 'flex', justifyContent: 'center' }}>
+                        <SwiperSlide key={idx} style={generalStyles.swiperSlide}>
                             <SwiperCardContent allowlist={allowlist} />
                         </SwiperSlide>
                     )
                 })}
             </Swiper>
         </Fragment>
-
     )
 }
 

@@ -58,14 +58,23 @@ export const Controls = ({
                 return
             }
 
-            const { success, message } = allowlistState.editMode ?
-                await updateAllowlist(allowlistState) :
-                await createAllowlist(allowlistState)
+            try {
+                dispatch(updateModalState({ pageTransitionLoading: true }))
+                const { success, message } = allowlistState.editMode ?
+                    await updateAllowlist(allowlistState) :
+                    await createAllowlist(allowlistState)
+                if (success) {
+                    dispatch(updateModalState({ pageTransitionLoading: false, success: true }))
+                } else {
+                    throw new Error(message)
+                }
 
-            if (success) {
-                dispatch(updateModalState({ success: true }))
-            } else {
-                dispatch(updateModalState({ failure: true, message }))
+            } catch (error) {
+                dispatch(updateModalState({
+                    pageTransitionLoading: false,
+                    failure: true,
+                    message: error.message
+                }))
             }
 
             return

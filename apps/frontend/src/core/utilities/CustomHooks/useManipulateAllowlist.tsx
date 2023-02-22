@@ -92,7 +92,7 @@ const useManipulateAllowlist = () => {
 
         } catch (ex) {
             console.error(ex);
-            return { success: false, message: ex.response.data.message }
+            return { success: false, message: ex.response?.data?.message || ex.message || "Something went wrong"}
         }
     }, [connectedWallet, connectedAddress])
 
@@ -133,7 +133,7 @@ const useManipulateAllowlist = () => {
 
         } catch (ex) {
             console.error(ex);
-            return { success: false, message: ex.response.data.message }
+            return { success: false, message: ex.response?.data?.message || ex.message || "Something went wrong" }
         }
     }, [connectedWallet, connectedAddress])
 
