@@ -55,7 +55,7 @@ const SwiperCardContent = ({ allowlist }: { allowlist: FetchedAllowlist }) => {
     }, [banner, avatar])
 
     return (
-        <Box onClick={() => navigateToRoute(`/${allowlist.url}`)} sx={generalStyles.swiperDataBox}>
+        <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={generalStyles.swiperDataBox}>
             {loadingImgs ? <TailSpinLoader /> :
                 <Fragment>
                     <Box sx={generalStyles.imgHolder}>

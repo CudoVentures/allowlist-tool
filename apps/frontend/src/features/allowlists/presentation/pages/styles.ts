@@ -124,38 +124,38 @@ export const generalStyles = {
     }
 }
 
-export const swiperBreakpoints = () => {
+export const swiperBreakpoints = (adjust = 0) => {
     return {
         850: {
-            slidesPerView: 1,
+            slidesPerView: 1 + adjust,
             spaceBetween: 20
         },
         1200: {
-            slidesPerView: 2,
+            slidesPerView: 2 + adjust,
             spaceBetween: 20
         },
         1560: {
-            slidesPerView: 3,
+            slidesPerView: 3 + adjust,
             spaceBetween: 20
         },
         2000: {
-            slidesPerView: 4,
+            slidesPerView: 4 + adjust,
             spaceBetween: 20
         },
         2300: {
-            slidesPerView: 5,
+            slidesPerView: 5 + adjust,
             spaceBetween: 20
         },
         2700: {
-            slidesPerView: 6,
+            slidesPerView: 6 + adjust,
             spaceBetween: 20
         },
         3100: {
-            slidesPerView: 7,
+            slidesPerView: 7 + adjust,
             spaceBetween: 20
         },
         3600: {
-            slidesPerView: 8,
+            slidesPerView: 8 + adjust,
             spaceBetween: 20
         }
     }

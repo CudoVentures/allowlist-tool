@@ -13,7 +13,7 @@ const SwiperList = ({ data, withCreateBox }: { data: FetchedAllowlist[], withCre
     return (
         <Fragment>
             <Swiper
-                breakpoints={swiperBreakpoints()}
+                breakpoints={swiperBreakpoints(1)}
                 modules={[Pagination, Navigation]}
                 navigation
                 spaceBetween={20}
