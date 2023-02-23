@@ -46,7 +46,8 @@ import sampleAllowListDetails from '../../../../public/assets/vectors/parallax/s
 import sampleAllowListMint from '../../../../public/assets/vectors/parallax/sample-allowlist-mint.svg';
 import sampleAllowListPage from '../../../../public/assets/vectors/parallax/sample-allowlist-page.svg';
 import sampleAllowListRegister from '../../../../public/assets/vectors/parallax/sample-allowlist-register.svg';
-import headImg from '../../../../public/assets/vectors/parallax/head.svg';
+import sampleAvatar from '../../../../public/assets/vectors/parallax/sample-avatar.svg';
+import sampleAvatarBackground from '../../../../public/assets/vectors/parallax/sample-avatar-background.svg';
 import checkmark from '../../../../public/assets/vectors/parallax/checkmark.svg';
 import rectangularShade from '../../../../public/assets/vectors/parallax/rectangular-shade.svg';
 import stepOne from '../../../../public/assets/vectors/stepper/step-1.svg';
@@ -96,7 +97,8 @@ export enum LAYOUT_CONTENT_TEXT {
     CopyIcon = 'Copy icon',
     BigPlusIcon = 'Big plus icon',
     Logout = 'Logout',
-    HeadImg = 'Head image',
+    SampleAvatar = 'Sample Avatar image',
+    SampleAvatarBack = 'Sample Avatar background image',
     SampleAllowListDetails = 'Sample Allowlist details',
     SampleAllowListMint = 'Sample Allowlist mint form',
     SampleAllowListPage = 'Sample Allowlist page',
@@ -130,7 +132,8 @@ const SVG_SRC_MAPPER = {
     [LAYOUT_CONTENT_TEXT.StepThree]: stepThree,
     [LAYOUT_CONTENT_TEXT.Checkmark]: checkmark,
     [LAYOUT_CONTENT_TEXT.RectangularShade]: rectangularShade,
-    [LAYOUT_CONTENT_TEXT.HeadImg]: headImg,
+    [LAYOUT_CONTENT_TEXT.SampleAvatar]: sampleAvatar,
+    [LAYOUT_CONTENT_TEXT.SampleAvatarBack]: sampleAvatarBackground,
     [LAYOUT_CONTENT_TEXT.SampleAllowListRegister]: sampleAllowListRegister,
     [LAYOUT_CONTENT_TEXT.SampleAllowListPage]: sampleAllowListPage,
     [LAYOUT_CONTENT_TEXT.SampleAllowListDetails]: sampleAllowListDetails,
