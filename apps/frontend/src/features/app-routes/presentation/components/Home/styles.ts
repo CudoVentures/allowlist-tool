@@ -189,7 +189,7 @@ export const FAQStyle = {
         height: '22px'
     },
     containerBox: {
-        width: '100%',
+        maxWidth: '1024px',
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
