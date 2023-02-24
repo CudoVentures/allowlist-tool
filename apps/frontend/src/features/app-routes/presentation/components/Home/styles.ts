@@ -55,26 +55,14 @@ export const forCollectorsStyles = {
 
 export const forCreatorsStyles = {
     avatar: {
-        padding: '10px 10px 0px 10px',
-        borderRadius: '8px',
-        border: "1px solid #F5FAFF",
-        position: 'absolute',
+        position: 'absolute' as 'absolute',
         top: -5,
         right: 55,
-        backdropFilter: 'blur(16px)',
-        background: 'gba(16, 18, 26, 0.8)',
-        height: '164px',
-        width: '164px'
     },
-    yellowBox: {
-        borderRadius: '8px',
-        border: "1px solid #F5FAFF",
-        position: 'absolute',
+    avatarBack: {
+        position: 'absolute' as 'absolute',
         top: 20,
-        right: 30,
-        background: 'rgba(218, 251, 51, 1)',
-        height: '164px',
-        width: '164px'
+        right: 60,
     },
     rightContent: {
         position: 'relative',

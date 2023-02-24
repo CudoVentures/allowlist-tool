@@ -73,12 +73,13 @@ const ForCreators = () => {
                         style={{ position: 'absolute', bottom: -45, left: 55 }} />
                 </Box>
                 <Box>
-                    <Box sx={forCreatorsStyles.yellowBox} />
-                    <Parallax translateY={["50px", "0px"]} speed={20}>
-                        <Box sx={forCreatorsStyles.avatar}>
-                            <SvgComponent type={LAYOUT_CONTENT_TEXT.HeadImg}
-                                style={{ width: '100%', height: '100%' }} />
-                        </Box>
+                    <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.SampleAvatarBack}
+                        style={forCreatorsStyles.avatarBack} />
+                    <Parallax translateY={["-50px", "0px"]} speed={50}>
+                        <SvgComponent
+                            type={LAYOUT_CONTENT_TEXT.SampleAvatar}
+                            style={forCreatorsStyles.avatar} />
                     </Parallax>
                 </Box>
                 <Box sx={{ position: 'absolute', left: -60, bottom: 0 }}>
