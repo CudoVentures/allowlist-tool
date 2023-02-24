@@ -16,12 +16,18 @@ export const createAllowlistStyles = {
 }
 
 export const generalStyles = {
+    swiperSlide: {
+        display: 'flex',
+        justifyContent: 'center'
+    },
     plusIconBackground: {
         background: COLORS_DARK_THEME.PRIMARY_BLUE,
         borderRadius: '50%',
         width: '48px',
         height: '48px',
-        padding: '12px'
+        padding: '12px',
+        display: 'flex',
+        alignItems: 'center'
     },
     clocIcon: {
         width: '24px',
@@ -71,19 +77,19 @@ export const generalStyles = {
         },
         transition: "transform 0.5s ease, top 0.5s ease",
         textAlign: 'center',
-        padding: '50px',
+        padding: '16px 16px 24px 16px',
         cursor: 'pointer',
         justifyContent: 'center',
-        margin: '-5px 0px 40px 0px',
+        marginLeft: '5px',
         background: 'transparent',
         border: "1px dashed #363E5A",
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        minWidth: '320px',
-        minHeight: '360px',
-        width: '320px',
-        height: '360px',
+        minWidth: '300px',
+        minHeight: '320px',
+        width: '300px',
+        height: '320px',
         borderRadius: '16px',
     },
     swiperDataBox: {
@@ -118,39 +124,38 @@ export const generalStyles = {
     }
 }
 
-export const swiperBreakpoints = (withBox: boolean) => {
-    const extraSpace = withBox ? 0 : 1
+export const swiperBreakpoints = (adjust = 0) => {
     return {
         850: {
-            slidesPerView: 1 + extraSpace,
+            slidesPerView: 1 + adjust,
             spaceBetween: 20
         },
         1200: {
-            slidesPerView: 2 + extraSpace,
+            slidesPerView: 2 + adjust,
             spaceBetween: 20
         },
         1560: {
-            slidesPerView: 3 + extraSpace,
+            slidesPerView: 3 + adjust,
             spaceBetween: 20
         },
         2000: {
-            slidesPerView: 4 + extraSpace,
+            slidesPerView: 4 + adjust,
             spaceBetween: 20
         },
         2300: {
-            slidesPerView: 5 + extraSpace,
+            slidesPerView: 5 + adjust,
             spaceBetween: 20
         },
         2700: {
-            slidesPerView: 6 + extraSpace,
+            slidesPerView: 6 + adjust,
             spaceBetween: 20
         },
         3100: {
-            slidesPerView: 7 + extraSpace,
+            slidesPerView: 7 + adjust,
             spaceBetween: 20
         },
         3600: {
-            slidesPerView: 8 + extraSpace,
+            slidesPerView: 8 + adjust,
             spaceBetween: 20
         }
     }
