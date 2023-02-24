@@ -24,18 +24,24 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
     async handleConnection(client: Socket) {
         const { isValid, user } = await this.isValidFeClient(client)
+
         if (!isValid) {
             client.disconnect(true)
-            throw new Error('Socket Connection refused. Invalid client');
+            console.log(`Socket Connection refused. Invalid client. Disconnecting...`);
+            return
         }
 
-        if (!this.connectedClients.has(user)) {
-            this.connectedClients.add(user);
-            console.log(`Client connected - ${user}`);
-        }
-        
-        setTimeout(() => {
+        if (this.connectedClients.has(user)) {
+            console.log(`Client ${user} - already connected. Disconnecting...`);
             client.disconnect()
+            return
+        }
+
+        this.connectedClients.add(user);
+        console.log(`Client connected - ${user}`);
+
+        setTimeout(() => {
+            client.disconnect(true)
             console.log(`Client ${user} disconnected - time out`);
         }, 60000);
     }
