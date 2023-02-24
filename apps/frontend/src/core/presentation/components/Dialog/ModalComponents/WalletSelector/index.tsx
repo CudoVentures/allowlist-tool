@@ -20,6 +20,7 @@ import { connectUser, SUPPORTED_WALLET_LOGOS } from '../../../../../../features/
 import { updateModalState, initialState as initialModalState } from '../../../../../store/modals'
 import { updateUser } from '../../../../../store/user'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../Layout/helpers'
+import useSocialMedia from '../../../../../utilities/CustomHooks/useSocialMedia'
 
 import { CancelRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
 import { styles } from './styles'
@@ -27,6 +28,7 @@ import { styles } from './styles'
 const WalletSelector = () => {
 
   const { selectWallet } = useSelector((state: RootState) => state.modalState)
+  const { setConnectedSocialMedia } = useSocialMedia()
   const [userBrowser, setUserBrowser] = useState<SUPPORTED_BROWSER | undefined>(undefined)
   const [loading, setLoading] = useState(new Map())
   const dispatch = useDispatch()
@@ -41,7 +43,7 @@ const WalletSelector = () => {
 
     try {
       setLoading(new Map(loading.set(walletName, true)))
-      const connectedUser = await connectUser(walletName)
+      const connectedUser = await connectUser(walletName, setConnectedSocialMedia)
       dispatch(updateUser(connectedUser))
       handleModalClose()
 

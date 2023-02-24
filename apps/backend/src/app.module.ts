@@ -23,6 +23,7 @@ import { UserController } from './user/user.controller';
 import { DiscordService } from './discord/discord.service';
 import { DiscordModule } from './discord/discord.module';
 import { DiscordController } from './discord/discord.controller';
+import { WebsocketGateway } from './websocket/websocket.gateway';
 
 @Module({
   imports: [
@@ -68,7 +69,7 @@ import { DiscordController } from './discord/discord.controller';
     AllowlistModule,
     DiscordModule
   ],
-  providers: [AppService, AuthService, UserService, AllowlistService, DiscordService],
+  providers: [AppService, AuthService, UserService, AllowlistService, DiscordService, WebsocketGateway],
   controllers: [AuthController, AllowlistController, UserController, DiscordController],
 })
 

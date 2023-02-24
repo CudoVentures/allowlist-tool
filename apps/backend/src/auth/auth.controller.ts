@@ -16,13 +16,16 @@ import { AuthService } from './auth.service';
 import { DiscordAuthGuard } from './guards/discord-auth.guard';
 import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 import { DiscordService } from '../discord/discord.service';
+import { WebsocketGateway } from '../websocket/websocket.gateway';
+import { WS_MSGS, WS_ROOM } from 'apps/common/interfaces';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
-    private discordService: DiscordService
+    private discordService: DiscordService,
+    private websocketGateway: WebsocketGateway
   ) { }
 
   @UseInterceptors(TransactionInterceptor)
@@ -65,6 +68,10 @@ export class AuthController {
         discord: user
       }
     }
+    this.websocketGateway.sendMessageToClient(
+      WS_ROOM.socialMediaEvents,
+      WS_MSGS.socialMediaSuccess
+    )
     res.send(`<script>window.close()</script>`);
   }
 
@@ -87,6 +94,10 @@ export class AuthController {
     } else {
       req.session.user = { twitter: req.user }
     }
+    this.websocketGateway.sendMessageToClient(
+      WS_ROOM.socialMediaEvents,
+      WS_MSGS.socialMediaSuccess
+    )
     res.send(`<script>window.close()</script>`);
   }
 }

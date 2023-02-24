@@ -14,7 +14,6 @@ export class UserController {
     async getUser(@Req() req) {
         let twitterUser: UserEntity
         let discordUser: UserEntity
-        console.log(req.session.user)
         if (req.session.user?.twitter) {
             twitterUser = await this.userService.findByTwitterId(req.session.user.twitter.twitter_profile_id)
         }

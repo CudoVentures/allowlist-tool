@@ -34,6 +34,15 @@ export enum SOCIAL_MEDIA {
     discord = 'discord'
 }
 
+export enum WS_MSGS {
+    join = 'join',
+    socialMediaSuccess = 'socialMediaSuccess',
+}
+
+export enum WS_ROOM {
+    socialMediaEvents = 'socialMediaEvents'
+}
+
 export const emptySocialMedia = {
     id: '',
     userName: '',
