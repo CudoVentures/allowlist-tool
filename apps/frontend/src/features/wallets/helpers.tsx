@@ -90,7 +90,7 @@ export const getNativeBalance = (balances: readonly Coin[]): string => {
     return nativeBalance
 }
 
-export const connectUser = async (walletType: SUPPORTED_WALLET, setMedia: () => Promise<void>): Promise<userState> => {
+export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userState> => {
 
     const { address: connectedAddress, accountName } = await connectWalletByType(walletType)
     const currentBalances = await getAccountBalances(connectedAddress)
@@ -115,8 +115,6 @@ export const connectUser = async (walletType: SUPPORTED_WALLET, setMedia: () => 
         nativeBalance: userNativeBalance,
         connectedWallet: walletType,
     }
-
-    await connectSocket(connectedAddress, setMedia)
 
     return connectedUser
 }

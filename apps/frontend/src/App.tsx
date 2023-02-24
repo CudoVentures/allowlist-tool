@@ -45,6 +45,7 @@ export const connectSocket = async (userAddres: string, setMedia: () => Promise<
 
     socketConnection.on(WS_MSGS.socialMediaSuccess, async () => {
       await setMedia()
+      disconnectSocket()
     });
   }
 }
@@ -53,12 +54,12 @@ const App = () => {
 
   const location = useLocation()
   const dispatch = useDispatch()
-  const { disconnectAllSocialMedias, setConnectedSocialMedia } = useSocialMedia()
+  const { disconnectAllSocialMedias } = useSocialMedia()
 
   const reconnectUser = useCallback(async (ledgerType: SUPPORTED_WALLET) => {
     try {
       dispatch(updateModalState({ pageTransitionLoading: true }))
-      const connectedUser = await connectUser(ledgerType, setConnectedSocialMedia)
+      const connectedUser = await connectUser(ledgerType)
       await disconnectAllSocialMedias()
       dispatch(updateUser(connectedUser))
 
