@@ -55,7 +55,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
         if (e.target.value === 'discord_server') {
 
             if (e.target.checked) {
-                addDiscordBot()
+                addDiscordBot(connectedAddress)
             } else {
                 dispatch(updateUser({
                     connectedSocialMedia: {
@@ -78,7 +78,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
             disabled={!connectedAddress}
             variant="contained"
             sx={{ height: '38px', width: '104px' }}
-            onClick={() => connectSocialMedia(SOCIAL_MEDIA.twitter)}
+            onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.twitter)}
         >
             Connect
         </Button>
@@ -89,7 +89,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
             disabled={!connectedAddress}
             variant="contained"
             sx={{ height: '38px', width: '104px' }}
-            onClick={() => connectSocialMedia(SOCIAL_MEDIA.discord)}
+            onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.discord)}
         >
             Connect
         </Button>

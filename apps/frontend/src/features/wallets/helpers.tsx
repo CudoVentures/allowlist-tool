@@ -16,6 +16,7 @@ import { connectCosmostationLedger } from "./Cosmostation"
 import { connectKeplrLedger } from "./Keplr"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../core/presentation/components/Layout/helpers"
 import { LOG_IN_USER } from "../../core/api/calls"
+import { connectSocket, disconnectSocket, socketConnection } from "../../App"
 
 import { styles } from "./styles"
 
@@ -119,6 +120,8 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
 }
 
 export const disconnectWalletByType = async (walletType: SUPPORTED_WALLET) => {
+
+    disconnectSocket()
 
     if (walletType === SUPPORTED_WALLET.Keplr) {
         // Keplr seems to not offer a particular disconnect method

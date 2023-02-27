@@ -6,6 +6,8 @@ import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { isExtensionEnabled, SUPPORTED_WALLET } from 'cudosjs';
 import { useDispatch } from 'react-redux';
+import io, { Socket } from 'socket.io-client';
+import { DefaultEventsMap } from 'socket.io/dist/typed-events';
 
 import theme from './core/theme';
 import Layout from './core/presentation/components/Layout';
@@ -19,6 +21,34 @@ import { updateModalState } from './core/store/modals';
 import { connectUser } from './features/wallets/helpers';
 import { updateUser } from './core/store/user';
 import useSocialMedia from './core/utilities/CustomHooks/useSocialMedia';
+import { WS_MSGS, WS_ROOM } from '../../common/interfaces';
+
+declare let Config: { APP_WS_ID: any, APP_URL: any };
+
+export let socketConnection: Socket<DefaultEventsMap, DefaultEventsMap>;
+
+export const disconnectSocket = () => {
+  if (socketConnection && socketConnection.connected) {
+    socketConnection.disconnect()
+  }
+}
+
+export const connectSocket = async (userAddres: string, setMedia: () => Promise<void>) => {
+  if (!socketConnection || socketConnection.disconnected) {
+    socketConnection = io(Config.APP_URL, {
+      query: { customId: Buffer.from(Config.APP_WS_ID + userAddres).toString('base64') }
+    });
+
+    socketConnection.on('connect', () => {
+      socketConnection.emit(WS_MSGS.join, { roomName: WS_ROOM.socialMediaEvents });
+    });
+
+    socketConnection.on(WS_MSGS.socialMediaSuccess, async () => {
+      await setMedia()
+      disconnectSocket()
+    });
+  }
+}
 
 const App = () => {
 
@@ -58,6 +88,13 @@ const App = () => {
         });
     }
   }, [reconnectUser])
+
+  useEffect(() => {
+    //Clean-up on app closing
+    return () => {
+      disconnectSocket()
+    };
+  }, []);
 
   return (
     <Fragment>

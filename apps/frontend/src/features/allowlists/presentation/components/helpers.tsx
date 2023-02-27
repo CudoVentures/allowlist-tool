@@ -105,7 +105,7 @@ export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<
 export const SocialMediaButtons = () => {
 
     const { connectSocialMedia, disconnectSocialMedia } = useSocialMedia()
-    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
 
     const StyledTypography = ({ type, media }: { type: LAYOUT_CONTENT_TEXT, media: SOCIAL_MEDIA }) => {
         const [openMenu, setOpenMenu] = useState<boolean>(false)
@@ -119,7 +119,7 @@ export const SocialMediaButtons = () => {
                         fontWeight={700}
                         sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                         onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
-                        onClick={() => isDisconnected ? connectSocialMedia(media) : null}
+                        onClick={() => isDisconnected ? connectSocialMedia(connectedAddress, media) : null}
                     >
                         <SvgComponent
                             type={type}
@@ -243,7 +243,7 @@ export const SocialMediaBoxes = ({
                                 disabled={!connectedAddress}
                                 variant="contained"
                                 sx={{ height: '40px', width: '104px' }}
-                                onClick={() => connectSocialMedia(SOCIAL_MEDIA.twitter)}
+                                onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.twitter)}
                             >
                                 Connect
                             </Button>}
@@ -317,7 +317,7 @@ export const SocialMediaBoxes = ({
                                 disabled={!connectedAddress}
                                 variant="contained"
                                 sx={{ height: '40px', width: '104px' }}
-                                onClick={() => connectSocialMedia(SOCIAL_MEDIA.discord)}
+                                onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.discord)}
                             >
                                 Connect
                             </Button>}
