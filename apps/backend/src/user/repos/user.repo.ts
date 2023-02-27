@@ -24,6 +24,10 @@ export class UserRepo extends Model {
 
   @AllowNull(true)
   @Column
+  email: string;
+
+  @AllowNull(true)
+  @Column
   twitter_profile_id: string;
 
   @AllowNull(true)

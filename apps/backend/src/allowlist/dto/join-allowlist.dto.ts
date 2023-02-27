@@ -6,5 +6,5 @@ export class JoinAllowlistDto extends SignedMessageDto {
   @IsEmail()
   @IsOptional()
   @ApiProperty({ required: false })
-  email: string;
+  userEmail: string;
 }

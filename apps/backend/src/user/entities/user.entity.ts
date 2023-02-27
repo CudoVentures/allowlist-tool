@@ -5,6 +5,7 @@ import { UserJSONValidator } from '../user.types';
 export default class UserEntity {
     id: number;
     address: string;
+    email: string;
     twitter_profile_id: string;
     twitter_profile_username: string;
     twitter_access_token: string;
@@ -17,6 +18,7 @@ export default class UserEntity {
     constructor() {
         this.id = NOT_EXISTS_INT;
         this.address = '';
+        this.email = '';
         this.twitter_profile_id = '';
         this.twitter_profile_username = '';
         this.twitter_access_token = '';
@@ -41,6 +43,7 @@ export default class UserEntity {
             repoJson.id = entity.id;
         }
         repoJson.address = entity.address;
+        repoJson.email = entity.email;
         repoJson.twitter_profile_id = entity.twitter_profile_id;
         repoJson.twitter_profile_username = entity.twitter_profile_username;
         repoJson.twitter_access_token = entity.twitter_access_token;
@@ -61,6 +64,7 @@ export default class UserEntity {
         const entity = new UserEntity();
         entity.id = repoJson.id ?? entity.id;
         entity.address = repoJson.address ?? entity.address;
+        entity.email = repoJson.email ?? entity.email;
         entity.twitter_profile_id = repoJson.twitter_profile_id ?? entity.twitter_profile_id;
         entity.twitter_profile_username = repoJson.twitter_profile_username ?? entity.twitter_profile_username;
         entity.twitter_access_token = repoJson.twitter_access_token ?? entity.twitter_access_token;
@@ -81,6 +85,7 @@ export default class UserEntity {
         return {
             id: entity.id,
             address: entity.address,
+            email: entity.email,
             twitter_profile_id: entity.twitter_profile_id,
             twitter_profile_username: entity.twitter_profile_username,
             twitter_access_token: entity.twitter_access_token,
@@ -100,6 +105,7 @@ export default class UserEntity {
         const entity = new UserEntity();
         entity.id = json.id ?? entity.id;
         entity.address = json.address ?? entity.address;
+        entity.email = json.email ?? entity.email;
         entity.twitter_profile_id = json.twitter_profile_id ?? entity.twitter_profile_id;
         entity.twitter_profile_username = json.twitter_profile_username ?? entity.twitter_profile_username;
         entity.twitter_access_token = json.twitter_access_token ?? entity.twitter_access_token;
