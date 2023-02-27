@@ -11,7 +11,7 @@ const LowerSection = () => {
 
     return (
         <Box id='LowerSectionHolder' sx={lowerSectionStyles.holder}>
-            <Box gap={15} id='LowerSectionContent' sx={{ display: 'flex', flexDirection: 'column', width: '100%', maxWidth: '1300px' }}>
+            <Box gap={15} id='LowerSectionContent' sx={{ display: 'flex', alignItems: 'center', flexDirection: 'column', width: '100%', maxWidth: '1300px' }}>
                 <ForCreators />
                 <ForCollectors />
                 <FAQ />
