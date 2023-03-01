@@ -269,7 +269,7 @@ export class AllowlistService {
         const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
             headers: { Authorization: process.env.App_Twitter_Bearer_Token },
         });
-        return data.data.id
+        return data.data?.id
     }
 
     private async passCheck(url, target) {
