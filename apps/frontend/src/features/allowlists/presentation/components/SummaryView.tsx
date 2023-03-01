@@ -109,7 +109,7 @@ export const SummaryView = ({
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
                     <LinkBox
                         link={`${BaseURL.twitter_acc}${props.twitter_account}`}
-                        text={<StyledTypography text={props.twitter_account.startsWith('@') ? props.twitter_account : `@${props.twitter_account}`} />}
+                        text={<StyledTypography text={props.twitter_account} />}
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >

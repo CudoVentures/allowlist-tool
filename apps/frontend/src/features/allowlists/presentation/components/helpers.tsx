@@ -416,7 +416,13 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             subtitle:
                 <LinkBox
                     link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`}
-                    text={props.twitter_account_to_follow.startsWith('@') ? props.twitter_account_to_follow : `@${props.twitter_account_to_follow}`}
+                    text={
+                        isCollectedData ?
+                            props.twitter_account_to_follow.startsWith('@') ?
+                                props.twitter_account_to_follow :
+                                `@${props.twitter_account_to_follow}` :
+                            props.twitter_account_to_follow
+                    }
                 />
         },
         {
