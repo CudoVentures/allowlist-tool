@@ -413,7 +413,11 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />,
             title: 'Twitter Page to Follow',
             isDisabled: !props.twitter_account_to_follow,
-            subtitle: <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
+            subtitle:
+                <LinkBox
+                    link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`}
+                    text={props.twitter_account_to_follow.startsWith('@') ? props.twitter_account_to_follow : `@${props.twitter_account_to_follow}`}
+                />
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />,
