@@ -454,14 +454,14 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />,
             title: 'Discord Server Role',
-            isDisabled: !props.server_role,
+            isDisabled: isCollectedData ? !props.discord_server || !props.server_role : !props.discord_invite_link || !props.server_role,
             subtitle: isCollectedData ? connectedSocialMedia.discord.guild.guildRoles[props.server_role] || DISCORD_SERVER_ROLES.default : props.server_role || DISCORD_SERVER_ROLES.default
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.EnvelopIcon} style='default' />,
             title: 'Users to Provide Email',
-            isDisabled: false,
-            subtitle: props.require_email ? 'YES' : 'NO'
+            isDisabled: !props.require_email,
+            subtitle: null
         },
     ]
 }
