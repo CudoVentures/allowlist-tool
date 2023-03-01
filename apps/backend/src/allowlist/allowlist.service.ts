@@ -141,7 +141,7 @@ export class AllowlistService {
         await this.checkForDuplicateAcc(user, allowlistEntity);
 
         if (allowlistEntity.twitter_account_to_follow) {
-            const twitterAccountId = await this.getAccountID(allowlistEntity.twitter_account)
+            const twitterAccountId = await this.getTwitterAccountID(allowlistEntity.twitter_account)
             const followAcc = await this.followsAcc(
                 twitterAccountId,
                 user.twitter_profile_id,
@@ -265,7 +265,7 @@ export class AllowlistService {
         );
     }
 
-    private async getAccountID(twitterUsername: string) {
+    async getTwitterAccountID(twitterUsername: string) {
         const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
             headers: { Authorization: process.env.App_Twitter_Bearer_Token },
         });
