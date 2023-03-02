@@ -76,17 +76,18 @@ export const SummaryView = ({
                 <Typography variant='h4' fontWeight={900}>
                     {props.name}
                 </Typography>
-                {isAdmin ?
-                    <Box
-                        ref={editIcon}
-                        sx={summaryViewStyles.editIconHolder}
-                        onClick={handleClick}
-                    >
-                        <SvgComponent
-                            type={LAYOUT_CONTENT_TEXT.EditIcon}
-                            style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }}
-                        />
-                    </Box> : null}
+                {isAdmin ? null
+                    // <Box
+                    //     ref={editIcon}
+                    //     sx={summaryViewStyles.editIconHolder}
+                    //     onClick={handleClick}
+                    // >
+                    //     <SvgComponent
+                    //         type={LAYOUT_CONTENT_TEXT.EditIcon}
+                    //         style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }}
+                    //     />
+                    // </Box> 
+                    : null}
             </Box>
             <Box>
                 <Typography variant='h6' fontWeight={700}>
