@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import { signArbitrary } from "../../../features/wallets/helpers";
 import { RootState } from "../../store";
 import { CollectedData } from "../../store/allowlist";
+import { SOCIAL_MEDIA } from "../../../../../common/interfaces";
+import useSocialMedia from "./useSocialMedia";
 import {
     CREATE_ALLOWLIST,
     GET_USER_DETAILS,
@@ -14,16 +16,29 @@ import {
 const useManipulateAllowlist = () => {
 
     const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
+    const { disconnectSocialMedia } = useSocialMedia()
 
-    const joinAllowlist = useCallback(async (allowlistId: number, userEmail: string): Promise<{ success: boolean, message: string }> => {
+    const joinAllowlist = useCallback(async (allowlistId: number, userEmail: string, requiredSocialMedia: { [key in SOCIAL_MEDIA]: boolean }): Promise<{ success: boolean, message: string }> => {
 
         const userDetails = await GET_USER_DETAILS();
         const data = {};
-        if (userDetails.data.twitter?.accessToken) {
-            data['twitter_access_token'] = userDetails.data.twitter.accessToken;
+
+        if (requiredSocialMedia[SOCIAL_MEDIA.twitter]) {
+            if (!userDetails.data.twitter?.accessToken) {
+                await disconnectSocialMedia(SOCIAL_MEDIA.twitter)
+                throw new Error('Your Twitter session expired. Please connect')
+            } else {
+                data['twitter_access_token'] = userDetails.data.twitter.accessToken;
+            }
         }
-        if (userDetails.data.discord?.accessToken) {
-            data['discord_access_token'] = userDetails.data.discord.accessToken;
+
+        if (requiredSocialMedia[SOCIAL_MEDIA.discord]) {
+            if (!userDetails.data.discord?.accessToken) {
+                await disconnectSocialMedia(SOCIAL_MEDIA.discord)
+                throw new Error('Your Discord session expired. Please connect')
+            } else {
+                data['discord_access_token'] = userDetails.data.discord.accessToken;
+            }
         }
 
         const message = JSON.stringify(data);
@@ -92,7 +107,7 @@ const useManipulateAllowlist = () => {
 
         } catch (ex) {
             console.error(ex);
-            return { success: false, message: ex.response?.data?.message || ex.message || "Something went wrong"}
+            return { success: false, message: ex.response?.data?.message || ex.message || "Something went wrong" }
         }
     }, [connectedWallet, connectedAddress])
 

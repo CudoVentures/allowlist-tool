@@ -47,15 +47,17 @@ export class TwitterService {
     }
 
     async getTwitterAccountIDByAccountName(accountName: string): Promise<string> {
-        const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${accountName}`, {
+        let name = accountName
+        if (name.startsWith('@')) {
+            name = name.substring(1)
+        }
+        const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${name}`, {
             headers: { Authorization: process.env.App_Twitter_Bearer_Token },
         });
         return data.data?.id
     }
 
     // PRIVATE
-
-
     private async passCheck(url: string, target: string): Promise<boolean> {
         let arr = [];
 

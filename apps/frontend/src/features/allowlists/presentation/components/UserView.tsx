@@ -90,7 +90,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
                 //If page to follow
                 if (!!props.twitter_account_to_follow) {
-                    const isFollowingAcc = await IS_FOLLOWING_TWITTER_ACCOUNT(props.twitter_account_to_follow, connectedSocialMedia.twitter.id)
+                    const isFollowingAcc = await IS_FOLLOWING_TWITTER_ACCOUNT(connectedSocialMedia.twitter.id, props.twitter_account_to_follow)
                     if (!isFollowingAcc) {
                         modalObject = {
                             pageTransitionLoading: false,
@@ -103,7 +103,14 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             }
 
             //IF EVERYTHING LOOK GOOD
-            const { success, message } = await joinAllowlist(props.id, userEmail)
+            const { success, message } = await joinAllowlist(
+                props.id,
+                userEmail,
+                {
+                    twitter: isTwitterRequired,
+                    discord: isDiscordRequired
+                }
+            )
             if (!success) { throw new Error(message) }
             modalObject = {
                 pageTransitionLoading: false,
