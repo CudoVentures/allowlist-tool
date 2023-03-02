@@ -31,6 +31,12 @@ export const DISCORD_ROLE_NAME_FROM_ROLE_ID_URL = (inviteCode: string, roleId: s
 export const DISCORD_GUILD_NAME_FROM_INVITE_CODE_URL = (inviteCode: string) =>
   `/api/v1/discord/invite/${inviteCode}/guild/name`
 
+export const IS_VALID_TWITTER_ACC_URL = (accountName: string) =>
+  `/api/v1/twitter/validate/account/${accountName}`
+
+export const IS_FOLLOWING_TWITTER_ACCOUNT_URL = (userId: string, accountName: string) =>
+  `/api/v1/twitter/user/${userId}/following/${accountName}`
+
 export const DISCORD_MEMBER_JOINED_SERVER_URL = (inviteCode: string, userId: string) =>
   `/api/v1/discord/guild/${inviteCode}/${userId}`
 

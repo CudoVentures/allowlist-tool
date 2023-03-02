@@ -12,12 +12,24 @@ import {
     DISCORD_GUILD_NAME_FROM_INVITE_CODE_URL,
     DISCORD_MEMBER_JOINED_SERVER_URL,
     DISCORD_ROLE_NAME_FROM_ROLE_ID_URL,
+    IS_FOLLOWING_TWITTER_ACCOUNT_URL,
+    IS_VALID_TWITTER_ACC_URL,
     JOIN_ALLOWLIST_URL,
     SOCIAL_MEDIA_LOGOUT_URL,
     USER_DETAILS_URL,
     USER_JOINED_ALLOWLIST_URL,
     USER_LOGIN_URL
 } from './endpoints';
+
+export const IS_FOLLOWING_TWITTER_ACCOUNT = async (userId: string, accountName: string): Promise<boolean> => {
+    const result = await axios.get(IS_FOLLOWING_TWITTER_ACCOUNT_URL(userId, accountName))
+    return result.data
+}
+
+export const IS_VALID_TWITTER_ACC = async (twitterAccName: string): Promise<boolean> => {
+    const result = await axios.get(IS_VALID_TWITTER_ACC_URL(twitterAccName))
+    return result.data
+}
 
 export const IS_JOINED_DISCORD_SERVER = async (inviteCode: string, userId: string): Promise<boolean> => {
     const result = await axios.get(DISCORD_MEMBER_JOINED_SERVER_URL(inviteCode, userId))

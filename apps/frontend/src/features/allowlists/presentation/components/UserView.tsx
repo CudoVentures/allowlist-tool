@@ -12,7 +12,7 @@ import { SocialMediaBoxes } from './helpers'
 import { updateModalState } from '../../../../core/store/modals'
 import { isValidEmail } from '../../validation'
 import { DISCORD_API_MSGS } from '../../../../../../common/interfaces'
-import { IS_JOINED_DISCORD_SERVER, IS_USER_JOINED_ALLOWLIST } from '../../../../core/api/calls'
+import { IS_FOLLOWING_TWITTER_ACCOUNT, IS_JOINED_DISCORD_SERVER, IS_USER_JOINED_ALLOWLIST } from '../../../../core/api/calls'
 import Dialog from '../../../../core/presentation/components/Dialog'
 import { delay } from '../../../../core/utilities/ProjectUtils'
 
@@ -29,6 +29,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const [isUserJoined, setisUserJoined] = useState<boolean>(false)
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link && !!props.discord_server_name
+    const isTwitterRequired = !!props.twitter_account_to_follow || !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet
 
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>, isOn: boolean) => {
         setCheckBoxes({
@@ -50,6 +51,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         let modalObject = {}
 
         try {
+            //HANDLING DISCORD REQUIREMENTS
             if (isDiscordRequired) {
                 if (!connectedSocialMedia.discord.id) {
                     modalObject = {
@@ -60,16 +62,47 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                     return
                 }
 
-                if (!IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)) {
+                //Server to join
+                if (!!props.discord_invite_link) {
+                    const isJoinedServer = await IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)
+                    if (!isJoinedServer) {
+                        modalObject = {
+                            pageTransitionLoading: false,
+                            failure: true,
+                            message: `Discord server ${props.discord_server_name} not joined`
+                        }
+                        return
+                    }
+                }
+
+            }
+
+            //HANDLING TWITTER REQUIREMENTS
+            if (isTwitterRequired) {
+                if (!connectedSocialMedia.twitter.id) {
                     modalObject = {
                         pageTransitionLoading: false,
                         failure: true,
-                        message: `Discord server ${props.discord_server_name} not joined`
+                        message: 'Please connect Twitter account'
                     }
                     return
                 }
+
+                //If page to follow
+                if (!!props.twitter_account_to_follow) {
+                    const isFollowingAcc = await IS_FOLLOWING_TWITTER_ACCOUNT(props.twitter_account_to_follow, connectedSocialMedia.twitter.id)
+                    if (!isFollowingAcc) {
+                        modalObject = {
+                            pageTransitionLoading: false,
+                            failure: true,
+                            message: `Twitter page ${props.twitter_account_to_follow} not followed`
+                        }
+                        return
+                    }
+                }
             }
 
+            //IF EVERYTHING LOOK GOOD
             const { success, message } = await joinAllowlist(props.id, userEmail)
             if (!success) { throw new Error(message) }
             modalObject = {

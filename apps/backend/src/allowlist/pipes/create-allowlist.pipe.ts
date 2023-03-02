@@ -6,12 +6,12 @@ import {
 } from '@nestjs/common';
 
 import AppRoutes from '../../../../frontend/src/features/app-routes/entities/AppRoutes';
-import { AllowlistService } from '../allowlist.service';
+import { TwitterService } from '../../twitter/twitter.service';
 import { CreateAllowlistDto } from '../dto/create-allowlist.dto';
 
 @Injectable()
 export class CreateAllowlistPipe implements PipeTransform {
-  constructor(private allowlistService: AllowlistService) { }
+  constructor(private twitterService: TwitterService) { }
   async transform(value: CreateAllowlistDto, metadata: ArgumentMetadata) {
     if (
       value.twitter_account_to_follow ||
@@ -25,7 +25,7 @@ export class CreateAllowlistPipe implements PipeTransform {
       }
 
       if (value.twitter_account_to_follow) {
-        const isValidAccountToFollow = await this.allowlistService.getTwitterAccountID(value.twitter_account_to_follow)
+        const isValidAccountToFollow = await this.twitterService.isExistingTwitterAcc(value.twitter_account_to_follow)
         if (!isValidAccountToFollow) {
           throw new BadRequestException('Invalid Twitter Account To Follow');
         }

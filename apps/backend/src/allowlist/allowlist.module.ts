@@ -5,9 +5,10 @@ import { AllowlistController } from './allowlist.controller';
 import { AllowlistRepo } from './repos/allowlist.repo';
 import { AllowlistService } from './allowlist.service';
 import { DiscordModule } from '../discord/discord.module';
+import { TwitterModule } from '../twitter/twitter.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([AllowlistRepo]), UserModule, DiscordModule],
+  imports: [SequelizeModule.forFeature([AllowlistRepo]), UserModule, DiscordModule, TwitterModule],
   providers: [AllowlistService],
   controllers: [AllowlistController],
   exports: [SequelizeModule],
