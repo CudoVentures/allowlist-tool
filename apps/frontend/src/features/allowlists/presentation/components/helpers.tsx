@@ -249,25 +249,26 @@ export const SocialMediaBoxes = ({
                             </Button>}
                     </Box>
                     <FormGroup>
-                        <FormControlLabel
-                            sx={{ pointerEvents: 'none' }}
-                            disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
-                            checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
-                            control={<Checkbox
-                                onChange={handleCheckbox}
-                                value={`Follow ${props.twitter_account_to_follow}`}
-                                icon={<RadioButtonUncheckedIcon />}
-                                checkedIcon={getCheckedIcon()}
-                            />}
-                            label={<Typography
-                                lineHeight='normal'
-                                variant='subtitle2'
-                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
-                            >
-                                {`Follow `}
-                                <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
-                            </Typography>}
-                        />
+                        {!!props.twitter_account_to_follow ?
+                            <FormControlLabel
+                                sx={{ pointerEvents: 'none' }}
+                                disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
+                                checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
+                                control={<Checkbox
+                                    onChange={handleCheckbox}
+                                    value={`Follow ${props.twitter_account_to_follow}`}
+                                    icon={<RadioButtonUncheckedIcon />}
+                                    checkedIcon={getCheckedIcon()}
+                                />}
+                                label={<Typography
+                                    lineHeight='normal'
+                                    variant='subtitle2'
+                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                >
+                                    {`Follow `}
+                                    <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
+                                </Typography>}
+                            /> : null}
                         {twitterActions.length ?
                             <FormControlLabel
                                 sx={{ pointerEvents: 'none' }}

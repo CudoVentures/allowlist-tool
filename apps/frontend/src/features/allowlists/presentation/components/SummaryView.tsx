@@ -69,8 +69,8 @@ export const SummaryView = ({
     return (
         <Box gap={3} sx={generalStyles.flexColumn}>
             <Box
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
+                // onMouseOver={handleMouseOver}
+                // onMouseOut={handleMouseOut}
                 sx={summaryViewStyles.title}
             >
                 <Typography variant='h4' fontWeight={900}>
