@@ -15,17 +15,17 @@ async function bootstrap() {
     logger: console
   });
 
-
-  app.enableCors({
-    origin: (origin, callback) => {
-      const whitelist = [process.env.APP_URL, process.env.AURA_POOL_URL]
-      if (origin === undefined || whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
-  });
+  app.enableCors();
+  // app.enableCors({
+  //   origin: (origin, callback) => {
+  //     const whitelist = [process.env.APP_URL, process.env.AURA_POOL_URL]
+  //     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
+  //       callback(null, true);
+  //     } else {
+  //       callback(new Error('Not allowed by CORS'));
+  //     }
+  //   },
+  // });
 
   app.setGlobalPrefix('api');
   app.enableVersioning({

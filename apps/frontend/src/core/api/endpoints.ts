@@ -34,6 +34,12 @@ export const DISCORD_GUILD_NAME_FROM_INVITE_CODE_URL = (inviteCode: string) =>
 export const IS_VALID_TWITTER_ACC_URL = (accountName: string) =>
   `/api/v1/twitter/validate/account/${accountName}`
 
+export const IS_TWEET_RETWEETED_URL = (userId: string, tweetUrl: string) =>
+  `/api/v1/twitter/user/${userId}/retweeted/tweet/${encodeURIComponent(tweetUrl)}`
+
+export const IS_TWEET_LIKED_URL = (userId: string, tweetUrl: string) =>
+  `/api/v1/twitter/user/${userId}/liked/tweet/${encodeURIComponent(tweetUrl)}`
+
 export const IS_FOLLOWING_TWITTER_ACCOUNT_URL = (userId: string, accountName: string) =>
   `/api/v1/twitter/user/${userId}/following/${accountName}`
 

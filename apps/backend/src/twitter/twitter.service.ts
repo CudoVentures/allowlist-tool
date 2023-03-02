@@ -21,23 +21,25 @@ export class TwitterService {
         );
     }
 
-    async isLikedTweet(
-        tweetId: string,
-        twitterId: string,
+    async isTweetLiked(
+        tweetUrl: string,
+        userId: string,
     ): Promise<boolean> {
+        const tweetId = this.getTweetIdIdFromUrl(tweetUrl)
         return this.passCheck(
-            `https://api.twitter.com/2/users/${twitterId}/liked_tweets`,
+            `https://api.twitter.com/2/users/${userId}/liked_tweets`,
             tweetId,
         );
     }
 
     async isTweetRetweeted(
-        twitterUsername: string,
-        tweetId: string,
+        tweetUrl: string,
+        userId: string,
     ): Promise<boolean> {
+        const tweetId = this.getTweetIdIdFromUrl(tweetUrl)
         return this.passCheck(
             `https://api.twitter.com/2/tweets/${tweetId}/retweeted_by`,
-            twitterUsername,
+            userId,
         );
     }
 
@@ -46,7 +48,19 @@ export class TwitterService {
         return !!isIdFound
     }
 
-    async getTwitterAccountIDByAccountName(accountName: string): Promise<string> {
+    // PRIVATE
+    private getTweetIdIdFromUrl = (tweetUrl: string): string => {
+        if (!this.isValidTweetUrl(tweetUrl)) {
+            return ''
+        }
+        return tweetUrl.split('/').pop()
+    }
+
+    private isValidTweetUrl = (tweetUrl: string): boolean => {
+        return /^https:\/\/twitter\.com\/@?[A-Za-z0-9_]{1,15}\/status\/[\d]{19}[?]?.*$/gm.test(tweetUrl)
+    }
+
+    private async getTwitterAccountIDByAccountName(accountName: string): Promise<string> {
         let name = accountName
         if (name.startsWith('@')) {
             name = name.substring(1)
@@ -57,7 +71,6 @@ export class TwitterService {
         return data.data?.id
     }
 
-    // PRIVATE
     private async passCheck(url: string, target: string): Promise<boolean> {
         let arr = [];
 

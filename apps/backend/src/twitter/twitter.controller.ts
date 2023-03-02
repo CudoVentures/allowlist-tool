@@ -14,6 +14,32 @@ import { TwitterService } from './twitter.service';
 export class TwitterController {
   constructor(private twitterService: TwitterService) { }
 
+  @Get(`user/:userId/retweeted/tweet/:tweetUrl`)
+  async isTweetRetweeted(
+    @Param('userId') userId: string,
+    @Param('tweetUrl') tweetUrl: string,
+  ) {
+    try {
+      const decodedUrl = decodeURIComponent(tweetUrl)
+      return this.twitterService.isTweetRetweeted(decodedUrl, userId)
+    } catch {
+      throw new BadRequestException(TWITTER_API_MSGS.NotRetweetedTweet)
+    }
+  }
+
+  @Get(`user/:userId/liked/tweet/:tweetUrl`)
+  async isTweetLiked(
+    @Param('userId') userId: string,
+    @Param('tweetUrl') tweetUrl: string,
+  ) {
+    try {
+      const decodedUrl = decodeURIComponent(tweetUrl)
+      return this.twitterService.isTweetLiked(decodedUrl, userId)
+    } catch {
+      throw new BadRequestException(TWITTER_API_MSGS.NotLikedTweet)
+    }
+  }
+
   @Get(`user/:userId/following/:accountName`)
   async isFollowingTwitterAcc(
     @Param('userId') userId: string,

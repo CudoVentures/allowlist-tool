@@ -152,24 +152,16 @@ export class AllowlistService {
         }
 
         if (allowlistEntity.tweet_to_like) {
-            const tweetId = allowlistEntity.tweet_to_like
-                .split('/')
-                .at(-1)
-                .split('?')[0];
-            const liked = await this.twitterService.isLikedTweet(tweetId, user.twitter_profile_id);
+            const liked = await this.twitterService.isTweetLiked(allowlistEntity.tweet_to_like, user.twitter_profile_id);
             if (!liked) {
                 throw new BadRequestException(`Criteria not met: ${TWITTER_API_MSGS.NotLikedTweet}`);
             }
         }
 
         if (allowlistEntity.tweet_to_retweet) {
-            const tweetId = allowlistEntity.tweet_to_like
-                .split('/')
-                .at(-1)
-                .split('?')[0];
             const retweeted = await this.twitterService.isTweetRetweeted(
-                user.twitter_profile_username,
-                tweetId,
+                allowlistEntity.tweet_to_retweet,
+                user.twitter_profile_id
             );
             if (!retweeted) {
                 throw new BadRequestException(`Criteria not met: ${TWITTER_API_MSGS.NotRetweetedTweet}`);

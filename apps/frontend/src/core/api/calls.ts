@@ -13,6 +13,8 @@ import {
     DISCORD_MEMBER_JOINED_SERVER_URL,
     DISCORD_ROLE_NAME_FROM_ROLE_ID_URL,
     IS_FOLLOWING_TWITTER_ACCOUNT_URL,
+    IS_TWEET_LIKED_URL,
+    IS_TWEET_RETWEETED_URL,
     IS_VALID_TWITTER_ACC_URL,
     JOIN_ALLOWLIST_URL,
     SOCIAL_MEDIA_LOGOUT_URL,
@@ -23,6 +25,16 @@ import {
 
 export const IS_FOLLOWING_TWITTER_ACCOUNT = async (userId: string, accountName: string): Promise<boolean> => {
     const result = await axios.get(IS_FOLLOWING_TWITTER_ACCOUNT_URL(userId, accountName))
+    return result.data
+}
+
+export const IS_TWEET_RETWEETED = async (userId: string, tweetUrl: string): Promise<boolean> => {
+    const result = await axios.get(IS_TWEET_RETWEETED_URL(userId, tweetUrl))
+    return result.data
+}
+
+export const IS_TWEET_LIKED = async (userId: string, tweetUrl: string): Promise<boolean> => {
+    const result = await axios.get(IS_TWEET_LIKED_URL(userId, tweetUrl))
     return result.data
 }
 
