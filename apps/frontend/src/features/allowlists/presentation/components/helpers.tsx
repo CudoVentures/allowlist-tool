@@ -266,7 +266,7 @@ export const SocialMediaBoxes = ({
                                     color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                                 >
                                     {`Follow `}
-                                    <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
+                                    <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
                                 </Typography>}
                             /> : null}
                         {twitterActions.length ?
@@ -286,7 +286,7 @@ export const SocialMediaBoxes = ({
                                     color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                                 >
                                     {`${twitterActions.join('& ')}`}
-                                    <LinkBox link={isUserJoinedAllowlist ? 'none' : `${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
+                                    <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
                                 </Typography>}
                             /> : null}
                     </FormGroup>
@@ -341,7 +341,7 @@ export const SocialMediaBoxes = ({
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
                                 {`Join `}
-                                <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
+                                <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
                                 {` server with `}
                                 <Typography
                                     component={"span"}
