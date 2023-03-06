@@ -23,6 +23,7 @@ import { SignMessagePipe } from './pipes/sign-message.pipe';
 import { AdminSignMessagePipe } from './pipes/admin-sign-message.pipe';
 import AllowlistEntity from './entities/allowlist.entity';
 import UserEntity from '../user/entities/user.entity';
+import { CanEditGuard } from './guards/can-edit.guard';
 
 @ApiTags('Allowlist')
 @Controller('allowlist')
@@ -114,6 +115,7 @@ export class AllowlistController {
 
   @UseInterceptors(TransactionInterceptor)
   @UseGuards(IsAdminGuard)
+  @UseGuards(CanEditGuard)
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
