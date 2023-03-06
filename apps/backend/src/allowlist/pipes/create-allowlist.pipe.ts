@@ -20,13 +20,19 @@ export class CreateAllowlistPipe implements PipeTransform {
       value.discord_invite_link
     ) {
 
-      if (value.twitter_account && !value.twitter_account.startsWith('@')) {
-        value.twitter_account = `@${value.twitter_account}`
+      if (value.twitter_account) {
+        const isValid = await this.twitterService.isExistingTwitterAcc(value.twitter_account)
+        if (!isValid) {
+          throw new BadRequestException('Invalid Allowlist Twitter Account');
+        }
+        if (value.twitter_account && !value.twitter_account.startsWith('@')) {
+          value.twitter_account = `@${value.twitter_account}`
+        }
       }
 
       if (value.twitter_account_to_follow) {
-        const isValidAccountToFollow = await this.twitterService.isExistingTwitterAcc(value.twitter_account_to_follow)
-        if (!isValidAccountToFollow) {
+        const isValid = await this.twitterService.isExistingTwitterAcc(value.twitter_account_to_follow)
+        if (!isValid) {
           throw new BadRequestException('Invalid Twitter Account To Follow');
         }
         if (!value.twitter_account_to_follow.startsWith('@')) {

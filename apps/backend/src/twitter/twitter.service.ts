@@ -44,7 +44,7 @@ export class TwitterService {
     }
 
     async isExistingTwitterAcc(accountName: string): Promise<boolean> {
-        const isIdFound = this.getTwitterAccountIDByAccountName(accountName)
+        const isIdFound = await this.getTwitterAccountIDByAccountName(accountName)
         return !!isIdFound
     }
 
