@@ -1,6 +1,10 @@
 // CONFIGURATIONS
 declare let Config;
 
+export const APP_DETAILS = {
+    API_KEY: Config.APP_API_KEY ?? ''
+}
+
 export const CHAIN_DETAILS = {
     ADMIN_TOKEN_DENOM: 'cudosAdmin',
     NATIVE_TOKEN_DENOM: 'acudos',
