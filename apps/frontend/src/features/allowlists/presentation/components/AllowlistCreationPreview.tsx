@@ -42,7 +42,7 @@ export const AllowlistCreationPreview = () => {
                 underline="none"
                 color={COLORS_DARK_THEME.PRIMARY_BLUE}
             >
-                {allowlistState.twitter_account}
+                {allowlistState.twitter_account.startsWith('@') ? allowlistState.twitter_account : `@${allowlistState.twitter_account}`}
             </Link>
         },
         {

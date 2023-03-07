@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Typography, Divider, List, ListItem, Input, Button } from '@mui/material'
+import { Box, Typography, Divider, List, ListItem, Input, Button, Link } from '@mui/material'
 import { TailSpin as TailSpinLoader } from 'svg-loaders-react'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
@@ -12,7 +12,13 @@ import { SocialMediaBoxes } from './helpers'
 import { updateModalState } from '../../../../core/store/modals'
 import { isValidEmail } from '../../validation'
 import { DISCORD_API_MSGS } from '../../../../../../common/interfaces'
-import { IS_JOINED_DISCORD_SERVER, IS_USER_JOINED_ALLOWLIST } from '../../../../core/api/calls'
+import {
+    IS_FOLLOWING_TWITTER_ACCOUNT,
+    IS_JOINED_DISCORD_SERVER,
+    IS_TWEET_LIKED,
+    IS_TWEET_RETWEETED,
+    IS_USER_JOINED_ALLOWLIST
+} from '../../../../core/api/calls'
 import Dialog from '../../../../core/presentation/components/Dialog'
 import { delay } from '../../../../core/utilities/ProjectUtils'
 
@@ -29,6 +35,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const [isUserJoined, setisUserJoined] = useState<boolean>(false)
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link && !!props.discord_server_name
+    const isTwitterRequired = !!props.twitter_account_to_follow || !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet
 
     const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>, isOn: boolean) => {
         setCheckBoxes({
@@ -50,6 +57,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         let modalObject = {}
 
         try {
+            //HANDLING DISCORD REQUIREMENTS
             if (isDiscordRequired) {
                 if (!connectedSocialMedia.discord.id) {
                     modalObject = {
@@ -60,17 +68,97 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                     return
                 }
 
-                if (!IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)) {
+                //Server to join
+                if (!!props.discord_invite_link) {
+                    const isJoinedServer = await IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)
+                    if (!isJoinedServer) {
+                        modalObject = {
+                            pageTransitionLoading: false,
+                            failure: true,
+                            message: `Discord server ${props.discord_server_name} not joined`
+                        }
+                        return
+                    }
+                }
+
+            }
+
+            //HANDLING TWITTER REQUIREMENTS
+            if (isTwitterRequired) {
+                if (!connectedSocialMedia.twitter.id) {
                     modalObject = {
                         pageTransitionLoading: false,
                         failure: true,
-                        message: `Discord server ${props.discord_server_name} not joined`
+                        message: 'Please connect Twitter account'
                     }
                     return
                 }
+
+                //If page to follow
+                if (!!props.twitter_account_to_follow) {
+                    const isFollowingAcc = await IS_FOLLOWING_TWITTER_ACCOUNT(connectedSocialMedia.twitter.id, props.twitter_account_to_follow)
+                    if (!isFollowingAcc) {
+                        modalObject = {
+                            pageTransitionLoading: false,
+                            failure: true,
+                            message: `Twitter page ${props.twitter_account_to_follow} not followed`
+                        }
+                        return
+                    }
+                }
+
+                //If tweet to like
+                if (!!props.tweet_to_like) {
+                    const isTweetLiked = await IS_TWEET_LIKED(connectedSocialMedia.twitter.id, props.tweet_to_like)
+                    if (!isTweetLiked) {
+                        modalObject = {
+                            pageTransitionLoading: false,
+                            failure: true,
+                            message: <Typography>
+                                <Link
+                                    sx={{ textDecoration: 'none', margin: '20px 10px 20px 0px' }}
+                                    href={props.tweet_to_like}
+                                >
+                                    @Tweet
+                                </Link>
+                                not liked
+                            </Typography>
+                        }
+                        return
+                    }
+                }
+
+                //If tweet to retweet
+                if (!!props.tweet_to_retweet) {
+                    const isTweetRetweeted = await IS_TWEET_RETWEETED(connectedSocialMedia.twitter.id, props.tweet_to_retweet)
+                    if (!isTweetRetweeted) {
+                        modalObject = {
+                            pageTransitionLoading: false,
+                            failure: true,
+                            message: <Typography>
+                                <Link
+                                    sx={{ textDecoration: 'none', margin: '20px 10px 20px 0px' }}
+                                    href={props.tweet_to_retweet}
+                                >
+                                    @Tweet
+                                </Link>
+                                not retweeted
+                            </Typography>
+                        }
+                        return
+                    }
+                }
             }
 
-            const { success, message } = await joinAllowlist(props.id, userEmail)
+            //IF EVERYTHING LOOK GOOD
+            const { success, message } = await joinAllowlist(
+                props.id,
+                userEmail,
+                {
+                    twitter: isTwitterRequired,
+                    discord: isDiscordRequired
+                }
+            )
             if (!success) { throw new Error(message) }
             modalObject = {
                 pageTransitionLoading: false,

@@ -9,6 +9,7 @@ import { RootState } from '../../../../core/store'
 import { isValidStepOne, isValidStepTwo } from '../../validation'
 import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useManipulateAllowlist'
 import { updateModalState } from '../../../../core/store/modals'
+import { IS_VALID_TWITTER_ACC } from '../../../../core/api/calls'
 
 export const STEP_MAPPER = {
     0: LAYOUT_CONTENT_TEXT.StepOne,
@@ -60,6 +61,29 @@ export const Controls = ({
 
             try {
                 dispatch(updateModalState({ pageTransitionLoading: true }))
+                let validatedBeforeSubmit = true
+                let errMsg = ''
+
+                if (allowlistState.twitter_account) {
+                    const isValid = await IS_VALID_TWITTER_ACC(allowlistState.twitter_account)
+                    if (!isValid) {
+                        validatedBeforeSubmit = false
+                        errMsg = `Invalid Twitter account: ${allowlistState.twitter_account}`
+                    }
+                }
+
+                if (allowlistState.twitter_account_to_follow) {
+                    const isValid = await IS_VALID_TWITTER_ACC(allowlistState.twitter_account_to_follow)
+                    if (!isValid) {
+                        validatedBeforeSubmit = false
+                        errMsg = `Invalid Twitter account: ${allowlistState.twitter_account_to_follow}`
+                    }
+                }
+
+                if (!validatedBeforeSubmit) {
+                    throw new Error(errMsg)
+                }
+
                 const { success, message } = allowlistState.editMode ?
                     await updateAllowlist(allowlistState) :
                     await createAllowlist(allowlistState)
