@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import axios from 'axios';
-import { Guild, Role, User } from 'discord.js';
+import { Guild, Role } from 'discord.js';
 
 import { UserService } from '../user/user.service';
 import { AllowlistRepo } from './repos/allowlist.repo';
@@ -10,8 +10,8 @@ import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import AllowlistEntity from './entities/allowlist.entity';
 import UserEntity from '../user/entities/user.entity';
 import { DiscordService } from '../discord/discord.service';
-import { DISCORD_SERVER_ROLES } from '../../../common/interfaces';
-import e from 'express';
+import { DISCORD_SERVER_ROLES, TWITTER_API_MSGS } from '../../../common/interfaces';
+import { TwitterService } from '../twitter/twitter.service';
 
 @Injectable()
 export class AllowlistService {
@@ -20,6 +20,7 @@ export class AllowlistService {
         private allowlistRepo: typeof AllowlistRepo,
         private userService: UserService,
         private discordService: DiscordService,
+        private twitterService: TwitterService
     ) { }
 
     async getUserByAllowlistIdAndAddress(allowlistId: number, address: string): Promise<UserEntity> {
@@ -141,38 +142,29 @@ export class AllowlistService {
         await this.checkForDuplicateAcc(user, allowlistEntity);
 
         if (allowlistEntity.twitter_account_to_follow) {
-            const twitterAccountId = await this.getAccountID(allowlistEntity.twitter_account)
-            const followAcc = await this.followsAcc(
-                twitterAccountId,
+            const followAcc = await this.twitterService.isFollowingTwitterAcc(
                 user.twitter_profile_id,
+                allowlistEntity.twitter_account_to_follow,
             );
             if (!followAcc) {
-                throw new BadRequestException('Criteria not met');
+                throw new BadRequestException(`Criteria not met: ${TWITTER_API_MSGS.NotFollowingAcc}`);
             }
         }
 
         if (allowlistEntity.tweet_to_like) {
-            const tweetId = allowlistEntity.tweet_to_like
-                .split('/')
-                .at(-1)
-                .split('?')[0];
-            const liked = await this.likedTweet(tweetId, user.twitter_profile_id);
+            const liked = await this.twitterService.isTweetLiked(allowlistEntity.tweet_to_like, user.twitter_profile_id);
             if (!liked) {
-                throw new BadRequestException('Criteria not met');
+                throw new BadRequestException(`Criteria not met: ${TWITTER_API_MSGS.NotLikedTweet}`);
             }
         }
 
         if (allowlistEntity.tweet_to_retweet) {
-            const tweetId = allowlistEntity.tweet_to_like
-                .split('/')
-                .at(-1)
-                .split('?')[0];
-            const retweeted = await this.retweeted(
-                user.twitter_profile_username,
-                tweetId,
+            const retweeted = await this.twitterService.isTweetRetweeted(
+                allowlistEntity.tweet_to_retweet,
+                user.twitter_profile_id
             );
             if (!retweeted) {
-                throw new BadRequestException('Criteria not met');
+                throw new BadRequestException(`Criteria not met: ${TWITTER_API_MSGS.NotRetweetedTweet}`);
             }
         }
 
@@ -233,72 +225,6 @@ export class AllowlistService {
                 throw new BadRequestException('Twitter profile is already registered');
             }
         }
-    }
-
-    private async followsAcc(
-        accUsername: string,
-        twitterId: string,
-    ): Promise<boolean> {
-        return this.passCheck(
-            `https://api.twitter.com/2/users/${twitterId}/following`,
-            accUsername,
-        );
-    }
-
-    private async likedTweet(
-        tweetId: string,
-        twitterId: string,
-    ): Promise<boolean> {
-        return this.passCheck(
-            `https://api.twitter.com/2/users/${twitterId}/liked_tweets`,
-            tweetId,
-        );
-    }
-
-    private async retweeted(
-        twitterUsername: string,
-        tweetId: string,
-    ): Promise<boolean> {
-        return this.passCheck(
-            `https://api.twitter.com/2/tweets/${tweetId}/retweeted_by`,
-            twitterUsername,
-        );
-    }
-
-    private async getAccountID(twitterUsername: string) {
-        const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${twitterUsername}`, {
-            headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-        });
-        return data.data.id
-    }
-
-    private async passCheck(url, target) {
-        let arr = [];
-
-        let res;
-        let next_token;
-
-        do {
-            const params = { max_results: 100 };
-            if (next_token) {
-                params['pagination_token'] = next_token;
-            }
-
-            res = await axios.get(url, {
-                headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-                params,
-            });
-
-            if (res.data.meta.result_count === 0 || !res.data.data) {
-                break;
-            }
-
-            const data = res.data.data.map((tweet) => tweet.id);
-            arr = arr.concat(data);
-            next_token = res.data.meta.next_token;
-        } while (next_token);
-
-        return arr.includes(target);
     }
 
     private async hasRole(

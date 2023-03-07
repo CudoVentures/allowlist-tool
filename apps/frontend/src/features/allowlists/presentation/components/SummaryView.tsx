@@ -69,24 +69,25 @@ export const SummaryView = ({
     return (
         <Box gap={3} sx={generalStyles.flexColumn}>
             <Box
-                onMouseOver={handleMouseOver}
-                onMouseOut={handleMouseOut}
+                // onMouseOver={handleMouseOver}
+                // onMouseOut={handleMouseOut}
                 sx={summaryViewStyles.title}
             >
                 <Typography variant='h4' fontWeight={900}>
                     {props.name}
                 </Typography>
-                {isAdmin ?
-                    <Box
-                        ref={editIcon}
-                        sx={summaryViewStyles.editIconHolder}
-                        onClick={handleClick}
-                    >
-                        <SvgComponent
-                            type={LAYOUT_CONTENT_TEXT.EditIcon}
-                            style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }}
-                        />
-                    </Box> : null}
+                {isAdmin ? null
+                    // <Box
+                    //     ref={editIcon}
+                    //     sx={summaryViewStyles.editIconHolder}
+                    //     onClick={handleClick}
+                    // >
+                    //     <SvgComponent
+                    //         type={LAYOUT_CONTENT_TEXT.EditIcon}
+                    //         style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }}
+                    //     />
+                    // </Box> 
+                    : null}
             </Box>
             <Box>
                 <Typography variant='h6' fontWeight={700}>
@@ -109,7 +110,7 @@ export const SummaryView = ({
                     <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
                     <LinkBox
                         link={`${BaseURL.twitter_acc}${props.twitter_account}`}
-                        text={<StyledTypography text={`@${props.twitter_account}`} />}
+                        text={<StyledTypography text={props.twitter_account} />}
                     />
                 </Box>
                 <Box sx={summaryViewStyles.linkHolder} >

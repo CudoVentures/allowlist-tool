@@ -249,25 +249,26 @@ export const SocialMediaBoxes = ({
                             </Button>}
                     </Box>
                     <FormGroup>
-                        <FormControlLabel
-                            sx={{ pointerEvents: 'none' }}
-                            disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
-                            checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
-                            control={<Checkbox
-                                onChange={handleCheckbox}
-                                value={`Follow ${props.twitter_account_to_follow}`}
-                                icon={<RadioButtonUncheckedIcon />}
-                                checkedIcon={getCheckedIcon()}
-                            />}
-                            label={<Typography
-                                lineHeight='normal'
-                                variant='subtitle2'
-                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
-                            >
-                                {`Follow `}
-                                <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
-                            </Typography>}
-                        />
+                        {!!props.twitter_account_to_follow ?
+                            <FormControlLabel
+                                sx={{ pointerEvents: 'none' }}
+                                disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
+                                checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
+                                control={<Checkbox
+                                    onChange={handleCheckbox}
+                                    value={`Follow ${props.twitter_account_to_follow}`}
+                                    icon={<RadioButtonUncheckedIcon />}
+                                    checkedIcon={getCheckedIcon()}
+                                />}
+                                label={<Typography
+                                    lineHeight='normal'
+                                    variant='subtitle2'
+                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                >
+                                    {`Follow `}
+                                    <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
+                                </Typography>}
+                            /> : null}
                         {twitterActions.length ?
                             <FormControlLabel
                                 sx={{ pointerEvents: 'none' }}
@@ -285,7 +286,7 @@ export const SocialMediaBoxes = ({
                                     color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                                 >
                                     {`${twitterActions.join('& ')}`}
-                                    <LinkBox link={isUserJoinedAllowlist ? 'none' : `${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
+                                    <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
                                 </Typography>}
                             /> : null}
                     </FormGroup>
@@ -340,7 +341,7 @@ export const SocialMediaBoxes = ({
                                 color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
                             >
                                 {`Join `}
-                                <LinkBox link={isUserJoinedAllowlist ? 'none' : `${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
+                                <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
                                 {` server with `}
                                 <Typography
                                     component={"span"}
@@ -413,7 +414,17 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />,
             title: 'Twitter Page to Follow',
             isDisabled: !props.twitter_account_to_follow,
-            subtitle: <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
+            subtitle:
+                <LinkBox
+                    link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`}
+                    text={
+                        isCollectedData ?
+                            props.twitter_account_to_follow?.startsWith('@') ?
+                                props.twitter_account_to_follow :
+                                `@${props.twitter_account_to_follow}` :
+                            props.twitter_account_to_follow
+                    }
+                />
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style='default' />,
@@ -450,14 +461,14 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style='default' />,
             title: 'Discord Server Role',
-            isDisabled: !props.server_role,
+            isDisabled: isCollectedData ? !props.discord_server || !props.server_role : !props.discord_invite_link || !props.server_role,
             subtitle: isCollectedData ? connectedSocialMedia.discord.guild.guildRoles[props.server_role] || DISCORD_SERVER_ROLES.default : props.server_role || DISCORD_SERVER_ROLES.default
         },
         {
             icon: <SvgComponent type={LAYOUT_CONTENT_TEXT.EnvelopIcon} style='default' />,
             title: 'Users to Provide Email',
-            isDisabled: false,
-            subtitle: props.require_email ? 'YES' : 'NO'
+            isDisabled: !props.require_email,
+            subtitle: null
         },
     ]
 }

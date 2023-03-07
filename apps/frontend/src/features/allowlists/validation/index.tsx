@@ -118,7 +118,7 @@ export const isValidStepOne = (data: CollectedData): boolean => {
 export const isValidStepTwo = (data: CollectedData) => {
     if (
         (data.twitter_account_to_follow && isValidTwitterAccount(data.twitter_account_to_follow)) ||
-        (data.tweet && isValidTweetUrl(data.tweet) && (data.tweet_to_like || data.tweet_to_retweet)) ||
+        (data.tweet && isValidTweetUrl(data.tweet) && ((data.tweet_to_like || data.checkedFields.tweet_to_like) || (data.tweet_to_retweet || data.checkedFields.tweet_to_retweet))) ||
         (data.discord_server && isValidDiscorServerName(data.discord_server))
     ) { return true }
 

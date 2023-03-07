@@ -44,16 +44,26 @@ const RegistrationCriteriaForm = (): JSX.Element => {
     const { addDiscordBot, connectSocialMedia } = useSocialMedia()
 
     const handleSwitch = (e: React.ChangeEvent<HTMLInputElement>) => {
-        dispatch(updateAllowlistObject({
+        let updateObject = {
             [e.target.value]: !e.target.checked ? '' : allowlistState[e.target.value],
             checkedFields: {
                 ...allowlistState.checkedFields,
                 [e.target.value]: e.target.checked
             }
-        }))
+        }
+
+        if (e.target.value === 'tweet' && !e.target.checked) {
+            updateObject = {
+                ...updateObject,
+                checkedFields: {
+                    ...updateObject.checkedFields,
+                    tweet_to_retweet: false,
+                    tweet_to_like: false
+                }
+            }
+        }
 
         if (e.target.value === 'discord_server') {
-
             if (e.target.checked) {
                 addDiscordBot(connectedAddress)
             } else {
@@ -68,9 +78,9 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                     }
                 }))
             }
-
         }
 
+        dispatch(updateAllowlistObject(updateObject))
     }
 
     const TwitterBtn = useCallback(() => {

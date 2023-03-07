@@ -57,3 +57,10 @@ export enum DISCORD_SERVER_ROLES {
 export const DISCORD_API_MSGS = {
     ExpiredOrUnknownInvite: 'Expired or Invalid invite'
 }
+
+export const TWITTER_API_MSGS = {
+    InvalidAccount: 'Invalid Account',
+    NotFollowingAcc: 'User Not Following The Specified Account',
+    NotLikedTweet: 'User Not Liked The Specified Tweet',
+    NotRetweetedTweet: 'User Not Retweeted The Specified Tweet'
+}

@@ -24,6 +24,9 @@ import { DiscordService } from './discord/discord.service';
 import { DiscordModule } from './discord/discord.module';
 import { DiscordController } from './discord/discord.controller';
 import { WebsocketGateway } from './websocket/websocket.gateway';
+import { TwitterModule } from './twitter/twitter.module';
+import { TwitterService } from './twitter/twitter.service';
+import { TwitterController } from './twitter/twitter.controller';
 
 @Module({
   imports: [
@@ -67,10 +70,11 @@ import { WebsocketGateway } from './websocket/websocket.gateway';
     UserModule,
     PassportModule.register({ session: true }),
     AllowlistModule,
-    DiscordModule
+    DiscordModule,
+    TwitterModule
   ],
-  providers: [AppService, AuthService, UserService, AllowlistService, DiscordService, WebsocketGateway],
-  controllers: [AuthController, AllowlistController, UserController, DiscordController],
+  providers: [AppService, AuthService, UserService, AllowlistService, DiscordService, TwitterService, WebsocketGateway],
+  controllers: [AuthController, AllowlistController, UserController, DiscordController, TwitterController],
 })
 
 export class AppModule implements NestModule, OnModuleInit {
