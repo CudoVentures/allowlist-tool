@@ -26,12 +26,9 @@ export const summaryViewStyles = {
     height: '48px',
     padding: '12px',
     borderRadius: '50%',
-    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
-    cursor: 'pointer',
-    transition: 'opacity .3s ease-in-out',
-    opacity: '0',
-    visibility: 'hidden',
-  },
+    background: 'transparent',
+    cursor: 'pointer'
+  }
 }
 export const allowListStyles = {
   title: {
