@@ -15,7 +15,14 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const incomingId = this.decodedId(client.handshake.query.customId)
         const userAddress = incomingId.split(process.env.APP_WS_ID).pop();
         const userFound = await this.userService.findByAddress(userAddress)
-        return { isValid: !!userFound && incomingId.startsWith(process.env.APP_WS_ID), user: userFound.address }
+        let valid = false, usr = ""
+        if (userFound !== null) {
+            valid = incomingId.startsWith(process.env.APP_WS_ID)
+            if (valid) {
+                usr = userFound.address
+            }
+        }
+        return { isValid: valid, user: usr }
     }
 
     private decodedId(encodedString: any) {
