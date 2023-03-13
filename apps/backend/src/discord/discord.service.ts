@@ -31,11 +31,11 @@ export class DiscordService {
 
     async connect(): Promise<void> {
         await this.client.login(process.env.App_Discord_Bot_Token);
-        this.client.on('guildMemberAdd', async (member) => {
-            const guild = member.guild;
-            const role = guild.roles.cache.find(role => role.name === 'new-member');
-            await member.roles.add(role);
-        });
+        // this.client.on('guildMemberAdd', async (member) => {
+        //     const guild = member.guild;
+        //     const role = guild.roles.cache.find(role => role.name === 'new-member');
+        //     await member.roles.add(role);
+        // });
     }
 
     disconnect(): void {
