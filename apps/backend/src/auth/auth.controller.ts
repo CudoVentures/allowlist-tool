@@ -18,7 +18,9 @@ import { TwitterAuthGuard } from './guards/twitter-auth.guard';
 import { DiscordService } from '../discord/discord.service';
 import { WebsocketGateway } from '../websocket/websocket.gateway';
 import { WS_MSGS, WS_ROOM } from 'apps/common/interfaces';
+import { SetMetadata } from '@nestjs/common';
 
+@SetMetadata('isPublic', true)
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {

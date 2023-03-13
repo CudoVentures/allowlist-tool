@@ -1,4 +1,4 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ConfigService } from '@nestjs/config';
 import * as bodyParser from 'body-parser';
@@ -7,6 +7,7 @@ import { AppModule } from './app.module';
 import { VersioningType } from '@nestjs/common';
 import session from 'express-session';
 import passport from 'passport';
+import { GlobalGuard } from './auth/guards/global-auth.guard';
 
 declare const module: any;
 
@@ -15,18 +16,8 @@ async function bootstrap() {
     logger: console
   });
 
+  app.useGlobalGuards(new GlobalGuard(new Reflector));
   app.enableCors();
-  // app.enableCors({
-  //   origin: (origin, callback) => {
-  //     const whitelist = [process.env.APP_URL, process.env.AURA_POOL_URL]
-  //     if (origin === undefined || whitelist.indexOf(origin) !== -1) {
-  //       callback(null, true);
-  //     } else {
-  //       callback(new Error('Not allowed by CORS'));
-  //     }
-  //   },
-  // });
-
   app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI,

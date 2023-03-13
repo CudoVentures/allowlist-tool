@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axios';
 
 import { FetchedAllowlist } from "../store/allowlist";
 import { blobToBase64 } from '../../features/allowlists/presentation/components/helpers';
