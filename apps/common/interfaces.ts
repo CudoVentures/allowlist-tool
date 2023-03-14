@@ -58,6 +58,10 @@ export const DISCORD_API_MSGS = {
     ExpiredOrUnknownInvite: 'Expired or Invalid invite'
 }
 
+export const AUTH_API_MSGS = {
+    NoUserSession: 'No User Session'
+}
+
 export const TWITTER_API_MSGS = {
     InvalidAccount: 'Invalid Account',
     NotFollowingAcc: 'User Not Following The Specified Account',
