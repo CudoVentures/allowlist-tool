@@ -108,7 +108,7 @@ export class AllowlistController {
   @UseInterceptors(TransactionInterceptor)
   @Post()
   async create(
-    @Body(AdminSignMessagePipe, CreateAllowlistPipe)
+    @Body(SignMessagePipe, CreateAllowlistPipe)
     createAllowlistDto: CreateAllowlistDto,
   ): Promise<AllowlistEntity> {
     return this.allowlistService.createAllowlist(createAllowlistDto);
@@ -120,7 +120,7 @@ export class AllowlistController {
   @Put(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body(SignMessagePipe, EditAllowlistPipe)
+    @Body(AdminSignMessagePipe, EditAllowlistPipe)
     updateAllowlistDto: UpdateAllowlistDto,
   ): Promise<AllowlistEntity> {
     return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
