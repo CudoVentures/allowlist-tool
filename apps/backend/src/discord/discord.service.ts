@@ -87,11 +87,16 @@ export class DiscordService {
     }
 
     private async isUserAGuildMember(guild: Guild, userId: string): Promise<boolean> {
-        const memberFound = await guild.members.fetch(userId)
-        if (memberFound.id && memberFound.id === userId) {
-            return true
+        try {
+            const memberFound = await guild.members.fetch(userId)
+            if (memberFound.id && memberFound.id === userId) {
+                return true
+            }
+            return false
+        } catch (error) {
+            console.error(error.message)
+            return false
         }
-        return false
     }
 
     private async createInviteForChannel(channel: TextChannel): Promise<Invite> {
