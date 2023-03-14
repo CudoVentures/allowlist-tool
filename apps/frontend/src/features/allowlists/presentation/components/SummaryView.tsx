@@ -48,8 +48,6 @@ export const SummaryView = ({
     return (
         <Box gap={3} sx={generalStyles.flexColumn}>
             <Box
-                onMouseOver={() => setHovered(true)}
-                onMouseOut={() => setHovered(false)}
                 sx={summaryViewStyles.title}
             >
                 <Typography variant='h4' fontWeight={900}>
@@ -58,6 +56,8 @@ export const SummaryView = ({
                 {isAdmin ?
                     <Tooltip title={editAllowed ? '' : 'Edit Disabled. Possible if no users joined.'}>
                         <Box
+                            onMouseOver={() => setHovered(true)}
+                            onMouseOut={() => setHovered(false)}
                             sx={summaryViewStyles.editIconHolder}
                             onClick={handleClick}
                         >
