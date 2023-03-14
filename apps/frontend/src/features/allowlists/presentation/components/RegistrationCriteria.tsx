@@ -83,17 +83,6 @@ const RegistrationCriteriaForm = (): JSX.Element => {
         dispatch(updateAllowlistObject(updateObject))
     }
 
-    const TwitterBtn = useCallback(() => {
-        return <Button
-            disabled={!connectedAddress}
-            variant="contained"
-            sx={{ height: '38px', width: '104px' }}
-            onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.twitter)}
-        >
-            Connect
-        </Button>
-    }, [connectedAddress, connectedSocialMedia.twitter.userName])
-
     const DiscordBtn = useCallback(() => {
         return <Button
             disabled={!connectedAddress}
@@ -138,14 +127,11 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                             type={LAYOUT_CONTENT_TEXT.TwitterIcon}
                             style={generalStyles.titleIcons}
                         />}
-                        switchElement={connectedSocialMedia.twitter.userName ?
-                            <Switch
-                                checked={allowlistState.checkedFields['twitter_account_to_follow']}
-                                value={'twitter_account_to_follow'}
-                                onChange={((e) => handleSwitch(e))}
-                            /> :
-                            <TwitterBtn />
-                        }
+                        switchElement={<Switch
+                            checked={allowlistState.checkedFields['twitter_account_to_follow']}
+                            value={'twitter_account_to_follow'}
+                            onChange={((e) => handleSwitch(e))}
+                        />}
                         isDisabled={!allowlistState.checkedFields['twitter_account_to_follow']}
                     />
                     <Fragment>
@@ -157,14 +143,11 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                                 type={LAYOUT_CONTENT_TEXT.TwitterIcon}
                                 style={generalStyles.titleIcons}
                             />}
-                            switchElement={connectedSocialMedia.twitter.userName ?
-                                <Switch
-                                    checked={allowlistState.checkedFields['tweet']}
-                                    value={'tweet'}
-                                    onChange={((e) => handleSwitch(e))}
-                                /> :
-                                <TwitterBtn />
-                            }
+                            switchElement={<Switch
+                                checked={allowlistState.checkedFields['tweet']}
+                                value={'tweet'}
+                                onChange={((e) => handleSwitch(e))}
+                            />}
                             isDisabled={!allowlistState.checkedFields['tweet']}
                         />
                         <FormGroup>
