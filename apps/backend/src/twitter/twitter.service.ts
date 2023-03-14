@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
 
 @Injectable()
@@ -61,14 +61,23 @@ export class TwitterService {
     }
 
     private async getTwitterAccountIDByAccountName(accountName: string): Promise<string> {
-        let name = accountName
-        if (name.startsWith('@')) {
-            name = name.substring(1)
+        try {
+            let name = accountName
+            if (name.startsWith('@')) {
+                name = name.substring(1)
+            }
+            const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${name}`, {
+                headers: { Authorization: process.env.App_Twitter_Bearer_Token },
+            });
+            return data.data?.id
+        } catch (error) {
+            console.error(error.response?.statusText || error.message)
+            if (error.response?.status === 401) {
+                throw new UnauthorizedException(error.response?.statusText || error.message)
+            } else {
+                throw new Error(error.message)
+            }
         }
-        const { data } = await axios.get(`https://api.twitter.com/2/users/by/username/${name}`, {
-            headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-        });
-        return data.data?.id
     }
 
     private async passCheck(url: string, target: string): Promise<boolean> {
