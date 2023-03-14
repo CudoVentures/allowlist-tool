@@ -6,26 +6,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import { formatAddress, isMainnetInstance } from '../../../utilities/ProjectUtils';
 import { HashBasedUserAvatar, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
 import { RootState } from '../../../store';
-import { updateUser } from '../../../store/user';
-import { initialState as initialUserState } from '../../../store/user';
-import { disconnectWalletByType } from '../../../../features/wallets/helpers';
 import AppRoutes from '../../../../features/app-routes/entities/AppRoutes';
-import { updateModalState, initialState as initialModalState } from '../../../store/modals';
+import { updateModalState } from '../../../store/modals';
 import Dialog from '../Dialog';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
 import { useIsScreenLessThan, useMidLowerResCheck } from '../../../utilities/CustomHooks/screenChecks';
 import Menu from './Menu';
 import { CopyAndFollowComponent } from '../../../theme/helpers';
 import useNavigateToRoute from '../../../utilities/CustomHooks/useNavigateToRoute';
-import useSocialMedia from '../../../utilities/CustomHooks/useSocialMedia';
+import useDisconnectUser from '../../../utilities/CustomHooks/useDisconnect';
 
 import { headerStyles } from './styles';
 
 const Header = () => {
   const dispatch = useDispatch()
   const navigateToRoute = useNavigateToRoute()
-  const { disconnectAllSocialMedias } = useSocialMedia()
-  const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
+  const disconnectUser = useDisconnectUser()
+  const { connectedAddress } = useSelector((state: RootState) => state.userState)
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
   const isMidLowerRes = useMidLowerResCheck()
@@ -39,16 +36,6 @@ const Header = () => {
     }
 
     dispatch(updateModalState({ selectWallet: true }))
-  }
-
-  const handleDisconnect = async () => {
-    sessionStorage.clear()
-    localStorage.clear()
-    await disconnectWalletByType(connectedWallet!)
-    await disconnectAllSocialMedias()
-    dispatch(updateUser(initialUserState))
-    dispatch(updateModalState(initialModalState))
-    navigateToRoute(AppRoutes.MAIN)
   }
 
   useEffect(() => {
@@ -156,7 +143,7 @@ const Header = () => {
                 <Button
                   variant="contained"
                   sx={headerStyles.disconnectBtn}
-                  onClick={handleDisconnect}
+                  onClick={disconnectUser}
                 >
                   Disconnect
                 </Button>
