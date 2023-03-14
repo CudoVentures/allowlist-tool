@@ -26,6 +26,24 @@ const CreateAllowlistForm = () => {
   const [avatarPreview, setAvatarPreview] = useState<string>('')
   const allowlistState = useSelector((state: RootState) => state.allowlistState)
 
+  const MandatoryField = ({ text }: { text: string }) => {
+
+    return (
+      <Fragment>
+        {text}
+        <Tooltip title={'Mandatory Field'}>
+          <Typography
+            component={'span'}
+            color={COLORS_DARK_THEME.PRIMARY_BLUE}
+            sx={{ cursor: 'pointer' }}
+          >
+            *
+          </Typography>
+        </Tooltip>
+      </Fragment>
+    )
+  }
+  
   useEffect(() => {
     if (allowlistState.banner_image) {
       setBlobToB64Img(allowlistState.banner_image, setBannerPreview)
@@ -93,12 +111,12 @@ const CreateAllowlistForm = () => {
         <Fragment>
           <CreationField
             type={FormField.name}
-            text='Allowlist Name'
+            text={<MandatoryField text={'Allowlist Name'} />}
             placeholder='Enter Allowlist Name'
           />
           <CreationField
             type={FormField.url}
-            text='Custom URL'
+            text={<MandatoryField text={'Custom URL'} />}
             startAdornment={getStartAdornment(`${window.location.origin.replace('https://' || 'http://', '')}/`)}
           />
           <CreationField
@@ -107,7 +125,9 @@ const CreateAllowlistForm = () => {
             placeholder='Enter Description'
           />
           <Box id='allowlistCosmosBlockchainIDInput'>
-            <Typography fontWeight={600}>Cosmos Blockchain ID</Typography>
+            <Typography fontWeight={600}>
+              <MandatoryField text={'Cosmos Blockchain ID'} />
+            </Typography>
             <Select
               disabled
               disableUnderline
@@ -175,7 +195,9 @@ const CreateAllowlistForm = () => {
             />}
           />
           <Box id='allowlistProfileImageInput'>
-            <Typography fontWeight={600}>Profile Image</Typography>
+            <Typography fontWeight={600}>
+              <MandatoryField text={'Profile Image'} />
+            </Typography>
             <Typography
               variant='subtitle2'
               color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
@@ -212,7 +234,9 @@ const CreateAllowlistForm = () => {
             </Box>
           </Box>
           <Box id='allowlistBannerImageInput'>
-            <Typography fontWeight={600}>Banner Image</Typography>
+            <Typography fontWeight={600}>
+              <MandatoryField text={'Banner Image'} />
+            </Typography>
             <Typography
               variant='subtitle2'
               color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
@@ -261,7 +285,9 @@ const CreateAllowlistForm = () => {
             >
               <Box id='allowlistRegistrationEndDateInput' sx={{ width: '50%' }}>
                 <Box marginBottom='8px' gap={1} display='flex' alignItems='flex-start'>
-                  <Typography fontWeight={600}> Registration End Date </Typography>
+                  <Typography fontWeight={600}>
+                    <MandatoryField text={'Registration End Date'} />
+                  </Typography>
                   <Tooltip
                     placement='right'
                     followCursor
@@ -283,7 +309,9 @@ const CreateAllowlistForm = () => {
                 />
               </Box>
               <Box id='allowlistRegistrationEndTimeInput' sx={{ width: '50%' }}>
-                <Typography marginBottom='10px' fontWeight={600}> Registration End Time </Typography>
+                <Typography marginBottom='10px' fontWeight={600}>
+                  <MandatoryField text={'Registration End Time'} />
+                </Typography>
                 <MobileTimePicker
                   DialogProps={allowlistDetailsStyles.dialogProps}
                   InputProps={!isValidEndPeriod(allowlistState.end_period) ?
