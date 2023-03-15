@@ -6,16 +6,36 @@ import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../../../../store'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../Layout/helpers'
 import { initialState, updateModalState } from '../../../../../store/modals'
+import { AUTH_API_MSGS } from '../../../../../../../../common/interfaces'
+import useDisconnectUser from '../../../../../../core/utilities/CustomHooks/useDisconnect'
 
 import { CancelRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
 
 const Failure = () => {
 
     const dispatch = useDispatch()
+    const disconnectUser = useDisconnectUser()
     const { failure, message } = useSelector((state: RootState) => state.modalState)
 
     const handleModalClose = () => {
+        if (message === AUTH_API_MSGS.NoUserSession) {
+            disconnectUser()
+            return
+        }
         dispatch(updateModalState(initialState))
+    }
+
+    const handleMessage = (message: string) => {
+        if (!message) {
+            return "Something went wrong"
+        }
+        switch (message) {
+            case AUTH_API_MSGS.NoUserSession:
+                return 'No active user session. Please log in.'
+
+            default:
+                return message
+        }
     }
 
     const closeModal = (event: {}, reason: string) => {
@@ -45,7 +65,7 @@ const Failure = () => {
                     color='text.secondary'
                     variant="subtitle1"
                 >
-                    {message ? message : "Something went wrong"}
+                    {handleMessage(message)}
                 </Typography>
                 <Button
                     variant="contained"
