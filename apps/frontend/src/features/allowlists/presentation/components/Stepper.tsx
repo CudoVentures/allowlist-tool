@@ -64,13 +64,13 @@ export const Controls = ({
                 let validatedBeforeSubmit = true
                 let errMsg = ''
 
-               // if (allowlistState.twitter_account) {
-                   // const isValid = await IS_VALID_TWITTER_ACC(allowlistState.twitter_account)
-                   // if (!isValid) {
-                       // validatedBeforeSubmit = false
-                       // errMsg = `Invalid Twitter account: ${allowlistState.twitter_account}`
-                   // }
-               // }
+                if (allowlistState.twitter_account) {
+                    const isValid = await IS_VALID_TWITTER_ACC(allowlistState.twitter_account)
+                    if (!isValid) {
+                        validatedBeforeSubmit = false
+                        errMsg = `Invalid Twitter account: ${allowlistState.twitter_account}`
+                    }
+                }
 
                 if (allowlistState.twitter_account_to_follow) {
                     const isValid = await IS_VALID_TWITTER_ACC(allowlistState.twitter_account_to_follow)

@@ -14,6 +14,7 @@ export const menuStyles = {
 export const summaryViewStyles = {
   title: {
     display: 'flex',
+    alignItems: "flex-end",
     justifyContent: 'space-between',
     width: '100%'
   },
@@ -22,9 +23,6 @@ export const summaryViewStyles = {
     alignItems: 'center'
   },
   editIconHolder: {
-    width: '48px',
-    height: '48px',
-    padding: '12px',
     borderRadius: '50%',
     background: 'transparent',
     cursor: 'pointer'

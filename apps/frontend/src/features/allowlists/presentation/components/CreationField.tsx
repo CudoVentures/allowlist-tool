@@ -19,7 +19,7 @@ const CreationField = ({
     isDisabled
 }: {
     type: FormField,
-    text: string
+    text: string | JSX.Element,
     placeholder?: string,
     startAdornment?: React.ReactNode,
     svgIcon?: React.ReactNode,

@@ -98,18 +98,20 @@ export const getFieldisValid = (fieldType: FormField, value: any): boolean => {
 
 export const isValidStepOne = (data: CollectedData): boolean => {
     if (
+        //MANDATORY
         (data.name && getFieldisValid(FormField.name, data.name)) &&
         (data.url && getFieldisValid(FormField.url, data.url)) &&
-        (data.description && getFieldisValid(FormField.description, data.description)) &&
-        (data.website && getFieldisValid(FormField.website, data.website)) &&
-        (data.twitter_account && getFieldisValid(FormField.twitter_account, data.twitter_account)) &&
-        (data.discord_url && getFieldisValid(FormField.discord_url, data.discord_url)) &&
         data.cosmos_chain_id &&
         data.image &&
         data.banner_image &&
         data.end_date &&
         data.end_time &&
-        (data.end_period && getFieldisValid(FormField.end_period, data.end_period))
+        (data.end_period && getFieldisValid(FormField.end_period, data.end_period)) &&
+        //OPTIONAL
+        (!data.description || (data.description && getFieldisValid(FormField.description, data.description))) &&
+        (!data.website || (data.website && getFieldisValid(FormField.website, data.website))) &&
+        (!data.twitter_account || (data.twitter_account && getFieldisValid(FormField.twitter_account, data.twitter_account))) &&
+        (!data.discord_url || (data.discord_url && getFieldisValid(FormField.discord_url, data.discord_url)))
     ) { return true }
 
     return false

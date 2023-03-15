@@ -36,7 +36,8 @@ export class DiscordController {
       res.send({
         isUserJoinedDiscordGuild: await this.discordService.isUserJoinedByInvite(code, userId)
       })
-    } catch {
+    } catch (error) {
+      console.error(error.message)
       throw new BadRequestException(DISCORD_API_MSGS.ExpiredOrUnknownInvite)
     }
   }

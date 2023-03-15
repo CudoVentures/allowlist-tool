@@ -8,6 +8,7 @@ import {
   Put,
   Req,
   Request,
+  UnauthorizedException,
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
@@ -20,10 +21,11 @@ import { UpdateAllowlistDto } from './dto/update-allowlist.dto';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { CreateAllowlistPipe } from './pipes/create-allowlist.pipe';
 import { SignMessagePipe } from './pipes/sign-message.pipe';
-import { AdminSignMessagePipe } from './pipes/admin-sign-message.pipe';
 import AllowlistEntity from './entities/allowlist.entity';
 import UserEntity from '../user/entities/user.entity';
 import { CanEditGuard } from './guards/can-edit.guard';
+import { EditAllowlistPipe } from './pipes/edit-allowlist.pipe';
+import { SignedMessageDto } from './dto/signed-message.dto';
 
 @ApiTags('Allowlist')
 @Controller('allowlist')
@@ -107,7 +109,7 @@ export class AllowlistController {
   @UseInterceptors(TransactionInterceptor)
   @Post()
   async create(
-    @Body(AdminSignMessagePipe, CreateAllowlistPipe)
+    @Body(SignMessagePipe, CreateAllowlistPipe)
     createAllowlistDto: CreateAllowlistDto,
   ): Promise<AllowlistEntity> {
     return this.allowlistService.createAllowlist(createAllowlistDto);
@@ -118,9 +120,16 @@ export class AllowlistController {
   @UseGuards(CanEditGuard)
   @Put(':id')
   async update(
+    @Req() req,
     @Param('id', ParseIntPipe) id: number,
-    @Body(SignMessagePipe) updateAllowlistDto: UpdateAllowlistDto,
+    @Body(SignMessagePipe) signedData: SignedMessageDto,
+    @Body(EditAllowlistPipe) updateAllowlistDto: UpdateAllowlistDto,
   ): Promise<AllowlistEntity> {
-    return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
+    // If we reach here, we are guarantied a valid allowlist admin in the session by the "IsAdminGuard" 
+    // and valid signer by "SignMessagePipe". We only have to compare them.
+    if (req.session.user.address === signedData.connectedAddress) {
+      return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
+    }
+    throw new UnauthorizedException('Invalid admin');
   }
 }

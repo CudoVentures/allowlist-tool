@@ -48,8 +48,6 @@ export const SummaryView = ({
     return (
         <Box gap={3} sx={generalStyles.flexColumn}>
             <Box
-                onMouseOver={() => setHovered(true)}
-                onMouseOut={() => setHovered(false)}
                 sx={summaryViewStyles.title}
             >
                 <Typography variant='h4' fontWeight={900}>
@@ -58,6 +56,8 @@ export const SummaryView = ({
                 {isAdmin ?
                     <Tooltip title={editAllowed ? '' : 'Edit Disabled. Possible if no users joined.'}>
                         <Box
+                            onMouseOver={() => setHovered(true)}
+                            onMouseOut={() => setHovered(false)}
                             sx={summaryViewStyles.editIconHolder}
                             onClick={handleClick}
                         >
@@ -69,38 +69,45 @@ export const SummaryView = ({
                     </Tooltip>
                     : null}
             </Box>
-            <Box>
-                <Typography variant='h6' fontWeight={700}>
-                    Description
-                </Typography>
-                <StyledTypography text={props.description} />
-            </Box>
-            <Box gap={1} sx={generalStyles.flexColumn}>
-                <Typography variant='h6' fontWeight={700}>
-                    Links
-                </Typography>
-                <Box sx={summaryViewStyles.linkHolder} >
-                    <SvgComponent type={LAYOUT_CONTENT_TEXT.ChainLinkIcon} style={'default'} />
-                    <LinkBox
-                        link={props.website}
-                        text={<StyledTypography text={props.website} />}
-                    />
+            {props.description ?
+                <Box>
+                    <Typography variant='h6' fontWeight={700}>
+                        Description
+                    </Typography>
+                    <StyledTypography text={props.description} />
+
                 </Box>
-                <Box sx={summaryViewStyles.linkHolder} >
-                    <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
-                    <LinkBox
-                        link={`${BaseURL.twitter_acc}${props.twitter_account}`}
-                        text={<StyledTypography text={props.twitter_account} />}
-                    />
-                </Box>
-                <Box sx={summaryViewStyles.linkHolder} >
-                    <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style={'default'} />
-                    <LinkBox
-                        link={`${BaseURL.discord_server}${props.discord_url}`}
-                        text={<StyledTypography text='Discord' />}
-                    />
-                </Box>
-            </Box>
+                : null}
+            {props.website || props.twitter_account || props.discord_url ?
+                <Box gap={1} sx={generalStyles.flexColumn}>
+                    <Typography variant='h6' fontWeight={700}>
+                        Links
+                    </Typography>
+                    {props.website ?
+                        <Box sx={summaryViewStyles.linkHolder} >
+                            <SvgComponent type={LAYOUT_CONTENT_TEXT.ChainLinkIcon} style={'default'} />
+                            <LinkBox
+                                link={props.website}
+                                text={<StyledTypography text={props.website} />}
+                            />
+                        </Box> : null}
+                    {props.twitter_account ?
+                        <Box sx={summaryViewStyles.linkHolder} >
+                            <SvgComponent type={LAYOUT_CONTENT_TEXT.TwitterIcon} style={'default'} />
+                            <LinkBox
+                                link={`${BaseURL.twitter_acc}${props.twitter_account}`}
+                                text={<StyledTypography text={props.twitter_account} />}
+                            />
+                        </Box> : null}
+                    {props.discord_url ?
+                        <Box sx={summaryViewStyles.linkHolder} >
+                            <SvgComponent type={LAYOUT_CONTENT_TEXT.DiscordIcon} style={'default'} />
+                            <LinkBox
+                                link={`${BaseURL.discord_server}${props.discord_url}`}
+                                text={<StyledTypography text='Discord' />}
+                            />
+                        </Box> : null}
+                </Box> : null}
             <Box gap={1} sx={generalStyles.flexColumn}>
                 <Typography variant='h6' fontWeight={700}>
                     Mint Details
