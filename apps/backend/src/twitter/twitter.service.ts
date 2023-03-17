@@ -53,7 +53,7 @@ export class TwitterService {
         if (!this.isValidTweetUrl(tweetUrl)) {
             return ''
         }
-        return tweetUrl.split('/').pop()
+        return tweetUrl.split('/').pop().split('?')[0] || ''
     }
 
     private isValidTweetUrl = (tweetUrl: string): boolean => {
