@@ -189,7 +189,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const handleComponentLoading = async () => {
         await handleUserIsJoined(props.id)
         await delay(500)
-        if (!isUserJoined ) {
+        if (!isUserJoined) {
             await checkEligibility({ withSignUp: false })
         }
         setLoading(false)
@@ -220,7 +220,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             />
             {isUserJoined || !props.require_email ? null :
                 <Fragment>
-                    <Box id='userEmailInput'>
+                    <Box width={'100%'} id='userEmailInput'>
                         <Box>
                             <Typography display={'flex'} alignItems='center' fontWeight={600}>
                                 <SvgComponent
@@ -229,14 +229,11 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                                 />
                                 Provide your email address
                             </Typography>
-                            <List sx={{ ...allowlistPreviewStyles.list, color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}>
+                            {/* <List sx={{ ...allowlistPreviewStyles.list, color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}>
                                 <ListItem sx={allowlistPreviewStyles.listItem}>
                                     The collection creator will send you updates via email
                                 </ListItem>
-                                <ListItem sx={allowlistPreviewStyles.listItem}>
-                                    {`${props.website} will send you a confirmation by email upon successful completion of ${props.name} allowlist criteria`}
-                                </ListItem>
-                            </List>
+                            </List> */}
                         </Box>
                         <Input placeholder='johndoe@mail.com' disableUnderline type='text'
                             sx={generalStyles.input}

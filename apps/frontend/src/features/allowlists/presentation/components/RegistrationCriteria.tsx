@@ -132,6 +132,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                             value={'twitter_account_to_follow'}
                             onChange={((e) => handleSwitch(e))}
                         />}
+                        switched={allowlistState.checkedFields['twitter_account_to_follow']}
                         isDisabled={!allowlistState.checkedFields['twitter_account_to_follow']}
                     />
                     <Fragment>
@@ -148,6 +149,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                                 value={'tweet'}
                                 onChange={((e) => handleSwitch(e))}
                             />}
+                            switched={allowlistState.checkedFields['tweet']}
                             isDisabled={!allowlistState.checkedFields['tweet']}
                         />
                         <FormGroup>
@@ -191,6 +193,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                             /> :
                             <DiscordBtn />
                         }
+                        switched={allowlistState.checkedFields['discord_server']}
                         isDisabled={true}
                     />
                     <Box id='allowlistServerRoleInput'>
