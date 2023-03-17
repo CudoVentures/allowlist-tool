@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Typography, Divider, List, ListItem, Input, Button, Link } from '@mui/material'
+import { Box, Typography, Divider, List, ListItem, Input, Button } from '@mui/material'
 import { TailSpin as TailSpinLoader } from 'svg-loaders-react'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
@@ -21,6 +21,7 @@ import {
 } from '../../../../core/api/calls'
 import Dialog from '../../../../core/presentation/components/Dialog'
 import { delay } from '../../../../core/utilities/ProjectUtils'
+import { updateSocialMediaActionsState } from '../../../../core/store/socialMediaActions'
 
 import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
 
@@ -29,182 +30,177 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     const dispatch = useDispatch()
     const { joinAllowlist } = useManipulateAllowlist()
     const { connectedAddress, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { ongoingEligibilityCheck } = useSelector((state: RootState) => state.modalState)
     const [userEmail, setUserEmail] = useState<string>('')
-    const [checkBoxes, setCheckBoxes] = useState<Record<string, boolean>>({})
     const [loading, setLoading] = useState<boolean>(true)
     const [isUserJoined, setisUserJoined] = useState<boolean>(false)
+    const {
+        followTwitterAccount,
+        likeTweet,
+        retweetTweet,
+        joinDiscordServer
+    } = useSelector((state: RootState) => state.socialMediaActionsState)
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link && !!props.discord_server_name
     const isTwitterRequired = !!props.twitter_account_to_follow || !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet
 
-    const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>, isOn: boolean) => {
-        setCheckBoxes({
-            ...checkBoxes,
-            [e.target.value]: isOn
-        })
-    }
-
     const handleUserIsJoined = async (allowlistID: number) => {
         const result = await IS_USER_JOINED_ALLOWLIST(allowlistID)
         setisUserJoined(result && !!connectedAddress)
-        await delay(500)
-        setLoading(false)
     }
 
-    const signUp = async () => {
-
-        dispatch(updateModalState({ pageTransitionLoading: true }))
-        let modalObject = {}
-
+    const checkEligibility = async (option: { withSignUp: boolean }) => {
+        const withSignUp = option.withSignUp
         try {
+            if (withSignUp) {
+                dispatch(updateModalState({
+                    pageTransitionLoading: true,
+                    message: 'Signing You Up',
+                    loadingSpinner: true
+                }))
+            } else {
+                dispatch(updateModalState({
+                    ongoingEligibilityCheck: true
+                }))
+            }
+
             //HANDLING DISCORD REQUIREMENTS
-            if (isDiscordRequired) {
-                if (!connectedSocialMedia.discord.id) {
-                    modalObject = {
-                        pageTransitionLoading: false,
-                        failure: true,
-                        message: 'Please connect Discord account'
-                    }
-                    return
+            if (isDiscordRequired && !!connectedSocialMedia.discord.id && !!props.discord_invite_link) {
+                //If server to join
+                const isJoinedServer = await IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)
+                dispatch(updateSocialMediaActionsState({ joinDiscordServer: isJoinedServer }))
+                if (withSignUp && !isJoinedServer) {
+                    throw new Error(`Discord server ${props.discord_server_name} not joined`)
                 }
-
-                //Server to join
-                if (!!props.discord_invite_link) {
-                    const isJoinedServer = await IS_JOINED_DISCORD_SERVER(props.discord_invite_link, connectedSocialMedia.discord.id)
-                    if (!isJoinedServer) {
-                        modalObject = {
-                            pageTransitionLoading: false,
-                            failure: true,
-                            message: `Discord server ${props.discord_server_name} not joined`
-                        }
-                        return
-                    }
-                }
-
             }
 
             //HANDLING TWITTER REQUIREMENTS
-            if (isTwitterRequired) {
-                if (!connectedSocialMedia.twitter.id) {
-                    modalObject = {
-                        pageTransitionLoading: false,
-                        failure: true,
-                        message: 'Please connect Twitter account'
-                    }
-                    return
-                }
-
+            if (isTwitterRequired && !!connectedSocialMedia.twitter.id) {
                 //If page to follow
                 if (!!props.twitter_account_to_follow) {
                     const isFollowingAcc = await IS_FOLLOWING_TWITTER_ACCOUNT(connectedSocialMedia.twitter.id, props.twitter_account_to_follow)
-                    if (!isFollowingAcc) {
-                        modalObject = {
-                            pageTransitionLoading: false,
-                            failure: true,
-                            message: `Twitter page ${props.twitter_account_to_follow} not followed`
-                        }
-                        return
+                    dispatch(updateSocialMediaActionsState({ followTwitterAccount: isFollowingAcc }))
+                    if (withSignUp && !isFollowingAcc) {
+                        throw new Error(`Twitter page ${props.twitter_account_to_follow} not followed`)
                     }
                 }
-
                 //If tweet to like
                 if (!!props.tweet_to_like) {
                     const isTweetLiked = await IS_TWEET_LIKED(connectedSocialMedia.twitter.id, props.tweet_to_like)
-                    if (!isTweetLiked) {
-                        modalObject = {
-                            pageTransitionLoading: false,
-                            failure: true,
-                            message: <Typography>
-                                <Link
-                                    sx={{ textDecoration: 'none', margin: '20px 10px 20px 0px' }}
-                                    href={props.tweet_to_like}
-                                >
-                                    @Tweet
-                                </Link>
-                                not liked
-                            </Typography>
-                        }
-                        return
+                    dispatch(updateSocialMediaActionsState({ likeTweet: isTweetLiked }))
+                    if (withSignUp && !isTweetLiked) {
+                        throw new Error(`Tweet not liked`)
                     }
                 }
-
                 //If tweet to retweet
                 if (!!props.tweet_to_retweet) {
                     const isTweetRetweeted = await IS_TWEET_RETWEETED(connectedSocialMedia.twitter.id, props.tweet_to_retweet)
-                    if (!isTweetRetweeted) {
-                        modalObject = {
-                            pageTransitionLoading: false,
-                            failure: true,
-                            message: <Typography>
-                                <Link
-                                    sx={{ textDecoration: 'none', margin: '20px 10px 20px 0px' }}
-                                    href={props.tweet_to_retweet}
-                                >
-                                    @Tweet
-                                </Link>
-                                not retweeted
-                            </Typography>
-                        }
-                        return
+                    dispatch(updateSocialMediaActionsState({ retweetTweet: isTweetRetweeted }))
+                    if (withSignUp && !isTweetRetweeted) {
+                        throw new Error(`Tweet not retweeted`)
                     }
                 }
             }
-
             //IF EVERYTHING LOOK GOOD
-            const { success, message } = await joinAllowlist(
-                props.id,
-                userEmail,
-                {
-                    twitter: isTwitterRequired,
-                    discord: isDiscordRequired
+            if (withSignUp) {
+                const { success, message } = await joinAllowlist(
+                    props.id,
+                    userEmail,
+                    {
+                        twitter: isTwitterRequired,
+                        discord: isDiscordRequired
+                    }
+                )
+                if (!success) {
+                    throw new Error(message)
                 }
-            )
-            if (!success) { throw new Error(message) }
-            modalObject = {
-                pageTransitionLoading: false,
-                success: true
+                dispatch(updateModalState({
+                    success: true,
+                }))
             }
 
         } catch (error) {
-            modalObject = {
-                pageTransitionLoading: false,
+            dispatch(updateModalState({
                 failure: true,
                 message: error.message
-            }
+            }))
+
         } finally {
-            dispatch(updateModalState(modalObject))
+            dispatch(updateModalState({
+                pageTransitionLoading: false,
+                loadingSpinner: false,
+                ongoingEligibilityCheck: false
+            }))
         }
     }
 
-    const isSignUpDisabled = (): boolean => {
+    const isEligibilityBtnDisabled = (): boolean => {
         if (!connectedAddress) {
             return true
         }
 
-        //IsTwitterLogInRequired
-        if ((props.twitter_account_to_follow || props.tweet) && (!connectedSocialMedia.twitter.userName || !connectedSocialMedia.twitter.id)) {
-            return true
-        }
-
-        //IsDiscordLogInRequired
-        if (isDiscordRequired && (
-            props.discord_server_name === DISCORD_API_MSGS.ExpiredOrUnknownInvite ||
-            !connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id)
+        if (isTwitterRequired && (
+            !connectedSocialMedia.twitter.userName ||
+            !connectedSocialMedia.twitter.id)
         ) {
             return true
         }
 
-        //IsEmailRequired
-        if (props.require_email && (!userEmail || !isValidEmail(userEmail))) {
+        if (isDiscordRequired && (
+            !connectedSocialMedia.discord.userName &&
+            !connectedSocialMedia.discord.id)
+        ) {
             return true
         }
 
         return false
     }
 
+    const isCheckEligibilityDisabled = (): boolean => {
+        //IsTwitterLogInRequired
+        if (isTwitterRequired && (
+            (!!props.twitter_account_to_follow && !followTwitterAccount) ||
+            (!!props.tweet_to_like && !likeTweet) ||
+            (!!props.tweet_to_retweet && !retweetTweet) ||
+            !connectedSocialMedia.twitter.userName ||
+            !connectedSocialMedia.twitter.id)
+        ) {
+            return true
+        }
+        //IsDiscordLogInRequired
+        if (isDiscordRequired && (
+            (!!props.discord_invite_link && !joinDiscordServer) ||
+            props.discord_server_name === DISCORD_API_MSGS.ExpiredOrUnknownInvite ||
+            (!connectedSocialMedia.discord.userName && !connectedSocialMedia.discord.id))
+        ) {
+            return true
+        }
+
+        return false
+    }
+
+    const isSignUpDisabled = (): boolean => {
+        if (props.require_email && (!userEmail || !isValidEmail(userEmail))) {
+            return true && !isCheckEligibilityDisabled()
+        }
+        return false
+    }
+
+    const handleComponentLoading = async () => {
+        await handleUserIsJoined(props.id)
+        await delay(500)
+        if (!isUserJoined ) {
+            await checkEligibility({ withSignUp: false })
+        }
+        setLoading(false)
+    }
+
     useEffect(() => {
-        handleUserIsJoined(props.id)
-    }, [props.id, connectedAddress])
+        if (!!props.id) {
+            setLoading(true)
+            handleComponentLoading()
+        }
+    }, [props.id, connectedAddress, connectedSocialMedia.discord.id, connectedSocialMedia.twitter.id])
 
     return loading ? <TailSpinLoader /> : (
         <Fragment>
@@ -218,7 +214,10 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                 </Typography>
             </Box>
             <Divider sx={{ width: '100%' }} />
-            <SocialMediaBoxes handleCheckbox={handleCheckbox} props={props} isUserJoinedAllowlist={isUserJoined} />
+            <SocialMediaBoxes
+                props={props}
+                isUserJoinedAllowlist={isUserJoined}
+            />
             {isUserJoined || !props.require_email ? null :
                 <Fragment>
                     <Box id='userEmailInput'>
@@ -247,16 +246,26 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                     </Box>
                 </Fragment>}
             {isUserJoined ? null :
-                <Button
-                    disabled={isSignUpDisabled()}
-                    variant="contained"
-                    sx={{ height: '56px', width: '100%' }}
-                    onClick={signUp}
-                >
-                    SignUp
-                </Button>}
+                isCheckEligibilityDisabled() ?
+                    <Button
+                        disabled={ongoingEligibilityCheck || isEligibilityBtnDisabled()}
+                        variant="contained"
+                        sx={{ height: '56px', width: '100%' }}
+                        onClick={() => checkEligibility({ withSignUp: false })}
+                    >
+                        Check Eligibility
+                    </Button>
+                    :
+                    <Button
+                        disabled={ongoingEligibilityCheck || isSignUpDisabled()}
+                        variant="contained"
+                        sx={{ height: '56px', width: '100%' }}
+                        onClick={() => checkEligibility({ withSignUp: true })}
+                    >
+                        Sign Up
+                    </Button>}
         </Fragment>
     )
 }
 
-export default UserView
+export default React.memo(UserView)
