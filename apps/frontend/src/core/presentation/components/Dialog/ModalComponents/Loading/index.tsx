@@ -1,6 +1,7 @@
 import React from 'react'
-import { Dialog as MuiDialog } from '@mui/material'
+import { Box, Dialog as MuiDialog, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
+import { Circles as CirclesSpinner } from 'svg-loaders-react'
 
 import { RootState } from '../../../../../store'
 
@@ -8,11 +9,11 @@ import { ModalContainer, styles as defaultStyles } from '../../styles'
 
 const Loading = () => {
 
-    const { pageTransitionLoading } = useSelector((state: RootState) => state.modalState)
+    const { pageTransitionLoading, message, loadingSpinner } = useSelector((state: RootState) => state.modalState)
 
     return (
         <MuiDialog
-            BackdropProps={defaultStyles.defaultBackDrop}
+            BackdropProps={message ? defaultStyles.msgBackDrop : defaultStyles.defaultBackDrop}
             open={pageTransitionLoading}
             PaperProps={defaultStyles.loadingProps}
         >
@@ -20,6 +21,12 @@ const Loading = () => {
                 backgroundColor: 'transparent',
                 ...defaultStyles.loadingModalContainer
             }}>
+                {message ?
+                    <Box gap={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                        {loadingSpinner ? <CirclesSpinner style={{ width: '60px', height: '60px' }} /> : null}
+                        <Typography variant='h5'>{message}</Typography>
+                    </Box>
+                    : null}
             </ModalContainer>
         </MuiDialog>
     )

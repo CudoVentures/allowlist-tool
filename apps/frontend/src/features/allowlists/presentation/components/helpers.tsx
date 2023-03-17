@@ -2,8 +2,8 @@ import React, { Fragment, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Dispatch } from "redux";
 import { Box, Button, Checkbox, ClickAwayListener, Collapse, Divider, FormControlLabel, FormGroup, InputAdornment, List, ListItem, Paper, Tooltip, Typography } from "@mui/material";
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
@@ -14,9 +14,21 @@ import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedi
 import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
 import { updateModalState } from "../../../../core/store/modals";
+import { TailSpin as TailSpinLoader } from 'svg-loaders-react'
 
 import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
+
+export enum SocialMediaAction {
+    joinDiscordServer = 'joinDiscordServer',
+    followTwitterAccount = 'followTwitterAccount',
+    likeTweet = 'likeTweet',
+    retweetTweet = 'retweetTweet'
+}
+
+export type SocialMediaUserActions = {
+    [key in SocialMediaAction]: boolean
+}
 
 export enum FormFieldErrors {
     description = 'Have to be between 20 and 500 characters',
@@ -167,11 +179,9 @@ export const SocialMediaButtons = () => {
 }
 
 export const SocialMediaBoxes = ({
-    handleCheckbox,
     props,
     isUserJoinedAllowlist
 }: {
-    handleCheckbox: (e: React.ChangeEvent<HTMLInputElement>, isOn: boolean) => void,
     props: FetchedAllowlist
     isUserJoinedAllowlist?: boolean
 }) => {
@@ -179,17 +189,57 @@ export const SocialMediaBoxes = ({
     const dispatch = useDispatch()
     const { connectSocialMedia } = useSocialMedia()
     const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
+    const { ongoingEligibilityCheck } = useSelector((state: RootState) => state.modalState)
+    const {
+        followTwitterAccount,
+        likeTweet,
+        retweetTweet,
+        joinDiscordServer
+    } = useSelector((state: RootState) => state.socialMediaActionsState)
 
     const isDiscordRequired = !!props.server_role && !!props.discord_invite_link
     const isTwitterRequired = !!props.tweet || !!props.tweet_to_like || !!props.tweet_to_retweet || !!props.twitter_account_to_follow
     const twitterActions = [props.tweet_to_like ? 'Like ' : null, props.tweet_to_retweet ? 'Retweet ' : null].filter((action) => action !== null)
 
-    const getCheckedIcon = useCallback(() => {
+    const getCheckedIcon = useCallback((actions: SocialMediaAction[]) => {
         if (isUserJoinedAllowlist) {
             return <CheckCircleIcon />
         }
-        return <RadioButtonCheckedIcon />
-    }, [isUserJoinedAllowlist])
+        let valid = false
+        actions.forEach((action) => {
+            if (actions.length > 1) {
+                //Handling Like & Retweet
+                valid = likeTweet && retweetTweet
+            } else {
+                if (
+                    (action === SocialMediaAction.followTwitterAccount && followTwitterAccount) ||
+                    (action === SocialMediaAction.likeTweet && likeTweet) ||
+                    (action === SocialMediaAction.retweetTweet && retweetTweet) ||
+                    (action === SocialMediaAction.joinDiscordServer && joinDiscordServer)
+                ) {
+                    valid = true
+                } else {
+                    valid = false
+                }
+            }
+        })
+
+        return valid ?
+            <CheckCircleIcon style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+            <HighlightOffIcon style={{ color: COLORS_DARK_THEME.TESTNET_ORANGE }} />
+
+    }, [isUserJoinedAllowlist, followTwitterAccount, likeTweet, retweetTweet, joinDiscordServer])
+
+    const getCheckBox = (action: SocialMediaAction[]) => {
+        if (ongoingEligibilityCheck) {
+            return <TailSpinLoader style={{ width: '24px', height: '24px', margin: '9px' }} />
+        }
+        return <Checkbox
+            value={action}
+            icon={<RadioButtonUncheckedIcon />}
+            checkedIcon={getCheckedIcon(action)}
+        />
+    }
 
     return (
         <Fragment>
@@ -254,12 +304,7 @@ export const SocialMediaBoxes = ({
                                 sx={{ pointerEvents: 'none' }}
                                 disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
                                 checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
-                                control={<Checkbox
-                                    onChange={handleCheckbox}
-                                    value={`Follow ${props.twitter_account_to_follow}`}
-                                    icon={<RadioButtonUncheckedIcon />}
-                                    checkedIcon={getCheckedIcon()}
-                                />}
+                                control={getCheckBox([SocialMediaAction.followTwitterAccount])}
                                 label={<Typography
                                     lineHeight='normal'
                                     variant='subtitle2'
@@ -274,12 +319,14 @@ export const SocialMediaBoxes = ({
                                 sx={{ pointerEvents: 'none' }}
                                 disabled={!isUserJoinedAllowlist && !connectedSocialMedia.twitter.userName}
                                 checked={isUserJoinedAllowlist || !!connectedSocialMedia.twitter.userName}
-                                control={<Checkbox
-                                    onChange={handleCheckbox}
-                                    value={`Like & retweet ${props.name}'s tweet`}
-                                    icon={<RadioButtonUncheckedIcon />}
-                                    checkedIcon={getCheckedIcon()}
-                                />}
+                                control={getCheckBox(twitterActions.map((action) => {
+                                    if (action.trim() === 'Like') {
+                                        return SocialMediaAction.likeTweet
+                                    }
+                                    if (action.trim() === 'Retweet') {
+                                        return SocialMediaAction.retweetTweet
+                                    }
+                                }))}
                                 label={<Typography
                                     lineHeight='normal'
                                     variant='subtitle2'
@@ -327,12 +374,7 @@ export const SocialMediaBoxes = ({
                         sx={{ pointerEvents: 'none' }}
                         disabled={!isUserJoinedAllowlist && !connectedSocialMedia.discord.userName}
                         checked={isUserJoinedAllowlist || !!connectedSocialMedia.discord.userName}
-                        control={<Checkbox
-                            onChange={handleCheckbox}
-                            value={`Join ${props.discord_invite_link}`}
-                            icon={<RadioButtonUncheckedIcon />}
-                            checkedIcon={getCheckedIcon()}
-                        />}
+                        control={getCheckBox([SocialMediaAction.joinDiscordServer])}
                         label={<Box gap={1} display='flex'>
                             <Typography
                                 component={"div"}

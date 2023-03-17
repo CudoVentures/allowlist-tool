@@ -289,30 +289,32 @@ export class AllowlistService {
     }
 
     async updateUserInfo(user, sessionUser) {
-        const twitterInfo = sessionUser.twitter
-        const discordInfo = sessionUser.discord
-        let twitterUser, discordUser, newUserInfo
-        if (twitterInfo) {
-            twitterUser = await this.userService.findByTwitterId(sessionUser.twitter.twitter_profile_id)
-            delete twitterUser.id
-            delete twitterUser.address
-            delete twitterUser.discord_profile_username
-            delete twitterUser.discord_access_token
-            delete twitterUser.discord_profile_id
-            delete twitterUser.discord_refresh_token
-            newUserInfo = { ...user, ...twitterUser }
-        } else if (discordInfo) {
-            discordUser = await this.userService.findByDiscordId(sessionUser.discord.discord_profile_id)
-            delete discordUser.id
-            delete discordUser.address
-            delete discordUser.twitter_access_token
-            delete discordUser.twitter_account
-            delete discordUser.twitter_handle
-            delete discordUser.twitter_profile_username
-            delete discordUser.twitter_profile_username
-            newUserInfo = { ...user, ...discordUser }
+        let sessionTwitterUser = sessionUser.twitter
+        let sessionDiscordUser = sessionUser.discord
+
+        if (sessionTwitterUser) {
+            delete sessionTwitterUser.email
+            delete sessionTwitterUser.id
+            delete sessionTwitterUser.discord_access_token
+            delete sessionTwitterUser.discord_profile_id
+            delete sessionTwitterUser.discord_profile_username
+            delete sessionTwitterUser.discord_refresh_token
         }
-        delete newUserInfo.id
-        return await this.userService.updateUser(user.id, newUserInfo)
+
+        if (sessionDiscordUser) {
+            delete sessionDiscordUser.email
+            delete sessionDiscordUser.id
+            delete sessionDiscordUser.twitter_access_token
+            delete sessionDiscordUser.twitter_profile_id
+            delete sessionDiscordUser.twitter_profile_username
+            delete sessionDiscordUser.twitter_refresh_token
+        }
+
+        const newUser = {
+            ...sessionDiscordUser,
+            ...sessionTwitterUser,
+            address: user.address
+        }
+        return await this.userService.updateUser(user.id, newUser)
     }
 }

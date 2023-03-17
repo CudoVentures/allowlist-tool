@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Input, Tooltip, Typography } from '@mui/material'
 
@@ -16,6 +16,7 @@ const CreationField = ({
     startAdornment,
     svgIcon,
     switchElement,
+    switched,
     isDisabled
 }: {
     type: FormField,
@@ -24,6 +25,7 @@ const CreationField = ({
     startAdornment?: React.ReactNode,
     svgIcon?: React.ReactNode,
     switchElement?: React.ReactNode,
+    switched?: boolean
     isDisabled?: boolean
 }) => {
 
@@ -76,6 +78,23 @@ const CreationField = ({
         return false
     }
 
+    useEffect(() => {
+        if (!!switchElement && !switched) {
+            setIsValid(true)
+        }
+    }, [switchElement, switched])
+
+    const getInputStyles = () => {
+        if (isConnectedDiscordServer()) {
+            return validationStyles.connectedInput
+        }
+        if (isValid) {
+            return generalStyles.input
+        }
+
+        return validationStyles.invalidInput
+    }
+
     return (
         <Box id={`allowlist${type}`}>
             <Box sx={registrationCriteriaStyles.titleSwitchHolder}>
@@ -110,7 +129,7 @@ const CreationField = ({
                         rows={type === FormField.description ? 3 : 1}
                         disableUnderline
                         type='text'
-                        sx={isValid ? isConnectedDiscordServer() ? validationStyles.connectedInput : generalStyles.input : validationStyles.invalidInput}
+                        sx={getInputStyles()}
                         value={handleValue()}
                         onChange={handleChange}
                         onPaste={() => setPastedData(true)}

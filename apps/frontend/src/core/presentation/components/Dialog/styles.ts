@@ -23,6 +23,11 @@ export const ModalContainer = styled(Box)(({ theme }) => ({
 }))
 
 export const styles = {
+    msgBackDrop: {
+        style: {
+            opacity: 1,
+        },
+    },
     defaultBackDrop: {
         style: {
             backgroundColor: 'transparent',

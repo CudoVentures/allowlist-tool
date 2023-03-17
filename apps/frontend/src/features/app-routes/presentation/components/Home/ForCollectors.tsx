@@ -6,11 +6,14 @@ import { Parallax } from 'react-scroll-parallax';
 import { GradientText } from "../../../../../core/theme/helpers"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../../core/presentation/components/Layout/helpers"
 import { useIsScreenLessThan } from "../../../../../core/utilities/CustomHooks/screenChecks"
+import AppRoutes from "../../../entities/AppRoutes";
+import useNavigateToRoute from "../../../../../core/utilities/CustomHooks/useNavigateToRoute";
 
 import { forCollectorsStyles } from "./styles"
 
 const ForCollectors = () => {
 
+    const navigateToRoute = useNavigateToRoute()
     const isUnder1350px = useIsScreenLessThan('1350px', 'width')
     const isUnder800px = useIsScreenLessThan('800px', 'width')
 
@@ -65,15 +68,13 @@ const ForCollectors = () => {
                         Keep up to date with upcoming mints and find out how to participate in exciting communities. Plus keep your eyes peeled for an upcoming dashboard to keep track and explore new projects, all tracked by your interchain wallet.
                     </Typography>
                 </Box>
-                <Link style={{ textDecoration: 'none' }} to={"TODO: WHERE?"}>
-                    <Button variant="contained" sx={forCollectorsStyles.btn} >
-                        See Example
-                        <SvgComponent
-                            type={LAYOUT_CONTENT_TEXT.ArrowRight}
-                            style={{ marginLeft: '10px', height: '24px' }}
-                        />
-                    </Button>
-                </Link>
+                <Button onClick={() => navigateToRoute(AppRoutes.ALLOWLISTS)} variant="contained" sx={forCollectorsStyles.btn} >
+                    See Example
+                    <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.ArrowRight}
+                        style={{ marginLeft: '10px', height: '24px' }}
+                    />
+                </Button>
             </Box>
         </Box>
     )

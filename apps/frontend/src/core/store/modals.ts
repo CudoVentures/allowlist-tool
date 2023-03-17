@@ -6,6 +6,8 @@ export interface modalState {
     success?: boolean
     failure?: boolean
     message?: string
+    loadingSpinner?: boolean
+    ongoingEligibilityCheck?: boolean
 }
 
 export const initialState: modalState = {
@@ -13,7 +15,9 @@ export const initialState: modalState = {
     selectWallet: false,
     success: false,
     failure: false,
-    message: ''
+    message: '',
+    loadingSpinner: false,
+    ongoingEligibilityCheck: false
 }
 
 export const modalStateSlice = createSlice({

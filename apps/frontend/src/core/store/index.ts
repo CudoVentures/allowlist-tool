@@ -6,11 +6,13 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import userStateReducer from './user'
 import modalStateReducer from './modals'
 import allowlistStateReducer from './allowlist'
+import socialMediaActionsStateReducer from './socialMediaActions'
 
 const rootReducer = combineReducers({
     userState: userStateReducer,
     modalState: modalStateReducer,
-    allowlistState: allowlistStateReducer
+    allowlistState: allowlistStateReducer,
+    socialMediaActionsState: socialMediaActionsStateReducer
 })
 
 const persistConfig = {

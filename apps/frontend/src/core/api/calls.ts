@@ -24,8 +24,12 @@ import {
 } from './endpoints';
 
 export const IS_FOLLOWING_TWITTER_ACCOUNT = async (userId: string, accountName: string): Promise<boolean> => {
-    const result = await axios.get(IS_FOLLOWING_TWITTER_ACCOUNT_URL(userId, accountName))
-    return result.data
+    try {
+        const result = await axios.get(IS_FOLLOWING_TWITTER_ACCOUNT_URL(userId, accountName))
+        return result.data
+    } catch (error) {
+        throw new Error(error.response?.data?.message || error.message)
+    }
 }
 
 export const IS_TWEET_RETWEETED = async (userId: string, tweetUrl: string): Promise<boolean> => {

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, Injectable, UnauthorizedException } from '@nestjs/common';
 import axios from 'axios';
 
 @Injectable()
@@ -53,7 +53,7 @@ export class TwitterService {
         if (!this.isValidTweetUrl(tweetUrl)) {
             return ''
         }
-        return tweetUrl.split('/').pop()
+        return tweetUrl.split('/').pop().split('?')[0] || ''
     }
 
     private isValidTweetUrl = (tweetUrl: string): boolean => {
@@ -86,26 +86,35 @@ export class TwitterService {
         let res: any;
         let next_token: any;
 
-        do {
-            const params = { max_results: 100 };
-            if (next_token) {
-                params['pagination_token'] = next_token;
+        try {
+            do {
+                const params = { max_results: 100 };
+                if (next_token) {
+                    params['pagination_token'] = next_token;
+                }
+
+                res = await axios.get(url, {
+                    headers: { Authorization: process.env.App_Twitter_Bearer_Token },
+                    params,
+                });
+
+                if (res.data.meta.result_count === 0 || !res.data.data) {
+                    break;
+                }
+
+                const data = res.data.data.map((tweet: any) => tweet.id);
+                arr = arr.concat(data);
+                next_token = res.data.meta.next_token;
+            } while (next_token);
+
+            return arr.includes(target);
+
+        } catch (error) {
+            if (error.response?.status === 429) {
+                throw new HttpException(error.response?.statusText, error.response?.status)
             }
-
-            res = await axios.get(url, {
-                headers: { Authorization: process.env.App_Twitter_Bearer_Token },
-                params,
-            });
-
-            if (res.data.meta.result_count === 0 || !res.data.data) {
-                break;
-            }
-
-            const data = res.data.data.map((tweet: any) => tweet.id);
-            arr = arr.concat(data);
-            next_token = res.data.meta.next_token;
-        } while (next_token);
-
-        return arr.includes(target);
+            console.error(error.response?.statusText || error.message)
+            return false
+        }
     }
 }
