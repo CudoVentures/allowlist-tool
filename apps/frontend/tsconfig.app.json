@@ -1,9 +1,14 @@
 {
   "extends": "../../tsconfig.json",
+  "paths": {
+    "*": [
+      "../common/*"
+    ]
+  },
   "compilerOptions": {
     "declaration": false,
     "outDir": "../../dist/apps/frontend"
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/types"],
   "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

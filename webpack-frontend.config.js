@@ -1,9 +1,10 @@
 const Path = require('path');
 const Dotenv = require('dotenv');
+const webpack = require('webpack');
 
 const CopyPlugin = require('copy-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
@@ -21,8 +22,8 @@ const envs = Dotenv.config({
 const ConfigFrontend = {};
 if (!envs.error) {
     Object.keys(envs.parsed).forEach((propName) => {
-        let exposedVariable = true
-        for (let i = propName.length; i-- > 0;) {
+        let exposedVariable = true;
+        for (let i = propName.length; i-- > 0; ) {
             if (propName[i] >= 'a' && propName[i] <= 'z') {
                 exposedVariable = false;
             }
@@ -37,7 +38,7 @@ if (!envs.error) {
     console.warn('There was an error parsing .env file', envs.error);
 }
 
-module.exports = function (options, webpack) {
+module.exports = function () {
     let devTool, optimization;
     if (process.env.NODE_ENV === 'production') {
         devTool = false;
@@ -56,7 +57,7 @@ module.exports = function (options, webpack) {
 
     return {
         target: 'web',
-        mode: process.env.APP_NODE_ENV,
+        mode: process.env.NODE_ENV,
         externals: [],
         devtool: devTool,
         optimization,
@@ -66,6 +67,9 @@ module.exports = function (options, webpack) {
             path: distPublicWebpackPath,
         },
         plugins: [
+            new webpack.ProvidePlugin({
+                Buffer: ['buffer', 'Buffer'],
+            }),
             new MiniCssExtractPlugin({
                 filename: '[name]-[fullhash].css',
             }),
@@ -73,7 +77,7 @@ module.exports = function (options, webpack) {
                 Config: JSON.stringify(ConfigFrontend),
                 process: {
                     env: {
-                        NODE_ENV: JSON.stringify(process.env.APP_NODE_ENV),
+                        NODE_ENV: JSON.stringify(process.env.NODE_ENV),
                     },
                 },
             }),
@@ -95,58 +99,62 @@ module.exports = function (options, webpack) {
             new CleanWebpackPlugin(),
         ],
         module: {
-            rules: [{
-                test: /\.css$/,
-                exclude: [/node_modules/],
-                use: [
-                    MiniCssExtractPlugin.loader,
-                    {
-                        'loader': 'css-loader',
-                        'options': {
-                            'url': false,
+            rules: [
+                {
+                    test: /\.(woff2|woff|eot|ttf|otf)$/,
+                    use: ["file-loader"],
+                },
+                {
+                    test: /\.css$/,
+                    use: [
+                        MiniCssExtractPlugin.loader,
+                        {
+                            'loader': 'css-loader',
+                            'options': {
+                                'url': false,
+                            },
+                        },
+                    ],
+                }, {
+                    test: /\.js$|\.jsx$|\.ts$|\.tsx$/,
+                    exclude: [/node_modules/],
+                    use: {
+                        loader: 'babel-loader',
+                        options: {
+                            'presets': [
+                                [
+                                    '@babel/env',
+                                    {
+                                        targets: {
+                                            chrome: '60',
+                                            safari: '10',
+                                            edge: '12',
+                                        },
+                                        useBuiltIns: 'entry',
+                                        corejs: { version: 2, proposals: false },
+                                    },
+                                ],
+                                '@babel/preset-react',
+                                '@babel/typescript',
+                            ],
+                            plugins: [
+                                ['@babel/plugin-proposal-decorators', { 'legacy': true }],
+                                ['@babel/plugin-proposal-class-properties', { 'loose': false }],
+                                '@babel/proposal-object-rest-spread',
+                                // '@babel/plugin-transform-regenerator',
+                            ],
+                            cacheDirectory: '/tmp',
+                            configFile: false,
+                            babelrc: false,
                         },
                     },
-                ],
-            }, {
-                test: /\.js$|\.jsx$|\.ts$|\.tsx$/,
-                exclude: [/node_modules/],
-                use: {
-                    loader: 'babel-loader',
-                    options: {
-                        'presets': [
-                            [
-                                '@babel/env',
-                                {
-                                    targets: {
-                                        chrome: '60',
-                                        safari: '10',
-                                        edge: '12',
-                                    },
-                                    useBuiltIns: 'entry',
-                                    corejs: { version: 2, proposals: false },
-                                },
-                            ],
-                            '@babel/preset-react',
-                            '@babel/typescript',
-                        ],
-                        plugins: [
-                            ['@babel/plugin-proposal-decorators', { 'legacy': true }],
-                            ['@babel/plugin-proposal-class-properties', { 'loose': false }],
-                            '@babel/proposal-object-rest-spread',
-                            // '@babel/plugin-transform-regenerator',
-                        ],
-                        cacheDirectory: '/tmp',
-                        configFile: false,
-                        babelrc: false,
+                }, {
+                    test: /\.svg$/,
+                    exclude: /node_modules/,
+                    use: {
+                        loader: 'raw-loader',
                     },
-                },
-            }, {
-                test: /\.svg$/,
-                exclude: /node_modules/,
-                use: {
-                    loader: 'raw-loader',
-                },
-            }],
+                }],
         },
         resolve: {
             extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
@@ -154,6 +162,7 @@ module.exports = function (options, webpack) {
                 'crypto': require.resolve('crypto-browserify'),
                 'stream': require.resolve('stream-browserify'),
                 'path': require.resolve('path-browserify'),
+                'buffer': require.resolve('buffer/'),
             },
         },
     };
