@@ -11,7 +11,7 @@ import AllowListCarousel from '../components/AllowlistsCarousel'
 const CreatedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
     return (
         <AllowListCarousel
-            text='Allowlists Created'
+            text='Created'
             data={data}
             withCreateBox={true}
         />

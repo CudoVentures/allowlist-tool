@@ -11,7 +11,7 @@ const AllowListCarousel = ({
     withCreateBox,
 }: {
     data: FetchedAllowlist[],
-    text: string,
+    text?: string,
     withCreateBox: boolean
 }) => {
 
@@ -19,7 +19,7 @@ const AllowListCarousel = ({
 
     return (
         <Box gap={2} sx={{ display: 'flex', flexDirection: 'column', maxWidth: '3840px' }}>
-            <Typography fontWeight={700} variant='h6'>{text}</Typography>
+            <Typography fontWeight={700} variant='h6'>{text ? text : null}</Typography>
             <Box gap={isUnder850px ? 0 : 4} sx={{ alignItems: 'center', width: '100%', display: 'flex', flexDirection: isUnder850px ? 'column' : 'row' }}>
                 <SwiperList data={data} withCreateBox={withCreateBox} />
             </Box>

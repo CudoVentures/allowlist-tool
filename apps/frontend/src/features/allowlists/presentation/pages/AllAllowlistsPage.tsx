@@ -10,12 +10,15 @@ import CreatedAllowlistsPreview from './CreatedAllowlists';
 import JoinedAllowlistsPreview from './JoinedAllowlists';
 import AllAllowlistsPreview from './AllAllowlists';
 import { RootState } from '../../../../core/store';
+import { isExpired } from '../components/helpers';
+import ExpiredAllowlists from './ExpiredAllowlists';
 
 import { generalStyles } from './styles';
 
 const AllAllowlistsPage = () => {
 
   const [allowlists, setAllowlists] = useState<FetchedAllowlist[]>([])
+  const [expiredAllowlists, setExpiredAllowlists] = useState<FetchedAllowlist[]>([])
   const [joinedAllowlists, setJoinedAllowlists] = useState<FetchedAllowlist[]>([])
   const [createdAllowlists, setCreatedAllowlists] = useState<FetchedAllowlist[]>([])
   const [loading, setLoading] = useState<boolean>(true)
@@ -32,19 +35,31 @@ const AllAllowlistsPage = () => {
         <CreatedAllowlistsPreview data={createdAllowlists} />
         <JoinedAllowlistsPreview data={joinedAllowlists} />
         <AllAllowlistsPreview data={allowlists} />
+        <ExpiredAllowlists data={expiredAllowlists} />
       </Box>
     )
   }, [loading, allowlists, joinedAllowlists])
 
   const loadData = async () => {
     try {
+      const all = []
+      const expired = []
+
       const allAllowlists = await GET_ALL_ALLOWLISTS()
+
       if (!userId || !connectedAddress) {
-        setAllowlists(allAllowlists)
+        allAllowlists.forEach((record) => {
+          if (isExpired(record.end_date)) {
+            expired.push(record)
+          } else {
+            all.push(record)
+          }
+        })
+        setExpiredAllowlists(expired)
+        setAllowlists(all)
         return
       }
 
-      const all = []
       const joined = []
       const created = []
 
@@ -57,12 +72,17 @@ const AllAllowlistsPage = () => {
           created.push(record)
           return
         }
+        if (isExpired(record.end_date)) {
+          expired.push(record)
+          return
+        }
         all.push(record)
       })
 
       setJoinedAllowlists(joined)
       setCreatedAllowlists(created)
       setAllowlists(all)
+      setExpiredAllowlists(expired)
 
     } finally {
       setLoading(false)

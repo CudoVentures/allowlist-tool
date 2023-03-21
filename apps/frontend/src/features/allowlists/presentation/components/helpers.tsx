@@ -514,3 +514,8 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
         },
     ]
 }
+
+export const isExpired = (time: Date) => {
+    const now = Date.now()
+    return now > new Date(time).valueOf()
+}

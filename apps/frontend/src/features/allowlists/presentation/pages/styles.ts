@@ -16,6 +16,25 @@ export const createAllowlistStyles = {
 }
 
 export const generalStyles = {
+    minusIconHolder: {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center'
+    },
+    rotatingMinus: {
+        position: 'absolute' as 'absolute',
+        transition: "transform 0.2s ease-in-out",
+        height: '30px',
+        width: '30px'
+    },
+    collapsebleTextHolder: {
+        justifyContent: 'space-between',
+        marginBottom: '-30px',
+        cursor: 'pointer',
+        alignItems: 'center',
+        width: '130px',
+        display: 'flex'
+    },
     swiperSlide: {
         display: 'flex',
         justifyContent: 'center'

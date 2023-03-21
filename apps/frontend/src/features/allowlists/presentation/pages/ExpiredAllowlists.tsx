@@ -3,16 +3,16 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 
-import React from 'react'
+import React from 'react';
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist";
 import AllowListCarousel from '../components/AllowlistsCarousel'
 import CollapsableCarousel from './CollapsableCarousel'
 
-const JoinedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
+const ExpiredAllowlists = ({ data }: { data: FetchedAllowlist[] }) => {
     return !data.length ? null :
         <CollapsableCarousel
-            text='Joined'
+            text='All Expired'
             carousel={
                 <AllowListCarousel
                     data={data}
@@ -22,4 +22,4 @@ const JoinedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
         />
 }
 
-export default JoinedAllowlistsPreview
+export default ExpiredAllowlists
