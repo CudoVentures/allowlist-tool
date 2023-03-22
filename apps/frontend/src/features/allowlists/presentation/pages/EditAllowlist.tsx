@@ -60,7 +60,7 @@ const EditAllowlistPage = () => {
             color='text.secondary'
             fontWeight={400}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra.
+            Here you can edit all the information about your Allowlist, including its sign up criteria. We remind you that this is only possible while no users have joined your Allowlist yet.
           </Typography>
         </Box>
         <Stepper step={currentCreationStep} />

@@ -85,7 +85,7 @@ const CreateAllowlistPage = () => {
             color='text.secondary'
             fontWeight={400}
           >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate libero et velit interdum, ac aliquet odio mattis. Class aptent taciti sociosqu ad litora torquent per conubia nostra.
+            Please provide all required information in the sections below. We advise creators to be as descriptive as possible when creating an Allowlist, to provide your audience with sufficient information about the project. It is possible to edit an Allowlist after it has been created, but only if no users have joined it yet.
           </Typography>
         </Box>
         <Stepper step={currentCreationStep} />
