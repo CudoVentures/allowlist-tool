@@ -9,7 +9,7 @@ import CreateBox from './CreateBox'
 import { generalStyles, swiperBreakpoints } from '../pages/styles'
 import './swiper.css';
 
-const SwiperList = ({ data, withCreateBox }: { data: FetchedAllowlist[], withCreateBox?: boolean }) => {
+const SwiperList = ({ data, withCreateBox, expanded }: { data: FetchedAllowlist[], withCreateBox?: boolean, expanded?: boolean }) => {
     return (
         <Fragment>
             <Swiper
@@ -24,10 +24,10 @@ const SwiperList = ({ data, withCreateBox }: { data: FetchedAllowlist[], withCre
                     <SwiperSlide key={"CreateBox"} style={generalStyles.swiperSlide}>
                         <CreateBox />
                     </SwiperSlide> : null}
-                {data.map((allowlist, idx) => {
+                {data?.map((allowlist, idx) => {
                     return (
                         <SwiperSlide key={idx} style={generalStyles.swiperSlide}>
-                            <SwiperCardContent allowlist={allowlist} />
+                            <SwiperCardContent allowlist={allowlist} visible={expanded} />
                         </SwiperSlide>
                     )
                 })}

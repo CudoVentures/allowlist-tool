@@ -10,11 +10,11 @@ import { getTimeFromNumber, setBlobToB64Img } from "../../../../core/utilities/P
 
 import { generalStyles } from "../pages/styles"
 
-const SwiperCardContent = ({ allowlist }: { allowlist: FetchedAllowlist }) => {
+const SwiperCardContent = ({ allowlist, visible }: { allowlist: FetchedAllowlist, visible: boolean }) => {
 
     const navigateToRoute = useNavigateToRoute()
-    const [banner, setBanner] = useState<string>('')
-    const [avatar, setAvatar] = useState<string>('')
+    const [banner, setBanner] = useState<string>(undefined)
+    const [avatar, setAvatar] = useState<string>(undefined)
     const [remainingTime, setRemainingTime] = useState<number>(0)
     const [loadingImgs, setLoadingImgs] = useState<boolean>(true)
     const [detailedTime, setDetailedTime] = useState<DetailedTime>(null)
@@ -47,12 +47,16 @@ const SwiperCardContent = ({ allowlist }: { allowlist: FetchedAllowlist }) => {
     }, [allowlist.image])
 
     useEffect(() => {
-        if (banner !== '' && avatar !== '') {
+        if (!visible) {
+            setLoadingImgs(true)
+            return
+        }
+        if (banner && avatar && visible) {
             setTimeout(() => {
                 setLoadingImgs(false)
             }, 300)
         }
-    }, [banner, avatar])
+    }, [banner, avatar, visible])
 
     return (
         <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={generalStyles.swiperDataBox}>

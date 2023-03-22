@@ -14,6 +14,7 @@ const CreatedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
             text='Created'
             data={data}
             withCreateBox={true}
+            expanded={true}
         />
     )
 }
