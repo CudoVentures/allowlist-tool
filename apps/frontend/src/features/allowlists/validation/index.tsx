@@ -1,7 +1,9 @@
+import { bech32 } from 'bech32'
 import isURL, { IsURLOptions } from 'validator/lib/isURL'
 import isEmail from "validator/lib/isEmail"
 import { CollectedData, OptionalAllowlistData } from "../../../core/store/allowlist"
 import { FormField } from "../presentation/components/helpers"
+import { CHAIN_DETAILS } from '../../../core/utilities/Constants'
 
 const urlOptions: IsURLOptions = {
     protocols: [
@@ -16,6 +18,18 @@ const urlOptions: IsURLOptions = {
     allow_trailing_dot: false,
     allow_protocol_relative_urls: false,
     disallow_auth: false
+}
+
+export const isValidCudosAddress = (addr: string) => {
+    if (addr === '' || addr === undefined) return false
+    try {
+        const { prefix: decodedPrefix } = bech32.decode(addr)
+        return decodedPrefix.toLowerCase() === CHAIN_DETAILS.CURRENCY_DISPLAY_NAME.toLowerCase()
+
+    } catch {
+        // invalid checksum
+        return false
+    }
 }
 
 export const isZeroLength = (data: any): boolean => !data
