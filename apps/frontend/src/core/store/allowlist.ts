@@ -39,6 +39,7 @@ export interface FetchedAllowlist extends Omit<CollectedData, 'checkedFields' | 
     end_date: Date;
     discord_invite_link?: string;
     discord_server_name?: string;
+    isExpired?: boolean;
 }
 
 export interface AllowlistCreationData extends CollectedData {
