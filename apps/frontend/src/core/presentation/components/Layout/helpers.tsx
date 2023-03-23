@@ -3,7 +3,7 @@ import SVG from 'react-inlinesvg';
 import moment from "moment";
 import { Box, Divider } from '@mui/material';
 import { JdenticonConfig, toSvg } from 'jdenticon';
-import { Circles as CirclesSpinner } from 'svg-loaders-react';
+import { Puff as PuffLoader } from 'svg-loaders-react'
 
 import { CHAIN_DETAILS } from '../../../utilities/Constants';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
@@ -12,6 +12,8 @@ import arrowDown from '../../../../public/assets/vectors/arrow-down.svg';
 import userIcon from '../../../../public/assets/vectors/user-icon.svg';
 import arrowRight from '../../../../public/assets/vectors/menu-arrow-right.svg';
 import linkIcon from '../../../../public/assets/vectors/link-icon.svg';
+import searchIcon from '../../../../public/assets/vectors/search-icon.svg';
+import sortingIcon from '../../../../public/assets/vectors/sorting-icon.svg';
 import infoIcon from '../../../../public/assets/vectors/info-icon.svg';
 import keplrLogo from '../../../../public/assets/vectors/keplr-logo.svg';
 import cosmostationLogo from '../../../../public/assets/vectors/cosmostation-logo.svg';
@@ -79,6 +81,8 @@ export enum LAYOUT_CONTENT_TEXT {
     LinkIcon = 'Link icon',
     InfoIcon = 'Info icon',
     KeplrLogo = 'Keplr logo',
+    SearchIcon = 'Search icon',
+    SortingIcon = 'Sorting icon',
     TwitterIcon = 'Twitter icon',
     TelegramIcon = 'Telegram icon',
     DiscordIcon = 'Discord icon',
@@ -115,6 +119,8 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.SortingIcon]: sortingIcon,
+    [LAYOUT_CONTENT_TEXT.SearchIcon]: searchIcon,
     [LAYOUT_CONTENT_TEXT.FailureIcon]: failureIcon,
     [LAYOUT_CONTENT_TEXT.SuccessIcon]: successIcon,
     [LAYOUT_CONTENT_TEXT.RocketIcon]: rocketIcon,
@@ -270,7 +276,6 @@ export const SVG_FRAMES = {
     frame1674: frame1674
 }
 
-export const StyledCircleSpinner = () => {
-    return <CirclesSpinner style={generalStyles.spinner}
-        fill={COLORS_DARK_THEME.PRIMARY_BLUE} />
+export const StyledPuffLoader = () => {
+    return <PuffLoader style={generalStyles.spinner} />
 }

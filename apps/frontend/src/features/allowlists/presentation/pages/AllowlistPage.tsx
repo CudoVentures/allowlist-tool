@@ -6,7 +6,7 @@ import Allowlist from '../components/Allowlist';
 import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { GET_ALLOWLIST_DETAILS } from '../../../../core/api/calls';
-import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
+import { StyledPuffLoader } from '../../../../core/presentation/components/Layout/helpers';
 import { getDiscordGuildNameByInviteCode, getServerRoleNameByRoleId } from '../../../../core/utilities/ProjectUtils';
 import { RootState } from '../../../../core/store';
 
@@ -19,7 +19,7 @@ function AllowlistPage() {
 
   const contentHandler = useCallback((): JSX.Element => {
     if (loading) {
-      return <StyledCircleSpinner />
+      return <StyledPuffLoader />
     }
     if (Object.keys(allowlist || {}).length) {
       return <Allowlist props={{ ...allowlist, end_date: new Date(allowlist.end_date) }} />

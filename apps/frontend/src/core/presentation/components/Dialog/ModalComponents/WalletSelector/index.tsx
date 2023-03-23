@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { Box, Tooltip, Typography, Dialog as MuiDialog } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
-import { ThreeDots as ThreeDotsLoading } from 'svg-loaders-react'
+import { Puff as PuffLoader } from 'svg-loaders-react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   detectUserBrowser,
@@ -20,6 +20,7 @@ import { connectUser, SUPPORTED_WALLET_LOGOS } from '../../../../../../features/
 import { updateModalState, initialState as initialModalState } from '../../../../../store/modals'
 import { updateUser } from '../../../../../store/user'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../Layout/helpers'
+import { COLORS_DARK_THEME } from '../../../../../../core/theme/colors'
 
 import { CancelRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
 import { styles } from './styles'
@@ -60,8 +61,8 @@ const WalletSelector = () => {
 
   const LoadingButtonComponent = (): JSX.Element => {
     return (
-      <ThreeDotsLoading
-        style={{ width: '30px', height: '30px' }}
+      <PuffLoader
+        style={{ width: '30px', height: '30px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }}
       />
     )
   }
