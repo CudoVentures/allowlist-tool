@@ -134,6 +134,7 @@ const theme = createTheme({
           '&::placeholder': {
             textOverflow: 'ellipsis !important',
             color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20,
+            opacity: 1,
             fontSize: '14px',
             fontWeight: 600
           }
@@ -157,6 +158,17 @@ const theme = createTheme({
     },
     MuiCssBaseline: {
       styleOverrides: {
+        'body': {
+          overflowY: 'scroll',
+        },
+        'body::-webkit-scrollbar': {
+          width: '4px',
+          backgroundColor: 'transparent',
+        },
+        'body::-webkit-scrollbar-thumb': {
+          borderRadius: '2px',
+          backgroundColor: 'transparent',
+        },
         html: {
           ...darkScrollbar({
             track: 'transparent',

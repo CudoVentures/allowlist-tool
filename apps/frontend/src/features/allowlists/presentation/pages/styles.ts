@@ -16,28 +16,24 @@ export const createAllowlistStyles = {
 }
 
 export const generalStyles = {
-    minusIconHolder: {
+    arrowIconHolder: {
         position: 'relative',
         display: 'flex',
         alignItems: 'center'
     },
-    rotatingMinus: {
+    rotatingArrow: {
         position: 'absolute' as 'absolute',
         transition: "transform 0.2s ease-in-out",
-        height: '30px',
-        width: '30px'
+        height: '20px',
+        width: '20px',
+        color: COLORS_DARK_THEME.PRIMARY_BLUE
     },
     collapsebleTextHolder: {
-        justifyContent: 'space-between',
-        marginBottom: '-30px',
+        justifyContent: 'flex-start',
+        marginBottom: '-10px',
         cursor: 'pointer',
         alignItems: 'center',
-        width: '130px',
         display: 'flex'
-    },
-    swiperSlide: {
-        display: 'flex',
-        justifyContent: 'center'
     },
     plusIconBackground: {
         background: COLORS_DARK_THEME.PRIMARY_BLUE,
@@ -73,22 +69,18 @@ export const generalStyles = {
         objectFit: "cover" as 'cover'
     },
     imgHolder: {
+        width: '100%',
         position: 'relative',
         flexDirection: 'column',
         display: 'flex',
         height: '270px',
         alignItems: 'center'
     },
-    swipersHolder: {
+    gridsHolder: {
         width: '100%',
         padding: '4rem 4rem 6rem 4rem',
         display: 'flex',
         flexDirection: 'column'
-    },
-    swiper: {
-        width: '100%',
-        height: '100%',
-        padding: '5px 0px 50px 0px'
     },
     createBox: {
         "&:hover": {
@@ -105,13 +97,13 @@ export const generalStyles = {
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        minWidth: '300px',
-        minHeight: '320px',
-        width: '300px',
-        height: '320px',
+        minWidth: '318px',
+        minHeight: '360px',
+        width: '100%',
+        height: '360px',
         borderRadius: '16px',
     },
-    swiperDataBox: {
+    gridDataBox: {
         "&:hover": {
             transform: 'scale(1.025)'
         },
@@ -122,60 +114,17 @@ export const generalStyles = {
         display: 'flex',
         flexDirection: 'column',
         padding: '16px 16px 24px 16px',
-        width: '300px',
-        height: '320px',
+        minWidth: '318px',
+        width: '100%',
+        height: '360px',
         borderRadius: '16px',
         background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100
-    },
-    swiperCard: {
-        marginTop: '5px',
-        borderRadius: '10px',
-        paddingTop: '0',
-        backgroundColor: 'rgba(99, 109, 143, 0.1)',
-        height: '140px',
-        width: '420px'
     },
     spinner: {
         width: '80px',
         height: '80vh',
         display: 'flex',
-        alignSelf: 'center'
-    }
-}
-
-export const swiperBreakpoints = (adjust = 0) => {
-    return {
-        850: {
-            slidesPerView: 1 + adjust,
-            spaceBetween: 20
-        },
-        1200: {
-            slidesPerView: 2 + adjust,
-            spaceBetween: 20
-        },
-        1560: {
-            slidesPerView: 3 + adjust,
-            spaceBetween: 20
-        },
-        2000: {
-            slidesPerView: 4 + adjust,
-            spaceBetween: 20
-        },
-        2300: {
-            slidesPerView: 5 + adjust,
-            spaceBetween: 20
-        },
-        2700: {
-            slidesPerView: 6 + adjust,
-            spaceBetween: 20
-        },
-        3100: {
-            slidesPerView: 7 + adjust,
-            spaceBetween: 20
-        },
-        3600: {
-            slidesPerView: 8 + adjust,
-            spaceBetween: 20
-        }
+        alignSelf: 'center',
+        stroke: COLORS_DARK_THEME.PRIMARY_BLUE
     }
 }

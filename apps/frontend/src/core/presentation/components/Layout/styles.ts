@@ -34,14 +34,14 @@ export const headerStyles = {
     },
     collapse: {
         position: 'absolute',
-        marginTop: '24px',
+        marginTop: '8px',
         zIndex: '-1',
         width: '224px',
     },
     SMcollapse: {
         cursor: 'pointer',
         position: 'absolute',
-        marginTop: '55px',
+        marginTop: '39px',
         minWidth: '100%',
         zIndex: '-1',
     },
