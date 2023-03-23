@@ -1,22 +1,15 @@
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
-
 import React from 'react'
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist";
-import AllowListCarousel from '../components/AllowlistsCarousel'
+import CollapsableGrid from './CollapsableGrid'
 
 const CreatedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
-    return (
-        <AllowListCarousel
-            text='Created'
+    return !data.length ? null :
+        <CollapsableGrid
+            text='My Allowlists'
             data={data}
             withCreateBox={true}
-            expanded={true}
         />
-    )
 }
 
 export default CreatedAllowlistsPreview

@@ -1,19 +1,21 @@
-import 'swiper/css'
-import 'swiper/css/navigation'
-import 'swiper/css/pagination'
-import 'swiper/css/scrollbar'
-
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist";
-import CollapsableCarousel from './CollapsableCarousel'
+import AllowListGrid from '../components/AllowListGrid';
 
 const AllAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
-    return !data.length ? null :
-        <CollapsableCarousel
-            text='All Active'
-            data={data}
-        />
+    return !data.length ? null : (
+        <Fragment>
+            <AllowListGrid
+                text='Explore'
+                data={data}
+                withCreateBox={false}
+                expanded={true}
+                withSearchBar={true}
+            />
+        </Fragment>
+    )
+
 }
 
 export default AllAllowlistsPreview
