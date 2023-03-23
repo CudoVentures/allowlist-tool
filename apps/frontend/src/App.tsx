@@ -17,11 +17,13 @@ import CreateAllowlistPage from './features/allowlists/presentation/pages/Create
 import AllowlistPage from './features/allowlists/presentation/pages/AllowlistPage';
 import EditAllowlistPage from './features/allowlists/presentation/pages/EditAllowlist';
 import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllowlistsPage';
+import MyAllowlistsPage from './features/allowlists/presentation/pages/MyAllowlistsPage';
 import { updateModalState } from './core/store/modals';
 import { connectUser } from './features/wallets/helpers';
 import { updateUser } from './core/store/user';
 import useSocialMedia from './core/utilities/CustomHooks/useSocialMedia';
 import { WS_MSGS, WS_ROOM } from '../../common/interfaces';
+import RequireConnectedWallet from './core/presentation/components/RequireConnectedWallet';
 
 declare let Config: { APP_WS_ID: any, APP_URL: any };
 
@@ -121,6 +123,12 @@ const App = () => {
                   path={AppRoutes.ALLOWLISTS}
                   element={<AllAllowlistsPage />}
                 />
+                <Route element={<RequireConnectedWallet />}>
+                  <Route
+                    path={AppRoutes.MY_ALLOWLISTS}
+                    element={<MyAllowlistsPage />}
+                  />
+                </Route>
                 <Route
                   path="*"
                   element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />}
