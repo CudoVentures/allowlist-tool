@@ -110,16 +110,18 @@ const Header = () => {
               onMouseEnter={() => isConnected ? setOpenMenu(true) : null}
               onClick={handleClick}
             >
-              {isConnected ? <HashBasedUserAvatar UID={connectedAddress} size={25} /> :
-                <SvgComponent
-                  type={LAYOUT_CONTENT_TEXT.WalletLogo}
-                  style={{ height: '24px', marginRight: '5px' }}
-                />}
-              <Typography fontWeight={700}>
-                {isConnected ?
-                  formatAddress(connectedAddress, 7) :
-                  LAYOUT_CONTENT_TEXT.ConnectWallet}
-              </Typography>
+              <Box id='hashLogoAndAddressHolder' gap={1} sx={{ marginLeft: isConnected ? '-6px' : '0px', display: 'flex', alignItems: 'center' }}>
+                {isConnected ? <HashBasedUserAvatar UID={connectedAddress} size={23} /> :
+                  <SvgComponent
+                    type={LAYOUT_CONTENT_TEXT.WalletLogo}
+                    style={{ height: '24px', marginRight: '5px' }}
+                  />}
+                <Typography fontWeight={700}>
+                  {isConnected ?
+                    formatAddress(connectedAddress, 7) :
+                    LAYOUT_CONTENT_TEXT.ConnectWallet}
+                </Typography>
+              </Box>
               {isConnected ?
                 <SvgComponent
                   type={LAYOUT_CONTENT_TEXT.ArrowIcon}

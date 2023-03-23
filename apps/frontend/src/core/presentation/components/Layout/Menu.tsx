@@ -8,12 +8,14 @@ import useNavigateToRoute from "../../../utilities/CustomHooks/useNavigateToRout
 import { RootState } from "../../../store";
 import { SocialMediaButtons } from "../../../../features/allowlists/presentation/components/helpers";
 import { COLORS_DARK_THEME } from "../../../theme/colors";
+import { LAYOUT_CONTENT_TEXT, SvgComponent } from "./helpers";
 
 import { headerStyles } from "./styles";
 
 const MENU_ITEMS = [
-    { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST },
-    { text: 'Explore', route: AppRoutes.ALLOWLISTS }
+    { text: 'My Allowlists', route: AppRoutes.MY_ALLOWLISTS },
+    { text: 'Explore', route: AppRoutes.ALLOWLISTS },
+    { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST }
 ]
 
 const Menu = (): JSX.Element => {
@@ -38,13 +40,20 @@ const Menu = (): JSX.Element => {
     }
 
     const MenuItem = ({ route, text }: { route: AppRoutes, text: string }) => {
+        if (route === AppRoutes.MY_ALLOWLISTS && !connectedAddress) {
+            return
+        }
         return (
             <Typography
                 fontWeight={700}
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: 'max-content' }}
                 onClick={() => navigateToRoute(route)}
                 color={isActive(route) ? COLORS_DARK_THEME.PRIMARY_BLUE : 'inherit'}
             >
+                {text === 'Create' ? <SvgComponent
+                    type={LAYOUT_CONTENT_TEXT.PlusIcon}
+                    style={{ height: '18px' }}
+                /> : null}
                 {text}
             </Typography>
         )
