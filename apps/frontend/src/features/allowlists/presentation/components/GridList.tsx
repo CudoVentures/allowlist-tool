@@ -1,20 +1,25 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Grid, Typography } from '@mui/material';
-import { Puff as PuffLoader } from 'svg-loaders-react'
+import { Box, Grid } from '@mui/material';
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist";
 import GridCardContent from './GridCardContent';
 import CreateBox from './CreateBox';
-import { SearchFilter, updateSearchState } from '../../../../core/store/search';
+import { initialState, SearchFilter, updateSearchState } from '../../../../core/store/search';
 import { RootState } from '../../../../core/store';
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import NoResult from '../../../../core/presentation/components/Layout/NoResult';
+import { allowlistDetailsStyles } from './styles';
 
 const GridList = ({ data: defaultData, withCreateBox, expanded, withSearchBar }) => {
 
   const dispatch = useDispatch()
   const { activeSearch, searchTerms, appliedFilter, ascendingOrder } = useSelector((state: RootState) => state.searchState)
   const [displayData, setDisplayData] = useState<FetchedAllowlist[]>([])
+  const gridSpacing = 1.5
+  const gridCardWidth = 316
+  const dataLength: number = displayData.length
 
   const sanitizeString = (text: string): string => {
     return text.trim().toLowerCase()
@@ -75,38 +80,47 @@ const GridList = ({ data: defaultData, withCreateBox, expanded, withSearchBar })
     }
   }, [searchTerms, appliedFilter, ascendingOrder])
 
-  return (
-    <Fragment> {activeSearch ? <PuffLoader style={{ position: 'absolute', top: '50%', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
-      <Fragment>
-        {withSearchBar && searchTerms && !displayData.length ?
-          <Typography
-            sx={{ position: 'absolute', top: '50%' }}
-            variant='h6'
-            color={COLORS_DARK_THEME.TESTNET_ORANGE}
-          >
-            {`No result...`}
-          </Typography> :
-          null}
-        <Grid
-          container
-          sx={{ justifyContent: 'center' }}
-          spacing={2}
-        >
+  const cleanUp = () => {
+    dispatch(updateSearchState(initialState))
+  }
 
-          {withCreateBox && (
-            <Grid item sx={{ flexGrow: 1, flexBasis: 0 }}>
-              <CreateBox />
+  useEffect(() => {
+    cleanUp()
+    return () => cleanUp()
+    //eslint-disable-next-line
+  }, [])
+
+  return (
+    <Box sx={{ width: '100%' }}
+    >
+      {activeSearch ? <OvalLoader style={{ position: 'absolute', top: '50%', left: '50%', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+        <Fragment>
+          {withSearchBar && searchTerms && !dataLength ?
+            <NoResult /> :
+            null}
+          <Box sx={allowlistDetailsStyles.contentHolder} >
+            <Grid container
+              spacing={gridSpacing}
+            >
+              {withCreateBox && (
+                <Grid id='GridCreateBoxHolder' item key={'CreateBox'}
+                  style={{ display: 'flex', justifyContent: 'flex-start' }}
+                >
+                  <CreateBox width={gridCardWidth} />
+                </Grid>
+              )}
+              {displayData.map((allowlist: FetchedAllowlist, idx: React.Key) => (
+                <Grid id='GridCardContentHolder' item key={idx}
+                  style={{ display: 'flex', justifyContent: 'flex-start' }}
+                >
+                  <GridCardContent allowlist={allowlist} visible={expanded} width={gridCardWidth} />
+                </Grid>
+              ))}
             </Grid>
-          )}
-          {displayData.map((allowlist: FetchedAllowlist, idx: React.Key) => (
-            <Grid key={idx} item sx={{ flexGrow: 1, flexBasis: 0 }}>
-              <GridCardContent allowlist={allowlist} visible={expanded} />
-            </Grid>
-          ))}
-        </Grid>
-      </Fragment>
-    }
-    </Fragment>
+          </Box>
+        </Fragment>
+      }
+    </Box>
   );
 };
 

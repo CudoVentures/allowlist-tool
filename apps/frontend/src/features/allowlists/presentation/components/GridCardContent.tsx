@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Puff as PuffLoader } from 'svg-loaders-react'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 import { Box, Typography } from "@mui/material"
 
 import { COLORS_DARK_THEME } from "../../../../core/theme/colors"
@@ -10,7 +10,7 @@ import { getTimeFromNumber, setBlobToB64Img } from "../../../../core/utilities/P
 
 import { generalStyles } from "../pages/styles"
 
-const GridCardContent = ({ allowlist, visible }: { allowlist: FetchedAllowlist, visible: boolean }) => {
+const GridCardContent = ({ allowlist, visible, width }: { allowlist: FetchedAllowlist, visible: boolean, width: number }) => {
 
     const navigateToRoute = useNavigateToRoute()
     const [banner, setBanner] = useState<string>(undefined)
@@ -64,8 +64,8 @@ const GridCardContent = ({ allowlist, visible }: { allowlist: FetchedAllowlist, 
     }, [avatar, banner, visible])
 
     return (
-        <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={generalStyles.gridDataBox}>
-            {contentLoaded() ? null : <PuffLoader style={{stroke: COLORS_DARK_THEME.PRIMARY_BLUE}} />}
+        <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={{ ...generalStyles.gridDataBox, width: width, minWidth: width }}>
+            {contentLoaded() ? null : <OvalLoader style={{ stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} />}
             <Box sx={{ display: contentLoaded() ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                 <Box sx={generalStyles.imgHolder}>
                     <img

@@ -311,6 +311,17 @@ export const allowlistDetailsStyles = {
       background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
     }
   },
+  contentHolder: {
+    display: 'grid',
+    justifyContent: 'start',
+    alignContent: 'space-between',
+  },
+  gridHolder: {
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%',
+    height: "100%"
+  },
   dropdownIcon: {
     cursor: 'pointer',
     color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20

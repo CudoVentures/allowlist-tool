@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Box, Fade, Input, MenuItem, Select, Typography } from "@mui/material"
+import { CancelRounded } from '@mui/icons-material'
 
 import { RootState } from "../../../store"
 import { initialState, SearchFilter, updateSearchState } from "../../../store/search"
@@ -17,6 +18,9 @@ const SearchBar = () => {
     const { searchTerms, appliedFilter, ascendingOrder } = useSelector((state: RootState) => state.searchState)
     const [filterOpen, setFilterOpen] = useState<boolean>(false)
     const [displaySortingIcon, setDisplaySortingIcon] = useState<boolean>(true)
+    const [showCloseIcon, setShowCloseIcon] = useState<boolean>(false)
+    const [expand, setExpand] = useState<boolean>(false)
+    const [placeholder, setPlaceholder] = useState<string>('')
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(updateSearchState({
@@ -32,34 +36,71 @@ const SearchBar = () => {
         }, 150)
     }
 
-    const cleanUp = () => {
-        dispatch(updateSearchState(initialState))
+    const handleTransitionEnd = () => {
+        if (expand) {
+            searchBar.current?.click()
+            setShowCloseIcon(true)
+            setPlaceholder('Search by Allowlist Name')
+        }
+    }
+
+    const handleExpand = () => {
+        setExpand(true)
+    }
+
+    const handleShrink = () => {
+        if (expand) {
+            setExpand(false)
+            setShowCloseIcon(false)
+            setTimeout(() => {
+                dispatch(updateSearchState({
+                    searchTerms: '',
+                    activeSearch: false
+                }))
+            }, 300)
+        }
     }
 
     useEffect(() => {
-        cleanUp()
-        return () => cleanUp()
+        if (!showCloseIcon) {
+            setPlaceholder('')
+            handleShrink()
+        }
+
         //eslint-disable-next-line
-    }, [])
+    }, [showCloseIcon])
 
     return (
-        <Box
-            gap={2}
-            display={'flex'}
-            alignItems={'center'}
-            sx={{ width: '100%' }}
-        >
-            <Input
-                startAdornment={<SvgComponent type={LAYOUT_CONTENT_TEXT.SearchIcon} style={{ color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20, marginRight: '10px' }} />}
-                style={{ display: 'flex' }}
-                ref={searchBar}
-                disableUnderline
-                placeholder="Search by Allowlist Name"
-                sx={styles.searchBar}
-                type="text"
-                onChange={handleChange}
-                value={searchTerms}
-            />
+        <Box gap={2} display={'flex'}>
+            <Box
+                onTransitionEnd={handleTransitionEnd}
+                onClick={handleExpand}
+                gap={2}
+                display={'flex'}
+                alignItems={'center'}
+                sx={{ ...styles.searchBar, width: expand ? "400px" : '60px' }}
+            >
+                <Box display={'flex'}>
+                    <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.SearchIcon}
+                        style={{ color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+                    />
+                </Box>
+                <Input
+                    ref={searchBar}
+                    disableUnderline
+                    placeholder={placeholder}
+                    type="text"
+                    onChange={handleChange}
+                    value={searchTerms}
+                    sx={{ width: '100%', display: 'flex' }}
+                    endAdornment={showCloseIcon ?
+                        <Box onClick={() => setShowCloseIcon(false)}>
+                            <CancelRounded sx={styles.cancelIcon} />
+                        </Box>
+                        : null}
+                />
+            </Box>
             <Select
                 MenuProps={styles.filterDropoDownMenuProps}
                 disableUnderline

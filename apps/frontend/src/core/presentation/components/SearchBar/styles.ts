@@ -2,6 +2,7 @@ import { COLORS_DARK_THEME } from "../../../theme/colors";
 
 export const styles = {
     sortingOrder: {
+        width: '60px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -17,8 +18,9 @@ export const styles = {
         height: '20px', color: COLORS_DARK_THEME.SECONDARY_TEXT
     },
     searchBar: {
+        cursor: 'pointer',
+        transition: 'width .4s ease-in-out',
         padding: '15px 24px 15px 20px',
-        width: '100%',
         height: '48px',
         border: `1px solid ${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70}`,
         borderRadius: '64px'

@@ -3,11 +3,12 @@ import SVG from 'react-inlinesvg';
 import moment from "moment";
 import { Box, Divider } from '@mui/material';
 import { JdenticonConfig, toSvg } from 'jdenticon';
-import { Puff as PuffLoader } from 'svg-loaders-react'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { CHAIN_DETAILS } from '../../../utilities/Constants';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
 import walletIcon from '../../../../public/assets/vectors/wallet-icon.svg';
+import magnifyingGlass from '../../../../public/assets/vectors/magnifying-glass.svg';
 import arrowDown from '../../../../public/assets/vectors/arrow-down.svg';
 import userIcon from '../../../../public/assets/vectors/user-icon.svg';
 import arrowRight from '../../../../public/assets/vectors/menu-arrow-right.svg';
@@ -62,6 +63,7 @@ import { generalStyles } from '../../../../features/allowlists/presentation/page
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    MagnifyingGlass = 'Magnifying Glass Icon',
     FailureIcon = 'Failure icon',
     SuccessIcon = 'Success icon',
     RocketIcon = 'Rocket icon',
@@ -119,6 +121,7 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.MagnifyingGlass]: magnifyingGlass,
     [LAYOUT_CONTENT_TEXT.SortingIcon]: sortingIcon,
     [LAYOUT_CONTENT_TEXT.SearchIcon]: searchIcon,
     [LAYOUT_CONTENT_TEXT.FailureIcon]: failureIcon,
@@ -277,5 +280,5 @@ export const SVG_FRAMES = {
 }
 
 export const StyledPuffLoader = () => {
-    return <PuffLoader style={generalStyles.spinner} />
+    return <OvalLoader style={generalStyles.spinner} />
 }

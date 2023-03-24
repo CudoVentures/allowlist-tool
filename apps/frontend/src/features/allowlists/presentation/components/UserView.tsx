@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, Divider, Input, Button } from '@mui/material'
-import { Puff as PuffLoader } from 'svg-loaders-react'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
 import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
@@ -202,7 +202,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
     }, [props.id, connectedAddress, connectedSocialMedia.discord.id, connectedSocialMedia.twitter.id])
 
-    return loading ? <PuffLoader style={{ stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> : (
+    return loading ? <OvalLoader style={{ stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> : (
         <Fragment>
             <Dialog />
             <Box sx={allowListStyles.title} style={{ flexDirection: isUserJoined ? 'column-reverse' : 'column' }}>

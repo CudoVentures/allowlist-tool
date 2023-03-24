@@ -8,7 +8,7 @@ import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
 
 import { generalStyles } from '../pages/styles'
 
-const CreateBox = () => {
+const CreateBox = ({ width }: { width: number }) => {
 
     const navigateToRoute = useNavigateToRoute()
 
@@ -16,7 +16,7 @@ const CreateBox = () => {
         <Box
             onClick={() => navigateToRoute(AppRoutes.CREATE_ALLOWLIST)}
             gap={1}
-            sx={generalStyles.createBox}
+            sx={{ ...generalStyles.createBox, width: width, minWidth: width }}
         >
             <Box sx={generalStyles.plusIconBackground} >
                 <SvgComponent

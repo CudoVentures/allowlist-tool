@@ -52,6 +52,7 @@ const CollapsableGrid = ({ text, data, withCreateBox, withSearchBar
                 in={expanded}
             >
                 <AllowListGrid
+                    text={undefined}
                     data={data}
                     expanded={expanded}
                     withCreateBox={withCreateBox}
