@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Box, Fade, Input, MenuItem, Select, Typography } from "@mui/material"
+import { Box, Divider, Fade, Input, MenuItem, Select, Typography } from "@mui/material"
 import { CancelRounded } from '@mui/icons-material'
 
 import { RootState } from "../../../store"
@@ -10,6 +10,7 @@ import { COLORS_DARK_THEME } from "../../../theme/colors"
 
 import { styles } from "./styles"
 import { allowlistDetailsStyles } from "../../../../features/allowlists/presentation/components/styles"
+import { headerStyles } from "../Layout/styles"
 
 const SearchBar = () => {
 
@@ -71,16 +72,16 @@ const SearchBar = () => {
     }, [showCloseIcon])
 
     return (
-        <Box gap={2} display={'flex'}>
+        <Box sx={{ gap: '12px', display: 'flex', alignItems: 'center' }}>
             <Box
                 onTransitionEnd={handleTransitionEnd}
                 onClick={handleExpand}
                 gap={2}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expand ? "400px" : '60px' }}
+                sx={{ ...styles.searchBar, width: expand ? "400px" : '48px' }}
             >
-                <Box display={'flex'}>
+                <Box sx={{ display: 'flex', marginLeft: '-7px' }}>
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.SearchIcon}
                         style={{ color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
@@ -100,6 +101,25 @@ const SearchBar = () => {
                         </Box>
                         : null}
                 />
+            </Box>
+            <Divider orientation="vertical" sx={headerStyles.divider} />
+            <Box
+                id="sortingOrderBox"
+                sx={styles.sortingOrder}
+                onClick={() => !!appliedFilter ? handleOrder() : null}
+            >
+                <Fade in={displaySortingIcon} timeout={150}>
+                    <Box sx={{
+                        transform: !ascendingOrder ? 'rotateX(180deg)' : 'none',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}
+                    >
+                        <SvgComponent
+                            type={LAYOUT_CONTENT_TEXT.SortingIcon}
+                            style={{ color: !!appliedFilter ? 'inherit' : COLORS_DARK_THEME.PRIMARY_BLUE_DISABLED }}
+                        />
+                    </Box>
+                </Fade>
             </Box>
             <Select
                 MenuProps={styles.filterDropoDownMenuProps}
@@ -128,27 +148,9 @@ const SearchBar = () => {
                 </Box>}
             >
                 {Object.values(SearchFilter).map((filter, idx) => {
-                    return <MenuItem key={idx} value={filter}>{filter}</MenuItem>
+                    return <MenuItem sx={styles.menuItem} key={idx} value={filter}>{filter}</MenuItem>
                 })}
             </Select>
-            <Box
-                id="sortingOrderBox"
-                sx={styles.sortingOrder}
-                onClick={() => !!appliedFilter ? handleOrder() : null}
-            >
-                <Fade in={displaySortingIcon} timeout={150}>
-                    <Box sx={{
-                        transform: !ascendingOrder ? 'rotateX(180deg)' : 'none',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                    }}
-                    >
-                        <SvgComponent
-                            type={LAYOUT_CONTENT_TEXT.SortingIcon}
-                            style={{ color: !!appliedFilter ? 'inherit' : COLORS_DARK_THEME.PRIMARY_BLUE_DISABLED }}
-                        />
-                    </Box>
-                </Fade>
-            </Box>
         </Box>
     )
 }

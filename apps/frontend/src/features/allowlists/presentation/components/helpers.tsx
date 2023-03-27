@@ -114,7 +114,7 @@ export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<
     stateFunc(e.target.value);
 };
 
-export const SocialMediaButtons = () => {
+export const SocialMediaButtons = ({ hamburger }: { hamburger?: boolean }) => {
 
     const { connectSocialMedia, disconnectSocialMedia } = useSocialMedia()
     const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
@@ -123,13 +123,12 @@ export const SocialMediaButtons = () => {
         const [openMenu, setOpenMenu] = useState<boolean>(false)
         const isDisconnected = !connectedSocialMedia[media].id
         const displayName = media.charAt(0).toUpperCase() + media.slice(1)
-        return (
-            <ClickAwayListener
-                onClickAway={() => setOpenMenu(false)}
-                children={<Box sx={{ flexDirection: 'column', display: 'flex', position: 'relative' }}>
+        return hamburger ?
+            (
+                <Box gap={2} sx={{ display: 'flex', position: 'relative', height: '48px', marginTop: '-10px' }}>
                     <Typography
                         fontWeight={700}
-                        sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: isDisconnected ? 'pointer' : 'auto', display: 'flex', alignItems: 'center' }}
                         onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
                         onClick={() => isDisconnected ? connectSocialMedia(connectedAddress, media) : null}
                     >
@@ -137,35 +136,64 @@ export const SocialMediaButtons = () => {
                             type={type}
                             style={menuStyles.logoItem}
                         />
-                        {isDisconnected ? `Connect` :
+                        {isDisconnected ? `Connect ${hamburger ? displayName : ''}` :
                             `${connectedSocialMedia[media].userName}`}
-                        {isDisconnected ? null :
-                            <SvgComponent
-                                type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                                style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
-                            />}
                     </Typography>
-                    <Collapse
-                        onMouseLeave={() => setOpenMenu(false)}
-                        sx={headerStyles.SMcollapse}
-                        in={openMenu}
-                    >
-                        <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
-                            <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                    {isDisconnected ? null :
+                        <Paper elevation={1} sx={{ ...headerStyles.dropDownContentHolder, width: '176px', height: '48px' }}>
+                            <Box gap={2} sx={{ ...headerStyles.dropDownItemHolder, cursor: 'pointer', justifyContent: "center" }}>
                                 <Typography onClick={() => disconnectSocialMedia(media)}>
                                     {`Disconnect`}
                                 </Typography>
                             </Box>
-                        </Paper>
-                    </Collapse>
+                        </Paper>}
                 </Box>
-                }
-            />
-        )
+            )
+            :
+            (
+                <ClickAwayListener
+                    onClickAway={() => setOpenMenu(false)}
+                    children={<Box sx={{ display: 'flex', position: 'relative' }}>
+                        <Typography
+                            fontWeight={700}
+                            sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                            onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
+                            onClick={() => isDisconnected ? connectSocialMedia(connectedAddress, media) : null}
+                        >
+                            <SvgComponent
+                                type={type}
+                                style={menuStyles.logoItem}
+                            />
+                            {isDisconnected ? `Connect` :
+                                `${connectedSocialMedia[media].userName}`}
+                            {isDisconnected ? null :
+                                <SvgComponent
+                                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                                    style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                                />}
+                        </Typography>
+                        <Collapse
+                            orientation={'vertical'}
+                            onMouseLeave={() => setOpenMenu(false)}
+                            sx={headerStyles.SMcollapse}
+                            in={!isDisconnected && (hamburger || openMenu)}
+                        >
+                            <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
+                                <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                                    <Typography onClick={() => disconnectSocialMedia(media)}>
+                                        {`Disconnect`}
+                                    </Typography>
+                                </Box>
+                            </Paper>
+                        </Collapse>
+                    </Box>
+                    }
+                />
+            )
     }
 
     return (
-        <Box gap={3} display='flex'>
+        <Box gap={3} display='flex' flexDirection={hamburger ? 'column' : 'row'}>
             <StyledTypography
                 type={LAYOUT_CONTENT_TEXT.TwitterIcon}
                 media={SOCIAL_MEDIA.twitter}

@@ -1,25 +1,93 @@
 import { COLORS_DARK_THEME } from "../../../theme/colors";
 
 export const headerStyles = {
+    hamburgerAddressHolder: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'flex-start'
+    },
+    hamburgerFlexLine: {
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: '-10px'
+    },
+    hamburgerMenuContent: {
+        display: 'flex',
+        height: '100%',
+        width: '100%',
+        marginBottom: '40px',
+        alignItems: 'flex-start',
+        flexDirection: 'column'
+    },
+    hamburgerTopWideDivider: {
+        margin: '20px 0px',
+        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        position: 'absolute',
+        left: 0,
+        top: '65px',
+        width: '100vw'
+    },
+    hamburgerBottomWideDivider: {
+        margin: '20px 0px',
+        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        position: 'relative',
+        left: '-62px',
+        width: '100vw'
+    },
+    headerDisabled: {
+        pointerEvents: "none",
+    },
     disconnectBtn: {
         width: '195px',
         height: '45px',
         borderRadius: '100px'
     },
     logoGroup: {
+        opacity: '1',
+        transition: 'all .1s ease-in-out',
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center'
     },
+    hamburgerMidDivider: {
+        height: '1px',
+        width: '100%',
+        margin: '10px 0px',
+        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70
+    },
     divider: {
         height: '24px',
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
+        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70
+    },
+    hamburgerDropDownItemHolder: {
+        cursor: 'pointer',
+        justifyContent: "center",
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        padding: '8px 0px'
     },
     dropDownItemHolder: {
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
         padding: '8px 0px'
+    },
+    hamburgerDropDownContentHolder: {
+        width: '176px',
+        height: '48px',
+        padding: '10px 20px',
+        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
+        fontSize: '14px',
+        fontWeight: '500',
+        borderRadius: '24px',
+        display: 'flex',
+        justifyContent: 'center',
     },
     dropDownContentHolder: {
         padding: '10px 20px',
@@ -45,23 +113,37 @@ export const headerStyles = {
         minWidth: '100%',
         zIndex: '-1',
     },
-    holderLowRes: {
-        padding: '16px 4rem',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        display: 'flex',
-        flexDirection: 'column',
-        background: "rgba(16, 18, 26, 0.8)",
-        backdropFilter: 'blur(12px)'
-    },
     holder: {
+        opacity: 1,
+        backdropFilter: "blur(12px)",
+        background: "rgba(16, 18, 26, 0.8)",
+        height: '80px',
+        transition: 'all .3s ease-in-out',
         padding: '16px 4rem',
         justifyContent: 'space-between',
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'row',
-        background: "rgba(16, 18, 26, 0.8)",
-        backdropFilter: 'blur(12px)'
+    },
+    leftNavContentAndIcon: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    hamburger: {
+        opacity: 1,
+        overflowY: 'scroll',
+        overflowX: 'clip',
+        height: '100vh',
+        backdropFilter: "blur(20px)",
+        background: "rgba(16, 18, 26, 0.9)",
+        transition: 'all .3s ease-in-out',
+        padding: '16px 4rem',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        display: 'flex',
+        flexDirection: 'column',
     },
     btnHolder: {
         zIndex: '10',
@@ -71,7 +153,7 @@ export const headerStyles = {
         padding: '10px 20px 10px 12px',
         borderRadius: '100px',
         height: '40px',
-        width: '100%',
+        width: '224px',
         display: 'flex',
         alignItems: 'center',
         textTransform: 'none',

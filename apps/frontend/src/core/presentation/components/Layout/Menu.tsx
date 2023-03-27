@@ -18,7 +18,7 @@ const MENU_ITEMS = [
     { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST }
 ]
 
-const Menu = (): JSX.Element => {
+const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
 
     const navigateToRoute = useNavigateToRoute()
     const location = useLocation()
@@ -60,14 +60,17 @@ const Menu = (): JSX.Element => {
     }
 
     return (
-        <Box gap={2} sx={{ display: 'flex', alignItems: 'center' }} >
+        <Box gap={hamburger ? 4 : 2} sx={{ width: '100%', display: 'flex', flexDirection: hamburger ? 'column' : 'row', alignItems: hamburger ? 'flex-start' : 'center', justifyContent: 'flex-end' }} >
             {MENU_ITEMS.map((item, idx) => {
                 return <MenuItem key={idx} route={item.route} text={item.text} />
             })}
             {connectedAddress ?
                 <Fragment>
-                    <Divider orientation='vertical' sx={headerStyles.divider} />
-                    <SocialMediaButtons />
+                    <Divider
+                        orientation={hamburger ? 'horizontal' : 'vertical'}
+                        sx={{ ...headerStyles.divider, height: hamburger ? '1px' : '24px', width: hamburger ? '100%' : 'auto' }}
+                    />
+                    <SocialMediaButtons hamburger={hamburger} />
                 </Fragment>
                 : null}
         </Box>

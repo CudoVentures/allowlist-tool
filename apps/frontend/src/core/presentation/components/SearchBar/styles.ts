@@ -2,7 +2,7 @@ import { COLORS_DARK_THEME } from "../../../theme/colors";
 
 export const styles = {
     sortingOrder: {
-        width: '60px',
+        width: '48px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -13,6 +13,7 @@ export const styles = {
         border: `1px solid ${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70}`
     },
     cancelIcon: {
+        marginRight: '-10px',
         marginTop: '5px',
         cursor: 'pointer',
         height: '20px', color: COLORS_DARK_THEME.SECONDARY_TEXT
@@ -25,9 +26,37 @@ export const styles = {
         border: `1px solid ${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70}`,
         borderRadius: '64px'
     },
+    menuItem: {
+        height: '48px',
+        borderRadius: '10px',
+        width: '100%',
+        "&:focus": {
+            backgroundColor: 'transparent !important',
+        },
+        "&:hover": {
+            cursor: 'pointer',
+            backgroundColor: `${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY} !important`
+        },
+        "&:selected:hover": {
+            backgroundColor: `${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY} !important`
+        },
+        "&:focus:hover": {
+            backgroundColor: `${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY} !important`
+        }
+    },
     filterDropoDownMenuProps: {
         PaperProps: {
+            sx: {
+                '& .MuiList-root': {
+                    width: '100%',
+                    padding: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px'
+                }
+            },
             style: {
+                display: 'flex',
                 marginTop: '15px',
                 background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
                 borderRadius: '8px',

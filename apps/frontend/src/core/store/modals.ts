@@ -7,12 +7,14 @@ export interface modalState {
     failure?: boolean
     message?: string
     loadingSpinner?: boolean
+    hamburgerMenu?: boolean
     ongoingEligibilityCheck?: boolean
 }
 
 export const initialState: modalState = {
     pageTransitionLoading: false,
     selectWallet: false,
+    hamburgerMenu: false,
     success: false,
     failure: false,
     message: '',
