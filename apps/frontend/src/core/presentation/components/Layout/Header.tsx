@@ -30,7 +30,7 @@ const Header = () => {
   const { hamburgerMenu } = useSelector((state: RootState) => state.modalState)
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
-  const isScreenLessThan1280px = useIsScreenLessThan('1280px', 'width')
+  const isScreenLessThan1400px = useIsScreenLessThan('1400px', 'width')
 
   const handleCloseTransition = () => {
     navBar.current.style.opacity = '0'
@@ -113,10 +113,10 @@ const Header = () => {
           </Typography>
         </Box>
         {hamburgerMenu ? <CloseIcon style={{ cursor: 'pointer' }} fontSize='medium' onClick={closeHamburgerMenu} /> : null}
-        {isScreenLessThan1280px && !hamburgerMenu ? <MenuIcon style={{ cursor: 'pointer' }} fontSize='large' onClick={openHamburgerMenu} /> : null}
+        {isScreenLessThan1400px && !hamburgerMenu ? <MenuIcon style={{ cursor: 'pointer' }} fontSize='large' onClick={openHamburgerMenu} /> : null}
       </Box>
       {
-        hamburgerMenu ? <HamburgerMenu /> : isScreenLessThan1280px ? null :
+        hamburgerMenu ? <HamburgerMenu /> : isScreenLessThan1400px ? null :
           <Box
             id='rightNavContent'
             gap={2}
