@@ -83,10 +83,9 @@ const Header = () => {
       component="nav"
     >
       <Dialog />
-      <Box id='leftNavContentAndIcon'
+      <Box ref={navBar} id='leftNavContentAndIcon'
         sx={{ ...headerStyles.leftNavContentAndIcon, paddingTop: hamburgerMenu ? '8px' : '0px', marginBottom: hamburgerMenu ? '60px' : '0px' }}>
         <Box
-          ref={navBar}
           style={{ width: "max-content" }}
           id='leftNavContent'
           onClick={() => navigateToRoute(AppRoutes.MAIN)}
