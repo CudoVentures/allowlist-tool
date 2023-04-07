@@ -4,14 +4,14 @@ import { FetchedAllowlist } from "../../../../core/store/allowlist";
 import AllowListGrid from '../components/AllowListGrid';
 
 const AllAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
-    return !data.length ? null : (
+    return (
         <Fragment>
             <AllowListGrid
                 text='Explore'
                 data={data}
-                withCreateBox={false}
+                withCreateBox={!data.length ? true : false}
                 expanded={true}
-                withSearchBar={true}
+                withSearchBar={!data.length ? false : true}
             />
         </Fragment>
     )
