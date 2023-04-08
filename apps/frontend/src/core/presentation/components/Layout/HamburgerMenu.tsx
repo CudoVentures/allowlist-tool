@@ -6,7 +6,7 @@ import { updateModalState } from '../../../store/modals';
 import { RootState } from '../../../store';
 import Menu from './Menu';
 import { HashBasedUserAvatar, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
-import { CopyAndFollowComponent } from '../../../theme/helpers';
+import { ConnectedChain, CopyAndFollowComponent } from '../../../theme/helpers';
 import { formatAddress } from '../../../utilities/ProjectUtils';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
 import useDisconnectUser from '../../../utilities/CustomHooks/useDisconnect';
@@ -33,6 +33,7 @@ const HamburgerMenu = () => {
                     <Box gap={2} sx={headerStyles.hamburgerFlexLine}>
                         <HashBasedUserAvatar UID={connectedAddress} size={48} />
                         <Typography fontWeight={700}>{formatAddress(connectedAddress, 7)}</Typography>
+                        <ConnectedChain />
                     </Box>
                     <Box gap={2} sx={headerStyles.hamburgerFlexLine}>
                         <CopyAndFollowComponent address={connectedAddress} />

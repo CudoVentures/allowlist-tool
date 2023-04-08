@@ -326,6 +326,17 @@ export const allowlistDetailsStyles = {
     cursor: 'pointer',
     color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20
   },
+  chainIdSelector: {
+    height: '50px',
+    borderRadius: '26px',
+    fontWeight: 600,
+    fontSize: '14px',
+    padding: '16px 20px',
+    width: '100%',
+    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+    border: '0px',
+    outline: '0px',
+  },
   defaultDropDown: {
     fontWeight: 600,
     fontSize: '14px',

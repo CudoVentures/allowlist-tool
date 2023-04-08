@@ -69,6 +69,15 @@ export const SummaryView = ({
                     </Tooltip>
                     : null}
             </Box>
+            {props.cosmos_chain_id ?
+                <Box>
+                    <Typography variant='h6' fontWeight={700}>
+                        Cosmos Network
+                    </Typography>
+                    <StyledTypography text={props.cosmos_chain_id} />
+
+                </Box>
+                : null}
             {props.description ?
                 <Box>
                     <Typography variant='h6' fontWeight={700}>

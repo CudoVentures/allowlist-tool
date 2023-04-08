@@ -6,6 +6,7 @@ import { CONNECTED_SOCIAL_MEDIA, emptySocialMedia, SOCIAL_MEDIA } from '../../..
 
 export interface userState {
     userId?: string,
+    chosenChainId?: string,
     connectedNetwork?: string,
     connectedAddress?: string
     accountName?: string
@@ -17,6 +18,7 @@ export interface userState {
 
 export const initialState: userState = {
     userId: '',
+    chosenChainId: CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK],
     connectedNetwork: CHAIN_DETAILS.DEFAULT_NETWORK,
     connectedAddress: '',
     accountName: '',

@@ -1,7 +1,15 @@
 import { styled, Box } from '@mui/material'
-import { CancelRounded } from '@mui/icons-material'
+import { CancelRounded, ArrowBackRounded } from '@mui/icons-material'
 
 import { COLORS_DARK_THEME } from '../../../theme/colors'
+
+export const BackRoundedIcon = styled(ArrowBackRounded)(({ theme }) => ({
+    color: theme.palette.text.secondary,
+    position: 'absolute',
+    top: 32,
+    left: 32,
+    cursor: 'pointer',
+}))
 
 export const CancelRoundedIcon = styled(CancelRounded)(({ theme }) => ({
     color: theme.palette.text.secondary,

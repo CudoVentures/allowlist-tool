@@ -79,7 +79,7 @@ const SearchBar = () => {
                 gap={2}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expand ? "400px" : '48px' }}
+                sx={{ ...styles.searchBar, width: expand ? "300px" : '48px' }}
             >
                 <Box sx={{ display: 'flex', marginLeft: '-7px' }}>
                     <SvgComponent

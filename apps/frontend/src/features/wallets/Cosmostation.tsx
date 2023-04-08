@@ -1,23 +1,24 @@
 import { cosmos, InstallError } from "@cosmostation/extension-client"
 import { AddChainParams } from "@cosmostation/extension-client/types/message"
+import { SUPPORTED_WALLET } from "cudosjs"
 import { CHAIN_DETAILS } from "../../core/utilities/Constants"
+import { getAvailableChainIdsByWalletType } from "./helpers"
 
-export const connectCosmostationLedger = async (): Promise<{ address: string; accountName: string; }> => {
+export const connectCosmostationLedger = async (chainId: string): Promise<{ address: string; accountName: string; }> => {
 
     let userAccountAddress: string = ''
     let userAccountName: string = ''
 
     try {
+        let chainIdToConnectTo = chainId
         const provider = await cosmos()
-        const activatedChains = await provider.getActivatedChainIds()
+        const availableChains = await getAvailableChainIdsByWalletType(SUPPORTED_WALLET.Cosmostation)
 
-        const network = CHAIN_DETAILS.DEFAULT_NETWORK
-        const chainId = CHAIN_DETAILS.CHAIN_ID[network]
-
-        if (!activatedChains.includes(chainId.toLowerCase())) {
-
+        if (!availableChains[chainIdToConnectTo]) {
+            const network = CHAIN_DETAILS.DEFAULT_NETWORK
+            chainIdToConnectTo = CHAIN_DETAILS.CHAIN_ID[network]
             const chainToAdd: AddChainParams = {
-                chainId: CHAIN_DETAILS.CHAIN_ID[network],
+                chainId: chainIdToConnectTo,
                 chainName: CHAIN_DETAILS.CHAIN_NAME[network],
                 restURL: CHAIN_DETAILS.API_ADDRESS[network],
                 addressPrefix: CHAIN_DETAILS.CURRENCY_DISPLAY_NAME.toLowerCase(),
@@ -35,8 +36,7 @@ export const connectCosmostationLedger = async (): Promise<{ address: string; ac
             await provider.addChain(chainToAdd)
         }
 
-        // Although the method suggests CHAIN_NAME as parameter only, it can work with CHAIN_ID too!
-        const acccount = await provider.requestAccount(chainId)
+        const acccount = await provider.requestAccount(chainIdToConnectTo)
         userAccountAddress = acccount.address
         userAccountName = acccount.name
 

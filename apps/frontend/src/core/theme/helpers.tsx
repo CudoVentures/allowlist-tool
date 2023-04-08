@@ -1,10 +1,10 @@
-import { Box, Link, Tooltip } from "@mui/material"
+import { Box, Link, Tooltip, Typography } from "@mui/material"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import copy from "copy-to-clipboard"
 
 import { RootState } from "../store"
-import { EXPLORER_ADDRESS_DETAILS } from "../api/endpoints"
+import { ATOMSCAN_ADDRESS_EXPLORER } from "../api/endpoints"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
 import { COLORS_DARK_THEME } from "./colors"
 
@@ -39,9 +39,20 @@ export const GradientText = ({
     )
 }
 
+export const ConnectedChain = (): JSX.Element => {
+
+    const { chosenChainId } = useSelector((state: RootState) => state.userState)
+    return !!chosenChainId ? (
+        <Box gap={2} style={themeStyles.centerFlexLinear}>
+            <Typography variant="subtitle2" color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                {chosenChainId}
+            </Typography>
+        </Box>
+    ) : null
+}
+
 export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.Element => {
 
-    const { connectedNetwork } = useSelector((state: RootState) => state.userState)
     const [copied, setCopied] = useState<boolean>(false)
 
     const handleCopy = (value: string) => {
@@ -67,7 +78,7 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
             <Box sx={themeStyles.iconHolder}>
                 <Tooltip title="Check address on explorer">
                     <Link
-                        href={EXPLORER_ADDRESS_DETAILS(connectedNetwork, address)}
+                        href={ATOMSCAN_ADDRESS_EXPLORER(address)}
                         rel="noreferrer"
                         target='Checking address on explorer'
                     >

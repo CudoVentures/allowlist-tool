@@ -14,7 +14,7 @@ import Dialog from '../Dialog';
 import { COLORS_DARK_THEME } from '../../../theme/colors';
 import { useIsScreenLessThan } from '../../../utilities/CustomHooks/screenChecks';
 import Menu from './Menu';
-import { CopyAndFollowComponent } from '../../../theme/helpers';
+import { ConnectedChain, CopyAndFollowComponent } from '../../../theme/helpers';
 import useNavigateToRoute from '../../../utilities/CustomHooks/useNavigateToRoute';
 import useDisconnectUser from '../../../utilities/CustomHooks/useDisconnect';
 import HamburgerMenu from './HamburgerMenu';
@@ -48,9 +48,13 @@ const Header = () => {
     dispatch(updateModalState({ hamburgerMenu: true }))
   }
 
+  const hasScrollbar = () => {
+    return document.documentElement.scrollHeight > document.documentElement.clientHeight;
+  };
+
   const toggleBodyScroll = (disable: boolean) => {
     document.body.style.overflow = disable ? 'hidden' : 'auto';
-    document.body.style.paddingRight = disable ? '4px' : '0px';
+    document.body.style.paddingRight = disable && hasScrollbar() ? '4px' : '0px';
   };
 
   const handleClick = () => {
@@ -168,6 +172,7 @@ const Header = () => {
                 <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
                   <Box gap={2} sx={headerStyles.dropDownItemHolder}>
                     <HashBasedUserAvatar UID={connectedAddress} size={50} />
+                    <ConnectedChain />
                     <Typography color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
                       {formatAddress(connectedAddress, 10)}
                     </Typography>

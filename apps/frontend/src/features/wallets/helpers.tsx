@@ -16,18 +16,44 @@ import { connectCosmostationLedger } from "./Cosmostation"
 import { connectKeplrLedger } from "./Keplr"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../core/presentation/components/Layout/helpers"
 import { LOG_IN_USER } from "../../core/api/calls"
-import { connectSocket, disconnectSocket, socketConnection } from "../../App"
+import { disconnectSocket } from "../../App"
 
 import { styles } from "./styles"
+import { cosmos } from "@cosmostation/extension-client"
 
-export const connectWalletByType = async (walletType: SUPPORTED_WALLET) => {
-
+export const getAvailableChainIdsByWalletType = async (walletType: SUPPORTED_WALLET): Promise<Record<string, boolean>> => {
+    let availableChains = {}
     if (walletType === SUPPORTED_WALLET.Keplr) {
-        return connectKeplrLedger()
+        availableChains = await window.keplr.getChainInfosWithoutEndpoints()
+            .then((chains) => {
+                return chains.reduce((obj, chain) => {
+                    return { ...obj, [chain.chainId]: true }
+                }, {})
+            });
     }
 
     if (walletType === SUPPORTED_WALLET.Cosmostation) {
-        return connectCosmostationLedger()
+        const provider = await cosmos()
+        const supportedChains = await provider.getSupportedChainIds()
+        const activatedChains = await provider.getActivatedChainIds()
+        availableChains = activatedChains
+            .concat(supportedChains.official, supportedChains.unofficial)
+            .reduce((obj, chainId) => {
+                return { ...obj, [chainId]: true };
+            }, {});
+    }
+
+    return availableChains
+}
+
+export const connectWalletByType = async (walletType: SUPPORTED_WALLET, chainId: string) => {
+
+    if (walletType === SUPPORTED_WALLET.Keplr) {
+        return connectKeplrLedger(chainId)
+    }
+
+    if (walletType === SUPPORTED_WALLET.Cosmostation) {
+        return connectCosmostationLedger(chainId)
     }
 
     return { address: '', accountName: '' }
@@ -90,14 +116,14 @@ export const getNativeBalance = (balances: readonly Coin[]): string => {
     return nativeBalance
 }
 
-export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userState> => {
+export const connectUser = async (walletType: SUPPORTED_WALLET, chainId: string): Promise<userState> => {
 
-    const { address: connectedAddress, accountName } = await connectWalletByType(walletType)
-    const currentBalances = await getAccountBalances(connectedAddress)
-    const userNativeBalance = getNativeBalance(currentBalances)
+    const { address: connectedAddress, accountName } = await connectWalletByType(walletType, chainId)
+    // const currentBalances = await getAccountBalances(connectedAddress)
+    // const userNativeBalance = getNativeBalance(currentBalances)
 
     const message = 'Allowlist tool login';
-    const { signature } = await signArbitrary(walletType, connectedAddress, message)
+    const { signature } = await signArbitrary(chainId, walletType, connectedAddress, message)
 
     const reqData = {
         signature,
@@ -111,8 +137,8 @@ export const connectUser = async (walletType: SUPPORTED_WALLET): Promise<userSta
         userId: res.data.userId,
         accountName: accountName,
         connectedAddress: connectedAddress,
-        balances: currentBalances,
-        nativeBalance: userNativeBalance,
+        // balances: currentBalances,
+        // nativeBalance: userNativeBalance,
         connectedWallet: walletType,
     }
 
@@ -137,11 +163,11 @@ export const disconnectWalletByType = async (walletType: SUPPORTED_WALLET) => {
 }
 
 export const signArbitrary = async (
+    chainId: string,
     walletType: SUPPORTED_WALLET,
     signingAddress: string,
     message: string
 ): Promise<{ signature: StdSignature }> => {
-    const chainId = CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK]
     let signature: StdSignature = {
         pub_key: undefined,
         signature: ""

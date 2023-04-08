@@ -29,7 +29,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
     const dispatch = useDispatch()
     const { joinAllowlist } = useManipulateAllowlist()
-    const { connectedAddress, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { connectedAddress, connectedSocialMedia, chosenChainId } = useSelector((state: RootState) => state.userState)
     const { ongoingEligibilityCheck } = useSelector((state: RootState) => state.modalState)
     const [userEmail, setUserEmail] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(true)
@@ -180,7 +180,11 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     }
 
     const isSignUpDisabled = (): boolean => {
-        if (props.require_email && (!userEmail || !isValidEmail(userEmail))) {
+        if (
+            props.require_email && (!userEmail ||
+                !isValidEmail(userEmail)) ||
+            props.cosmos_chain_id !== chosenChainId
+        ) {
             return true && !isCheckEligibilityDisabled()
         }
         return false

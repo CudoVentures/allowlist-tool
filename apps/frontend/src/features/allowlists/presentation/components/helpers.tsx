@@ -31,6 +31,7 @@ export type SocialMediaUserActions = {
 }
 
 export enum FormFieldErrors {
+    connectWalletToSetChainId = 'Connect your Wallet to set a Chain ID',
     description = 'Have to be between 20 and 500 characters',
     minimumFiveChars = 'Have to be minimum 5 characters',
     invalidCustomUrl = 'Invalid format. Have to be 5 to 20 letters with no special characters and spaces',
@@ -47,6 +48,7 @@ export enum BaseURL {
 }
 
 export enum FormField {
+    cosmos_chain_id = 'cosmos_chain_id',
     end_period = 'end_period',
     tweet = 'tweet',
     name = 'name',
@@ -61,6 +63,7 @@ export enum FormField {
 }
 
 export const FieldTooltips = {
+    [FormField.cosmos_chain_id]: FormFieldErrors.connectWalletToSetChainId,
     [FormField.name]: FormFieldErrors.minimumFiveChars,
     [FormField.url]: FormFieldErrors.invalidCustomUrl,
     [FormField.website]: FormFieldErrors.url,
@@ -216,7 +219,7 @@ export const SocialMediaBoxes = ({
 
     const dispatch = useDispatch()
     const { connectSocialMedia } = useSocialMedia()
-    const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
+    const { connectedSocialMedia, connectedAddress, chosenChainId } = useSelector((state: RootState) => state.userState)
     const { ongoingEligibilityCheck } = useSelector((state: RootState) => state.modalState)
     const {
         followTwitterAccount,
@@ -271,7 +274,7 @@ export const SocialMediaBoxes = ({
 
     return (
         <Fragment>
-            {connectedAddress ? null :
+            {connectedAddress && props.cosmos_chain_id === chosenChainId ? null :
                 <Fragment>
                     <Box id='connectWalletBox' sx={allowListStyles.socialBox}>
                         <Box sx={allowListStyles.socialBoxHeader}>
@@ -282,7 +285,7 @@ export const SocialMediaBoxes = ({
                                 alignItems='center'
                             >
                                 <SvgComponent type={LAYOUT_CONTENT_TEXT.WalletLogo} style='default' />
-                                Connect Wallet
+                                {!connectedAddress ? "Connect Wallet" : `Connect ${props.cosmos_chain_id} account`}
                             </Typography>
                             <Button
                                 variant="contained"
@@ -318,7 +321,7 @@ export const SocialMediaBoxes = ({
                             </Box>
                             :
                             <Button
-                                disabled={!connectedAddress}
+                                disabled={!connectedAddress || props.cosmos_chain_id !== chosenChainId}
                                 variant="contained"
                                 sx={{ height: '40px', width: '104px' }}
                                 onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.twitter)}
@@ -390,7 +393,7 @@ export const SocialMediaBoxes = ({
                             </Box>
                             :
                             <Button
-                                disabled={!connectedAddress}
+                                disabled={!connectedAddress || props.cosmos_chain_id !== chosenChainId}
                                 variant="contained"
                                 sx={{ height: '40px', width: '104px' }}
                                 onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.discord)}

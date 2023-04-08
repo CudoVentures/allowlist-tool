@@ -33,7 +33,7 @@ const CreationField = ({
     const [isValid, setIsValid] = useState<boolean>(true)
     const [pastedData, setPastedData] = useState<boolean>(false)
     const allowlistState = useSelector((state: RootState) => state.allowlistState)
-    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { connectedSocialMedia, connectedAddress, chosenChainId } = useSelector((state: RootState) => state.userState)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let value = e.target.value
@@ -83,6 +83,20 @@ const CreationField = ({
             setIsValid(true)
         }
     }, [switchElement, switched])
+
+    useEffect(() => {
+        if (!connectedAddress) {
+            dispatch(updateAllowlistObject({ cosmos_chain_id: '' }))
+        } else {
+            dispatch(updateAllowlistObject({ cosmos_chain_id: chosenChainId }))
+        }
+    }, [connectedAddress])
+
+    useEffect(() => {
+        if (type === FormField.cosmos_chain_id) {
+            setIsValid(!!allowlistState.cosmos_chain_id)
+        }
+    }, [allowlistState.cosmos_chain_id])
 
     const getInputStyles = () => {
         if (isConnectedDiscordServer()) {

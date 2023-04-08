@@ -1,7 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Divider, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Divider, TextField, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { chains } from 'chain-registry';
 import { FileUploader } from "react-drag-drop-files";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
@@ -20,8 +19,6 @@ import { allowlistDetailsStyles, generalStyles, validationStyles } from './style
 const CreateAllowlistForm = () => {
 
   const dispatch = useDispatch()
-  const [availableChainIDs, setAvailableChainIDs] = useState<string[]>([])
-  const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
   const [bannerPreview, setBannerPreview] = useState<string>('')
   const [avatarPreview, setAvatarPreview] = useState<string>('')
   const allowlistState = useSelector((state: RootState) => state.allowlistState)
@@ -79,22 +76,6 @@ const CreateAllowlistForm = () => {
 
   }, [allowlistState.end_time, allowlistState.end_date])
 
-  useEffect(() => {
-    const cosmosChainIDs = chains.map((chain) => {
-      return chain.chain_id
-    })
-
-    if (cosmosChainIDs) {
-      const sortedChainIDs = cosmosChainIDs
-        .sort((a, b) => a
-          .localeCompare(b, undefined, { sensitivity: 'base' }))
-      setAvailableChainIDs(sortedChainIDs)
-      return
-    }
-
-    setAvailableChainIDs([])
-  }, [])
-
   return (
     <Box id='createAllowlistForm' width='100%'>
       <Box
@@ -124,49 +105,12 @@ const CreateAllowlistForm = () => {
             text='Description'
             placeholder='Enter Description'
           />
-          <Box id='allowlistCosmosBlockchainIDInput'>
-            <Typography fontWeight={600}>
-              <MandatoryField text={'Cosmos Blockchain ID'} />
-            </Typography>
-            <Select
-              disabled
-              disableUnderline
-              displayEmpty
-              variant='standard'
-              open={dropDownOpen}
-              onOpen={() => setDropDownOpen(true)}
-              onClose={() => setDropDownOpen(false)}
-              renderValue={() =>
-                allowlistState.cosmos_chain_id ?
-                  allowlistState.cosmos_chain_id :
-                  <Typography sx={allowlistDetailsStyles.dropDownPlaceholder}>Select a chain</Typography>
-              }
-              sx={allowlistDetailsStyles.defaultDropDown}
-              value={allowlistState.cosmos_chain_id}
-              onChange={(e) => dispatch(updateAllowlistObject({ cosmos_chain_id: e.target.value }))}
-              IconComponent={() => <Fragment></Fragment>
-                // <Box
-                //   sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
-                //   onClick={() => setDropDownOpen(true)}
-                // >
-                // <SvgComponent
-                //   type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                //   style={allowlistDetailsStyles.dropdownIcon}
-                // />
-                // </Box>
-              }
-            >
-              <MenuItem
-                key={allowlistState.cosmos_chain_id}
-                value={allowlistState.cosmos_chain_id}
-              >
-                {allowlistState.cosmos_chain_id}
-              </MenuItem>
-              {/* {availableChainIDs.map((CHAIN_ID, idx) => {
-                return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>
-              })} */}
-            </Select>
-          </Box>
+          <CreationField
+            type={FormField.cosmos_chain_id}
+            text={<MandatoryField text={'Cosmos Blockchain'} />}
+            placeholder={'Set a Chain ID'}
+            isDisabled={true}
+          />
           <CreationField
             type={FormField.website}
             text='Website URL'

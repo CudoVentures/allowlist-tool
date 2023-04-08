@@ -18,6 +18,7 @@ export const AllowlistCreationPreview = () => {
     const { date, time } = getSeparateDateAndTime(allowlistState.end_period)
 
     const DETAIL_FIELDS = [
+        { title: 'Cosmos Chain', isDisabled: !allowlistState.cosmos_chain_id, subtitle: allowlistState.cosmos_chain_id },
         { title: 'Name', isDisabled: !allowlistState.name, subtitle: allowlistState.name },
         { title: 'Custom URL', isDisabled: !allowlistState.url, subtitle: allowlistState.url },
         { title: 'Description', isDisabled: !allowlistState.description, subtitle: allowlistState.description },

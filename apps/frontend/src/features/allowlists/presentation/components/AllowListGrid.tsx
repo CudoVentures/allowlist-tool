@@ -105,7 +105,15 @@ const AllowListGrid = ({
             <Box gap={5} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                 <Box gap={1} display={'flex'} alignItems={"flex-end"}>
                     <Typography fontWeight={700} variant='h5' alignSelf={'center'} color={COLORS.LIGHT_BLUE[10]}>{text}</Typography>
-                    {withCount && !!displayData.length ? <Typography fontWeight={600} variant='subtitle2' paddingBottom={'3px'} color={COLORS.STEEL_GRAY[50]}>{`${displayData.length} Allowlists`}</Typography> : null}
+                    {withCount && !!displayData.length ? <Typography
+                        fontWeight={600}
+                        variant='subtitle2'
+                        paddingBottom={'3px'}
+                        color={COLORS.STEEL_GRAY[50]}
+                        minWidth={'max-content'}
+                    >
+                        {`${displayData.length} Allowlists`}
+                    </Typography> : null}
                 </Box>
                 {withSearchBar ? <SearchBar /> : null}
             </Box>

@@ -1,8 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import { Box, Tooltip, Typography, Dialog as MuiDialog } from '@mui/material'
+import { Box, Tooltip, Typography, Dialog as MuiDialog, MenuItem, Select } from '@mui/material'
 import { LoadingButton } from '@mui/lab'
 import { ThreeDots as ThreeDotsLoading } from 'svg-loaders-react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 import {
   detectUserBrowser,
   getExtensionUrlForBrowser,
@@ -16,18 +17,26 @@ import {
 } from 'cudosjs'
 
 import { RootState } from '../../../../../store'
-import { connectUser, SUPPORTED_WALLET_LOGOS } from '../../../../../../features/wallets/helpers'
+import { connectUser, getAvailableChainIdsByWalletType, SUPPORTED_WALLET_LOGOS } from '../../../../../../features/wallets/helpers'
 import { updateModalState, initialState as initialModalState } from '../../../../../store/modals'
 import { updateUser } from '../../../../../store/user'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../Layout/helpers'
+import { updateAllowlistObject } from '../../../../../../core/store/allowlist'
 
-import { CancelRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
+import { CancelRoundedIcon, BackRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
 import { styles } from './styles'
+import { allowlistDetailsStyles } from '../../../../../../features/allowlists/presentation/components/styles'
+import { COLORS_DARK_THEME } from '../../../../../../core/theme/colors'
 
 const WalletSelector = () => {
 
   const { selectWallet } = useSelector((state: RootState) => state.modalState)
+  const { chosenChainId } = useSelector((state: RootState) => state.userState)
   const [userBrowser, setUserBrowser] = useState<SUPPORTED_BROWSER | undefined>(undefined)
+  const [selectChainId, setSelectChainId] = useState<SUPPORTED_WALLET | undefined>(undefined)
+  const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
+  const [loadSelectChainId, setLoadSelectChainId] = useState<boolean>(false)
+  const [availableChainIDs, setAvailableChainIDs] = useState<string[]>([])
   const [loading, setLoading] = useState(new Map())
   const dispatch = useDispatch()
 
@@ -37,11 +46,11 @@ const WalletSelector = () => {
     }
   }
 
-  const connect = async (walletName: SUPPORTED_WALLET) => {
+  const connect = async (walletName: SUPPORTED_WALLET, chainId: string) => {
 
     try {
       setLoading(new Map(loading.set(walletName, true)))
-      const connectedUser = await connectUser(walletName)
+      const connectedUser = await connectUser(walletName, chainId)
       dispatch(updateUser(connectedUser))
       handleModalClose()
 
@@ -56,6 +65,7 @@ const WalletSelector = () => {
 
   const handleModalClose = () => {
     dispatch(updateModalState(initialModalState))
+    setSelectChainId(undefined)
   }
 
   const LoadingButtonComponent = (): JSX.Element => {
@@ -98,10 +108,15 @@ const WalletSelector = () => {
     return false
   }
 
-  const click = async (walletName: SUPPORTED_WALLET) => {
+  const click = async (walletName: SUPPORTED_WALLET, chainId: string) => {
 
     if (isExtensionEnabled(walletName)) {
-      await connect(walletName)
+      if (selectChainId) {
+        await connect(walletName, chainId)
+      } else {
+        setLoadSelectChainId(true)
+        setSelectChainId(walletName)
+      }
       return
     }
 
@@ -141,6 +156,16 @@ const WalletSelector = () => {
     return 'Unsupported browser'
   }
 
+  const handleBack = () => {
+    setLoadSelectChainId(true)
+    setSelectChainId(undefined)
+  }
+
+  const handleChosenChainIdChange = (value: string) => {
+    dispatch(updateUser({ chosenChainId: value }))
+    dispatch(updateAllowlistObject({ cosmos_chain_id: value }))
+  }
+
   useEffect(() => {
     const userBrowser = detectUserBrowser()
     if (isSupportedBrowser(userBrowser)) {
@@ -150,6 +175,30 @@ const WalletSelector = () => {
     setUserBrowser(undefined)
   }, [])
 
+  useEffect(() => {
+    (async () => {
+      try {
+        if (selectChainId) {
+          const availableChains = await getAvailableChainIdsByWalletType(selectChainId)
+          const cosmosChainIDs = Object.keys(availableChains)
+          const sortedChainIDs = cosmosChainIDs
+            .sort((a, b) => a
+              .localeCompare(b, undefined, { sensitivity: 'base' }))
+          setAvailableChainIDs(sortedChainIDs)
+          return
+        }
+        dispatch(updateUser({ chosenChainId: chosenChainId }))
+        dispatch(updateAllowlistObject({ cosmos_chain_id: '' }))
+        setAvailableChainIDs([])
+
+      } finally {
+        setTimeout(() => {
+          setLoadSelectChainId(false)
+        }, 300)
+      }
+    })()
+  }, [selectChainId])
+
   return (
     <MuiDialog
       BackdropProps={defaultStyles.defaultBackDrop}
@@ -158,8 +207,9 @@ const WalletSelector = () => {
       PaperProps={defaultStyles.defaultPaperProps}
     >
       <ModalContainer sx={{ padding: '25px 25px 20px 30px' }}>
+        {selectChainId ? <BackRoundedIcon onClick={handleBack} /> : null}
         <CancelRoundedIcon onClick={handleModalClose} />
-        <Box sx={styles.contentHolder}>
+        <Box id='modalContentHolder' sx={styles.contentHolder}>
           <Typography
             style={{ margin: '20px 0 20px 0' }}
             variant="h4"
@@ -169,41 +219,103 @@ const WalletSelector = () => {
             Connect Wallet
           </Typography>
           <Typography marginBottom={3} variant="subtitle1" color="text.secondary">
-            Connect your wallet in order to create an Allowlist
+            Connect your wallet in order to proceed
           </Typography>
-          <Box gap={3} style={styles.btnsHolder}>
-
-            {getSupportedWallets().map((wallet, idx) => {
-              return (
-                <Tooltip key={idx} placement='right' title={btnTooltip(wallet)}>
-                  <Box width='100%'>
-                    <LoadingButton
-                      loadingIndicator={<LoadingButtonComponent />}
-                      disabled={isDisabledBtn(wallet)}
-                      loading={loading.get(wallet)}
-                      variant="contained"
-                      color="primary"
-                      onClick={() => click(wallet)}
-                      sx={styles.connectButton}
+          {selectChainId ?
+            <Box gap={3} style={styles.btnsHolder}>
+              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+                <Fragment>
+                  <Select
+                    disableUnderline
+                    displayEmpty
+                    variant='standard'
+                    open={dropDownOpen}
+                    onOpen={() => setDropDownOpen(true)}
+                    onClose={() => setDropDownOpen(false)}
+                    renderValue={() =>
+                      !!chosenChainId ?
+                        chosenChainId :
+                        <Typography sx={allowlistDetailsStyles.dropDownPlaceholder}>Select a chain</Typography>
+                    }
+                    sx={allowlistDetailsStyles.chainIdSelector}
+                    value={chosenChainId}
+                    onChange={(e) => handleChosenChainIdChange(e.target.value)}
+                    IconComponent={() => <Box
+                      sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
+                      onClick={() => setDropDownOpen(true)}
                     >
-                      {displayLogo(wallet)}
-                      {btnText(wallet)}
-                    </LoadingButton>
-                  </Box>
-                </Tooltip>
-              )
-            })}
-            <Box sx={styles.pluginWarning} color="primary.main">
-              <SvgComponent
-                type={LAYOUT_CONTENT_TEXT.InfoIcon}
-                style={styles.infoIcon}
-              />
-              Make sure you have Keplr and/or Cosmostation plugins enabled.
+                      <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                        style={allowlistDetailsStyles.dropdownIcon}
+                      />
+                    </Box>
+                    }
+                  >
+                    {availableChainIDs.map((CHAIN_ID, idx) => {
+                      return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>
+                    })}
+                  </Select>
+                  <Tooltip placement='right' title={btnTooltip(selectChainId)}>
+                    <Box width='100%'>
+                      <LoadingButton
+                        loadingIndicator={<LoadingButtonComponent />}
+                        disabled={isDisabledBtn(selectChainId)}
+                        loading={loading.get(selectChainId)}
+                        variant="contained"
+                        color="primary"
+                        onClick={() => click(selectChainId, chosenChainId)}
+                        sx={styles.connectButton}
+                      >
+                        {displayLogo(selectChainId)}
+                        {btnText(selectChainId)}
+                      </LoadingButton>
+                    </Box>
+                  </Tooltip>
+                </Fragment>}
+              <Box sx={styles.pluginWarning} color="primary.main">
+                <SvgComponent
+                  type={LAYOUT_CONTENT_TEXT.InfoIcon}
+                  style={styles.infoIcon}
+                />
+                Make sure you have Keplr and/or Cosmostation plugins enabled.
+              </Box>
             </Box>
-          </Box>
+            :
+            <Box gap={3} style={styles.btnsHolder}>
+              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+                <Fragment>
+                  {getSupportedWallets().map((wallet, idx) => {
+                    return (
+                      <Tooltip key={idx} placement='right' title={btnTooltip(wallet)}>
+                        <Box width='100%'>
+                          <LoadingButton
+                            loadingIndicator={<LoadingButtonComponent />}
+                            disabled={isDisabledBtn(wallet)}
+                            loading={loading.get(wallet)}
+                            variant="contained"
+                            color="primary"
+                            onClick={() => click(wallet, chosenChainId)}
+                            sx={styles.connectButton}
+                          >
+                            {displayLogo(wallet)}
+                            {btnText(wallet)}
+                          </LoadingButton>
+                        </Box>
+                      </Tooltip>
+                    )
+                  })}
+                </Fragment>}
+              <Box sx={styles.pluginWarning} color="primary.main">
+                <SvgComponent
+                  type={LAYOUT_CONTENT_TEXT.InfoIcon}
+                  style={styles.infoIcon}
+                />
+                Make sure you have Keplr and/or Cosmostation plugins enabled.
+              </Box>
+            </Box>}
         </Box>
       </ModalContainer>
-    </MuiDialog>
+    </MuiDialog >
   )
 }
 

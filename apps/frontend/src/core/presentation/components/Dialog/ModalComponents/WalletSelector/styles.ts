@@ -34,8 +34,8 @@ export const styles = {
         height: '25px',
     },
     contentHolder: {
-        width: '100%',
-        minHeight: '200px',
+        height: '350px',
+        width: '500px',
         display: 'block',
         flexDirection: 'column',
         alignItems: 'center',

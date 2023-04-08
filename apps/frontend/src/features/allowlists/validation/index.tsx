@@ -20,11 +20,19 @@ const urlOptions: IsURLOptions = {
     disallow_auth: false
 }
 
-export const isValidCudosAddress = (addr: string) => {
+export const getCosmosAddressPrefix = (addr: string) => {
+    if (isValidCosmosAddress(addr)) {
+        const { prefix: decodedPrefix } = bech32.decode(addr)
+        return decodedPrefix
+    }
+    return 'invalidAddress'
+}
+
+export const isValidCosmosAddress = (addr: string) => {
     if (addr === '' || addr === undefined) return false
     try {
         const { prefix: decodedPrefix } = bech32.decode(addr)
-        return decodedPrefix.toLowerCase() === CHAIN_DETAILS.CURRENCY_DISPLAY_NAME.toLowerCase()
+        return addr.toLowerCase().startsWith(decodedPrefix.toLowerCase())
 
     } catch {
         // invalid checksum
