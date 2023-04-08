@@ -11,6 +11,7 @@ const AllAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
                 data={data}
                 withCreateBox={!data.length ? true : false}
                 expanded={true}
+                withCount={true}
                 withSearchBar={!data.length ? false : true}
             />
         </Fragment>
