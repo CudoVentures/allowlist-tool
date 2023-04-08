@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export enum SearchFilter {
     remainingTime = 'Remaining time',
+    popularity = 'Popularity',
     name = 'Name'
 }
 

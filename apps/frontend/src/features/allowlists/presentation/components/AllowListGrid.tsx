@@ -70,7 +70,18 @@ const AllowListGrid = ({
                                     return date1 - date2
                                 }
                             })
-                        }
+                        } else
+                            if (appliedFilter === SearchFilter.popularity) {
+                                dataToDisplay = [...dataToDisplay].sort((a, b) => {
+                                    const followingUsers1 = a.users.length
+                                    const followingUsers2 = b.users.length
+                                    if (ascendingOrder) {
+                                        return followingUsers2 - followingUsers1
+                                    } else {
+                                        return followingUsers1 - followingUsers2
+                                    }
+                                })
+                            }
                 }
             } catch (error) {
                 console.error(error.message)
