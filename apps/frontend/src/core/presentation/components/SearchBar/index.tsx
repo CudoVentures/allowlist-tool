@@ -149,7 +149,7 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                 gap={2}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expandChainSelector ? "210px" : '48px' }}
+                sx={{ ...styles.searchBar, width: expandChainSelector ? "200px" : '48px' }}
             >
                 <Box sx={{ display: 'flex', marginLeft: '-9px' }}>
                     <SvgComponent

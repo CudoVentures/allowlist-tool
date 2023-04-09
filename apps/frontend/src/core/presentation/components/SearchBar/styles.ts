@@ -61,8 +61,8 @@ export const styles = {
                 background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
                 borderRadius: '8px',
                 marginLeft: '-18px',
-                minWidth: '210px',
-                maxWidth: '210px'
+                minWidth: '200px',
+                maxWidth: '200px'
             },
         },
     },
