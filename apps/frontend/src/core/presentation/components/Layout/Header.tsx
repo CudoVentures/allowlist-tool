@@ -30,7 +30,30 @@ const Header = () => {
   const { hamburgerMenu } = useSelector((state: RootState) => state.modalState)
   const [isConnected, setIsConnected] = useState<boolean>(false);
   const [openMenu, setOpenMenu] = useState<boolean>(false)
+  const [compensateRightMargin, setCompensateRightMargin] = useState<boolean>(false)
   const isScreenLessThan1400px = useIsScreenLessThan('1400px', 'width')
+
+  //Dirty Hack fighting elements displacement on the UI when MUI Select dropdown is active. 
+  const observeAriaHidden = () => {
+    const rootElement = document.getElementById('root');
+    function handleMutations(mutations: any[]) {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'aria-hidden') {
+          const isAriaHidden = rootElement.getAttribute('aria-hidden') === 'true';
+          setCompensateRightMargin(isAriaHidden)
+        }
+      });
+    }
+
+    const observer = new MutationObserver(handleMutations);
+    if (rootElement) {
+      observer.observe(rootElement, { attributes: true });
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }
 
   const handleCloseTransition = () => {
     navBar.current.style.opacity = '0'
@@ -79,6 +102,11 @@ const Header = () => {
     toggleBodyScroll(hamburgerMenu)
   }, [hamburgerMenu])
 
+  useEffect(() => {
+    const cleanup = observeAriaHidden();
+    return cleanup;
+  }, []);
+
   return (
     <AppBar
       id='header'
@@ -88,7 +116,7 @@ const Header = () => {
     >
       <Dialog />
       <Box ref={navBar} id='leftNavContentAndIcon'
-        sx={{ ...headerStyles.leftNavContentAndIcon, paddingTop: hamburgerMenu ? '8px' : '0px', marginBottom: hamburgerMenu ? '60px' : '0px' }}>
+        sx={headerStyles.leftNavContentAndIcon(hamburgerMenu)}>
         <Box
           style={{ width: "max-content" }}
           id='leftNavContent'
@@ -116,79 +144,83 @@ const Header = () => {
               null}
           </Typography>
         </Box>
-        {hamburgerMenu ? <CloseIcon style={{ cursor: 'pointer' }} fontSize='medium' onClick={closeHamburgerMenu} /> : null}
-        {isScreenLessThan1400px && !hamburgerMenu ? <MenuIcon style={{ cursor: 'pointer' }} fontSize='large' onClick={openHamburgerMenu} /> : null}
+        {hamburgerMenu ?
+          <CloseIcon
+            style={{ cursor: 'pointer' }}
+            fontSize='medium'
+            onClick={closeHamburgerMenu}
+          /> : null}
+        {isScreenLessThan1400px && !hamburgerMenu ?
+          <MenuIcon
+            style={headerStyles.menuIcon(compensateRightMargin, hasScrollbar())}
+            fontSize='large'
+            onClick={openHamburgerMenu}
+          /> : null}
       </Box>
-      {
-        hamburgerMenu ? <HamburgerMenu /> : isScreenLessThan1400px ? null :
-          <Box
-            id='rightNavContent'
-            gap={2}
-            sx={{ display: 'flex', alignItems: 'center', flexDirection: 'row' }}>
-            <Menu />
-            <Divider
-              orientation='vertical'
-              sx={headerStyles.divider}
-            />
-            <Box sx={headerStyles.btnHolder}>
-              <ClickAwayListener
-                onClickAway={() => setOpenMenu(false)}
-                children={<Button
-                  variant="contained"
-                  style={{ justifyContent: isConnected ? 'space-between' : 'center' }}
-                  sx={{
-                    ...
-                    headerStyles.logInBtn,
-                    bgcolor: isConnected ? COLORS_DARK_THEME.PRIMARY_STEEL_GRAY : COLORS_DARK_THEME.PRIMARY_BLUE
-                  }}
-                  onMouseEnter={() => isConnected ? setOpenMenu(true) : null}
-                  onClick={handleClick}
-                >
-                  <Box id='hashLogoAndAddressHolder' gap={1} sx={{ marginLeft: isConnected ? '-6px' : '0px', display: 'flex', alignItems: 'center' }}>
-                    {isConnected ? <HashBasedUserAvatar UID={connectedAddress} size={23} /> :
-                      <SvgComponent
-                        type={LAYOUT_CONTENT_TEXT.WalletLogo}
-                        style={{ height: '24px', marginRight: '5px' }}
-                      />}
-                    <Typography fontWeight={700}>
-                      {isConnected ?
-                        formatAddress(connectedAddress, 7) :
-                        LAYOUT_CONTENT_TEXT.ConnectWallet}
-                    </Typography>
-                  </Box>
-                  {isConnected ?
-                    <SvgComponent
-                      type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                      style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
-                    /> : null}
-                </Button>}
-              />
-              <Collapse
-                sx={headerStyles.collapse}
-                onMouseEnter={() => setOpenMenu(true)}
-                onMouseLeave={() => setOpenMenu(false)}
-                in={openMenu}
+      {hamburgerMenu ? <HamburgerMenu /> : isScreenLessThan1400px ? null :
+        <Box
+          id='rightNavContent'
+          gap={2}
+          sx={headerStyles.rightNavContent(compensateRightMargin, hasScrollbar())}>
+          <Menu />
+          <Divider
+            orientation='vertical'
+            sx={headerStyles.divider}
+          />
+          <Box sx={headerStyles.btnHolder}>
+            <ClickAwayListener
+              onClickAway={() => setOpenMenu(false)}
+              children={<Button
+                variant="contained"
+                sx={headerStyles.logInBtn(isConnected)}
+                onMouseEnter={() => isConnected ? setOpenMenu(true) : null}
+                onClick={handleClick}
               >
-                <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
-                  <Box gap={2} sx={headerStyles.dropDownItemHolder}>
-                    <HashBasedUserAvatar UID={connectedAddress} size={50} />
-                    <ConnectedChain />
-                    <Typography color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
-                      {formatAddress(connectedAddress, 10)}
-                    </Typography>
-                    <CopyAndFollowComponent address={connectedAddress} />
-                    <Button
-                      variant="contained"
-                      sx={headerStyles.disconnectBtn}
-                      onClick={disconnectUser}
-                    >
-                      Disconnect
-                    </Button>
-                  </Box>
-                </Paper>
-              </Collapse>
-            </Box>
+                <Box id='hashLogoAndAddressHolder' gap={1} sx={headerStyles.hashLogoAndAddressHolder(isConnected)}>
+                  {isConnected ? <HashBasedUserAvatar UID={connectedAddress} size={23} /> :
+                    <SvgComponent
+                      type={LAYOUT_CONTENT_TEXT.WalletLogo}
+                      style={{ height: '24px', marginRight: '5px' }}
+                    />}
+                  <Typography fontWeight={700}>
+                    {isConnected ?
+                      formatAddress(connectedAddress, 7) :
+                      LAYOUT_CONTENT_TEXT.ConnectWallet}
+                  </Typography>
+                </Box>
+                {isConnected ?
+                  <SvgComponent
+                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                    style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                  /> : null}
+              </Button>}
+            />
+            <Collapse
+              sx={headerStyles.collapse}
+              onMouseEnter={() => setOpenMenu(true)}
+              onMouseLeave={() => setOpenMenu(false)}
+              in={openMenu}
+            >
+              <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
+                <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                  <HashBasedUserAvatar UID={connectedAddress} size={50} />
+                  <ConnectedChain />
+                  <Typography color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                    {formatAddress(connectedAddress, 10)}
+                  </Typography>
+                  <CopyAndFollowComponent address={connectedAddress} />
+                  <Button
+                    variant="contained"
+                    sx={headerStyles.disconnectBtn}
+                    onClick={disconnectUser}
+                  >
+                    Disconnect
+                  </Button>
+                </Box>
+              </Paper>
+            </Collapse>
           </Box>
+        </Box>
       }
     </AppBar >
   );

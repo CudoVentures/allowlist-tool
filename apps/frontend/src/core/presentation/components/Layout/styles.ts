@@ -1,6 +1,20 @@
 import { COLORS_DARK_THEME } from "../../../theme/colors";
 
 export const headerStyles = {
+    menuIcon: (compensateRightMargin: boolean, hasScrollbar: boolean) => {
+        return {
+            cursor: 'pointer',
+            marginRight: compensateRightMargin && hasScrollbar ? '4px' : '0px'
+        }
+    },
+    rightNavContent: (compensateRightMargin: boolean, hasScrollbar: boolean) => {
+        return {
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'row',
+            marginRight: compensateRightMargin && hasScrollbar ? '4px' : '0px'
+        }
+    },
     hamburgerAddressHolder: {
         width: '100%',
         display: 'flex',
@@ -125,11 +139,22 @@ export const headerStyles = {
         display: 'flex',
         flexDirection: 'row',
     },
-    leftNavContentAndIcon: {
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center'
+    hashLogoAndAddressHolder: (isConnected: boolean) => {
+        return {
+            marginLeft: isConnected ? '-6px' : '0px',
+            display: 'flex',
+            alignItems: 'center'
+        }
+    },
+    leftNavContentAndIcon: (hamburgerMenu: boolean) => {
+        return {
+            width: '100%',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            paddingTop: hamburgerMenu ? '8px' : '0px',
+            marginBottom: hamburgerMenu ? '60px' : '0px'
+        }
     },
     hamburger: {
         opacity: 1,
@@ -149,14 +174,18 @@ export const headerStyles = {
         zIndex: '10',
         width: '224px',
     },
-    logInBtn: {
-        padding: '10px 20px 10px 12px',
-        borderRadius: '100px',
-        height: '40px',
-        width: '224px',
-        display: 'flex',
-        alignItems: 'center',
-        textTransform: 'none',
+    logInBtn: (isConnected: boolean) => {
+        return {
+            bgcolor: isConnected ? COLORS_DARK_THEME.PRIMARY_STEEL_GRAY : COLORS_DARK_THEME.PRIMARY_BLUE,
+            justifyContent: isConnected ? 'space-between' : 'center',
+            padding: '10px 20px 10px 12px',
+            borderRadius: '100px',
+            height: '40px',
+            width: '224px',
+            display: 'flex',
+            alignItems: 'center',
+            textTransform: 'none',
+        }
     },
 }
 export const footerStyles = {

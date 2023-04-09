@@ -29,15 +29,6 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
     const [expandSearchBar, setExpandSearchBar] = useState<boolean>(false)
     const [searchBarPlaceholder, setSearchBarPlaceholder] = useState<string>('')
 
-    const hasScrollbar = () => {
-        return document.documentElement.scrollHeight > document.documentElement.clientHeight;
-    };
-
-    const toggleBodyScroll = (disable: boolean) => {
-        document.body.style.overflow = disable ? 'hidden' : 'auto';
-        document.body.style.paddingRight = disable && hasScrollbar() ? '4px' : '0px';
-    };
-
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(updateSearchState({
             searchTerms: event.target.value as string
@@ -57,7 +48,7 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
         if (expandChainSelector) {
             chainSelector.current?.click()
             setChainSelectorCloseIcon(true)
-            setChainSelectorPlaceholder('Filter by Network')
+            setChainSelectorPlaceholder('Select Network')
         }
     }
 
@@ -120,10 +111,6 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
 
         //eslint-disable-next-line
     }, [showChainSelectorCloseIcon])
-
-    useEffect(() => {
-        toggleBodyScroll(dropDownOpen)
-    }, [dropDownOpen])
 
     return (
         <Box sx={{ gap: '12px', display: 'flex', alignItems: 'center' }}>
@@ -195,24 +182,9 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                         : null}
                 >
                     {networks.map((network, idx) => {
-                        return <MenuItem sx={styles.menuItem} key={idx} value={network}>{network}</MenuItem>
+                        return <MenuItem sx={styles.menuItem} key={idx + network} value={network}>{network}</MenuItem>
                     })}
                 </Select>
-
-                {/* <Input
-                    ref={chainSelector}
-                    disableUnderline
-                    placeholder={chainSelectorPlaceholder}
-                    type="text"
-                    onChange={handleChange}
-                    value={searchTerms}
-                    sx={{ width: '100%', display: 'flex' }}
-                    endAdornment={showChainSelectorCloseIcon ?
-                        <Box onClick={() => setChainSelectorCloseIcon(false)}>
-                            <CancelRounded sx={styles.cancelIcon} />
-                        </Box>
-                        : null}
-                /> */}
             </Box>
             <Divider orientation="vertical" sx={headerStyles.divider} />
             <Box
@@ -260,7 +232,7 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                 </Box>}
             >
                 {Object.values(SearchFilter).map((filter, idx) => {
-                    return <MenuItem sx={styles.menuItem} key={idx} value={filter}>{filter}</MenuItem>
+                    return <MenuItem sx={styles.menuItem} key={idx + filter} value={filter}>{filter}</MenuItem>
                 })}
             </Select>
         </Box>
