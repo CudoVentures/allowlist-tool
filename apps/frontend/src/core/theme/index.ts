@@ -98,25 +98,24 @@ const theme = createTheme({
             background: COLORS.LIGHT_BLUE[70]
           },
           '&:disabled': {
-            background: COLORS.LIGHT_BLUE[30],
-            color: COLORS.STEEL_GRAY[20]
+            background: COLORS.STEEL_GRAY[90],
+            color: COLORS.STEEL_GRAY[50]
           }
         },
         containedSecondary: {
           borderRadius: '26px',
-          background: COLORS.LIGHT_BLUE[30],
-          color: COLORS.DARK_BLUE[100],
+          background: COLORS.STEEL_GRAY[90],
+          color: COLORS.LIGHT_BLUE[10],
           padding: '16px 24px 16px 24px',
           textTransform: 'none',
           '&:hover': {
-            background: COLORS.LIGHT_BLUE[40]
+            background: COLORS.STEEL_GRAY[90]
           },
           '&:click': {
-            background: COLORS.LIGHT_BLUE[50]
+            background: COLORS.STEEL_GRAY[70]
           },
           '&:disabled': {
-            background: COLORS.LIGHT_BLUE[30],
-            color: COLORS.STEEL_GRAY[20]
+            color: COLORS.STEEL_GRAY[50]
           }
         },
         textPrimary: {
