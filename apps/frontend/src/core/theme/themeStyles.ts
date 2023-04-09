@@ -18,6 +18,12 @@ export const themeStyles = {
         height: '48px',
         padding: '12px',
         borderRadius: '50%',
-        background: COLORS.STEEL_GRAY[90]
+        background: COLORS.STEEL_GRAY[90],
+        "&:hover": {
+            background: COLORS.STEEL_GRAY[80]
+        },
+        '&:click': {
+            background: COLORS.STEEL_GRAY[70]
+        }
     }
 }

@@ -176,6 +176,9 @@ export const headerStyles = {
     },
     logInBtn: (isConnected: boolean) => {
         return {
+            "&:hover": {
+                bgcolor: isConnected ? COLORS.STEEL_GRAY[80] : 'auto'
+            },
             bgcolor: isConnected ? COLORS.STEEL_GRAY[90] : COLORS.LIGHT_BLUE[90],
             justifyContent: isConnected ? 'space-between' : 'center',
             padding: '10px 20px 10px 12px',
