@@ -13,7 +13,6 @@ import { LAYOUT_CONTENT_TEXT, SvgComponent } from "./helpers";
 import { headerStyles } from "./styles";
 
 const MENU_ITEMS = [
-    { text: 'My Allowlists', route: AppRoutes.MY_ALLOWLISTS },
     { text: 'Explore', route: AppRoutes.ALLOWLISTS },
     { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST }
 ]
@@ -40,7 +39,7 @@ const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
     }
 
     const MenuItem = ({ route, text }: { route: AppRoutes, text: string }) => {
-        if (route === AppRoutes.MY_ALLOWLISTS && !connectedAddress) {
+        if (!connectedAddress) {
             return
         }
         return (
@@ -59,6 +58,15 @@ const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
         )
     }
 
+    const StyledDivider = () => {
+        return (
+            <Divider
+                orientation={hamburger ? 'horizontal' : 'vertical'}
+                sx={{ ...headerStyles.divider, height: hamburger ? '1px' : '24px', width: hamburger ? '100%' : 'auto' }}
+            />
+        )
+    }
+
     return (
         <Box gap={hamburger ? 4 : 2} sx={{ width: '100%', display: 'flex', flexDirection: hamburger ? 'column' : 'row', alignItems: hamburger ? 'flex-start' : 'center', justifyContent: 'flex-end' }} >
             {MENU_ITEMS.map((item, idx) => {
@@ -66,11 +74,16 @@ const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
             })}
             {connectedAddress ?
                 <Fragment>
-                    <Divider
-                        orientation={hamburger ? 'horizontal' : 'vertical'}
-                        sx={{ ...headerStyles.divider, height: hamburger ? '1px' : '24px', width: hamburger ? '100%' : 'auto' }}
-                    />
+                    <StyledDivider />
                     <SocialMediaButtons hamburger={hamburger} />
+                    <StyledDivider />
+                    <Box sx={{ display: 'flex' }}>
+                        <SvgComponent
+                            type={LAYOUT_CONTENT_TEXT.PersonIcon}
+                            style={{ height: '24px', width: "24px", color: isActive(AppRoutes.DASHBOARD) ? COLORS.LIGHT_BLUE[90] : 'inherit' }}
+                        />
+                        <MenuItem route={AppRoutes.DASHBOARD} text={'Dashboard'} />
+                    </Box>
                 </Fragment>
                 : null}
         </Box>

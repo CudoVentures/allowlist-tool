@@ -96,11 +96,36 @@ export const headerStyles = {
         width: '176px',
         height: '48px',
         padding: '10px 20px',
-        background: COLORS.STEEL_GRAY[100],
+        background: COLORS.STEEL_GRAY[90],
+        '&:hover': {
+            background: COLORS.STEEL_GRAY[80]
+        },
+        '&:click': {
+            background: COLORS.STEEL_GRAY[70]
+        },
         fontSize: '14px',
         fontWeight: '500',
         borderRadius: '24px',
         display: 'flex',
+        alignItems: "center",
+        justifyContent: 'center',
+    },
+    dropDownDisconnectBtnHolder: {
+        display: "flex",
+        alignItems: "center",
+        padding: '10px 20px',
+        background: COLORS.STEEL_GRAY[90],
+        '&:hover': {
+            background: COLORS.STEEL_GRAY[80]
+        },
+        '&:click': {
+            background: COLORS.STEEL_GRAY[70]
+        },
+        fontSize: '14px',
+        width: '176px',
+        fontWeight: '500',
+        borderRadius: '24px',
+        height: '48px',
         justifyContent: 'center',
     },
     dropDownContentHolder: {

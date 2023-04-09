@@ -143,7 +143,7 @@ export const SocialMediaButtons = ({ hamburger }: { hamburger?: boolean }) => {
                             `${connectedSocialMedia[media].userName}`}
                     </Typography>
                     {isDisconnected ? null :
-                        <Paper elevation={1} sx={{ ...headerStyles.dropDownContentHolder, width: '176px', height: '48px' }}>
+                        <Paper id="dropDownDisconnectBtnHolder" elevation={1} sx={headerStyles.dropDownDisconnectBtnHolder}>
                             <Box gap={2} sx={{ ...headerStyles.dropDownItemHolder, cursor: 'pointer', justifyContent: "center" }}>
                                 <Typography onClick={() => disconnectSocialMedia(media)}>
                                     {`Disconnect`}
@@ -181,7 +181,7 @@ export const SocialMediaButtons = ({ hamburger }: { hamburger?: boolean }) => {
                             sx={headerStyles.SMcollapse}
                             in={!isDisconnected && (hamburger || openMenu)}
                         >
-                            <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
+                            <Paper id="dropDownDisconnectBtnHolder" elevation={1} sx={headerStyles.dropDownDisconnectBtnHolder}>
                                 <Box gap={2} sx={headerStyles.dropDownItemHolder}>
                                     <Typography onClick={() => disconnectSocialMedia(media)}>
                                         {`Disconnect`}

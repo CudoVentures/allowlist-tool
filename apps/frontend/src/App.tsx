@@ -17,7 +17,7 @@ import CreateAllowlistPage from './features/allowlists/presentation/pages/Create
 import AllowlistPage from './features/allowlists/presentation/pages/AllowlistPage';
 import EditAllowlistPage from './features/allowlists/presentation/pages/EditAllowlist';
 import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllowlistsPage';
-import MyAllowlistsPage from './features/allowlists/presentation/pages/MyAllowlistsPage';
+import DashboardPage from './features/allowlists/presentation/pages/Dashboard';
 import { updateModalState } from './core/store/modals';
 import useSocialMedia from './core/utilities/CustomHooks/useSocialMedia';
 import { WS_MSGS, WS_ROOM } from '../../common/interfaces';
@@ -125,8 +125,8 @@ const App = () => {
                 />
                 <Route element={<RequireConnectedWallet />}>
                   <Route
-                    path={AppRoutes.MY_ALLOWLISTS}
-                    element={<MyAllowlistsPage />}
+                    path={AppRoutes.DASHBOARD}
+                    element={<DashboardPage />}
                   />
                 </Route>
                 <Route

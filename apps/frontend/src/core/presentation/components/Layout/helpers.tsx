@@ -11,6 +11,7 @@ import walletIcon from '../../../../public/assets/vectors/wallet-icon.svg';
 import magnifyingGlass from '../../../../public/assets/vectors/magnifying-glass.svg';
 import arrowDown from '../../../../public/assets/vectors/arrow-down.svg';
 import userIcon from '../../../../public/assets/vectors/user-icon.svg';
+import personIcon from '../../../../public/assets/vectors/person-icon.svg';
 import arrowRight from '../../../../public/assets/vectors/menu-arrow-right.svg';
 import linkIcon from '../../../../public/assets/vectors/link-icon.svg';
 import searchIcon from '../../../../public/assets/vectors/search-icon.svg';
@@ -63,6 +64,7 @@ import { generalStyles } from '../../../../features/allowlists/presentation/page
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    PersonIcon = 'Person Icon',
     MagnifyingGlass = 'Magnifying Glass Icon',
     FailureIcon = 'Failure icon',
     SuccessIcon = 'Success icon',
@@ -121,6 +123,7 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.PersonIcon]: personIcon,
     [LAYOUT_CONTENT_TEXT.MagnifyingGlass]: magnifyingGlass,
     [LAYOUT_CONTENT_TEXT.SortingIcon]: sortingIcon,
     [LAYOUT_CONTENT_TEXT.SearchIcon]: searchIcon,

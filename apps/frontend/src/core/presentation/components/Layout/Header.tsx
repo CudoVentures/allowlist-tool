@@ -163,10 +163,11 @@ const Header = () => {
           gap={2}
           sx={headerStyles.rightNavContent(compensateRightMargin, hasScrollbar())}>
           <Menu />
-          <Divider
-            orientation='vertical'
-            sx={headerStyles.divider}
-          />
+          {isConnected ? null :
+            <Divider
+              orientation='vertical'
+              sx={headerStyles.divider}
+            />}
           <Box sx={headerStyles.btnHolder}>
             <ClickAwayListener
               onClickAway={() => setOpenMenu(false)}
