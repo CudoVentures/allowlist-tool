@@ -11,7 +11,7 @@ import { RootState } from '../../../store';
 import AppRoutes from '../../../../features/app-routes/entities/AppRoutes';
 import { updateModalState } from '../../../store/modals';
 import Dialog from '../Dialog';
-import { COLORS_DARK_THEME } from '../../../theme/colors';
+import { COLORS } from '../../../theme/colors';
 import { useIsScreenLessThan } from '../../../utilities/CustomHooks/screenChecks';
 import Menu from './Menu';
 import { ConnectedChain, CopyAndFollowComponent } from '../../../theme/helpers';
@@ -134,7 +134,7 @@ const Header = () => {
             {!isMainnetInstance() ?
               <Typography
                 marginLeft={1}
-                color={COLORS_DARK_THEME.TESTNET_ORANGE}
+                color={COLORS.ORANGE[50]}
                 fontWeight={300}
                 component="span"
                 fontSize={18}
@@ -191,7 +191,7 @@ const Header = () => {
                 {isConnected ?
                   <SvgComponent
                     type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                    style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                    style={{ color: COLORS.LIGHT_BLUE[90], transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
                   /> : null}
               </Button>}
             />
@@ -205,7 +205,7 @@ const Header = () => {
                 <Box gap={2} sx={headerStyles.dropDownItemHolder}>
                   <HashBasedUserAvatar UID={connectedAddress} size={50} />
                   <ConnectedChain />
-                  <Typography color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                  <Typography color={COLORS.STEEL_GRAY[20]}>
                     {formatAddress(connectedAddress, 10)}
                   </Typography>
                   <CopyAndFollowComponent address={connectedAddress} />

@@ -26,7 +26,7 @@ import { updateAllowlistObject } from '../../../../../../core/store/allowlist'
 import { CancelRoundedIcon, BackRoundedIcon, ModalContainer, styles as defaultStyles } from '../../styles'
 import { styles } from './styles'
 import { allowlistDetailsStyles } from '../../../../../../features/allowlists/presentation/components/styles'
-import { COLORS_DARK_THEME } from '../../../../../../core/theme/colors'
+import { COLORS } from '../../../../../../core/theme/colors'
 
 const WalletSelector = () => {
 
@@ -71,7 +71,13 @@ const WalletSelector = () => {
   const LoadingButtonComponent = (): JSX.Element => {
     return (
       <ThreeDotsLoading
-        style={{ width: '30px', height: '30px' }}
+        style={{
+          width: '30px',
+          height: '30px',
+          fill: COLORS.STEEL_GRAY[20],
+          stroke: COLORS.STEEL_GRAY[20],
+          color: COLORS.STEEL_GRAY[20]
+        }}
       />
     )
   }
@@ -223,7 +229,7 @@ const WalletSelector = () => {
           </Typography>
           {selectChainId ?
             <Box gap={3} style={styles.btnsHolder}>
-              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS.LIGHT_BLUE[90] }} /> :
                 <Fragment>
                   <Select
                     disableUnderline
@@ -282,7 +288,7 @@ const WalletSelector = () => {
             </Box>
             :
             <Box gap={3} style={styles.btnsHolder}>
-              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS.LIGHT_BLUE[90] }} /> :
                 <Fragment>
                   {getSupportedWallets().map((wallet, idx) => {
                     return (

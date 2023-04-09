@@ -1,4 +1,4 @@
-import { COLORS_DARK_THEME } from "../../../../../core/theme/colors"
+import { COLORS } from "../../../../../core/theme/colors"
 
 export const forCollectorsStyles = {
     avatar: {
@@ -145,7 +145,7 @@ export const mainCardStyles = {
         alignItems: 'center',
         borderRadius: '24px',
         padding: '16px 16px 24px 16px',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+        background: COLORS.STEEL_GRAY[90],
         height: '384px',
         minWidth: '384px',
     },
@@ -185,7 +185,7 @@ export const featuresStyle = {
 
 export const FAQStyle = {
     expandIcon: {
-        color: COLORS_DARK_THEME.PRIMARY_BLUE,
+        color: COLORS.LIGHT_BLUE[90],
         height: '22px'
     },
     containerBox: {
@@ -204,6 +204,6 @@ export const FAQStyle = {
     },
     accordion: {
         borderRadius: '32px',
-        background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_50
+        background: COLORS.DARK_BLUE[50]
     },
 }

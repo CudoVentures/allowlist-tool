@@ -1,4 +1,4 @@
-import { COLORS_DARK_THEME } from "../../../theme/colors";
+import { COLORS } from "../../../theme/colors";
 
 export const headerStyles = {
     menuIcon: (compensateRightMargin: boolean, hasScrollbar: boolean) => {
@@ -36,8 +36,8 @@ export const headerStyles = {
     },
     hamburgerTopWideDivider: {
         margin: '20px 0px',
-        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        borderColor: COLORS.STEEL_GRAY[70],
+        backgroundColor: COLORS.STEEL_GRAY[70],
         position: 'absolute',
         left: 0,
         top: '65px',
@@ -45,8 +45,8 @@ export const headerStyles = {
     },
     hamburgerBottomWideDivider: {
         margin: '20px 0px',
-        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
+        borderColor: COLORS.STEEL_GRAY[70],
+        backgroundColor: COLORS.STEEL_GRAY[70],
         position: 'relative',
         left: '-62px',
         width: '100vw'
@@ -70,13 +70,13 @@ export const headerStyles = {
         height: '1px',
         width: '100%',
         margin: '10px 0px',
-        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70
+        borderColor: COLORS.STEEL_GRAY[70],
+        backgroundColor: COLORS.STEEL_GRAY[70]
     },
     divider: {
         height: '24px',
-        borderColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70,
-        backgroundColor: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_70
+        borderColor: COLORS.STEEL_GRAY[70],
+        backgroundColor: COLORS.STEEL_GRAY[70]
     },
     hamburgerDropDownItemHolder: {
         cursor: 'pointer',
@@ -96,7 +96,7 @@ export const headerStyles = {
         width: '176px',
         height: '48px',
         padding: '10px 20px',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
+        background: COLORS.STEEL_GRAY[100],
         fontSize: '14px',
         fontWeight: '500',
         borderRadius: '24px',
@@ -105,7 +105,7 @@ export const headerStyles = {
     },
     dropDownContentHolder: {
         padding: '10px 20px',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
+        background: COLORS.STEEL_GRAY[100],
         fontSize: '14px',
         width: '100%',
         fontWeight: '500',
@@ -176,7 +176,7 @@ export const headerStyles = {
     },
     logInBtn: (isConnected: boolean) => {
         return {
-            bgcolor: isConnected ? COLORS_DARK_THEME.PRIMARY_STEEL_GRAY : COLORS_DARK_THEME.PRIMARY_BLUE,
+            bgcolor: isConnected ? COLORS.STEEL_GRAY[90] : COLORS.LIGHT_BLUE[90],
             justifyContent: isConnected ? 'space-between' : 'center',
             padding: '10px 20px 10px 12px',
             borderRadius: '100px',
@@ -191,9 +191,9 @@ export const headerStyles = {
 export const footerStyles = {
     typography: {
         fontWeight: 700,
-        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50,
+        color: COLORS.STEEL_GRAY[50],
         "&:hover": {
-            color: COLORS_DARK_THEME.PRIMARY_BLUE
+            color: COLORS.LIGHT_BLUE[90]
         }
     },
     holder: {
@@ -209,9 +209,9 @@ export const footerStyles = {
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50,
+        color: COLORS.STEEL_GRAY[50],
         '&:hover': {
-            color: COLORS_DARK_THEME.PRIMARY_BLUE
+            color: COLORS.LIGHT_BLUE[90]
         }
     },
     leftItem: {
@@ -222,10 +222,10 @@ export const footerStyles = {
 export const helperStyles = {
     footerLogo: {
         display: 'flex',
-        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50,
+        color: COLORS.STEEL_GRAY[50],
         alignItems: 'center',
         "&:hover": {
-            color: COLORS_DARK_THEME.PRIMARY_BLUE
+            color: COLORS.LIGHT_BLUE[90]
         }
     },
     dropDownItem: {

@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import { RootState } from '../../../../../store'
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../Layout/helpers'
-import { COLORS_DARK_THEME } from '../../../../../theme/colors'
+import { COLORS } from '../../../../../theme/colors'
 import { initialState, updateModalState } from '../../../../../store/modals'
 import AppRoutes from '../../../../../../features/app-routes/entities/AppRoutes'
 import useNavigateToRoute from '../../../../../../core/utilities/CustomHooks/useNavigateToRoute'
@@ -38,7 +38,7 @@ const Success = () => {
             PaperProps={defaultStyles.defaultPaperProps}
         >
             <ModalContainer sx={{ width: '512px', padding: '4rem 2rem 1rem 2rem' }}>
-                <SvgComponent type={LAYOUT_CONTENT_TEXT.SuccessIcon} style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} />
+                <SvgComponent type={LAYOUT_CONTENT_TEXT.SuccessIcon} style={{ color: COLORS.LIGHT_BLUE[90] }} />
                 <CancelRoundedIcon onClick={handleModalClose} />
                 <Typography
                     variant="h4"
@@ -65,7 +65,7 @@ const Success = () => {
                     <Button
                         variant="outlined"
                         onClick={() => handleModalClose(AppRoutes.MAIN)}
-                        sx={{ height: '48px', width: '100%', background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY, border: 'none', '&:hover': { border: 'none' } }}
+                        sx={{ height: '48px', width: '100%', background: COLORS.STEEL_GRAY[90], border: 'none', '&:hover': { border: 'none' } }}
                     >
                         Back to Home
                     </Button>

@@ -1,4 +1,4 @@
-import { COLORS_DARK_THEME } from "./colors";
+import { COLORS } from "./colors";
 
 export const themeStyles = {
     centerFlexLinear: {
@@ -18,6 +18,6 @@ export const themeStyles = {
         height: '48px',
         padding: '12px',
         borderRadius: '50%',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
+        background: COLORS.STEEL_GRAY[90]
     }
 }

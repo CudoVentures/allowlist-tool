@@ -9,7 +9,7 @@ import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
 import { CONNECTED_SOCIAL_MEDIA, DISCORD_SERVER_ROLES, SOCIAL_MEDIA } from "../../../../../../common/interfaces";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
-import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
+import { COLORS } from "../../../../core/theme/colors";
 import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedia";
 import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
@@ -83,7 +83,7 @@ export const getStartAdornment = (text: string): JSX.Element => {
                 sx={{ marginRight: '-6px' }}
                 fontWeight={600}
                 variant='subtitle2'
-                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
+                color={COLORS.STEEL_GRAY[50]}>
                 {text}
             </Typography>
         </InputAdornment>
@@ -172,7 +172,7 @@ export const SocialMediaButtons = ({ hamburger }: { hamburger?: boolean }) => {
                             {isDisconnected ? null :
                                 <SvgComponent
                                     type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                                    style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                                    style={{ marginLeft: '5px', color: COLORS.LIGHT_BLUE[90], transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
                                 />}
                         </Typography>
                         <Collapse
@@ -256,14 +256,14 @@ export const SocialMediaBoxes = ({
         })
 
         return valid ?
-            <CheckCircleIcon style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
-            <HighlightOffIcon style={{ color: COLORS_DARK_THEME.TESTNET_ORANGE }} />
+            <CheckCircleIcon style={{ color: COLORS.LIGHT_BLUE[90] }} /> :
+            <HighlightOffIcon style={{ color: COLORS.RED[60] }} />
 
     }, [isUserJoinedAllowlist, followTwitterAccount, likeTweet, retweetTweet, joinDiscordServer])
 
     const getCheckBox = (action: SocialMediaAction[]) => {
         if (ongoingEligibilityCheck) {
-            return <OvalLoader style={{ width: '24px', height: '24px', margin: '9px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} />
+            return <OvalLoader style={{ width: '24px', height: '24px', margin: '9px', stroke: COLORS.LIGHT_BLUE[90] }} />
         }
         return <Checkbox
             value={action}
@@ -312,7 +312,7 @@ export const SocialMediaBoxes = ({
                         </Typography>
                         {isUserJoinedAllowlist ? null : connectedSocialMedia.twitter.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
-                                <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                                <Typography variant='subtitle2' color={COLORS.STEEL_GRAY[20]}>
                                     Connected:
                                 </Typography>
                                 <Typography variant='subtitle2'>
@@ -339,7 +339,7 @@ export const SocialMediaBoxes = ({
                                 label={<Typography
                                     lineHeight='normal'
                                     variant='subtitle2'
-                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                    color={COLORS.STEEL_GRAY[20]}
                                 >
                                     {`Follow `}
                                     <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
@@ -361,7 +361,7 @@ export const SocialMediaBoxes = ({
                                 label={<Typography
                                     lineHeight='normal'
                                     variant='subtitle2'
-                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                    color={COLORS.STEEL_GRAY[20]}
                                 >
                                     {`${twitterActions.join('& ')}`}
                                     <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
@@ -384,7 +384,7 @@ export const SocialMediaBoxes = ({
                         </Typography>
                         {isUserJoinedAllowlist ? null : connectedSocialMedia.discord.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
-                                <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                                <Typography variant='subtitle2' color={COLORS.STEEL_GRAY[20]}>
                                     Connected:
                                 </Typography>
                                 <Typography variant='subtitle2'>
@@ -411,7 +411,7 @@ export const SocialMediaBoxes = ({
                                 component={"div"}
                                 lineHeight='normal'
                                 variant='subtitle2'
-                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                color={COLORS.STEEL_GRAY[20]}
                             >
                                 {`Join `}
                                 <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />

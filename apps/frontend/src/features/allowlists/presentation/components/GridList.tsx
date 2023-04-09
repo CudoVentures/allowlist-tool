@@ -7,7 +7,7 @@ import { FetchedAllowlist } from "../../../../core/store/allowlist";
 import GridCardContent from './GridCardContent';
 import CreateBox from './CreateBox';
 import { RootState } from '../../../../core/store';
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import { COLORS } from '../../../../core/theme/colors';
 import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { allowlistDetailsStyles } from './styles';
 
@@ -20,7 +20,7 @@ const GridList = ({ data, withCreateBox, expanded, withSearchBar }) => {
   return (
     <Box sx={{ width: '100%' }}
     >
-      {activeSearch ? <OvalLoader style={{ position: 'absolute', top: '50%', left: '50%', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
+      {activeSearch ? <OvalLoader style={{ position: 'absolute', top: '50%', left: '50%', stroke: COLORS.LIGHT_BLUE[90] }} /> :
         <Fragment>
           {withSearchBar && searchTerms && !data.length ?
             <NoResult /> :

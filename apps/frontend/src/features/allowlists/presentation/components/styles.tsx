@@ -1,6 +1,6 @@
 import React from "react";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
-import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
+import { COLORS } from "../../../../core/theme/colors";
 
 export const menuStyles = {
   logoItem: {
@@ -97,7 +97,7 @@ export const allowListStyles = {
     minWidth: '500px',
     maxWidth: '600px',
     padding: '48px',
-    background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80,
+    background: COLORS.DARK_BLUE[80],
     borderRadius: '24px',
   },
   panel: {
@@ -110,7 +110,7 @@ export const allowListStyles = {
     minWidth: '500px',
     maxWidth: '600px',
     padding: '48px',
-    background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80,
+    background: COLORS.DARK_BLUE[80],
     borderRadius: '24px',
     transform: "translate(-40px, -60px)",
   },
@@ -175,7 +175,7 @@ export const allowlistPreviewStyles = {
     fontSize: '14px'
   },
   subTitle: {
-    color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20,
+    color: COLORS.STEEL_GRAY[20],
     fontWeight: 600,
     fontSize: '14px'
   },
@@ -199,7 +199,7 @@ export const generalStyles = {
     padding: '32px',
     borderRadius: '24px',
     width: '100%',
-    background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80
+    background: COLORS.DARK_BLUE[80]
   },
   input: {
     border: '0.1px solid transparent',
@@ -207,7 +207,7 @@ export const generalStyles = {
     padding: '16px 20px',
     borderRadius: '8px',
     width: '100%',
-    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY
+    background: COLORS.STEEL_GRAY[90]
   },
   titleIcons: {
     marginRight: '5px',
@@ -228,7 +228,7 @@ export const allowlistDetailsStyles = {
   dropDownPlaceholder: {
     fontSize: '14px',
     fontWeight: 600,
-    color: COLORS_DARK_THEME.SECONDARY_TEXT
+    color: COLORS.STEEL_GRAY[40]
   },
   enabledDropDownPlaceholder: {
     fontSize: '14px',
@@ -242,7 +242,7 @@ export const allowlistDetailsStyles = {
   dropIcon: {
     width: '24px',
     height: '24px',
-    color: COLORS_DARK_THEME.PRIMARY_BLUE
+    color: COLORS.LIGHT_BLUE[90]
   },
   dropZone: {
     backgroundBlendMode: 'overlay',
@@ -272,12 +272,12 @@ export const allowlistDetailsStyles = {
   },
   tooltip: {
     cursor: 'pointer',
-    color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50
+    color: COLORS.STEEL_GRAY[50]
   },
   dialogProps: {
     PaperProps: {
       sx: {
-        background: COLORS_DARK_THEME.DARK_BACKGROUND
+        background: COLORS.DARK_BLUE[100]
       }
     }
   },
@@ -285,7 +285,7 @@ export const allowlistDetailsStyles = {
     placeholder: "Pick up a time",
     startAdornment: <SvgComponent
       type={LAYOUT_CONTENT_TEXT.ClockIcon}
-      style={{ width: '24px', height: '24px', marginRight: '10px', color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+      style={{ width: '24px', height: '24px', marginRight: '10px', color: COLORS.STEEL_GRAY[20] }}
     />,
     sx: {
       "& .MuiOutlinedInput-notchedOutline": {
@@ -293,14 +293,14 @@ export const allowlistDetailsStyles = {
       },
       border: '0.1px solid transparent',
       borderRadius: '8px',
-      background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+      background: COLORS.STEEL_GRAY[90],
     }
   },
   datePickerInput: {
     placeholder: "Pick up a date",
     startAdornment: <SvgComponent
       type={LAYOUT_CONTENT_TEXT.CalendarIcon}
-      style={{ width: '24px', height: '24px', marginRight: '10px', color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+      style={{ width: '24px', height: '24px', marginRight: '10px', color: COLORS.STEEL_GRAY[20] }}
     />,
     sx: {
       "& .MuiOutlinedInput-notchedOutline": {
@@ -308,7 +308,7 @@ export const allowlistDetailsStyles = {
       },
       borderRadius: '8px',
       border: '0.1px solid transparent',
-      background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+      background: COLORS.STEEL_GRAY[90],
     }
   },
   contentHolder: {
@@ -324,7 +324,7 @@ export const allowlistDetailsStyles = {
   },
   dropdownIcon: {
     cursor: 'pointer',
-    color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20
+    color: COLORS.STEEL_GRAY[20]
   },
   chainIdSelector: {
     height: '50px',
@@ -333,7 +333,7 @@ export const allowlistDetailsStyles = {
     fontSize: '14px',
     padding: '16px 20px',
     width: '100%',
-    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+    background: COLORS.STEEL_GRAY[90],
     border: '0px',
     outline: '0px',
   },
@@ -345,7 +345,7 @@ export const allowlistDetailsStyles = {
     height: '64px',
     borderRadius: '8px',
     width: '100%',
-    background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY,
+    background: COLORS.STEEL_GRAY[90],
     border: '0px',
     outline: '0px',
   },
@@ -355,7 +355,7 @@ export const allowlistDetailsStyles = {
     padding: '32px',
     borderRadius: '24px',
     width: '100%',
-    background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_80
+    background: COLORS.DARK_BLUE[80]
   }
 }
 
@@ -364,30 +364,30 @@ export const validationStyles = {
     ...allowlistDetailsStyles.datePickerInput,
     sx: {
       ...allowlistDetailsStyles.datePickerInput.sx,
-      border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`
+      border: `0.1px solid ${COLORS.RED[60]}`
     }
   },
   invalidTimerPickerInput: {
     ...allowlistDetailsStyles.timePickerInput,
     sx: {
       ...allowlistDetailsStyles.timePickerInput.sx,
-      border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`
+      border: `0.1px solid ${COLORS.RED[60]}`
     }
   },
   invalidInput: {
     ...generalStyles.input,
-    border: `0.1px solid ${COLORS_DARK_THEME.TESTNET_ORANGE}`,
+    border: `0.1px solid ${COLORS.RED[60]}`,
   },
   connectedInput: {
     ...generalStyles.input,
-    border: `0.1px solid ${COLORS_DARK_THEME.PRIMARY_BLUE}`,
+    border: `0.1px solid ${COLORS.LIGHT_BLUE[90]}`,
   },
   connectedTooltipProps: {
     tooltip: {
       sx: {
         marginTop: '-50px',
         background: 'transparent',
-        color: COLORS_DARK_THEME.PRIMARY_BLUE
+        color: COLORS.LIGHT_BLUE[90]
       },
     },
   },
@@ -396,7 +396,7 @@ export const validationStyles = {
       sx: {
         marginTop: '-50px',
         background: 'transparent',
-        color: COLORS_DARK_THEME.TESTNET_ORANGE
+        color: COLORS.RED[60]
       },
     },
   },

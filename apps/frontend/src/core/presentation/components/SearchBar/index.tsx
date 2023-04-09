@@ -6,7 +6,7 @@ import { CancelRounded } from '@mui/icons-material'
 import { RootState } from "../../../store"
 import { SearchFilter, updateSearchState } from "../../../store/search"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../Layout/helpers"
-import { COLORS_DARK_THEME } from "../../../theme/colors"
+import { COLORS } from "../../../theme/colors"
 
 import { styles } from "./styles"
 import { allowlistDetailsStyles } from "../../../../features/allowlists/presentation/components/styles"
@@ -117,15 +117,15 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
             <Box
                 onTransitionEnd={handleSearchBarTransitionEnd}
                 onClick={handleExpandSearchBar}
-                gap={2}
+                gap={'10px'}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expandSearchBar ? "320px" : '48px' }}
+                sx={{ ...styles.searchBar, width: expandSearchBar ? "315px" : '48px' }}
             >
                 <Box sx={{ display: 'flex', marginLeft: '-7px' }}>
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.SearchIcon}
-                        style={{ color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+                        style={{ color: COLORS.STEEL_GRAY[20] }}
                     />
                 </Box>
                 <Input
@@ -146,15 +146,15 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
             <Box
                 onTransitionEnd={handleChainSelectorTransitionEnd}
                 onClick={handleExpandChainSelector}
-                gap={2}
+                gap={'10px'}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expandChainSelector ? "200px" : '48px' }}
+                sx={{ ...styles.searchBar, width: expandChainSelector ? "195px" : '48px' }}
             >
                 <Box sx={{ display: 'flex', marginLeft: '-9px' }}>
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.GlobusIcon}
-                        style={{ color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+                        style={{ color: COLORS.STEEL_GRAY[20] }}
                     />
                 </Box>
                 <Select
@@ -200,7 +200,7 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                     >
                         <SvgComponent
                             type={LAYOUT_CONTENT_TEXT.SortingIcon}
-                            style={{ color: !!appliedFilter ? 'inherit' : COLORS_DARK_THEME.PRIMARY_BLUE_DISABLED }}
+                            style={{ color: !!appliedFilter ? 'inherit' : COLORS.STEEL_GRAY[80] }}
                         />
                     </Box>
                 </Fade>

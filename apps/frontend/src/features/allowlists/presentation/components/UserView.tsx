@@ -4,7 +4,7 @@ import { Box, Typography, Divider, Input, Button } from '@mui/material'
 import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
+import { COLORS } from '../../../../core/theme/colors'
 import { RootState } from '../../../../core/store'
 import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useManipulateAllowlist'
 import { FetchedAllowlist } from '../../../../core/store/allowlist'
@@ -206,14 +206,14 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
     }, [props.id, connectedAddress, connectedSocialMedia.discord.id, connectedSocialMedia.twitter.id])
 
-    return loading ? <OvalLoader style={{ stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> : (
+    return loading ? <OvalLoader style={{ stroke: COLORS.LIGHT_BLUE[90] }} /> : (
         <Fragment>
             <Dialog />
             <Box sx={allowListStyles.title} style={{ flexDirection: isUserJoined ? 'column-reverse' : 'column' }}>
                 <Typography variant='h6' fontWeight={700}>
                     {isUserJoined ? 'Registered' : `Register for ${props.name}`}
                 </Typography>
-                <Typography variant='subtitle1' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                <Typography variant='subtitle1' color={COLORS.STEEL_GRAY[20]}>
                     {isUserJoined ? 'Status:' : "Complete the following to register"}
                 </Typography>
             </Box>
@@ -233,7 +233,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                                 />
                                 Provide your email address
                             </Typography>
-                            {/* <List sx={{ ...allowlistPreviewStyles.list, color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}>
+                            {/* <List sx={{ ...allowlistPreviewStyles.list, color: COLORS.PRIMARY_STEEL_GRAY_20 }}>
                                 <ListItem sx={allowlistPreviewStyles.listItem}>
                                     The collection creator will send you updates via email
                                 </ListItem>

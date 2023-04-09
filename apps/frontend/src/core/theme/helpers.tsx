@@ -6,7 +6,7 @@ import copy from "copy-to-clipboard"
 import { RootState } from "../store"
 import { ATOMSCAN_ADDRESS_EXPLORER } from "../api/endpoints"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
-import { COLORS_DARK_THEME } from "./colors"
+import { COLORS } from "./colors"
 
 import { themeStyles } from "./themeStyles"
 
@@ -44,7 +44,7 @@ export const ConnectedChain = (): JSX.Element => {
     const { chosenChainId } = useSelector((state: RootState) => state.userState)
     return !!chosenChainId ? (
         <Box gap={2} style={themeStyles.centerFlexLinear}>
-            <Typography variant="subtitle2" color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+            <Typography variant="subtitle2" color={COLORS.STEEL_GRAY[20]}>
                 {chosenChainId}
             </Typography>
         </Box>
@@ -71,7 +71,7 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
                     title={copied ? 'Copied' : 'Copy to clipboard'}
                 >
                     <Box sx={{ cursor: 'pointer' }} onClick={() => handleCopy(address)}>
-                        <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px', color: COLORS_DARK_THEME.PRIMARY_BLUE }} />
+                        <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px', color: COLORS.LIGHT_BLUE[90] }} />
                     </Box>
                 </Tooltip>
             </Box>
@@ -100,7 +100,7 @@ export const LinkBox = ({ link, text, children }: { link: 'none' | string, text?
             href={link}
             rel="noreferrer"
             underline="none"
-            color={noLink ? 'inherit' : COLORS_DARK_THEME.PRIMARY_BLUE}
+            color={noLink ? 'inherit' : COLORS.LIGHT_BLUE[90]}
         >
             {text ? text : link}
         </Link>

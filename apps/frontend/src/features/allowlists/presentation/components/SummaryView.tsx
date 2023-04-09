@@ -3,7 +3,7 @@ import { Box, Tooltip, Typography } from '@mui/material';
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import { COLORS } from '../../../../core/theme/colors';
 import { getSeparateDateAndTime } from '../../../../core/utilities/ProjectUtils';
 import useEditMode from '../../../../core/utilities/CustomHooks/useEditMode';
 import { LinkBox } from '../../../../core/theme/helpers';
@@ -38,7 +38,7 @@ export const SummaryView = ({
         return (
             <Typography
                 variant='subtitle1'
-                color={color ? color : COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                color={color ? color : COLORS.STEEL_GRAY[20]}
             >
                 {text}
             </Typography>
@@ -63,7 +63,7 @@ export const SummaryView = ({
                         >
                             <SvgComponent
                                 type={LAYOUT_CONTENT_TEXT.EditIcon}
-                                style={{ opacity: editAllowed ? hovered ? 1 : 0.5 : 0.5, color: COLORS_DARK_THEME.PRIMARY_BLUE }}
+                                style={{ opacity: editAllowed ? hovered ? 1 : 0.5 : 0.5, color: COLORS.LIGHT_BLUE[90] }}
                             />
                         </Box>
                     </Tooltip>

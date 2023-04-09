@@ -8,7 +8,7 @@ import Menu from './Menu';
 import { HashBasedUserAvatar, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
 import { ConnectedChain, CopyAndFollowComponent } from '../../../theme/helpers';
 import { formatAddress } from '../../../utilities/ProjectUtils';
-import { COLORS_DARK_THEME } from '../../../theme/colors';
+import { COLORS } from '../../../theme/colors';
 import useDisconnectUser from '../../../utilities/CustomHooks/useDisconnect';
 
 import { headerStyles } from './styles';
@@ -50,7 +50,7 @@ const HamburgerMenu = () => {
                 <Button
                     variant="contained"
                     style={{ justifyContent: 'center' }}
-                    sx={{ ...headerStyles.logInBtn, bgcolor: COLORS_DARK_THEME.PRIMARY_BLUE }}
+                    sx={{ ...headerStyles.logInBtn, bgcolor: COLORS.LIGHT_BLUE[90] }}
                     onClick={handleClick}
                 >
                     <Box id='hashLogoAndAddressHolder' gap={1} sx={{ marginLeft: '0px', display: 'flex', alignItems: 'center' }}>

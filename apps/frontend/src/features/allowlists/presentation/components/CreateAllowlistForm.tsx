@@ -6,7 +6,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
 
 import { RootState } from '../../../../core/store';
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import { COLORS } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { acceptedImgTypes, BaseURL, FieldTooltips, FormField, getStartAdornment } from './helpers';
 import { isValidEndPeriod } from '../../validation';
@@ -31,7 +31,7 @@ const CreateAllowlistForm = () => {
         <Tooltip title={'Mandatory Field'}>
           <Typography
             component={'span'}
-            color={COLORS_DARK_THEME.PRIMARY_BLUE}
+            color={COLORS.LIGHT_BLUE[90]}
             sx={{ cursor: 'pointer' }}
           >
             *
@@ -144,7 +144,7 @@ const CreateAllowlistForm = () => {
             </Typography>
             <Typography
               variant='subtitle2'
-              color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+              color={COLORS.STEEL_GRAY[20]}
             >
               This image will be used as profile image on your allowlist page. 350 x 350 recommended.
             </Typography>
@@ -168,7 +168,7 @@ const CreateAllowlistForm = () => {
                     <Typography
                       fontWeight={600}
                       variant='subtitle2'
-                      color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                      color={COLORS.STEEL_GRAY[20]}
                     >
                       Browse or Drop Here
                     </Typography>
@@ -183,7 +183,7 @@ const CreateAllowlistForm = () => {
             </Typography>
             <Typography
               variant='subtitle2'
-              color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+              color={COLORS.STEEL_GRAY[20]}
             >
               This image will appear at the top of your allow list page. 1400 x 400 px recommended.            </Typography>
             <Box sx={allowlistDetailsStyles.bannerUploaderHolder}>
@@ -206,7 +206,7 @@ const CreateAllowlistForm = () => {
                     <Typography
                       fontWeight={600}
                       variant='subtitle2'
-                      color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                      color={COLORS.STEEL_GRAY[20]}
                     >
                       Browse or Drop Here
                     </Typography>

@@ -7,7 +7,7 @@ import AppRoutes from "../../../../features/app-routes/entities/AppRoutes";
 import useNavigateToRoute from "../../../utilities/CustomHooks/useNavigateToRoute";
 import { RootState } from "../../../store";
 import { SocialMediaButtons } from "../../../../features/allowlists/presentation/components/helpers";
-import { COLORS_DARK_THEME } from "../../../theme/colors";
+import { COLORS } from "../../../theme/colors";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "./helpers";
 
 import { headerStyles } from "./styles";
@@ -48,7 +48,7 @@ const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
                 fontWeight={700}
                 sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: 'max-content' }}
                 onClick={() => navigateToRoute(route)}
-                color={isActive(route) ? COLORS_DARK_THEME.PRIMARY_BLUE : 'inherit'}
+                color={isActive(route) ? COLORS.LIGHT_BLUE[90] : 'inherit'}
             >
                 {text === 'Create' ? <SvgComponent
                     type={LAYOUT_CONTENT_TEXT.PlusIcon}

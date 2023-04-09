@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react"
 import { Oval as OvalLoader } from 'svg-loaders-react'
 import { Box, Typography } from "@mui/material"
 
-import { COLORS_DARK_THEME } from "../../../../core/theme/colors"
+import { COLORS } from "../../../../core/theme/colors"
 import { FetchedAllowlist } from "../../../../core/store/allowlist"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers"
 import useNavigateToRoute from "../../../../core/utilities/CustomHooks/useNavigateToRoute"
@@ -65,7 +65,7 @@ const GridCardContent = ({ allowlist, visible, width }: { allowlist: FetchedAllo
 
     return (
         <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={{ ...generalStyles.gridDataBox, width: width, minWidth: width }}>
-            {contentLoaded() ? null : <OvalLoader style={{ stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} />}
+            {contentLoaded() ? null : <OvalLoader style={{ stroke: COLORS.LIGHT_BLUE[90] }} />}
             <Box sx={{ display: contentLoaded() ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                 <Box sx={generalStyles.imgHolder}>
                     <img
@@ -87,7 +87,7 @@ const GridCardContent = ({ allowlist, visible, width }: { allowlist: FetchedAllo
                         type={LAYOUT_CONTENT_TEXT.ClockIcon}
                         style={generalStyles.clocIcon}
                     />
-                    <Typography color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20} >
+                    <Typography color={COLORS.STEEL_GRAY[20]} >
                         {detailedTime && !isExpired ? `${detailedTime.days}d ${detailedTime.hours}h ${detailedTime.minutes}m` : 'Expired'}
                     </Typography>
                 </Box>

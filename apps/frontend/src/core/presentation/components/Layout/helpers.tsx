@@ -6,7 +6,7 @@ import { JdenticonConfig, toSvg } from 'jdenticon';
 import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { CHAIN_DETAILS } from '../../../utilities/Constants';
-import { COLORS_DARK_THEME } from '../../../theme/colors';
+import { COLORS } from '../../../theme/colors';
 import walletIcon from '../../../../public/assets/vectors/wallet-icon.svg';
 import magnifyingGlass from '../../../../public/assets/vectors/magnifying-glass.svg';
 import arrowDown from '../../../../public/assets/vectors/arrow-down.svg';
@@ -262,7 +262,7 @@ export const HashBasedUserAvatar = ({
     return (
         <Box sx={{
             ...helperStyles.imgHolder,
-            bgcolor: COLORS_DARK_THEME.DARK_BACKGROUND,
+            bgcolor: COLORS.DARK_BLUE[100],
             padding: `${size / 5}px`
         }}
         >

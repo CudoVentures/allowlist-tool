@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 
 import { BaseURL, getRegistrationCriteriaArray } from './helpers'
 import { RootState } from '../../../../core/store'
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
+import { COLORS } from '../../../../core/theme/colors'
 import { getSeparateDateAndTime, setBlobToB64Img } from '../../../../core/utilities/ProjectUtils'
 
 import { allowlistDetailsStyles, allowlistPreviewStyles } from './styles'
@@ -29,7 +29,7 @@ export const AllowlistCreationPreview = () => {
                 href={allowlistState.website}
                 rel="noreferrer"
                 underline="none"
-                color={COLORS_DARK_THEME.PRIMARY_BLUE}
+                color={COLORS.LIGHT_BLUE[90]}
             >
                 {allowlistState.website}
             </Link>
@@ -41,7 +41,7 @@ export const AllowlistCreationPreview = () => {
                 href={`${BaseURL.twitter_acc}${allowlistState.twitter_account}`}
                 rel="noreferrer"
                 underline="none"
-                color={COLORS_DARK_THEME.PRIMARY_BLUE}
+                color={COLORS.LIGHT_BLUE[90]}
             >
                 {allowlistState.twitter_account?.startsWith('@') ? allowlistState.twitter_account : `@${allowlistState.twitter_account}`}
             </Link>
@@ -53,7 +53,7 @@ export const AllowlistCreationPreview = () => {
                 href={`${BaseURL.discord_server}${allowlistState.discord_url}`}
                 rel="noreferrer"
                 underline="none"
-                color={COLORS_DARK_THEME.PRIMARY_BLUE}
+                color={COLORS.LIGHT_BLUE[90]}
             >
                 {allowlistState.discord_url}
             </Link>

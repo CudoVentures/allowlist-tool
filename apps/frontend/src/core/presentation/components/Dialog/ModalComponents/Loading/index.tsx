@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { RootState } from '../../../../../store'
-import { COLORS_DARK_THEME } from '../../../../../../core/theme/colors'
+import { COLORS } from '../../../../../../core/theme/colors'
 
 import { ModalContainer, styles as defaultStyles } from '../../styles'
 
@@ -24,7 +24,7 @@ const Loading = () => {
             }}>
                 {message ?
                     <Box gap={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        {loadingSpinner ? <OvalLoader style={{ width: '60px', height: '60px', stroke: COLORS_DARK_THEME.PRIMARY_BLUE }} /> : null}
+                        {loadingSpinner ? <OvalLoader style={{ width: '60px', height: '60px', stroke: COLORS.LIGHT_BLUE[90] }} /> : null}
                         <Typography variant='h5'>{message}</Typography>
                     </Box>
                     : null}

@@ -1,4 +1,4 @@
-import { COLORS_DARK_THEME } from "../../../../core/theme/colors"
+import { COLORS } from "../../../../core/theme/colors"
 
 export const createAllowlistStyles = {
     holder: {
@@ -26,7 +26,7 @@ export const generalStyles = {
         transition: "transform 0.2s ease-in-out",
         height: '20px',
         width: '20px',
-        color: COLORS_DARK_THEME.PRIMARY_BLUE
+        color: COLORS.LIGHT_BLUE[90]
     },
     collapsebleTextHolder: {
         justifyContent: 'flex-start',
@@ -36,7 +36,7 @@ export const generalStyles = {
         display: 'flex'
     },
     plusIconBackground: {
-        background: COLORS_DARK_THEME.PRIMARY_BLUE,
+        background: COLORS.LIGHT_BLUE[90],
         borderRadius: '50%',
         width: '48px',
         height: '48px',
@@ -48,7 +48,7 @@ export const generalStyles = {
         width: '24px',
         height: '24px',
         marginRight: '10px',
-        color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20
+        color: COLORS.STEEL_GRAY[20]
     },
     avatar: {
         transform: "translateY(-70%)",
@@ -113,13 +113,13 @@ export const generalStyles = {
         padding: '16px 16px 24px 16px',
         height: '360px',
         borderRadius: '16px',
-        background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100
+        background: COLORS.STEEL_GRAY[100]
     },
     spinner: {
         width: '40px',
         height: '80vh',
         display: 'flex',
         alignSelf: 'center',
-        stroke: COLORS_DARK_THEME.PRIMARY_BLUE
+        stroke: COLORS.LIGHT_BLUE[90]
     }
 }

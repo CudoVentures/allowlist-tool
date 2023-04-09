@@ -19,7 +19,7 @@ import {
     Typography
 } from '@mui/material';
 
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import { COLORS } from '../../../../core/theme/colors';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { RootState } from '../../../../core/store';
@@ -113,7 +113,7 @@ const RegistrationCriteriaForm = (): JSX.Element => {
                     <Typography variant='h6' fontWeight={700}>
                         Registration Criteria
                     </Typography>
-                    <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                    <Typography variant='subtitle2' color={COLORS.STEEL_GRAY[20]}>
                         You must choose at least one of the following criterias.
                     </Typography>
                 </Box>

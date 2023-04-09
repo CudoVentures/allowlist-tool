@@ -2,7 +2,7 @@ import React, { Fragment, useState } from 'react'
 import { Box, Collapse, Typography } from '@mui/material'
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers'
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
+import { COLORS } from '../../../../core/theme/colors'
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 
 import { generalStyles } from './styles';
@@ -23,7 +23,7 @@ const CollapsableGrid = ({ text, data, withCreateBox, withSearchBar
         <Fragment>
             <Box
                 gap={1}
-                style={{ color: hovered ? COLORS_DARK_THEME.PRIMARY_BLUE : 'inherit' }}
+                style={{ color: hovered ? COLORS.LIGHT_BLUE[90] : 'inherit' }}
                 sx={generalStyles.collapsebleTextHolder}
                 onClick={() => setExpanded(!expanded)}
                 onMouseEnter={() => setHovered(true)}
@@ -33,7 +33,7 @@ const CollapsableGrid = ({ text, data, withCreateBox, withSearchBar
                 <Typography
                     fontWeight={600}
                     variant='subtitle1'
-                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}
+                    color={COLORS.STEEL_GRAY[50]}
                 >
                     ({data.length})
                 </Typography>
