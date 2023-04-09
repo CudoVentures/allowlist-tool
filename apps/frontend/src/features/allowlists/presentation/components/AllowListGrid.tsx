@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 
 import GridList from './GridList'
 import { FetchedAllowlist } from '../../../../core/store/allowlist'
-import { useIsScreenLessThan } from '../../../../core/utilities/CustomHooks/screenChecks'
 import SearchBar from '../../../../core/presentation/components/SearchBar'
 import { COLORS } from '../../../../core/theme/colors'
 import { initialState, SearchFilter, updateSearchState } from '../../../../core/store/search'
@@ -28,16 +27,25 @@ const AllowListGrid = ({
 
     const dispatch = useDispatch()
     const [displayData, setDisplayData] = useState<FetchedAllowlist[]>([])
-    const { searchTerms, appliedFilter, ascendingOrder } = useSelector((state: RootState) => state.searchState)
-    const isUnder850px = useIsScreenLessThan('850px', 'width')
+    const { searchTerms, appliedFilter, ascendingOrder, chainFilter } = useSelector((state: RootState) => state.searchState)
 
     const sanitizeString = (text: string): string => {
         return text.trim().toLowerCase()
     }
 
     const filterBySearchTerms = (allowlist: FetchedAllowlist): boolean => {
-        if (sanitizeString(allowlist.name!)
-            .includes(sanitizeString(searchTerms!))) {
+        const searchString = sanitizeString(searchTerms!)
+        if (
+            sanitizeString(allowlist.name!).includes(searchString) ||
+            sanitizeString(allowlist.admin).includes(searchString)
+        ) {
+            return true
+        }
+        return false
+    }
+
+    const filterByChainFilter = (allowlist: FetchedAllowlist): boolean => {
+        if (sanitizeString(allowlist.cosmos_chain_id!) === sanitizeString(chainFilter)) {
             return true
         }
         return false
@@ -47,6 +55,9 @@ const AllowListGrid = ({
         let dataToDisplay = [...defaultData]
         if (withSearchBar) {
             try {
+                if (!!chainFilter) {
+                    dataToDisplay = [...dataToDisplay].filter(filterByChainFilter)
+                }
                 if (!!searchTerms) {
                     dataToDisplay = [...dataToDisplay].filter(filterBySearchTerms)
                 }
@@ -90,7 +101,7 @@ const AllowListGrid = ({
 
         setDisplayData(dataToDisplay)
 
-    }, [withSearchBar, searchTerms, appliedFilter, ascendingOrder])
+    }, [withSearchBar, searchTerms, appliedFilter, ascendingOrder, chainFilter])
 
     useEffect(() => {
         if (!searchTerms) {
@@ -112,7 +123,7 @@ const AllowListGrid = ({
     }, [])
 
     return (
-        <Box gap={3} sx={{ marginTop: isUnder850px ? 4 : 0, alignSelf: 'center', alignItems: 'flex-start', width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
+        <Box gap={3} sx={{ alignSelf: 'center', alignItems: 'flex-start', width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
             <Box gap={5} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                 <Box gap={1} display={'flex'} alignItems={"flex-end"}>
                     <Typography fontWeight={700} variant='h5' alignSelf={'center'} color={COLORS.LIGHT_BLUE[10]}>{text}</Typography>
@@ -126,7 +137,7 @@ const AllowListGrid = ({
                         {`${displayData.length} Allowlists`}
                     </Typography> : null}
                 </Box>
-                {withSearchBar ? <SearchBar /> : null}
+                {withSearchBar ? <SearchBar networks={defaultData.map((allowlist) => { return allowlist.cosmos_chain_id })} /> : null}
             </Box>
             <GridList data={displayData} withCreateBox={withCreateBox} expanded={expanded} withSearchBar={withSearchBar} />
         </Box>

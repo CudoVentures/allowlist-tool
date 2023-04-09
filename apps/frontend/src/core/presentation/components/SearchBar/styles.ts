@@ -44,6 +44,28 @@ export const styles = {
             backgroundColor: `${COLORS_DARK_THEME.PRIMARY_STEEL_GRAY} !important`
         }
     },
+    chainSelectorDropoDownMenuProps: {
+        PaperProps: {
+            sx: {
+                '& .MuiList-root': {
+                    width: '100%',
+                    padding: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '4px'
+                }
+            },
+            style: {
+                display: 'flex',
+                marginTop: '15px',
+                background: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_100,
+                borderRadius: '8px',
+                marginLeft: '-18px',
+                minWidth: '210px',
+                maxWidth: '210px'
+            },
+        },
+    },
     filterDropoDownMenuProps: {
         PaperProps: {
             sx: {
@@ -65,6 +87,11 @@ export const styles = {
                 maxWidth: '192px'
             },
         },
+    },
+    chainSelectorDropDown: {
+        width: '100%',
+        height: '48px',
+        borderRadius: '64px'
     },
     filterDropDown: {
         padding: '15px 24px 15px 20px',

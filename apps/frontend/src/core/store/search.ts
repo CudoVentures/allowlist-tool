@@ -7,6 +7,7 @@ export enum SearchFilter {
 }
 
 export interface searchState {
+    chainFilter?: string,
     searchTerms?: string,
     activeSearch?: boolean,
     appliedFilter?: SearchFilter,
@@ -14,6 +15,7 @@ export interface searchState {
 }
 
 export const initialState: searchState = {
+    chainFilter: '',
     searchTerms: '',
     activeSearch: false,
     appliedFilter: undefined,

@@ -4,7 +4,7 @@ import { Box, Divider, Fade, Input, MenuItem, Select, Typography } from "@mui/ma
 import { CancelRounded } from '@mui/icons-material'
 
 import { RootState } from "../../../store"
-import { initialState, SearchFilter, updateSearchState } from "../../../store/search"
+import { SearchFilter, updateSearchState } from "../../../store/search"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../Layout/helpers"
 import { COLORS_DARK_THEME } from "../../../theme/colors"
 
@@ -12,16 +12,31 @@ import { styles } from "./styles"
 import { allowlistDetailsStyles } from "../../../../features/allowlists/presentation/components/styles"
 import { headerStyles } from "../Layout/styles"
 
-const SearchBar = () => {
+const SearchBar = ({ networks }: { networks: string[] }) => {
 
     const dispatch = useDispatch()
     const searchBar = useRef<HTMLInputElement>()
-    const { searchTerms, appliedFilter, ascendingOrder } = useSelector((state: RootState) => state.searchState)
+    const chainSelector = useRef<HTMLInputElement>()
+    const { searchTerms, appliedFilter, ascendingOrder, chainFilter } = useSelector((state: RootState) => state.searchState)
     const [filterOpen, setFilterOpen] = useState<boolean>(false)
     const [displaySortingIcon, setDisplaySortingIcon] = useState<boolean>(true)
-    const [showCloseIcon, setShowCloseIcon] = useState<boolean>(false)
-    const [expand, setExpand] = useState<boolean>(false)
-    const [placeholder, setPlaceholder] = useState<string>('')
+    const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
+    const [expandChainSelector, setExpandChainSelector] = useState<boolean>(false)
+    const [showChainSelectorCloseIcon, setChainSelectorCloseIcon] = useState<boolean>(false)
+    const [chainSelectorPlaceholder, setChainSelectorPlaceholder] = useState<string>('')
+
+    const [showSearchBarCloseIcon, setShowSearchBarCloseIcon] = useState<boolean>(false)
+    const [expandSearchBar, setExpandSearchBar] = useState<boolean>(false)
+    const [searchBarPlaceholder, setSearchBarPlaceholder] = useState<string>('')
+
+    const hasScrollbar = () => {
+        return document.documentElement.scrollHeight > document.documentElement.clientHeight;
+    };
+
+    const toggleBodyScroll = (disable: boolean) => {
+        document.body.style.overflow = disable ? 'hidden' : 'auto';
+        document.body.style.paddingRight = disable && hasScrollbar() ? '4px' : '0px';
+    };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(updateSearchState({
@@ -37,22 +52,48 @@ const SearchBar = () => {
         }, 150)
     }
 
-    const handleTransitionEnd = () => {
-        if (expand) {
-            searchBar.current?.click()
-            setShowCloseIcon(true)
-            setPlaceholder('Search by Allowlist Name')
+    //CHAIN SELECTOR
+    const handleChainSelectorTransitionEnd = () => {
+        if (expandChainSelector) {
+            chainSelector.current?.click()
+            setChainSelectorCloseIcon(true)
+            setChainSelectorPlaceholder('Filter by Network')
         }
     }
 
-    const handleExpand = () => {
-        setExpand(true)
+    const handleExpandChainSelector = () => {
+        setExpandChainSelector(true)
     }
 
-    const handleShrink = () => {
-        if (expand) {
-            setExpand(false)
-            setShowCloseIcon(false)
+    const handleShrinkChainSelector = () => {
+        if (expandChainSelector) {
+            setExpandChainSelector(false)
+            setChainSelectorCloseIcon(false)
+            setTimeout(() => {
+                dispatch(updateSearchState({
+                    chainFilter: ''
+                }))
+            }, 300)
+        }
+    }
+
+    //SEARCH BAR
+    const handleSearchBarTransitionEnd = () => {
+        if (expandSearchBar) {
+            searchBar.current?.click()
+            setShowSearchBarCloseIcon(true)
+            setSearchBarPlaceholder('Search by Allowlist Name/Creator')
+        }
+    }
+
+    const handleExpandSearchBar = () => {
+        setExpandSearchBar(true)
+    }
+
+    const handleShrinkSearchBar = () => {
+        if (expandSearchBar) {
+            setExpandSearchBar(false)
+            setShowSearchBarCloseIcon(false)
             setTimeout(() => {
                 dispatch(updateSearchState({
                     searchTerms: '',
@@ -63,23 +104,36 @@ const SearchBar = () => {
     }
 
     useEffect(() => {
-        if (!showCloseIcon) {
-            setPlaceholder('')
-            handleShrink()
+        if (!showSearchBarCloseIcon) {
+            setSearchBarPlaceholder('')
+            handleShrinkSearchBar()
         }
 
         //eslint-disable-next-line
-    }, [showCloseIcon])
+    }, [showSearchBarCloseIcon])
+
+    useEffect(() => {
+        if (!showChainSelectorCloseIcon) {
+            setChainSelectorPlaceholder('')
+            handleShrinkChainSelector()
+        }
+
+        //eslint-disable-next-line
+    }, [showChainSelectorCloseIcon])
+
+    useEffect(() => {
+        toggleBodyScroll(dropDownOpen)
+    }, [dropDownOpen])
 
     return (
         <Box sx={{ gap: '12px', display: 'flex', alignItems: 'center' }}>
             <Box
-                onTransitionEnd={handleTransitionEnd}
-                onClick={handleExpand}
+                onTransitionEnd={handleSearchBarTransitionEnd}
+                onClick={handleExpandSearchBar}
                 gap={2}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expand ? "300px" : '48px' }}
+                sx={{ ...styles.searchBar, width: expandSearchBar ? "320px" : '48px' }}
             >
                 <Box sx={{ display: 'flex', marginLeft: '-7px' }}>
                     <SvgComponent
@@ -90,17 +144,75 @@ const SearchBar = () => {
                 <Input
                     ref={searchBar}
                     disableUnderline
-                    placeholder={placeholder}
+                    placeholder={searchBarPlaceholder}
                     type="text"
                     onChange={handleChange}
                     value={searchTerms}
                     sx={{ width: '100%', display: 'flex' }}
-                    endAdornment={showCloseIcon ?
-                        <Box onClick={() => setShowCloseIcon(false)}>
+                    endAdornment={showSearchBarCloseIcon ?
+                        <Box onClick={() => setShowSearchBarCloseIcon(false)}>
                             <CancelRounded sx={styles.cancelIcon} />
                         </Box>
                         : null}
                 />
+            </Box>
+            <Box
+                onTransitionEnd={handleChainSelectorTransitionEnd}
+                onClick={handleExpandChainSelector}
+                gap={2}
+                display={'flex'}
+                alignItems={'center'}
+                sx={{ ...styles.searchBar, width: expandChainSelector ? "210px" : '48px' }}
+            >
+                <Box sx={{ display: 'flex', marginLeft: '-9px' }}>
+                    <SvgComponent
+                        type={LAYOUT_CONTENT_TEXT.GlobusIcon}
+                        style={{ color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}
+                    />
+                </Box>
+                <Select
+                    disabled={!networks.length}
+                    MenuProps={styles.chainSelectorDropoDownMenuProps}
+                    disableUnderline
+                    displayEmpty
+                    variant='standard'
+                    open={dropDownOpen}
+                    onOpen={() => setDropDownOpen(true)}
+                    onClose={() => setDropDownOpen(false)}
+                    renderValue={() =>
+                        !!chainFilter ?
+                            chainFilter :
+                            <Typography sx={styles.dropDownPlaceholder}>{chainSelectorPlaceholder}</Typography>
+                    }
+                    sx={styles.chainSelectorDropDown}
+                    value={chainFilter}
+                    onChange={(e) => dispatch(updateSearchState({ chainFilter: e.target.value }))}
+                    IconComponent={() => null}
+                    endAdornment={showChainSelectorCloseIcon ?
+                        <Box marginLeft={'-24px'} onClick={() => setChainSelectorCloseIcon(false)}>
+                            <CancelRounded sx={styles.cancelIcon} />
+                        </Box>
+                        : null}
+                >
+                    {networks.map((network, idx) => {
+                        return <MenuItem sx={styles.menuItem} key={idx} value={network}>{network}</MenuItem>
+                    })}
+                </Select>
+
+                {/* <Input
+                    ref={chainSelector}
+                    disableUnderline
+                    placeholder={chainSelectorPlaceholder}
+                    type="text"
+                    onChange={handleChange}
+                    value={searchTerms}
+                    sx={{ width: '100%', display: 'flex' }}
+                    endAdornment={showChainSelectorCloseIcon ?
+                        <Box onClick={() => setChainSelectorCloseIcon(false)}>
+                            <CancelRounded sx={styles.cancelIcon} />
+                        </Box>
+                        : null}
+                /> */}
             </Box>
             <Divider orientation="vertical" sx={headerStyles.divider} />
             <Box
