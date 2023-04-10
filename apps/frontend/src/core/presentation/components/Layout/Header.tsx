@@ -162,44 +162,40 @@ const Header = () => {
           id='rightNavContent'
           gap={2}
           sx={headerStyles.rightNavContent(compensateRightMargin, hasScrollbar())}>
-          <Menu />
+          <Menu hamburger={false} />
           {isConnected ? null :
             <Divider
               orientation='vertical'
               sx={headerStyles.divider}
             />}
-          <Box sx={headerStyles.btnHolder}>
+          <Box onClick={handleClick} sx={headerStyles.btnHolder(openMenu, isConnected)}>
             <ClickAwayListener
               onClickAway={() => setOpenMenu(false)}
-              children={<Button
-                variant="contained"
-                sx={headerStyles.logInBtn(isConnected)}
-                onMouseEnter={() => isConnected ? setOpenMenu(true) : null}
-                onClick={handleClick}
-              >
-                <Box id='hashLogoAndAddressHolder' gap={1} sx={headerStyles.hashLogoAndAddressHolder(isConnected)}>
-                  {isConnected ? <HashBasedUserAvatar UID={connectedAddress} size={23} /> :
+              children={isConnected ?
+                <Box component={'span'}>
+                  <SvgComponent
+                    type={LAYOUT_CONTENT_TEXT.WalletLogo}
+                    style={{ height: '32px', width: '32px' }}
+                  />
+                </Box> :
+                <Button
+                  variant="contained"
+                  sx={headerStyles.logInBtn(isConnected)}
+                  onClick={handleClick}
+                >
+                  <Box id='hashLogoAndAddressHolder' gap={1} sx={headerStyles.hashLogoAndAddressHolder(isConnected)}>
                     <SvgComponent
                       type={LAYOUT_CONTENT_TEXT.WalletLogo}
                       style={{ height: '24px', marginRight: '5px' }}
-                    />}
-                  <Typography fontWeight={700}>
-                    {isConnected ?
-                      formatAddress(connectedAddress, 7) :
-                      LAYOUT_CONTENT_TEXT.ConnectWallet}
-                  </Typography>
-                </Box>
-                {isConnected ?
-                  <SvgComponent
-                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                    style={{ color: COLORS.LIGHT_BLUE[90], transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
-                  /> : null}
-              </Button>}
+                    />
+                    <Typography fontWeight={700}>{LAYOUT_CONTENT_TEXT.ConnectWallet} </Typography>
+                  </Box>
+                </Button>
+              }
             />
             <Collapse
+              id='collapseMenu'
               sx={headerStyles.collapse}
-              onMouseEnter={() => setOpenMenu(true)}
-              onMouseLeave={() => setOpenMenu(false)}
               in={openMenu}
             >
               <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
@@ -207,7 +203,7 @@ const Header = () => {
                   <HashBasedUserAvatar UID={connectedAddress} size={50} />
                   <ConnectedChain />
                   <Typography color={COLORS.STEEL_GRAY[20]}>
-                    {formatAddress(connectedAddress, 10)}
+                    {formatAddress(connectedAddress, 15)}
                   </Typography>
                   <CopyAndFollowComponent address={connectedAddress} />
                   <Button

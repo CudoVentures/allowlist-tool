@@ -39,9 +39,6 @@ const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
     }
 
     const MenuItem = ({ route, text }: { route: AppRoutes, text: string }) => {
-        if (!connectedAddress) {
-            return
-        }
         return (
             <Typography
                 fontWeight={700}

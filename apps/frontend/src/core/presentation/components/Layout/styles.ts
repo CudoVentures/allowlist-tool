@@ -140,10 +140,11 @@ export const headerStyles = {
         justifyContent: 'center',
     },
     collapse: {
+        right: 0,
         position: 'absolute',
-        marginTop: '8px',
+        marginTop: '17px',
         zIndex: '-1',
-        width: '224px',
+        width: '256px',
     },
     SMcollapse: {
         cursor: 'pointer',
@@ -195,9 +196,18 @@ export const headerStyles = {
         display: 'flex',
         flexDirection: 'column',
     },
-    btnHolder: {
-        zIndex: '10',
-        width: '224px',
+    btnHolder: (isMenuOpen: boolean, isConnected: boolean) => {
+        return {
+            marginTop: isConnected ? '-3px' : '-9px',
+            marginLeft: '-8px',
+            position: 'relative',
+            zIndex: '10',
+            color: isMenuOpen ? COLORS.LIGHT_BLUE[90] : 'inherit',
+            cursor: 'pointer',
+            background: isMenuOpen ? COLORS.STEEL_GRAY[100] : 'transparent',
+            borderRadius: "12px",
+            padding: "9px 10px 2px 11px"
+        }
     },
     logInBtn: (isConnected: boolean) => {
         return {
