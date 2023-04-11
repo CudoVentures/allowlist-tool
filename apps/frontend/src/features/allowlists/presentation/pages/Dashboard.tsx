@@ -17,7 +17,7 @@ const MenuContentMapper = {
 const DashboardPage = () => {
 
     const [loadedRightContent, setLoadedRightContent] = useState<boolean>(true)
-    const [menuSelection, setMenuSelection] = useState<MENU_CONTENT>(MENU_CONTENT.Joined)
+    const [menuSelection, setMenuSelection] = useState<MENU_CONTENT>(MENU_CONTENT.Created)
     const menuSwitchingTimeout = 200
 
     const isMenuItemSelected = (menuItem: MENU_CONTENT) => {
