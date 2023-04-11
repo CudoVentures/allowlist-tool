@@ -51,7 +51,7 @@ export const generalStyles = {
             cursor: 'pointer',
             padding: '18px 16px',
             borderRadius: '8px',
-            transition: `background-color 0.${menuSwitchingTimeout}s`,
+            transition: `background-color 0.${menuSwitchingTimeout * 2}s`,
             backgroundColor: 'transparent'
         }
     },
