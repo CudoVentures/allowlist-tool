@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import Allowlist from '../components/Allowlist';
-import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { GET_ALLOWLIST_DETAILS } from '../../../../core/api/calls';
 import { StyledPuffLoader } from '../../../../core/presentation/components/Layout/helpers';
@@ -24,7 +23,6 @@ function AllowlistPage() {
     if (Object.keys(allowlist || {}).length) {
       return <Allowlist props={{ ...allowlist, end_date: new Date(allowlist.end_date) }} />
     }
-    return <NoResult />
   }, [loading, allowlist])
 
   useEffect(() => {

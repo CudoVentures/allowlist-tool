@@ -8,12 +8,11 @@ import GridCardContent from './GridCardContent';
 import CreateBox from './CreateBox';
 import { RootState } from '../../../../core/store';
 import { COLORS } from '../../../../core/theme/colors';
-import NoResult from '../../../../core/presentation/components/Layout/NoResult';
 import { allowlistDetailsStyles } from './styles';
 
-const GridList = ({ data, withCreateBox, expanded, withSearchBar }) => {
+const GridList = ({ data, withCreateBox, expanded }) => {
 
-  const { activeSearch, searchTerms } = useSelector((state: RootState) => state.searchState)
+  const { activeSearch } = useSelector((state: RootState) => state.searchState)
   const gridSpacing = 1.5
   const gridCardWidth = 316
 
@@ -22,9 +21,6 @@ const GridList = ({ data, withCreateBox, expanded, withSearchBar }) => {
     >
       {activeSearch ? <OvalLoader style={{ position: 'absolute', top: '50%', left: '50%', stroke: COLORS.LIGHT_BLUE[90] }} /> :
         <Fragment>
-          {withSearchBar && searchTerms && !data.length ?
-            <NoResult /> :
-            null}
           <Box sx={allowlistDetailsStyles.contentHolder} >
             <Grid container
               spacing={gridSpacing}
