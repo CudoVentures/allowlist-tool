@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Box, Divider, Fade, Input, MenuItem, Select, Typography } from "@mui/material"
+import { Box, Divider, Fade, Input, MenuItem, Select, Tooltip, Typography } from "@mui/material"
 import { CancelRounded } from '@mui/icons-material'
 
 import { RootState } from "../../../store"
@@ -9,10 +9,10 @@ import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../Layout/helpers"
 import { COLORS } from "../../../theme/colors"
 
 import { styles } from "./styles"
-import { allowlistDetailsStyles } from "../../../../features/allowlists/presentation/components/styles"
+import { validationStyles } from "../../../../features/allowlists/presentation/components/styles"
 import { headerStyles } from "../Layout/styles"
 
-const SearchBar = ({ networks }: { networks: string[] }) => {
+const SearchBar = ({ networks, displayDataLength }: { networks: string[], displayDataLength: number }) => {
 
     const dispatch = useDispatch()
     const searchBar = useRef<HTMLInputElement>()
@@ -28,6 +28,8 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
     const [showSearchBarCloseIcon, setShowSearchBarCloseIcon] = useState<boolean>(false)
     const [expandSearchBar, setExpandSearchBar] = useState<boolean>(false)
     const [searchBarPlaceholder, setSearchBarPlaceholder] = useState<string>('')
+
+    const invalidSearch = expandSearchBar && !displayDataLength && !!searchTerms
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(updateSearchState({
@@ -114,51 +116,60 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
 
     return (
         <Box sx={{ gap: '12px', display: 'flex', alignItems: 'center' }}>
-            <Box
-                onTransitionEnd={handleSearchBarTransitionEnd}
-                onClick={handleExpandSearchBar}
-                gap={'10px'}
-                display={'flex'}
-                alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expandSearchBar ? "315px" : '48px' }}
+            <Tooltip
+                placement='bottom-start'
+                PopperProps={validationStyles.searchBarTooltipPopper}
+                componentsProps={validationStyles.tooltipProps}
+                open={invalidSearch}
+                title={'No Search Results'}
             >
-                <Box sx={{ display: 'flex', marginLeft: '-7px' }}>
-                    <SvgComponent
-                        type={LAYOUT_CONTENT_TEXT.SearchIcon}
-                        style={{ color: COLORS.STEEL_GRAY[20] }}
+                <Box
+                    onTransitionEnd={handleSearchBarTransitionEnd}
+                    onClick={handleExpandSearchBar}
+                    gap={'10px'}
+                    display={'flex'}
+                    alignItems={'center'}
+                    sx={styles.searchBar(expandSearchBar, invalidSearch, '315px')}
+                >
+                    <Box sx={{ display: 'flex', marginLeft: '-7px' }}>
+                        <SvgComponent
+                            type={LAYOUT_CONTENT_TEXT.SearchIcon}
+                            style={{ color: COLORS.STEEL_GRAY[20] }}
+                        />
+                    </Box>
+                    <Input
+                        ref={searchBar}
+                        disableUnderline
+                        placeholder={searchBarPlaceholder}
+                        type="text"
+                        onChange={handleChange}
+                        value={searchTerms}
+                        sx={{ width: '100%', display: 'flex' }}
+                        endAdornment={showSearchBarCloseIcon ?
+                            <Box onClick={() => setShowSearchBarCloseIcon(false)}>
+                                <CancelRounded sx={styles.cancelIcon} />
+                            </Box>
+                            : null}
                     />
                 </Box>
-                <Input
-                    ref={searchBar}
-                    disableUnderline
-                    placeholder={searchBarPlaceholder}
-                    type="text"
-                    onChange={handleChange}
-                    value={searchTerms}
-                    sx={{ width: '100%', display: 'flex' }}
-                    endAdornment={showSearchBarCloseIcon ?
-                        <Box onClick={() => setShowSearchBarCloseIcon(false)}>
-                            <CancelRounded sx={styles.cancelIcon} />
-                        </Box>
-                        : null}
-                />
-            </Box>
+            </Tooltip>
             <Box
                 onTransitionEnd={handleChainSelectorTransitionEnd}
                 onClick={handleExpandChainSelector}
                 gap={'10px'}
                 display={'flex'}
                 alignItems={'center'}
-                sx={{ ...styles.searchBar, width: expandChainSelector ? "195px" : '48px' }}
+                style={{ pointerEvents: invalidSearch ? 'none' : 'auto' }}
+                sx={styles.searchBar(expandChainSelector, false, "195px")}
             >
                 <Box sx={{ display: 'flex', marginLeft: '-9px' }}>
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.GlobusIcon}
-                        style={{ color: COLORS.STEEL_GRAY[20] }}
+                        style={{ color: invalidSearch ? '#88898c' : COLORS.STEEL_GRAY[20] }}
                     />
                 </Box>
                 <Select
-                    disabled={!networks.length}
+                    disabled={invalidSearch || !networks.length}
                     MenuProps={styles.chainSelectorDropoDownMenuProps}
                     disableUnderline
                     displayEmpty
@@ -177,7 +188,7 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                     IconComponent={() => null}
                     endAdornment={showChainSelectorCloseIcon ?
                         <Box marginLeft={'-24px'} onClick={() => setChainSelectorCloseIcon(false)}>
-                            <CancelRounded sx={styles.cancelIcon} />
+                            <CancelRounded sx={{ ...styles.cancelIcon, color: invalidSearch ? '#88898c' : COLORS.STEEL_GRAY[40] }} />
                         </Box>
                         : null}
                 >
@@ -190,6 +201,7 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
             <Box
                 id="sortingOrderBox"
                 sx={styles.sortingOrder}
+                style={{ pointerEvents: invalidSearch ? 'none' : 'auto' }}
                 onClick={() => !!appliedFilter ? handleOrder() : null}
             >
                 <Fade in={displaySortingIcon} timeout={150}>
@@ -200,12 +212,13 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                     >
                         <SvgComponent
                             type={LAYOUT_CONTENT_TEXT.SortingIcon}
-                            style={{ color: !!appliedFilter ? 'inherit' : COLORS.STEEL_GRAY[80] }}
+                            style={{ color: invalidSearch ? '#88898c' : !!appliedFilter ? 'inherit' : COLORS.STEEL_GRAY[80] }}
                         />
                     </Box>
                 </Fade>
             </Box>
             <Select
+                disabled={invalidSearch}
                 MenuProps={styles.filterDropoDownMenuProps}
                 disableUnderline
                 displayEmpty
@@ -222,12 +235,16 @@ const SearchBar = ({ networks }: { networks: string[] }) => {
                 value={appliedFilter || ''}
                 onChange={(e) => dispatch(updateSearchState({ appliedFilter: e.target.value }))}
                 IconComponent={() => <Box
+                    style={{
+                        color: invalidSearch ? '#88898c' : COLORS.STEEL_GRAY[20],
+                        pointerEvents: invalidSearch ? 'none' : 'auto'
+                    }}
                     sx={{ transform: filterOpen ? 'rotate(180deg)' : 'none' }}
                     onClick={() => setFilterOpen(true)}
                 >
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                        style={allowlistDetailsStyles.dropdownIcon}
+                        style={{ cursor: 'pointer' }}
                     />
                 </Box>}
             >

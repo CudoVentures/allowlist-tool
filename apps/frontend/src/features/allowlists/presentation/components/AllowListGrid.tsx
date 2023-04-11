@@ -13,14 +13,12 @@ const AllowListGrid = ({
     data: defaultData,
     text,
     withCreateBox,
-    expanded,
     withSearchBar,
     withCount
 }: {
     data: FetchedAllowlist[],
     text: string,
     withCreateBox: boolean,
-    expanded?: boolean,
     withSearchBar?: boolean,
     withCount?: boolean
 }) => {
@@ -125,9 +123,9 @@ const AllowListGrid = ({
     return (
         <Box gap={3} sx={{ alignSelf: 'center', alignItems: 'flex-start', width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
             <Box gap={5} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
-                <Box gap={1} display={'flex'} alignItems={"flex-end"}>
+                <Box gap={1} display={'flex'} alignItems={"flex-end"} minWidth={'max-content'}>
                     <Typography fontWeight={700} variant='h5' alignSelf={'center'} color={COLORS.LIGHT_BLUE[10]}>{text}</Typography>
-                    {withCount && !!displayData.length ? <Typography
+                    {withCount && (withCreateBox || !!displayData.length) ? <Typography
                         fontWeight={600}
                         variant='subtitle2'
                         paddingBottom={'3px'}
@@ -137,9 +135,12 @@ const AllowListGrid = ({
                         {`${displayData.length} Allowlists`}
                     </Typography> : null}
                 </Box>
-                {withSearchBar ? <SearchBar networks={defaultData.map((allowlist) => { return allowlist.cosmos_chain_id })} /> : null}
+                {withSearchBar ? <SearchBar displayDataLength={displayData.length} networks={defaultData.map((allowlist) => { return allowlist.cosmos_chain_id })} /> : null}
             </Box>
-            <GridList data={displayData} withCreateBox={withCreateBox} expanded={expanded} withSearchBar={withSearchBar} />
+            <GridList
+                data={displayData}
+                withCreateBox={withCreateBox}
+            />
         </Box>
     )
 }

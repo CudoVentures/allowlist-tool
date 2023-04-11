@@ -18,13 +18,16 @@ export const styles = {
         cursor: 'pointer',
         height: '20px', color: COLORS.STEEL_GRAY[40]
     },
-    searchBar: {
-        cursor: 'pointer',
-        transition: 'width .4s ease-in-out',
-        padding: '15px 24px 15px 20px',
-        height: '48px',
-        border: `1px solid ${COLORS.STEEL_GRAY[70]}`,
-        borderRadius: '64px'
+    searchBar: (expandSearchBar: boolean, noResult: boolean, width?: string) => {
+        return {
+            width: expandSearchBar ? width : '48px',
+            cursor: 'pointer',
+            transition: 'width .4s ease-in-out',
+            padding: '15px 24px 15px 20px',
+            height: '48px',
+            border: noResult ? `1px solid ${COLORS.RED[60]}` : `1px solid ${COLORS.STEEL_GRAY[70]}`,
+            borderRadius: '64px'
+        }
     },
     menuItem: {
         height: '48px',

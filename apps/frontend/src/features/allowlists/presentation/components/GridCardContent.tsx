@@ -10,7 +10,7 @@ import { getTimeFromNumber, setBlobToB64Img } from "../../../../core/utilities/P
 
 import { generalStyles } from "../pages/styles"
 
-const GridCardContent = ({ allowlist, visible, width }: { allowlist: FetchedAllowlist, visible: boolean, width: number }) => {
+const GridCardContent = ({ allowlist, width }: { allowlist: FetchedAllowlist, width: number }) => {
 
     const navigateToRoute = useNavigateToRoute()
     const [banner, setBanner] = useState<string>(undefined)
@@ -54,14 +54,14 @@ const GridCardContent = ({ allowlist, visible, width }: { allowlist: FetchedAllo
 
 
     useEffect(() => {
-        if (banner && avatar && visible) {
+        if (banner && avatar) {
             setTimeout(() => {
                 setSourceLoaded(true)
             }, 500)
         } else {
             setSourceLoaded(false)
         }
-    }, [avatar, banner, visible])
+    }, [avatar, banner])
 
     return (
         <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={{ ...generalStyles.gridDataBox, width: width, minWidth: width }}>

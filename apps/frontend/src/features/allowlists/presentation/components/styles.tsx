@@ -400,6 +400,26 @@ export const validationStyles = {
       },
     },
   },
+  searchBarTooltipPopper: {
+    sx: {
+      zIndex: '1'
+    },
+    modifiers: [
+      {
+        name: "offset",
+        options: {
+          offset: [0, -15]
+        },
+      },
+      {
+        name: 'flip',
+        options: {
+          fallbackPlacements: ['bottom-start'],
+          flipVariations: false, // true by default
+        },
+      },
+    ],
+  },
   tooltipPopper: {
     sx: {
       zIndex: '1'

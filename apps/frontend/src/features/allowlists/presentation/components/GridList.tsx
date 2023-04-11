@@ -10,7 +10,7 @@ import { RootState } from '../../../../core/store';
 import { COLORS } from '../../../../core/theme/colors';
 import { allowlistDetailsStyles } from './styles';
 
-const GridList = ({ data, withCreateBox, expanded }) => {
+const GridList = ({ data, withCreateBox }) => {
 
   const { activeSearch } = useSelector((state: RootState) => state.searchState)
   const gridSpacing = 1.5
@@ -36,7 +36,7 @@ const GridList = ({ data, withCreateBox, expanded }) => {
                 <Grid id='GridCardContentHolder' item key={idx}
                   style={{ display: 'flex', justifyContent: 'flex-start' }}
                 >
-                  <GridCardContent allowlist={allowlist} visible={expanded} width={gridCardWidth} />
+                  <GridCardContent allowlist={allowlist} width={gridCardWidth} />
                 </Grid>
               ))}
             </Grid>

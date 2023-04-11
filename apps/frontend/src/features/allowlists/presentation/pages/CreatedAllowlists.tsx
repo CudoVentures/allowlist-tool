@@ -1,14 +1,18 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist";
-import CollapsableGrid from './CollapsableGrid'
+import AllowListGrid from '../components/AllowListGrid';
 
 const CreatedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
-    return <CollapsableGrid
-        text='My Allowlists'
-        data={data}
-        withCreateBox={true}
-    />
+    return <Fragment>
+        <AllowListGrid
+            text='My Allowlists'
+            data={data}
+            withCreateBox={true}
+            withCount={true}
+            withSearchBar={!data.length ? false : true}
+        />
+    </Fragment>
 }
 
 export default CreatedAllowlistsPreview
