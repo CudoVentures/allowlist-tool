@@ -16,6 +16,24 @@ export const createAllowlistStyles = {
 }
 
 export const generalStyles = {
+    dashboardMenu: {
+        marginTop: '-18px',
+        gap: '8px',
+        width: '50%',
+        minWidth: 'max-content',
+        maxWidth: '270px',
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    dasboardMenuItem: (menuSwitchingTimeout: number) => {
+        return {
+            cursor: 'pointer',
+            padding: '18px 16px',
+            borderRadius: '8px',
+            transition: `background-color 0.${menuSwitchingTimeout}s`,
+            backgroundColor: 'transparent'
+        }
+    },
     arrowIconHolder: {
         position: 'relative',
         display: 'flex',
@@ -81,6 +99,11 @@ export const generalStyles = {
         padding: '4rem 4rem 6rem 4rem',
         display: 'flex',
         flexDirection: 'column'
+    },
+    dashboardHolder: {
+        width: '100%',
+        padding: '4rem 4rem 6rem 4rem',
+        display: 'flex'
     },
     createBox: {
         "&:hover": {
