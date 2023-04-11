@@ -12,12 +12,16 @@ import { GlobalGuard } from './auth/guards/global-auth.guard';
 declare const module: any;
 
 async function bootstrap() {
+  const corsOptions =  {
+    origin: [process.env.APP_URL, process.env.AURA_POOL_URL]
+  }
+  
   const app = await NestFactory.create(AppModule, {
     logger: console
   });
 
   app.useGlobalGuards(new GlobalGuard(new Reflector));
-  app.enableCors();
+  app.enableCors(corsOptions);
   app.setGlobalPrefix('api');
   app.enableVersioning({
     type: VersioningType.URI,
