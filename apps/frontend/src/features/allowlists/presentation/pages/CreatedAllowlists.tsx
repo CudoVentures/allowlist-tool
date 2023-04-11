@@ -6,7 +6,7 @@ import AllowListGrid from '../components/AllowListGrid';
 const CreatedAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
     return <Fragment>
         <AllowListGrid
-            text='My Allowlists'
+            text='Created'
             data={data}
             withCreateBox={true}
             withCount={true}

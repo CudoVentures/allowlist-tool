@@ -16,8 +16,29 @@ export const createAllowlistStyles = {
 }
 
 export const generalStyles = {
+    noJoinedTitle: {
+        alignSelf: 'flex-start',
+        color: COLORS.LIGHT_BLUE[10]
+    },
+    noJoinedSubtitle: {
+        marginTop: '15%',
+        alignSelf: 'center',
+        textAlign: 'center',
+        color: COLORS.LIGHT_BLUE[10]
+    },
+    noJoinedHolder: {
+        display: 'flex',
+        width: '100%',
+        flexDirection: 'column'
+    },
+    noJoinedBtn: {
+        margin: '35px 0px 10% 0px',
+        alignSelf: 'center',
+        width: '192px',
+        height: '48px'
+    },
     dashboardMenu: {
-        marginTop: '-18px',
+        marginTop: '-10px',
         gap: '8px',
         width: '50%',
         minWidth: 'max-content',

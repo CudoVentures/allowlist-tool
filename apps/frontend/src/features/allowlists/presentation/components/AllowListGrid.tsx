@@ -124,11 +124,11 @@ const AllowListGrid = ({
         <Box gap={3} sx={{ alignSelf: 'center', alignItems: 'flex-start', width: '100%', display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
             <Box gap={5} sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', alignItems: "center" }}>
                 <Box gap={1} display={'flex'} alignItems={"flex-end"} minWidth={'max-content'}>
-                    <Typography fontWeight={700} variant='h5' alignSelf={'center'} color={COLORS.LIGHT_BLUE[10]}>{text}</Typography>
+                    <Typography fontWeight={700} variant='h4' alignSelf={'center'} color={COLORS.LIGHT_BLUE[10]}>{text}</Typography>
                     {withCount && (withCreateBox || !!displayData.length) ? <Typography
                         fontWeight={600}
                         variant='subtitle2'
-                        paddingBottom={'3px'}
+                        paddingBottom={'4px'}
                         color={COLORS.STEEL_GRAY[50]}
                         minWidth={'max-content'}
                     >
