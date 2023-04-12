@@ -17,7 +17,7 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
     const dispatch = useDispatch()
     const searchBar = useRef<HTMLInputElement>()
     const chainSelector = useRef<HTMLInputElement>()
-    const { searchTerms, appliedFilter, ascendingOrder, chainFilter } = useSelector((state: RootState) => state.searchState)
+    const { searchTerms, appliedFilter, ascendingOrder, chainFilter, activeSearch } = useSelector((state: RootState) => state.searchState)
     const [filterOpen, setFilterOpen] = useState<boolean>(false)
     const [displaySortingIcon, setDisplaySortingIcon] = useState<boolean>(true)
     const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
@@ -30,6 +30,17 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
     const [searchBarPlaceholder, setSearchBarPlaceholder] = useState<string>('')
 
     const invalidSearch = expandSearchBar && !displayDataLength && !!searchTerms
+
+    const hasScrollbar = () => {
+        return document.documentElement.scrollHeight > document.documentElement.clientHeight;
+    };
+
+    useEffect(() => {
+        if (!hasScrollbar()) {
+            const footer = document.getElementById('footer')
+            footer.style.marginRight = invalidSearch ? '-4px' : '0px'
+        }
+    }, [invalidSearch])
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
         dispatch(updateSearchState({

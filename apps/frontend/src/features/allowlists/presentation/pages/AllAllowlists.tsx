@@ -10,7 +10,6 @@ const AllAllowlistsPreview = ({ data }: { data: FetchedAllowlist[] }) => {
                 text='Explore'
                 data={data}
                 withCreateBox={!data.length ? true : false}
-                expanded={true}
                 withCount={true}
                 withSearchBar={!data.length ? false : true}
             />
