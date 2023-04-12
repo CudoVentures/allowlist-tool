@@ -59,6 +59,10 @@ const CreationField = ({
             return ''
         }
 
+        if (type === FormField.cosmos_chain_id && !connectedAddress) {
+            return ''
+        }
+
         if (type === FormField.discord_server) {
             return `${BaseURL.discord_server}${allowlistState[type]}`
         }
@@ -94,7 +98,7 @@ const CreationField = ({
 
     useEffect(() => {
         if (type === FormField.cosmos_chain_id) {
-            setIsValid(!!allowlistState.cosmos_chain_id)
+            setIsValid(!!allowlistState.cosmos_chain_id && !!connectedAddress)
         }
     }, [allowlistState.cosmos_chain_id])
 

@@ -265,7 +265,7 @@ const WalletSelector = () => {
                     <Box width='100%'>
                       <LoadingButton
                         loadingIndicator={<LoadingButtonComponent />}
-                        disabled={isDisabledBtn(selectChainId)}
+                        disabled={!chosenChainId || isDisabledBtn(selectChainId)}
                         loading={loading.get(selectChainId)}
                         variant="contained"
                         color="primary"

@@ -3,7 +3,6 @@ import isURL, { IsURLOptions } from 'validator/lib/isURL'
 import isEmail from "validator/lib/isEmail"
 import { CollectedData, OptionalAllowlistData } from "../../../core/store/allowlist"
 import { FormField } from "../presentation/components/helpers"
-import { CHAIN_DETAILS } from '../../../core/utilities/Constants'
 
 const urlOptions: IsURLOptions = {
     protocols: [

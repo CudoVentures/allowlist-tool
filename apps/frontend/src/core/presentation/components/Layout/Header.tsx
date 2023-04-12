@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { formatAddress, isMainnetInstance } from '../../../utilities/ProjectUtils';
+import { formatAddress } from '../../../utilities/ProjectUtils';
 import { HashBasedUserAvatar, LAYOUT_CONTENT_TEXT, SvgComponent } from './helpers';
 import { RootState } from '../../../store';
 import AppRoutes from '../../../../features/app-routes/entities/AppRoutes';
@@ -131,17 +131,6 @@ const Header = () => {
           />
           <Typography fontWeight={700} variant="h6" color="text.primary">
             Allowlist Tool
-            {!isMainnetInstance() ?
-              <Typography
-                marginLeft={1}
-                color={COLORS.ORANGE[50]}
-                fontWeight={300}
-                component="span"
-                fontSize={18}
-              >
-                Testnet
-              </Typography> :
-              null}
           </Typography>
         </Box>
         {hamburgerMenu ?

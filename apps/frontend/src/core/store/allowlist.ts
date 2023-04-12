@@ -1,6 +1,5 @@
 import { StdSignature } from 'cudosjs'
 import { createSlice } from '@reduxjs/toolkit'
-import { CHAIN_DETAILS } from '../utilities/Constants'
 import { DISCORD_SERVER_ROLES } from '../../../../common/interfaces'
 
 export interface RequiredAllowlistData {

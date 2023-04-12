@@ -1,17 +1,11 @@
 import React from "react"
-import BigNumber from "bignumber.js"
-import { getOfflineSigner as cosmostationSigner } from "@cosmostation/cosmos-client"
 import {
-    Coin,
-    OfflineSigner,
-    SigningStargateClient,
-    StargateClient,
     StdSignature,
     SUPPORTED_WALLET
 } from "cudosjs"
+import { cosmos } from "@cosmostation/extension-client"
 
 import { userState } from "../../core/store/user"
-import { CHAIN_DETAILS } from "../../core/utilities/Constants"
 import { connectCosmostationLedger } from "./Cosmostation"
 import { connectKeplrLedger } from "./Keplr"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../core/presentation/components/Layout/helpers"
@@ -19,7 +13,6 @@ import { LOG_IN_USER } from "../../core/api/calls"
 import { disconnectSocket } from "../../App"
 
 import { styles } from "./styles"
-import { cosmos } from "@cosmostation/extension-client"
 
 export const getAvailableChainIdsByWalletType = async (walletType: SUPPORTED_WALLET): Promise<Record<string, boolean>> => {
     let availableChains = {}
@@ -27,7 +20,11 @@ export const getAvailableChainIdsByWalletType = async (walletType: SUPPORTED_WAL
         availableChains = await window.keplr.getChainInfosWithoutEndpoints()
             .then((chains) => {
                 return chains.reduce((obj, chain) => {
-                    return { ...obj, [chain.chainId]: true }
+                    let chainId = chain.chainId
+                    if (chainId.includes('cudos')) {
+                        chainId = 'cudos-1'
+                    }
+                    return { ...obj, [chainId]: true }
                 }, {})
             });
     }
@@ -39,7 +36,11 @@ export const getAvailableChainIdsByWalletType = async (walletType: SUPPORTED_WAL
         availableChains = activatedChains
             .concat(supportedChains.official, supportedChains.unofficial)
             .reduce((obj, chainId) => {
-                return { ...obj, [chainId]: true };
+                let newChainId = chainId
+                if (newChainId.includes('cudos')) {
+                    newChainId = 'cudos-1'
+                }
+                return { ...obj, [newChainId]: true };
             }, {});
     }
 
@@ -59,68 +60,9 @@ export const connectWalletByType = async (walletType: SUPPORTED_WALLET, chainId:
     return { address: '', accountName: '' }
 }
 
-export const getOfflineSignerByType = async (walletType: SUPPORTED_WALLET): Promise<OfflineSigner | undefined> => {
-
-    const chainId = CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK]
-
-    if (walletType === SUPPORTED_WALLET.Keplr) {
-        return window.keplr?.getOfflineSigner(chainId)
-    }
-
-    if (walletType === SUPPORTED_WALLET.Cosmostation) {
-        return cosmostationSigner(chainId)
-    }
-
-    return undefined
-}
-
-export const getSigningClient = async (walletType: SUPPORTED_WALLET): Promise<SigningStargateClient> => {
-
-    const offlineSigner = await getOfflineSignerByType(walletType)
-
-    if (window.keplr) {
-        window.keplr.defaultOptions = {
-            sign: {
-                preferNoSetFee: true,
-            },
-        }
-    }
-
-    if (!offlineSigner) {
-        throw new Error("Invalid signing client");
-    }
-
-    const rpcAddress = CHAIN_DETAILS.RPC_ADDRESS[CHAIN_DETAILS.DEFAULT_NETWORK]
-
-    return SigningStargateClient.connectWithSigner(rpcAddress, offlineSigner)
-}
-
-export const getQueryClient = async (rpcAddress: string): Promise<StargateClient> => {
-    const client = await StargateClient.connect(rpcAddress)
-    return client
-}
-
-export const getAccountBalances = async (accountAddress: string): Promise<readonly Coin[]> => {
-    const rpcAddress = CHAIN_DETAILS.RPC_ADDRESS[CHAIN_DETAILS.DEFAULT_NETWORK]
-    const queryClient = await getQueryClient(rpcAddress)
-    return queryClient.getAllBalances(accountAddress)
-}
-
-export const getNativeBalance = (balances: readonly Coin[]): string => {
-    let nativeBalance = '0'
-    balances.forEach((balance) => {
-        if (balance.denom === CHAIN_DETAILS.NATIVE_TOKEN_DENOM && new BigNumber(balance.amount).gt(0)) {
-            nativeBalance = balance.amount
-        }
-    })
-    return nativeBalance
-}
-
 export const connectUser = async (walletType: SUPPORTED_WALLET, chainId: string): Promise<userState> => {
 
     const { address: connectedAddress, accountName } = await connectWalletByType(walletType, chainId)
-    // const currentBalances = await getAccountBalances(connectedAddress)
-    // const userNativeBalance = getNativeBalance(currentBalances)
 
     const message = 'Allowlist tool login';
     const { signature } = await signArbitrary(chainId, walletType, connectedAddress, message)
@@ -137,8 +79,6 @@ export const connectUser = async (walletType: SUPPORTED_WALLET, chainId: string)
         userId: res.data.userId,
         accountName: accountName,
         connectedAddress: connectedAddress,
-        // balances: currentBalances,
-        // nativeBalance: userNativeBalance,
         connectedWallet: walletType,
     }
 
@@ -150,7 +90,7 @@ export const disconnectWalletByType = async (walletType: SUPPORTED_WALLET) => {
     disconnectSocket()
 
     if (walletType === SUPPORTED_WALLET.Keplr) {
-        // Keplr seems to not offer a particular disconnect method
+        window.keplr.disable()
         return
     }
 
