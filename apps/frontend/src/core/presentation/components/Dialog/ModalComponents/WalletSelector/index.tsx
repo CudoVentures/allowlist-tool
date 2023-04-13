@@ -4,8 +4,11 @@ import { LoadingButton } from '@mui/lab'
 import { ThreeDots as ThreeDotsLoading } from 'svg-loaders-react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Oval as OvalLoader } from 'svg-loaders-react'
+
 import {
   detectUserBrowser,
+  getCosmosNetworkImg,
+  getCosmosNetworkPrettyName,
   getExtensionUrlForBrowser,
   getSupportedBrowsersForWallet,
   getSupportedWallets,
@@ -38,6 +41,8 @@ const WalletSelector = () => {
   const [loadSelectChainId, setLoadSelectChainId] = useState<boolean>(false)
   const [availableChainIDs, setAvailableChainIDs] = useState<string[]>([])
   const [loading, setLoading] = useState(new Map())
+  const [logoLoaded, setLogoLoaded] = useState<boolean>(true)
+  const [networkLogo, setNetworkLogo] = useState<string>(undefined)
   const dispatch = useDispatch()
 
   const redirectToExtension = (extensionUrl: string | undefined) => {
@@ -168,6 +173,8 @@ const WalletSelector = () => {
   }
 
   const handleChosenChainIdChange = (value: string) => {
+    setNetworkLogo(undefined)
+    setLogoLoaded(false)
     dispatch(updateUser({ chosenChainId: value }))
     dispatch(updateAllowlistObject({ cosmos_chain_id: value }))
   }
@@ -205,6 +212,26 @@ const WalletSelector = () => {
     })()
   }, [selectChainId])
 
+  useEffect(() => {
+    if (chosenChainId) {
+      const imgSrc = getCosmosNetworkImg(chosenChainId)
+      if (!imgSrc) {
+        setNetworkLogo(undefined)
+        setLogoLoaded(true)
+        return
+      }
+
+      setNetworkLogo(imgSrc)
+      return
+    }
+  }, [chosenChainId])
+
+  useEffect(() => {
+    if (loadSelectChainId) {
+      dispatch(updateUser({ chosenChainId: '' }))
+    }
+  }, [loadSelectChainId])
+
   return (
     <MuiDialog
       BackdropProps={defaultStyles.defaultBackDrop}
@@ -229,7 +256,7 @@ const WalletSelector = () => {
           </Typography>
           {selectChainId ?
             <Box gap={3} style={styles.btnsHolder}>
-              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS.LIGHT_BLUE[90] }} /> :
+              {loadSelectChainId ? <OvalLoader style={styles.ovalLoader} /> :
                 <Fragment>
                   <Select
                     disableUnderline
@@ -240,8 +267,25 @@ const WalletSelector = () => {
                     onClose={() => setDropDownOpen(false)}
                     renderValue={() =>
                       !!chosenChainId ?
-                        chosenChainId :
-                        <Typography sx={allowlistDetailsStyles.dropDownPlaceholder}>Select a chain</Typography>
+                        <Fragment>
+                          <Box sx={styles.logoHolder(logoLoaded)}>
+                            {networkLogo ? <img
+                              src={networkLogo}
+                              alt={`Network logo`}
+                              style={styles.logo}
+                              onLoad={() => setLogoLoaded(true)}
+                            /> : null}
+                            {`${getCosmosNetworkPrettyName(chosenChainId)} (${chosenChainId})`}
+                          </Box>
+                          <Box sx={styles.logoHolder(logoLoaded, true)}>
+                            <LoadingButtonComponent />
+                          </Box>
+                        </Fragment>
+                        :
+                        <Typography sx={{ ...allowlistDetailsStyles.dropDownPlaceholder, marginRight: '-24px' }}
+                        >
+                          Select a chain
+                        </Typography>
                     }
                     sx={allowlistDetailsStyles.chainIdSelector}
                     value={chosenChainId}
@@ -258,7 +302,12 @@ const WalletSelector = () => {
                     }
                   >
                     {availableChainIDs.map((CHAIN_ID, idx) => {
-                      return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>
+                      return <MenuItem
+                        key={idx}
+                        value={CHAIN_ID}
+                      >
+                        {`${getCosmosNetworkPrettyName(CHAIN_ID)} (${CHAIN_ID})`}
+                      </MenuItem>
                     })}
                   </Select>
                   <Tooltip placement='right' title={btnTooltip(selectChainId)}>
@@ -288,7 +337,7 @@ const WalletSelector = () => {
             </Box>
             :
             <Box gap={3} style={styles.btnsHolder}>
-              {loadSelectChainId ? <OvalLoader style={{ width: '50px', height: '50px', margin: '37px 0px', stroke: COLORS.LIGHT_BLUE[90] }} /> :
+              {loadSelectChainId ? <OvalLoader style={styles.ovalLoader} /> :
                 <Fragment>
                   {getSupportedWallets().map((wallet, idx) => {
                     return (

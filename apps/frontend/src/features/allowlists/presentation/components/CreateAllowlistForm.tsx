@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FileUploader } from "react-drag-drop-files";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { getCosmosNetworkImg } from 'cudosjs';
 
 import { RootState } from '../../../../core/store';
 import { COLORS } from '../../../../core/theme/colors';
@@ -15,6 +16,7 @@ import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 import CreationField from './CreationField';
 
 import { allowlistDetailsStyles, generalStyles, validationStyles } from './styles';
+import { styles } from '../../../../core/presentation/components/Dialog/ModalComponents/WalletSelector/styles';
 
 const CreateAllowlistForm = () => {
 
@@ -22,6 +24,7 @@ const CreateAllowlistForm = () => {
   const [bannerPreview, setBannerPreview] = useState<string>('')
   const [avatarPreview, setAvatarPreview] = useState<string>('')
   const allowlistState = useSelector((state: RootState) => state.allowlistState)
+  const { chosenChainId, connectedAddress } = useSelector((state: RootState) => state.userState)
 
   const MandatoryField = ({ text }: { text: string }) => {
 
@@ -40,7 +43,7 @@ const CreateAllowlistForm = () => {
       </Fragment>
     )
   }
-  
+
   useEffect(() => {
     if (allowlistState.banner_image) {
       setBlobToB64Img(allowlistState.banner_image, setBannerPreview)
@@ -107,6 +110,13 @@ const CreateAllowlistForm = () => {
           />
           <CreationField
             type={FormField.cosmos_chain_id}
+            startAdornment={connectedAddress && chosenChainId && getCosmosNetworkImg(chosenChainId) ?
+              <img
+                src={getCosmosNetworkImg(chosenChainId)}
+                alt={`Network logo`}
+                style={{ ...styles.logo, marginRight: '10px' }}
+              />
+              : null}
             text={<MandatoryField text={'Cosmos Blockchain'} />}
             placeholder={'Set a Chain ID'}
             isDisabled={true}

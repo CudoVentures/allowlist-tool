@@ -2,13 +2,14 @@ import { Box, Link, Tooltip, Typography } from "@mui/material"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import copy from "copy-to-clipboard"
-import { getAtomscanExplorerUrl } from "cudosjs"
+import { getAtomscanExplorerUrl, getCosmosNetworkImg, getCosmosNetworkPrettyName } from "cudosjs"
 
 import { RootState } from "../store"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
 import { COLORS } from "./colors"
 
 import { themeStyles } from "./themeStyles"
+import { styles } from "../presentation/components/Dialog/ModalComponents/WalletSelector/styles"
 
 export const GradientText = ({
     text,
@@ -39,11 +40,21 @@ export const GradientText = ({
     )
 }
 
-export const ConnectedChain = (): JSX.Element => {
+export const ConnectedChain = ({ isHamburger }: { isHamburger: boolean }): JSX.Element => {
 
     const { chosenChainId } = useSelector((state: RootState) => state.userState)
     return !!chosenChainId ? (
-        <Box gap={2} style={themeStyles.centerFlexLinear}>
+        <Box gap={2} sx={isHamburger ? themeStyles.centerFlexLinear : themeStyles.centerFlexColumn}>
+            <Box sx={themeStyles.logoHolder}>
+                {getCosmosNetworkImg(chosenChainId) ?
+                    <img
+                        src={getCosmosNetworkImg(chosenChainId)}
+                        alt={`Network logo`}
+                        style={styles.logo}
+                    /> : null}
+                {getCosmosNetworkPrettyName(chosenChainId) ?
+                    getCosmosNetworkPrettyName(chosenChainId) : null}
+            </Box>
             <Typography variant="subtitle2" color={COLORS.STEEL_GRAY[20]}>
                 {chosenChainId}
             </Typography>
@@ -69,7 +80,7 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
         <Box gap={1} style={themeStyles.centerFlexLinear}>
             <Box sx={themeStyles.iconHolder}>
                 <Tooltip
-                    title={copied ? 'Copied' : 'Copy to clipboard'}
+                    title={copied ? 'Copied' : 'Copy address to clipboard'}
                 >
                     <Box sx={{ cursor: 'pointer' }} onClick={() => handleCopy(address)}>
                         <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px', color: COLORS.LIGHT_BLUE[90] }} />

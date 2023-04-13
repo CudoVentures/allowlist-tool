@@ -190,7 +190,7 @@ const Header = () => {
               <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
                 <Box gap={2} sx={headerStyles.dropDownItemHolder}>
                   <HashBasedUserAvatar UID={connectedAddress} size={50} />
-                  <ConnectedChain />
+                  <ConnectedChain isHamburger={false} />
                   <Typography color={COLORS.STEEL_GRAY[20]}>
                     {formatAddress(connectedAddress, 15)}
                   </Typography>

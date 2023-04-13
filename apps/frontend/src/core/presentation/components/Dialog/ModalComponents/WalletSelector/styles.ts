@@ -1,4 +1,34 @@
+import { COLORS } from "../../../../../../core/theme/colors"
+
 export const styles = {
+    logoHolder: (logoLoaded: boolean, isLoadingComponent?: boolean) => {
+        let extraStyles = isLoadingComponent ? {
+            visibility: logoLoaded ? 'hidden' : 'visible',
+            position: logoLoaded ? 'absolute' : 'relative'
+        } : {
+            visibility: logoLoaded ? 'visible' : 'hidden',
+            position: logoLoaded ? 'relative' : 'absolute',
+        }
+        return {
+            ...extraStyles,
+            gap: '10px',
+            height: '24px',
+            marginRight: '-24px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }
+    },
+    logo: {
+        width: '24px',
+        height: '24px'
+    },
+    ovalLoader: {
+        width: '50px',
+        height: '50px',
+        margin: '37px 0px',
+        stroke: COLORS.LIGHT_BLUE[90]
+    },
     pluginWarning: {
         maxWidth: '550px',
         fontSize: '14px',

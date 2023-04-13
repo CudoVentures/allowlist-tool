@@ -1,10 +1,23 @@
 import { COLORS } from "./colors";
 
 export const themeStyles = {
+    logoHolder: {
+        gap: '10px',
+        height: '24px',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     centerFlexLinear: {
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'center'
+    },
+    centerFlexColumn: {
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'center',
+        flexDirection: 'column'
     },
     icons: {
         marginLeft: '10px',

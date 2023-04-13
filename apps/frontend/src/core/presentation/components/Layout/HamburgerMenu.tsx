@@ -33,7 +33,7 @@ const HamburgerMenu = () => {
                     <Box gap={2} sx={headerStyles.hamburgerFlexLine}>
                         <HashBasedUserAvatar UID={connectedAddress} size={48} />
                         <Typography fontWeight={700}>{formatAddress(connectedAddress, 7)}</Typography>
-                        <ConnectedChain />
+                        <ConnectedChain isHamburger={true} />
                     </Box>
                     <Box gap={2} sx={headerStyles.hamburgerFlexLine}>
                         <CopyAndFollowComponent address={connectedAddress} />
