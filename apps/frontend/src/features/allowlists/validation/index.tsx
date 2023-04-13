@@ -1,4 +1,3 @@
-import { bech32 } from 'bech32'
 import isURL, { IsURLOptions } from 'validator/lib/isURL'
 import isEmail from "validator/lib/isEmail"
 import { CollectedData, OptionalAllowlistData } from "../../../core/store/allowlist"
@@ -17,26 +16,6 @@ const urlOptions: IsURLOptions = {
     allow_trailing_dot: false,
     allow_protocol_relative_urls: false,
     disallow_auth: false
-}
-
-export const getCosmosAddressPrefix = (addr: string) => {
-    if (isValidCosmosAddress(addr)) {
-        const { prefix: decodedPrefix } = bech32.decode(addr)
-        return decodedPrefix
-    }
-    return 'invalidAddress'
-}
-
-export const isValidCosmosAddress = (addr: string) => {
-    if (addr === '' || addr === undefined) return false
-    try {
-        const { prefix: decodedPrefix } = bech32.decode(addr)
-        return addr.toLowerCase().startsWith(decodedPrefix.toLowerCase())
-
-    } catch {
-        // invalid checksum
-        return false
-    }
 }
 
 export const isZeroLength = (data: any): boolean => !data

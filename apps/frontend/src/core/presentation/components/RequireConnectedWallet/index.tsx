@@ -1,9 +1,8 @@
 import React from 'react'
 import { Navigate, useLocation, Outlet } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { SUPPORTED_WALLET } from 'cudosjs'
+import { SUPPORTED_WALLET, isValidCosmosAddress } from 'cudosjs'
 
-import { isValidCosmosAddress } from '../../../../features/allowlists/validation'
 import AppRoutes from '../../../../features/app-routes/entities/AppRoutes'
 import { RootState } from '../../../store'
 

@@ -2,9 +2,9 @@ import { Box, Link, Tooltip, Typography } from "@mui/material"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import copy from "copy-to-clipboard"
+import { getAtomscanExplorerUrl } from "cudosjs"
 
 import { RootState } from "../store"
-import { ATOMSCAN_ADDRESS_EXPLORER } from "../api/endpoints"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
 import { COLORS } from "./colors"
 
@@ -54,6 +54,7 @@ export const ConnectedChain = (): JSX.Element => {
 export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.Element => {
 
     const [copied, setCopied] = useState<boolean>(false)
+    const { chosenChainId } = useSelector((state: RootState) => state.userState)
 
     const handleCopy = (value: string) => {
         copy(value)
@@ -78,7 +79,7 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
             <Box sx={themeStyles.iconHolder}>
                 <Tooltip title="Check address on explorer">
                     <Link
-                        href={ATOMSCAN_ADDRESS_EXPLORER(address)}
+                        href={getAtomscanExplorerUrl(chosenChainId, address)}
                         rel="noreferrer"
                         target='Checking address on explorer'
                     >

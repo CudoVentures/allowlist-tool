@@ -1,18 +1,4 @@
 import { SOCIAL_MEDIA } from "../../../../common/interfaces"
-import { getCosmosAddressPrefix } from "../../features/allowlists/validation"
-import { CHAIN_DETAILS } from "../utilities/Constants"
-
-export const ATOMSCAN_ADDRESS_EXPLORER = (address: string) => {
-  //TODO: This is not sufficient. Many networks are named differently on Atomscan. Mapping is needed.
-  const prefix = getCosmosAddressPrefix(address)
-  return `https://atomscan.com/${prefix}/accounts/${address}`
-}
-
-export const EXPLORER_ADDRESS_DETAILS = (connectedNetwork: string, accountAddress: string) =>
-  `${CHAIN_DETAILS.EXPLORER_URL[connectedNetwork]}/account/${accountAddress}`
-
-export const TX_HASH_DETAILS = (connectedNetwork: string, txHash: string) =>
-  `${CHAIN_DETAILS.EXPLORER_URL[connectedNetwork]}/transactions/${txHash}`
 
 export const JOIN_ALLOWLIST_URL = (allowlistID: number) =>
   `/api/v1/allowlist/join/${allowlistID}`
