@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { Fragment, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Box, Divider, Fade, Input, MenuItem, Select, Tooltip, Typography } from "@mui/material"
 import { CancelRounded } from '@mui/icons-material'
+import { getCosmosNetworkPrettyName } from "cudosjs"
 
 import { RootState } from "../../../store"
 import { SearchFilter, updateSearchState } from "../../../store/search"
@@ -190,7 +191,12 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
                     onClose={() => setDropDownOpen(false)}
                     renderValue={() =>
                         !!chainFilter ?
-                            chainFilter :
+                            <Fragment>
+                                <Tooltip title={getCosmosNetworkPrettyName(chainFilter) ? `ID: ${chainFilter}` : ''}>
+                                    <Box> {getCosmosNetworkPrettyName(chainFilter) ? getCosmosNetworkPrettyName(chainFilter) : chainFilter} </Box>
+                                </Tooltip>
+                            </Fragment>
+                            :
                             <Typography sx={styles.dropDownPlaceholder}>{chainSelectorPlaceholder}</Typography>
                     }
                     sx={styles.chainSelectorDropDown}
@@ -204,7 +210,17 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
                         : null}
                 >
                     {networks.map((network, idx) => {
-                        return <MenuItem sx={styles.menuItem} key={idx + network} value={network}>{network}</MenuItem>
+                        return <MenuItem
+                            key={idx + network}
+                            sx={styles.menuItem}
+                            value={network}
+                        >
+                            <Tooltip
+                                placement="right-end"
+                                title={getCosmosNetworkPrettyName(network) ? `ID: ${network}` : ''}
+                                children={<Box>{getCosmosNetworkPrettyName(network) ? getCosmosNetworkPrettyName(network) : network} </Box>}
+                            />
+                        </MenuItem>
                     })}
                 </Select>
             </Box>
