@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Tooltip, Typography } from '@mui/material';
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
@@ -10,6 +10,8 @@ import { LinkBox } from '../../../../core/theme/helpers';
 import { BaseURL } from './helpers';
 
 import { generalStyles, summaryViewStyles } from './styles';
+import { getCosmosNetworkImg, getCosmosNetworkPrettyName } from 'cudosjs';
+import { styles as walletSelectorStyles } from '../../../../core/presentation/components/Dialog/ModalComponents/WalletSelector/styles';
 
 export const SummaryView = ({
     props,
@@ -22,6 +24,7 @@ export const SummaryView = ({
     const editMode = useEditMode()
     const [hovered, setHovered] = useState<boolean>(false)
     const [editAllowed, setEditallowed] = useState<boolean>(false)
+    const [networkLogo, setNetworkLogo] = useState<string>(undefined)
     const { date, time } = getSeparateDateAndTime(props.end_date)
 
     const handleClick = () => {
@@ -33,6 +36,15 @@ export const SummaryView = ({
     useEffect(() => {
         setEditallowed(!props.users.length)
     }, [props.users])
+
+    useEffect(() => {
+        const imgSrc = getCosmosNetworkImg(props.cosmos_chain_id)
+        if (imgSrc) {
+            setNetworkLogo(imgSrc)
+            return
+        }
+        setNetworkLogo(undefined)
+    }, [])
 
     const StyledTypography = ({ text, color }: { text: string, color?: string }): JSX.Element => {
         return (
@@ -74,8 +86,17 @@ export const SummaryView = ({
                     <Typography variant='h6' fontWeight={700}>
                         Cosmos Network
                     </Typography>
-                    <StyledTypography text={props.cosmos_chain_id} />
-
+                    <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        {networkLogo ? <img
+                            src={networkLogo}
+                            alt={`Network logo`}
+                            style={walletSelectorStyles.logo}
+                        /> : null}
+                        <StyledTypography text={getCosmosNetworkPrettyName(props.cosmos_chain_id) ?
+                            `${getCosmosNetworkPrettyName(props.cosmos_chain_id)} (${props.cosmos_chain_id})` :
+                            props.cosmos_chain_id}
+                        />
+                    </Box>
                 </Box>
                 : null}
             {props.description ?
