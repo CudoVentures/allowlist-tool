@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Tooltip, Typography } from '@mui/material';
+import { ThreeDots as ThreeDotsLoading } from 'svg-loaders-react'
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { FetchedAllowlist } from '../../../../core/store/allowlist';
@@ -9,7 +10,7 @@ import useEditMode from '../../../../core/utilities/CustomHooks/useEditMode';
 import { LinkBox } from '../../../../core/theme/helpers';
 import { BaseURL } from './helpers';
 
-import { generalStyles, summaryViewStyles } from './styles';
+import { allowlistDetailsStyles, generalStyles, summaryViewStyles } from './styles';
 import { getCosmosNetworkImg, getCosmosNetworkPrettyName } from 'cudosjs';
 import { styles as walletSelectorStyles } from '../../../../core/presentation/components/Dialog/ModalComponents/WalletSelector/styles';
 
@@ -25,12 +26,27 @@ export const SummaryView = ({
     const [hovered, setHovered] = useState<boolean>(false)
     const [editAllowed, setEditallowed] = useState<boolean>(false)
     const [networkLogo, setNetworkLogo] = useState<string>(undefined)
+    const [logoLoaded, setLogoLoaded] = useState<boolean>(false)
     const { date, time } = getSeparateDateAndTime(props.end_date)
 
     const handleClick = () => {
         if (isAdmin && editAllowed) {
             editMode(props)
         }
+    }
+
+    const LoadingComponent = (): JSX.Element => {
+        return (
+            <ThreeDotsLoading
+                style={{
+                    width: '30px',
+                    height: '30px',
+                    fill: COLORS.STEEL_GRAY[20],
+                    stroke: COLORS.STEEL_GRAY[20],
+                    color: COLORS.STEEL_GRAY[20]
+                }}
+            />
+        )
     }
 
     useEffect(() => {
@@ -44,6 +60,7 @@ export const SummaryView = ({
             return
         }
         setNetworkLogo(undefined)
+        setLogoLoaded(true)
     }, [])
 
     const StyledTypography = ({ text, color }: { text: string, color?: string }): JSX.Element => {
@@ -86,16 +103,20 @@ export const SummaryView = ({
                     <Typography variant='h6' fontWeight={700}>
                         Cosmos Network
                     </Typography>
-                    <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <Box sx={allowlistDetailsStyles.logoHolder(logoLoaded)}>
                         {networkLogo ? <img
                             src={networkLogo}
                             alt={`Network logo`}
                             style={walletSelectorStyles.logo}
+                            onLoad={() => setLogoLoaded(true)}
                         /> : null}
                         <StyledTypography text={getCosmosNetworkPrettyName(props.cosmos_chain_id) ?
                             `${getCosmosNetworkPrettyName(props.cosmos_chain_id)} (${props.cosmos_chain_id})` :
                             props.cosmos_chain_id}
                         />
+                    </Box>
+                    <Box sx={allowlistDetailsStyles.logoHolder(logoLoaded, true)}>
+                        <LoadingComponent />
                     </Box>
                 </Box>
                 : null}

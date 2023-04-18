@@ -225,6 +225,23 @@ export const registrationCriteriaStyles = {
 }
 
 export const allowlistDetailsStyles = {
+  logoHolder: (logoLoaded: boolean, isLoadingComponent?: boolean) => {
+    let extraStyles = isLoadingComponent ? {
+      visibility: logoLoaded ? 'hidden' : 'visible',
+      position: logoLoaded ? 'absolute' : 'relative'
+    } : {
+      visibility: logoLoaded ? 'visible' : 'hidden',
+      position: logoLoaded ? 'relative' : 'absolute',
+    }
+    return {
+      ...extraStyles,
+      gap: '10px',
+      height: '24px',
+      display: 'flex',
+      justifyContent: 'flex-start',
+      alignItems: 'center'
+    }
+  },
   dropDownPlaceholder: {
     fontSize: '14px',
     fontWeight: 600,
