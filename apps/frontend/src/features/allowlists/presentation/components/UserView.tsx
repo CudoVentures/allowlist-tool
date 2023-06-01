@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Typography, Divider, List, ListItem, Input, Button } from '@mui/material'
-import { TailSpin as TailSpinLoader } from 'svg-loaders-react'
+import { Box, Typography, Divider, Input, Button } from '@mui/material'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
+import { COLORS } from '../../../../core/theme/colors'
 import { RootState } from '../../../../core/store'
 import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useManipulateAllowlist'
 import { FetchedAllowlist } from '../../../../core/store/allowlist'
@@ -23,13 +23,13 @@ import Dialog from '../../../../core/presentation/components/Dialog'
 import { delay } from '../../../../core/utilities/ProjectUtils'
 import { updateSocialMediaActionsState } from '../../../../core/store/socialMediaActions'
 
-import { allowListStyles, generalStyles, allowlistPreviewStyles } from './styles'
+import { allowListStyles, generalStyles } from './styles'
 
 const UserView = ({ props }: { props: FetchedAllowlist }) => {
 
     const dispatch = useDispatch()
     const { joinAllowlist } = useManipulateAllowlist()
-    const { connectedAddress, connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { connectedAddress, connectedSocialMedia, chosenChainId } = useSelector((state: RootState) => state.userState)
     const { ongoingEligibilityCheck } = useSelector((state: RootState) => state.modalState)
     const [userEmail, setUserEmail] = useState<string>('')
     const [loading, setLoading] = useState<boolean>(true)
@@ -180,7 +180,11 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
     }
 
     const isSignUpDisabled = (): boolean => {
-        if (props.require_email && (!userEmail || !isValidEmail(userEmail))) {
+        if (
+            props.require_email && (!userEmail ||
+                !isValidEmail(userEmail)) ||
+            props.cosmos_chain_id !== chosenChainId
+        ) {
             return true && !isCheckEligibilityDisabled()
         }
         return false
@@ -202,14 +206,14 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
     }, [props.id, connectedAddress, connectedSocialMedia.discord.id, connectedSocialMedia.twitter.id])
 
-    return loading ? <TailSpinLoader /> : (
+    return loading ? <OvalLoader style={{ stroke: COLORS.LIGHT_BLUE[90] }} /> : (
         <Fragment>
             <Dialog />
             <Box sx={allowListStyles.title} style={{ flexDirection: isUserJoined ? 'column-reverse' : 'column' }}>
                 <Typography variant='h6' fontWeight={700}>
                     {isUserJoined ? 'Registered' : `Register for ${props.name}`}
                 </Typography>
-                <Typography variant='subtitle1' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                <Typography variant='subtitle1' color={COLORS.STEEL_GRAY[20]}>
                     {isUserJoined ? 'Status:' : "Complete the following to register"}
                 </Typography>
             </Box>
@@ -229,7 +233,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
                                 />
                                 Provide your email address
                             </Typography>
-                            {/* <List sx={{ ...allowlistPreviewStyles.list, color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20 }}>
+                            {/* <List sx={{ ...allowlistPreviewStyles.list, color: COLORS.PRIMARY_STEEL_GRAY_20 }}>
                                 <ListItem sx={allowlistPreviewStyles.listItem}>
                                     The collection creator will send you updates via email
                                 </ListItem>

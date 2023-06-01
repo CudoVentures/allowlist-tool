@@ -1,9 +1,10 @@
 import React from 'react'
 import { Box, Dialog as MuiDialog, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { Circles as CirclesSpinner } from 'svg-loaders-react'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { RootState } from '../../../../../store'
+import { COLORS } from '../../../../../../core/theme/colors'
 
 import { ModalContainer, styles as defaultStyles } from '../../styles'
 
@@ -23,7 +24,7 @@ const Loading = () => {
             }}>
                 {message ?
                     <Box gap={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        {loadingSpinner ? <CirclesSpinner style={{ width: '60px', height: '60px' }} /> : null}
+                        {loadingSpinner ? <OvalLoader style={{ width: '60px', height: '60px', stroke: COLORS.LIGHT_BLUE[90] }} /> : null}
                         <Typography variant='h5'>{message}</Typography>
                     </Box>
                     : null}

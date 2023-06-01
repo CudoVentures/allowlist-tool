@@ -5,5 +5,5 @@ export default class AppRoutes {
   static EDIT_ALLOWLIST = '/edit/:id';
   static ALLOWLIST = '/allowlist/:id';
   static ALLOWLISTS = '/allowlists';
-  static MY_ALLOWLISTS = '/myallowlists';
+  static DASHBOARD = '/dashboard';
 }

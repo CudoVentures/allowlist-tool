@@ -10,7 +10,7 @@ import { FetchedAllowlist } from '../../../../core/store/allowlist';
 import { RootState } from '../../../../core/store';
 import { useIsScreenLessThan } from '../../../../core/utilities/CustomHooks/screenChecks';
 import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
-import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
+import { StyledPuffLoader } from '../../../../core/presentation/components/Layout/helpers';
 
 import { allowListStyles } from './styles';
 
@@ -101,7 +101,7 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
     }
   }, [connectedAddress, props.admin]);
 
-  return loading ? <StyledCircleSpinner /> : (
+  return loading ? <StyledPuffLoader /> : (
     <Box id="allowlist" sx={allowListStyles.holder}>
       <Box id="allowlistHolder" gap={4} sx={allowListStyles.contentHolder}>
         <Box sx={

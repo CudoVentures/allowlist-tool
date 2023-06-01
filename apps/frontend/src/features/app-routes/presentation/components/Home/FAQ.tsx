@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import {
     Accordion,
     AccordionDetails,
@@ -13,6 +13,7 @@ import {
     LAYOUT_CONTENT_TEXT,
     SvgComponent
 } from '../../../../../core/presentation/components/Layout/helpers';
+import { COLORS } from '../../../../../core/theme/colors';
 
 import { FAQStyle } from './styles';
 
@@ -59,7 +60,7 @@ const FaqItem = ({ question, answer }: {
     return (
 
         <Accordion
-            sx={{ width: '100%' }}
+            sx={{ width: '100%', background: COLORS.DARK_BLUE[50] }}
             disableGutters elevation={0} expanded={expanded} onChange={handleChange}>
             <AccordionSummary
                 sx={{ height: '80px' }}

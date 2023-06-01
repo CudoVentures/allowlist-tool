@@ -1,6 +1,5 @@
 import { StdSignature } from 'cudosjs'
 import { createSlice } from '@reduxjs/toolkit'
-import { CHAIN_DETAILS } from '../utilities/Constants'
 import { DISCORD_SERVER_ROLES } from '../../../../common/interfaces'
 
 export interface RequiredAllowlistData {
@@ -39,6 +38,7 @@ export interface FetchedAllowlist extends Omit<CollectedData, 'checkedFields' | 
     end_date: Date;
     discord_invite_link?: string;
     discord_server_name?: string;
+    isExpired?: boolean;
 }
 
 export interface AllowlistCreationData extends CollectedData {
@@ -55,7 +55,7 @@ export const initialState: CollectedData = {
     editMode: false,
     name: '',
     url: '',
-    cosmos_chain_id: CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK],
+    cosmos_chain_id: '',
     end_date: undefined,
     end_time: undefined,
     end_period: undefined,

@@ -7,16 +7,17 @@ import AppRoutes from "../../../../features/app-routes/entities/AppRoutes";
 import useNavigateToRoute from "../../../utilities/CustomHooks/useNavigateToRoute";
 import { RootState } from "../../../store";
 import { SocialMediaButtons } from "../../../../features/allowlists/presentation/components/helpers";
-import { COLORS_DARK_THEME } from "../../../theme/colors";
+import { COLORS } from "../../../theme/colors";
+import { LAYOUT_CONTENT_TEXT, SvgComponent } from "./helpers";
 
 import { headerStyles } from "./styles";
 
 const MENU_ITEMS = [
-    { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST },
-    { text: 'Explore', route: AppRoutes.ALLOWLISTS }
+    { text: 'Explore', route: AppRoutes.ALLOWLISTS },
+    { text: 'Create', route: AppRoutes.CREATE_ALLOWLIST }
 ]
 
-const Menu = (): JSX.Element => {
+const Menu = ({ hamburger }: { hamburger?: boolean }): JSX.Element => {
 
     const navigateToRoute = useNavigateToRoute()
     const location = useLocation()
@@ -41,24 +42,45 @@ const Menu = (): JSX.Element => {
         return (
             <Typography
                 fontWeight={700}
-                sx={{ cursor: 'pointer' }}
+                sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', width: 'max-content' }}
                 onClick={() => navigateToRoute(route)}
-                color={isActive(route) ? COLORS_DARK_THEME.PRIMARY_BLUE : 'inherit'}
+                color={isActive(route) ? COLORS.LIGHT_BLUE[90] : 'inherit'}
             >
+                {text === 'Create' ? <SvgComponent
+                    type={LAYOUT_CONTENT_TEXT.PlusIcon}
+                    style={{ height: '18px' }}
+                /> : null}
                 {text}
             </Typography>
         )
     }
 
+    const StyledDivider = () => {
+        return (
+            <Divider
+                orientation={hamburger ? 'horizontal' : 'vertical'}
+                sx={{ ...headerStyles.divider, height: hamburger ? '1px' : '24px', width: hamburger ? '100%' : 'auto' }}
+            />
+        )
+    }
+
     return (
-        <Box gap={2} sx={{ display: 'flex', alignItems: 'center' }} >
+        <Box gap={hamburger ? 4 : 2} sx={{ width: '100%', display: 'flex', flexDirection: hamburger ? 'column' : 'row', alignItems: hamburger ? 'flex-start' : 'center', justifyContent: 'flex-end' }} >
             {MENU_ITEMS.map((item, idx) => {
                 return <MenuItem key={idx} route={item.route} text={item.text} />
             })}
             {connectedAddress ?
                 <Fragment>
-                    <Divider orientation='vertical' sx={headerStyles.divider} />
-                    <SocialMediaButtons />
+                    <StyledDivider />
+                    <SocialMediaButtons hamburger={hamburger} />
+                    <StyledDivider />
+                    <Box sx={{ display: 'flex' }}>
+                        <SvgComponent
+                            type={LAYOUT_CONTENT_TEXT.PersonIcon}
+                            style={{ height: '24px', width: "24px", color: isActive(AppRoutes.DASHBOARD) ? COLORS.LIGHT_BLUE[90] : 'inherit' }}
+                        />
+                        <MenuItem route={AppRoutes.DASHBOARD} text={'Dashboard'} />
+                    </Box>
                 </Fragment>
                 : null}
         </Box>

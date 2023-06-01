@@ -3,15 +3,19 @@ import SVG from 'react-inlinesvg';
 import moment from "moment";
 import { Box, Divider } from '@mui/material';
 import { JdenticonConfig, toSvg } from 'jdenticon';
-import { Circles as CirclesSpinner } from 'svg-loaders-react';
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
-import { CHAIN_DETAILS } from '../../../utilities/Constants';
-import { COLORS_DARK_THEME } from '../../../theme/colors';
+import { APP_DETAILS } from '../../../utilities/Constants';
+import { COLORS } from '../../../theme/colors';
 import walletIcon from '../../../../public/assets/vectors/wallet-icon.svg';
+import magnifyingGlass from '../../../../public/assets/vectors/magnifying-glass.svg';
 import arrowDown from '../../../../public/assets/vectors/arrow-down.svg';
 import userIcon from '../../../../public/assets/vectors/user-icon.svg';
+import personIcon from '../../../../public/assets/vectors/person-icon.svg';
 import arrowRight from '../../../../public/assets/vectors/menu-arrow-right.svg';
 import linkIcon from '../../../../public/assets/vectors/link-icon.svg';
+import searchIcon from '../../../../public/assets/vectors/search-icon.svg';
+import sortingIcon from '../../../../public/assets/vectors/sorting-icon.svg';
 import infoIcon from '../../../../public/assets/vectors/info-icon.svg';
 import keplrLogo from '../../../../public/assets/vectors/keplr-logo.svg';
 import cosmostationLogo from '../../../../public/assets/vectors/cosmostation-logo.svg';
@@ -60,6 +64,8 @@ import { generalStyles } from '../../../../features/allowlists/presentation/page
 import { headerStyles, helperStyles } from './styles';
 
 export enum LAYOUT_CONTENT_TEXT {
+    PersonIcon = 'Person Icon',
+    MagnifyingGlass = 'Magnifying Glass Icon',
     FailureIcon = 'Failure icon',
     SuccessIcon = 'Success icon',
     RocketIcon = 'Rocket icon',
@@ -79,6 +85,8 @@ export enum LAYOUT_CONTENT_TEXT {
     LinkIcon = 'Link icon',
     InfoIcon = 'Info icon',
     KeplrLogo = 'Keplr logo',
+    SearchIcon = 'Search icon',
+    SortingIcon = 'Sorting icon',
     TwitterIcon = 'Twitter icon',
     TelegramIcon = 'Telegram icon',
     DiscordIcon = 'Discord icon',
@@ -115,6 +123,10 @@ export enum LAYOUT_CONTENT_TEXT {
 }
 
 const SVG_SRC_MAPPER = {
+    [LAYOUT_CONTENT_TEXT.PersonIcon]: personIcon,
+    [LAYOUT_CONTENT_TEXT.MagnifyingGlass]: magnifyingGlass,
+    [LAYOUT_CONTENT_TEXT.SortingIcon]: sortingIcon,
+    [LAYOUT_CONTENT_TEXT.SearchIcon]: searchIcon,
     [LAYOUT_CONTENT_TEXT.FailureIcon]: failureIcon,
     [LAYOUT_CONTENT_TEXT.SuccessIcon]: successIcon,
     [LAYOUT_CONTENT_TEXT.RocketIcon]: rocketIcon,
@@ -204,7 +216,7 @@ export const FOOTER = {
         { text: 'Privacy Policy', url: 'https://www.cudos.org/privacy-policy' },
         { text: 'cudos.org', url: 'https://www.cudos.org/' },
         { text: `License © 2018 - ${moment().year()}`, url: 'https://www.cudos.org/' },
-        { text: `${CHAIN_DETAILS.DEPLOYMENT_VERSION}`, url: `https://github.com/CudoVentures/cudos-allowlist-tool/releases/tag/${CHAIN_DETAILS.DEPLOYMENT_VERSION}` }
+        { text: `${APP_DETAILS.DEPLOYMENT_VERSION}`, url: `https://github.com/CudoVentures/cudos-allowlist-tool/releases/tag/${APP_DETAILS.DEPLOYMENT_VERSION}` }
     ],
     RIGHT_LINKS: [
         { icon: <SvgComponent style={FOOTER_ICON_STYLE} type={LAYOUT_CONTENT_TEXT.TwitterIcon} />, url: 'https://twitter.com/CUDOS_' },
@@ -253,7 +265,7 @@ export const HashBasedUserAvatar = ({
     return (
         <Box sx={{
             ...helperStyles.imgHolder,
-            bgcolor: COLORS_DARK_THEME.DARK_BACKGROUND,
+            bgcolor: COLORS.DARK_BLUE[100],
             padding: `${size / 5}px`
         }}
         >
@@ -270,7 +282,6 @@ export const SVG_FRAMES = {
     frame1674: frame1674
 }
 
-export const StyledCircleSpinner = () => {
-    return <CirclesSpinner style={generalStyles.spinner}
-        fill={COLORS_DARK_THEME.PRIMARY_BLUE} />
+export const StyledPuffLoader = () => {
+    return <OvalLoader style={generalStyles.spinner} />
 }

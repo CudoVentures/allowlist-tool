@@ -9,12 +9,12 @@ import { RootState } from "../../../../core/store";
 import { CollectedData, FetchedAllowlist } from "../../../../core/store/allowlist";
 import { CONNECTED_SOCIAL_MEDIA, DISCORD_SERVER_ROLES, SOCIAL_MEDIA } from "../../../../../../common/interfaces";
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers";
-import { COLORS_DARK_THEME } from "../../../../core/theme/colors";
+import { COLORS } from "../../../../core/theme/colors";
 import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedia";
 import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
 import { updateModalState } from "../../../../core/store/modals";
-import { TailSpin as TailSpinLoader } from 'svg-loaders-react'
+import { Oval as OvalLoader } from 'svg-loaders-react'
 
 import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
@@ -31,6 +31,7 @@ export type SocialMediaUserActions = {
 }
 
 export enum FormFieldErrors {
+    connectWalletToSetChainId = 'Connect your Wallet to set a Chain ID',
     description = 'Have to be between 20 and 500 characters',
     minimumFiveChars = 'Have to be minimum 5 characters',
     invalidCustomUrl = 'Invalid format. Have to be 5 to 20 letters with no special characters and spaces',
@@ -47,6 +48,7 @@ export enum BaseURL {
 }
 
 export enum FormField {
+    cosmos_chain_id = 'cosmos_chain_id',
     end_period = 'end_period',
     tweet = 'tweet',
     name = 'name',
@@ -61,6 +63,7 @@ export enum FormField {
 }
 
 export const FieldTooltips = {
+    [FormField.cosmos_chain_id]: FormFieldErrors.connectWalletToSetChainId,
     [FormField.name]: FormFieldErrors.minimumFiveChars,
     [FormField.url]: FormFieldErrors.invalidCustomUrl,
     [FormField.website]: FormFieldErrors.url,
@@ -80,7 +83,7 @@ export const getStartAdornment = (text: string): JSX.Element => {
                 sx={{ marginRight: '-6px' }}
                 fontWeight={600}
                 variant='subtitle2'
-                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_50}>
+                color={COLORS.STEEL_GRAY[50]}>
                 {text}
             </Typography>
         </InputAdornment>
@@ -114,7 +117,7 @@ export const onChange = (e: any, stateFunc: React.Dispatch<React.SetStateAction<
     stateFunc(e.target.value);
 };
 
-export const SocialMediaButtons = () => {
+export const SocialMediaButtons = ({ hamburger }: { hamburger?: boolean }) => {
 
     const { connectSocialMedia, disconnectSocialMedia } = useSocialMedia()
     const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
@@ -123,13 +126,12 @@ export const SocialMediaButtons = () => {
         const [openMenu, setOpenMenu] = useState<boolean>(false)
         const isDisconnected = !connectedSocialMedia[media].id
         const displayName = media.charAt(0).toUpperCase() + media.slice(1)
-        return (
-            <ClickAwayListener
-                onClickAway={() => setOpenMenu(false)}
-                children={<Box sx={{ flexDirection: 'column', display: 'flex', position: 'relative' }}>
+        return hamburger ?
+            (
+                <Box gap={2} sx={{ display: 'flex', position: 'relative', height: '48px', marginTop: '-10px' }}>
                     <Typography
                         fontWeight={700}
-                        sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                        sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: isDisconnected ? 'pointer' : 'auto', display: 'flex', alignItems: 'center' }}
                         onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
                         onClick={() => isDisconnected ? connectSocialMedia(connectedAddress, media) : null}
                     >
@@ -137,35 +139,64 @@ export const SocialMediaButtons = () => {
                             type={type}
                             style={menuStyles.logoItem}
                         />
-                        {isDisconnected ? `Connect ${displayName}` :
+                        {isDisconnected ? `Connect ${hamburger ? displayName : ''}` :
                             `${connectedSocialMedia[media].userName}`}
-                        {isDisconnected ? null :
-                            <SvgComponent
-                                type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                                style={{ marginLeft: '5px', color: COLORS_DARK_THEME.PRIMARY_BLUE, transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
-                            />}
                     </Typography>
-                    <Collapse
-                        onMouseLeave={() => setOpenMenu(false)}
-                        sx={headerStyles.SMcollapse}
-                        in={openMenu}
-                    >
-                        <Paper elevation={1} sx={headerStyles.dropDownContentHolder}>
-                            <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                    {isDisconnected ? null :
+                        <Paper id="dropDownDisconnectBtnHolder" elevation={1} sx={headerStyles.dropDownDisconnectBtnHolder}>
+                            <Box gap={2} sx={{ ...headerStyles.dropDownItemHolder, cursor: 'pointer', justifyContent: "center" }}>
                                 <Typography onClick={() => disconnectSocialMedia(media)}>
                                     {`Disconnect`}
                                 </Typography>
                             </Box>
-                        </Paper>
-                    </Collapse>
+                        </Paper>}
                 </Box>
-                }
-            />
-        )
+            )
+            :
+            (
+                <ClickAwayListener
+                    onClickAway={() => setOpenMenu(false)}
+                    children={<Box sx={{ display: 'flex', position: 'relative' }}>
+                        <Typography
+                            fontWeight={700}
+                            sx={{ minWidth: 'max-content', minHeight: 'max-content', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                            onMouseOver={() => isDisconnected ? null : setOpenMenu(true)}
+                            onClick={() => isDisconnected ? connectSocialMedia(connectedAddress, media) : null}
+                        >
+                            <SvgComponent
+                                type={type}
+                                style={menuStyles.logoItem}
+                            />
+                            {isDisconnected ? `Connect` :
+                                `${connectedSocialMedia[media].userName}`}
+                            {isDisconnected ? null :
+                                <SvgComponent
+                                    type={LAYOUT_CONTENT_TEXT.ArrowIcon}
+                                    style={{ marginLeft: '5px', color: COLORS.LIGHT_BLUE[90], transform: openMenu ? 'rotate(180deg)' : 'rotate(360deg)' }}
+                                />}
+                        </Typography>
+                        <Collapse
+                            orientation={'vertical'}
+                            onMouseLeave={() => setOpenMenu(false)}
+                            sx={headerStyles.SMcollapse}
+                            in={!isDisconnected && (hamburger || openMenu)}
+                        >
+                            <Paper id="dropDownDisconnectBtnHolder" elevation={1} sx={headerStyles.dropDownDisconnectBtnHolder}>
+                                <Box gap={2} sx={headerStyles.dropDownItemHolder}>
+                                    <Typography onClick={() => disconnectSocialMedia(media)}>
+                                        {`Disconnect`}
+                                    </Typography>
+                                </Box>
+                            </Paper>
+                        </Collapse>
+                    </Box>
+                    }
+                />
+            )
     }
 
     return (
-        <Box gap={3} display='flex'>
+        <Box gap={3} display='flex' flexDirection={hamburger ? 'column' : 'row'}>
             <StyledTypography
                 type={LAYOUT_CONTENT_TEXT.TwitterIcon}
                 media={SOCIAL_MEDIA.twitter}
@@ -188,7 +219,7 @@ export const SocialMediaBoxes = ({
 
     const dispatch = useDispatch()
     const { connectSocialMedia } = useSocialMedia()
-    const { connectedSocialMedia, connectedAddress } = useSelector((state: RootState) => state.userState)
+    const { connectedSocialMedia, connectedAddress, chosenChainId } = useSelector((state: RootState) => state.userState)
     const { ongoingEligibilityCheck } = useSelector((state: RootState) => state.modalState)
     const {
         followTwitterAccount,
@@ -225,14 +256,14 @@ export const SocialMediaBoxes = ({
         })
 
         return valid ?
-            <CheckCircleIcon style={{ color: COLORS_DARK_THEME.PRIMARY_BLUE }} /> :
-            <HighlightOffIcon style={{ color: COLORS_DARK_THEME.TESTNET_ORANGE }} />
+            <CheckCircleIcon style={{ color: COLORS.LIGHT_BLUE[90] }} /> :
+            <HighlightOffIcon style={{ color: COLORS.RED[60] }} />
 
     }, [isUserJoinedAllowlist, followTwitterAccount, likeTweet, retweetTweet, joinDiscordServer])
 
     const getCheckBox = (action: SocialMediaAction[]) => {
         if (ongoingEligibilityCheck) {
-            return <TailSpinLoader style={{ width: '24px', height: '24px', margin: '9px' }} />
+            return <OvalLoader style={{ width: '24px', height: '24px', margin: '9px', stroke: COLORS.LIGHT_BLUE[90] }} />
         }
         return <Checkbox
             value={action}
@@ -243,7 +274,7 @@ export const SocialMediaBoxes = ({
 
     return (
         <Fragment>
-            {connectedAddress ? null :
+            {connectedAddress && props.cosmos_chain_id === chosenChainId ? null :
                 <Fragment>
                     <Box id='connectWalletBox' sx={allowListStyles.socialBox}>
                         <Box sx={allowListStyles.socialBoxHeader}>
@@ -254,7 +285,7 @@ export const SocialMediaBoxes = ({
                                 alignItems='center'
                             >
                                 <SvgComponent type={LAYOUT_CONTENT_TEXT.WalletLogo} style='default' />
-                                Connect Wallet
+                                {!connectedAddress ? "Connect Wallet" : `Connect ${props.cosmos_chain_id} account`}
                             </Typography>
                             <Button
                                 variant="contained"
@@ -281,7 +312,7 @@ export const SocialMediaBoxes = ({
                         </Typography>
                         {isUserJoinedAllowlist ? null : connectedSocialMedia.twitter.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
-                                <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                                <Typography variant='subtitle2' color={COLORS.STEEL_GRAY[20]}>
                                     Connected:
                                 </Typography>
                                 <Typography variant='subtitle2'>
@@ -290,7 +321,7 @@ export const SocialMediaBoxes = ({
                             </Box>
                             :
                             <Button
-                                disabled={!connectedAddress}
+                                disabled={!connectedAddress || props.cosmos_chain_id !== chosenChainId}
                                 variant="contained"
                                 sx={{ height: '40px', width: '104px' }}
                                 onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.twitter)}
@@ -308,7 +339,7 @@ export const SocialMediaBoxes = ({
                                 label={<Typography
                                     lineHeight='normal'
                                     variant='subtitle2'
-                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                    color={COLORS.STEEL_GRAY[20]}
                                 >
                                     {`Follow `}
                                     <LinkBox link={`${BaseURL.twitter_acc}${props.twitter_account_to_follow}`} text={props.twitter_account_to_follow} />
@@ -330,7 +361,7 @@ export const SocialMediaBoxes = ({
                                 label={<Typography
                                     lineHeight='normal'
                                     variant='subtitle2'
-                                    color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                    color={COLORS.STEEL_GRAY[20]}
                                 >
                                     {`${twitterActions.join('& ')}`}
                                     <LinkBox link={`${props.tweet || props.tweet_to_like || props.tweet_to_retweet}`} text={'@Tweet'} />
@@ -353,7 +384,7 @@ export const SocialMediaBoxes = ({
                         </Typography>
                         {isUserJoinedAllowlist ? null : connectedSocialMedia.discord.userName ?
                             <Box gap={1} sx={{ display: 'fex' }}>
-                                <Typography variant='subtitle2' color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}>
+                                <Typography variant='subtitle2' color={COLORS.STEEL_GRAY[20]}>
                                     Connected:
                                 </Typography>
                                 <Typography variant='subtitle2'>
@@ -362,7 +393,7 @@ export const SocialMediaBoxes = ({
                             </Box>
                             :
                             <Button
-                                disabled={!connectedAddress}
+                                disabled={!connectedAddress || props.cosmos_chain_id !== chosenChainId}
                                 variant="contained"
                                 sx={{ height: '40px', width: '104px' }}
                                 onClick={() => connectSocialMedia(connectedAddress, SOCIAL_MEDIA.discord)}
@@ -380,7 +411,7 @@ export const SocialMediaBoxes = ({
                                 component={"div"}
                                 lineHeight='normal'
                                 variant='subtitle2'
-                                color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                                color={COLORS.STEEL_GRAY[20]}
                             >
                                 {`Join `}
                                 <LinkBox link={`${BaseURL.discord_server}${props.discord_invite_link}`} text={props.discord_server_name} />
@@ -513,4 +544,9 @@ export const getRegistrationCriteriaArray = (props: CollectedData | FetchedAllow
             subtitle: null
         },
     ]
+}
+
+export const isExpired = (time: Date) => {
+    const now = Date.now()
+    return now > new Date(time).valueOf()
 }

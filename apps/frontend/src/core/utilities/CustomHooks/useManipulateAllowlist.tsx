@@ -15,7 +15,7 @@ import {
 
 const useManipulateAllowlist = () => {
 
-    const { connectedAddress, connectedWallet } = useSelector((state: RootState) => state.userState)
+    const { connectedAddress, connectedWallet, chosenChainId } = useSelector((state: RootState) => state.userState)
     const { disconnectSocialMedia } = useSocialMedia()
 
     const joinAllowlist = useCallback(async (allowlistId: number, userEmail: string, requiredSocialMedia: { [key in SOCIAL_MEDIA]: boolean }): Promise<{ success: boolean, message: string }> => {
@@ -42,7 +42,7 @@ const useManipulateAllowlist = () => {
         }
 
         const message = JSON.stringify(data);
-        const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
+        const { signature } = await signArbitrary(chosenChainId, connectedWallet, connectedAddress, message)
 
         try {
             await JOIN_ALLOWLIST(allowlistId, {
@@ -94,7 +94,7 @@ const useManipulateAllowlist = () => {
             // }
             // for now don't sign anything specific
             const message = `Updating ${data.name} Allowlist`
-            const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
+            const { signature } = await signArbitrary(collectedData.cosmos_chain_id, connectedWallet, connectedAddress, message)
 
             const reqData = {
                 ...data,
@@ -134,7 +134,7 @@ const useManipulateAllowlist = () => {
 
         try {
             const message = JSON.stringify(data);
-            const { signature } = await signArbitrary(connectedWallet, connectedAddress, message)
+            const { signature } = await signArbitrary(collectedData.cosmos_chain_id, connectedWallet, connectedAddress, message)
 
             const reqData = {
                 ...data,
