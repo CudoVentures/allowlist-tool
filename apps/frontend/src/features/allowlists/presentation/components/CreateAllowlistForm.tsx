@@ -1,13 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import { Box, Divider, MenuItem, Select, TextField, Tooltip, Typography } from '@mui/material';
+import { Box, Divider, TextField, Tooltip, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { chains } from 'chain-registry';
 import { FileUploader } from "react-drag-drop-files";
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
+import { getCosmosNetworkImg } from 'cudosjs';
 
 import { RootState } from '../../../../core/store';
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors';
+import { COLORS } from '../../../../core/theme/colors';
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from '../../../../core/presentation/components/Layout/helpers';
 import { acceptedImgTypes, BaseURL, FieldTooltips, FormField, getStartAdornment } from './helpers';
 import { isValidEndPeriod } from '../../validation';
@@ -16,15 +16,15 @@ import { setBlobToB64Img } from '../../../../core/utilities/ProjectUtils';
 import CreationField from './CreationField';
 
 import { allowlistDetailsStyles, generalStyles, validationStyles } from './styles';
+import { styles } from '../../../../core/presentation/components/Dialog/ModalComponents/WalletSelector/styles';
 
 const CreateAllowlistForm = () => {
 
   const dispatch = useDispatch()
-  const [availableChainIDs, setAvailableChainIDs] = useState<string[]>([])
-  const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
   const [bannerPreview, setBannerPreview] = useState<string>('')
   const [avatarPreview, setAvatarPreview] = useState<string>('')
   const allowlistState = useSelector((state: RootState) => state.allowlistState)
+  const { chosenChainId, connectedAddress } = useSelector((state: RootState) => state.userState)
 
   const MandatoryField = ({ text }: { text: string }) => {
 
@@ -34,7 +34,7 @@ const CreateAllowlistForm = () => {
         <Tooltip title={'Mandatory Field'}>
           <Typography
             component={'span'}
-            color={COLORS_DARK_THEME.PRIMARY_BLUE}
+            color={COLORS.LIGHT_BLUE[90]}
             sx={{ cursor: 'pointer' }}
           >
             *
@@ -43,7 +43,7 @@ const CreateAllowlistForm = () => {
       </Fragment>
     )
   }
-  
+
   useEffect(() => {
     if (allowlistState.banner_image) {
       setBlobToB64Img(allowlistState.banner_image, setBannerPreview)
@@ -79,22 +79,6 @@ const CreateAllowlistForm = () => {
 
   }, [allowlistState.end_time, allowlistState.end_date])
 
-  useEffect(() => {
-    const cosmosChainIDs = chains.map((chain) => {
-      return chain.chain_id
-    })
-
-    if (cosmosChainIDs) {
-      const sortedChainIDs = cosmosChainIDs
-        .sort((a, b) => a
-          .localeCompare(b, undefined, { sensitivity: 'base' }))
-      setAvailableChainIDs(sortedChainIDs)
-      return
-    }
-
-    setAvailableChainIDs([])
-  }, [])
-
   return (
     <Box id='createAllowlistForm' width='100%'>
       <Box
@@ -124,49 +108,19 @@ const CreateAllowlistForm = () => {
             text='Description'
             placeholder='Enter Description'
           />
-          <Box id='allowlistCosmosBlockchainIDInput'>
-            <Typography fontWeight={600}>
-              <MandatoryField text={'Cosmos Blockchain ID'} />
-            </Typography>
-            <Select
-              disabled
-              disableUnderline
-              displayEmpty
-              variant='standard'
-              open={dropDownOpen}
-              onOpen={() => setDropDownOpen(true)}
-              onClose={() => setDropDownOpen(false)}
-              renderValue={() =>
-                allowlistState.cosmos_chain_id ?
-                  allowlistState.cosmos_chain_id :
-                  <Typography sx={allowlistDetailsStyles.dropDownPlaceholder}>Select a chain</Typography>
-              }
-              sx={allowlistDetailsStyles.defaultDropDown}
-              value={allowlistState.cosmos_chain_id}
-              onChange={(e) => dispatch(updateAllowlistObject({ cosmos_chain_id: e.target.value }))}
-              IconComponent={() => <Fragment></Fragment>
-                // <Box
-                //   sx={{ transform: dropDownOpen ? 'rotate(180deg)' : 'none' }}
-                //   onClick={() => setDropDownOpen(true)}
-                // >
-                // <SvgComponent
-                //   type={LAYOUT_CONTENT_TEXT.ArrowIcon}
-                //   style={allowlistDetailsStyles.dropdownIcon}
-                // />
-                // </Box>
-              }
-            >
-              <MenuItem
-                key={allowlistState.cosmos_chain_id}
-                value={allowlistState.cosmos_chain_id}
-              >
-                {allowlistState.cosmos_chain_id}
-              </MenuItem>
-              {/* {availableChainIDs.map((CHAIN_ID, idx) => {
-                return <MenuItem key={idx} value={CHAIN_ID}>{CHAIN_ID}</MenuItem>
-              })} */}
-            </Select>
-          </Box>
+          <CreationField
+            type={FormField.cosmos_chain_id}
+            startAdornment={connectedAddress && chosenChainId && getCosmosNetworkImg(chosenChainId) ?
+              <img
+                src={getCosmosNetworkImg(chosenChainId)}
+                alt={`Network logo`}
+                style={{ ...styles.logo, marginRight: '10px' }}
+              />
+              : null}
+            text={<MandatoryField text={'Cosmos Blockchain'} />}
+            placeholder={'Set a Chain ID'}
+            isDisabled={true}
+          />
           <CreationField
             type={FormField.website}
             text='Website URL'
@@ -200,7 +154,7 @@ const CreateAllowlistForm = () => {
             </Typography>
             <Typography
               variant='subtitle2'
-              color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+              color={COLORS.STEEL_GRAY[20]}
             >
               This image will be used as profile image on your allowlist page. 350 x 350 recommended.
             </Typography>
@@ -224,7 +178,7 @@ const CreateAllowlistForm = () => {
                     <Typography
                       fontWeight={600}
                       variant='subtitle2'
-                      color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                      color={COLORS.STEEL_GRAY[20]}
                     >
                       Browse or Drop Here
                     </Typography>
@@ -239,7 +193,7 @@ const CreateAllowlistForm = () => {
             </Typography>
             <Typography
               variant='subtitle2'
-              color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+              color={COLORS.STEEL_GRAY[20]}
             >
               This image will appear at the top of your allow list page. 1400 x 400 px recommended.            </Typography>
             <Box sx={allowlistDetailsStyles.bannerUploaderHolder}>
@@ -262,7 +216,7 @@ const CreateAllowlistForm = () => {
                     <Typography
                       fontWeight={600}
                       variant='subtitle2'
-                      color={COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20}
+                      color={COLORS.STEEL_GRAY[20]}
                     >
                       Browse or Drop Here
                     </Typography>

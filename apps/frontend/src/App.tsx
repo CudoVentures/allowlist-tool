@@ -17,11 +17,12 @@ import CreateAllowlistPage from './features/allowlists/presentation/pages/Create
 import AllowlistPage from './features/allowlists/presentation/pages/AllowlistPage';
 import EditAllowlistPage from './features/allowlists/presentation/pages/EditAllowlist';
 import AllAllowlistsPage from './features/allowlists/presentation/pages/AllAllowlistsPage';
+import DashboardPage from './features/allowlists/presentation/pages/Dashboard';
 import { updateModalState } from './core/store/modals';
-import { connectUser } from './features/wallets/helpers';
-import { updateUser } from './core/store/user';
 import useSocialMedia from './core/utilities/CustomHooks/useSocialMedia';
 import { WS_MSGS, WS_ROOM } from '../../common/interfaces';
+import RequireConnectedWallet from './core/presentation/components/RequireConnectedWallet';
+import useDisconnectUser from './core/utilities/CustomHooks/useDisconnect';
 
 declare let Config: { APP_WS_ID: any, APP_URL: any };
 
@@ -54,14 +55,15 @@ const App = () => {
 
   const location = useLocation()
   const dispatch = useDispatch()
+  const disconnectUser = useDisconnectUser()
   const { disconnectAllSocialMedias } = useSocialMedia()
 
-  const reconnectUser = useCallback(async (ledgerType: SUPPORTED_WALLET) => {
+  const reconnectUser = useCallback(async () => {
     try {
       dispatch(updateModalState({ pageTransitionLoading: true }))
-      const connectedUser = await connectUser(ledgerType)
+      await disconnectUser()
       await disconnectAllSocialMedias()
-      dispatch(updateUser(connectedUser))
+      dispatch(updateModalState({ selectWallet: true }))
 
     } catch (error) {
       console.error((error as Error).message)
@@ -75,7 +77,7 @@ const App = () => {
     if (isExtensionEnabled(SUPPORTED_WALLET.Keplr)) {
       window.addEventListener("keplr_keystorechange",
         async () => {
-          await reconnectUser(SUPPORTED_WALLET.Keplr)
+          await reconnectUser()
           return
         });
     }
@@ -83,7 +85,7 @@ const App = () => {
     if (isExtensionEnabled(SUPPORTED_WALLET.Cosmostation)) {
       window.cosmostation.cosmos.on("accountChanged",
         async () => {
-          await reconnectUser(SUPPORTED_WALLET.Cosmostation)
+          await reconnectUser()
           return
         });
     }
@@ -121,6 +123,12 @@ const App = () => {
                   path={AppRoutes.ALLOWLISTS}
                   element={<AllAllowlistsPage />}
                 />
+                <Route element={<RequireConnectedWallet />}>
+                  <Route
+                    path={AppRoutes.DASHBOARD}
+                    element={<DashboardPage />}
+                  />
+                </Route>
                 <Route
                   path="*"
                   element={<Navigate to={AppRoutes.MAIN} state={{ from: location }} />}

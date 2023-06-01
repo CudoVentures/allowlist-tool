@@ -3,28 +3,28 @@ import { createTheme } from '@mui/material/styles'
 import { fontSize, fontWeight } from '@mui/system'
 
 import CustomBit from '../../public/fonts/CustomBit.woff'
-import { COLORS_DARK_THEME } from './colors'
+import { COLORS } from './colors'
 
 const theme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
       light: '',
-      main: COLORS_DARK_THEME.PRIMARY_BLUE,
+      main: COLORS.LIGHT_BLUE[90],
       dark: ''
     },
     secondary: {
       light: '',
-      main: COLORS_DARK_THEME.SECONDARY_DARK,
+      main: COLORS.STEEL_GRAY[80],
       dark: ''
     },
     background: {
-      default: COLORS_DARK_THEME.DARK_BACKGROUND,
-      paper: COLORS_DARK_THEME.DARK_BACKGROUND
+      default: COLORS.DARK_BLUE[100],
+      paper: COLORS.DARK_BLUE[100]
     },
     text: {
-      primary: COLORS_DARK_THEME.PRIMARY_TEXT,
-      secondary: COLORS_DARK_THEME.SECONDARY_TEXT
+      primary: COLORS.LIGHT_BLUE[10],
+      secondary: COLORS.STEEL_GRAY[40]
     }
   },
   typography: {
@@ -63,7 +63,7 @@ const theme = createTheme({
             borderRadius: "32px",
           },
           padding: '10px 10px 10px 20px',
-          background: COLORS_DARK_THEME.PRIMARY_DARK_BLUE_50
+          background: COLORS.LIGHT_BLUE[50]
         }
       }
     },
@@ -81,44 +81,45 @@ const theme = createTheme({
           fontWeight: 700,
           borderRadius: '26px',
           textTransform: 'none',
-          color: 'white',
+          color: COLORS.LIGHT_BLUE[10],
           padding: '16px 24px 16px 24px',
         },
         containedPrimary: {
           fontWeight: 700,
           borderRadius: '26px',
-          background: COLORS_DARK_THEME.PRIMARY_BLUE,
-          color: 'white',
+          background: COLORS.LIGHT_BLUE[90],
+          color: COLORS.LIGHT_BLUE[10],
           padding: '16px 24px 16px 24px',
           textTransform: 'none',
           '&:hover': {
-            background: COLORS_DARK_THEME.PRIMARY_BLUE_HOVER
+            background: COLORS.LIGHT_BLUE[80]
           },
           '&:click': {
-            background: COLORS_DARK_THEME.PRIMARY_BLUE_CLICK
+            background: COLORS.LIGHT_BLUE[70]
           },
           '&:disabled': {
-            background: COLORS_DARK_THEME.PRIMARY_BLUE_DISABLED
+            background: COLORS.STEEL_GRAY[90],
+            color: COLORS.STEEL_GRAY[50]
           }
         },
         containedSecondary: {
           borderRadius: '26px',
-          background: COLORS_DARK_THEME.SECONDARY_BLUE,
-          color: 'red',
+          background: COLORS.STEEL_GRAY[90],
+          color: COLORS.LIGHT_BLUE[10],
           padding: '16px 24px 16px 24px',
           textTransform: 'none',
           '&:hover': {
-            background: COLORS_DARK_THEME.SECONDARY_BLUE_HOVER
+            background: COLORS.STEEL_GRAY[90]
           },
           '&:click': {
-            background: COLORS_DARK_THEME.SECONDARY_BLUE_CLICK
+            background: COLORS.STEEL_GRAY[70]
           },
           '&:disabled': {
-            background: COLORS_DARK_THEME.SECONDARY_BLUE_DISABLED
+            color: COLORS.STEEL_GRAY[50]
           }
         },
         textPrimary: {
-          color: COLORS_DARK_THEME.PRIMARY_BLUE,
+          color: COLORS.LIGHT_BLUE[10],
           fontWeight: 700,
           textTransform: 'none',
           '&:hover': {
@@ -133,7 +134,8 @@ const theme = createTheme({
         input: {
           '&::placeholder': {
             textOverflow: 'ellipsis !important',
-            color: COLORS_DARK_THEME.PRIMARY_STEEL_GRAY_20,
+            color: COLORS.STEEL_GRAY[20],
+            opacity: 1,
             fontSize: '14px',
             fontWeight: 600
           }
@@ -157,17 +159,28 @@ const theme = createTheme({
     },
     MuiCssBaseline: {
       styleOverrides: {
+        'body': {
+          overflowY: 'scroll',
+        },
+        'body::-webkit-scrollbar': {
+          width: '4px',
+          backgroundColor: 'transparent',
+        },
+        'body::-webkit-scrollbar-thumb': {
+          borderRadius: '2px',
+          backgroundColor: 'transparent',
+        },
         html: {
           ...darkScrollbar({
             track: 'transparent',
-            thumb: COLORS_DARK_THEME.SECONDARY_TEXT,
+            thumb: COLORS.STEEL_GRAY[40],
             active: 'transparent'
           }),
           '*::-webkit-scrollbar': {
             width: '4px'
           },
           '*::-webkit-scrollbar-thumb': {
-            background: COLORS_DARK_THEME.SECONDARY_TEXT,
+            background: COLORS.STEEL_GRAY[40],
             borderRadius: '2px'
           }
         },
@@ -191,7 +204,7 @@ const theme = createTheme({
     MuiTable: {
       styleOverrides: {
         root: {
-          background: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
+          background: COLORS.STEEL_GRAY[100],
           boxShadow: 'none',
           borderRadius: '5px',
           borderCollapse: 'collapse',
@@ -210,8 +223,8 @@ const theme = createTheme({
     MuiTableHead: {
       styleOverrides: {
         root: {
-          background: COLORS_DARK_THEME.LIGHT_BACKGROUND,
-          color: COLORS_DARK_THEME.SECONDARY_TEXT
+          background: COLORS.STEEL_GRAY[90],
+          color: COLORS.STEEL_GRAY[40]
         }
       }
     },
@@ -227,7 +240,7 @@ const theme = createTheme({
     MuiTabs: {
       styleOverrides: {
         root: {
-          background: COLORS_DARK_THEME.LIGHT_BACKGROUND,
+          background: COLORS.STEEL_GRAY[90],
           borderRadius: '30px',
           minHeight: '34px',
           height: '34px'
@@ -240,7 +253,7 @@ const theme = createTheme({
     MuiTab: {
       styleOverrides: {
         root: {
-          background: COLORS_DARK_THEME.LIGHT_BACKGROUND,
+          background: COLORS.STEEL_GRAY[90],
           borderRadius: '30px',
           fontSize: '12px',
           fontWeight: 600,
@@ -248,7 +261,7 @@ const theme = createTheme({
           height: '34px',
           textTransform: 'capitalize',
           '&.Mui-selected': {
-            background: COLORS_DARK_THEME.PRIMARY_BLUE,
+            background: COLORS.LIGHT_BLUE[90],
             transition: 'background .3s ease-in-out'
           }
         }
@@ -257,9 +270,9 @@ const theme = createTheme({
   },
   custom: {
     backgrounds: {
-      light: COLORS_DARK_THEME.LIGHT_BACKGROUND,
-      primary: COLORS_DARK_THEME.PRIMARY_BACKGROUND,
-      dark: COLORS_DARK_THEME.DARK_BACKGROUND
+      light: COLORS.STEEL_GRAY[90],
+      primary: COLORS.STEEL_GRAY[100],
+      dark: COLORS.DARK_BLUE[100]
     }
   }
 })

@@ -216,13 +216,13 @@ export class AllowlistService {
                 user.discord_profile_id
                 && user.discord_profile_id === u.discord_profile_id
             ) {
-                throw new BadRequestException('Discord profile is already registered');
+                throw new BadRequestException(`${user.discord_profile_username} is already registered for ${allowlistEntity.name}`);
             }
             if (
                 user.twitter_profile_id
                 && user.twitter_profile_id === u.twitter_profile_id
             ) {
-                throw new BadRequestException('Twitter profile is already registered');
+                throw new BadRequestException(`${user.twitter_profile_username} is already registered for ${allowlistEntity.name}`);
             }
         }
     }

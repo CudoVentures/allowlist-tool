@@ -1,14 +1,15 @@
-import { Box, Link, Tooltip } from "@mui/material"
+import { Box, Link, Tooltip, Typography } from "@mui/material"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
 import copy from "copy-to-clipboard"
+import { getAtomscanExplorerUrl, getCosmosNetworkImg, getCosmosNetworkPrettyName } from "cudosjs"
 
 import { RootState } from "../store"
-import { EXPLORER_ADDRESS_DETAILS } from "../api/endpoints"
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../presentation/components/Layout/helpers"
-import { COLORS_DARK_THEME } from "./colors"
+import { COLORS } from "./colors"
 
 import { themeStyles } from "./themeStyles"
+import { styles } from "../presentation/components/Dialog/ModalComponents/WalletSelector/styles"
 
 export const GradientText = ({
     text,
@@ -39,10 +40,32 @@ export const GradientText = ({
     )
 }
 
+export const ConnectedChain = ({ isHamburger }: { isHamburger: boolean }): JSX.Element => {
+
+    const { chosenChainId } = useSelector((state: RootState) => state.userState)
+    return !!chosenChainId ? (
+        <Box gap={2} sx={isHamburger ? themeStyles.centerFlexLinear : themeStyles.centerFlexColumn}>
+            <Box sx={themeStyles.logoHolder}>
+                {getCosmosNetworkImg(chosenChainId) ?
+                    <img
+                        src={getCosmosNetworkImg(chosenChainId)}
+                        alt={`Network logo`}
+                        style={styles.logo}
+                    /> : null}
+                {getCosmosNetworkPrettyName(chosenChainId) ?
+                    getCosmosNetworkPrettyName(chosenChainId) : null}
+            </Box>
+            <Typography variant="subtitle2" color={COLORS.STEEL_GRAY[20]}>
+                {chosenChainId}
+            </Typography>
+        </Box>
+    ) : null
+}
+
 export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.Element => {
 
-    const { connectedNetwork } = useSelector((state: RootState) => state.userState)
     const [copied, setCopied] = useState<boolean>(false)
+    const { chosenChainId } = useSelector((state: RootState) => state.userState)
 
     const handleCopy = (value: string) => {
         copy(value)
@@ -57,17 +80,17 @@ export const CopyAndFollowComponent = ({ address }: { address: string }): JSX.El
         <Box gap={1} style={themeStyles.centerFlexLinear}>
             <Box sx={themeStyles.iconHolder}>
                 <Tooltip
-                    title={copied ? 'Copied' : 'Copy to clipboard'}
+                    title={copied ? 'Copied' : 'Copy address to clipboard'}
                 >
                     <Box sx={{ cursor: 'pointer' }} onClick={() => handleCopy(address)}>
-                        <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px', color: COLORS_DARK_THEME.PRIMARY_BLUE }} />
+                        <SvgComponent type={LAYOUT_CONTENT_TEXT.CopyIcon} style={{ width: '24px', height: '24px', color: COLORS.LIGHT_BLUE[90] }} />
                     </Box>
                 </Tooltip>
             </Box>
             <Box sx={themeStyles.iconHolder}>
                 <Tooltip title="Check address on explorer">
                     <Link
-                        href={EXPLORER_ADDRESS_DETAILS(connectedNetwork, address)}
+                        href={getAtomscanExplorerUrl(chosenChainId, address)}
                         rel="noreferrer"
                         target='Checking address on explorer'
                     >
@@ -89,7 +112,7 @@ export const LinkBox = ({ link, text, children }: { link: 'none' | string, text?
             href={link}
             rel="noreferrer"
             underline="none"
-            color={noLink ? 'inherit' : COLORS_DARK_THEME.PRIMARY_BLUE}
+            color={noLink ? 'inherit' : COLORS.LIGHT_BLUE[90]}
         >
             {text ? text : link}
         </Link>

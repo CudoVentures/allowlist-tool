@@ -23,7 +23,7 @@ const ConfigFrontend = {};
 if (!envs.error) {
     Object.keys(envs.parsed).forEach((propName) => {
         let exposedVariable = true;
-        for (let i = propName.length; i-- > 0; ) {
+        for (let i = propName.length; i-- > 0;) {
             if (propName[i] >= 'a' && propName[i] <= 'z') {
                 exposedVariable = false;
             }
@@ -101,7 +101,7 @@ module.exports = function () {
         module: {
             rules: [
                 {
-                    test: /\.(woff2|woff|eot|ttf|otf)$/,
+                    test: /\.(jpeg|png|woff2|woff|eot|ttf|otf)$/,
                     use: ["file-loader"],
                 },
                 {

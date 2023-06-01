@@ -8,6 +8,7 @@ import useNavigateToRoute from "./useNavigateToRoute"
 import useSocialMedia from "./useSocialMedia"
 import { initialState as initialUserState } from "../../store/user"
 import { initialState as initialModalState } from "../../store/modals"
+import { initialState as initialAllowlistState, updateAllowlistObject } from "../../store/allowlist"
 
 const useDisconnectUser = () => {
 
@@ -23,6 +24,7 @@ const useDisconnectUser = () => {
         await disconnectAllSocialMedias()
         dispatch(updateUser(initialUserState))
         dispatch(updateModalState(initialModalState))
+        dispatch(updateAllowlistObject(initialAllowlistState))
         navigateToRoute(AppRoutes.MAIN)
     }
 

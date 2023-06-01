@@ -7,7 +7,7 @@ import Stepper, { Controls } from '../components/Stepper';
 import RegistrationCriteriaForm from '../components/RegistrationCriteria';
 import AllowlistCreationPreview from '../components/AllowlistCreationPreview';
 import { initialState as initialAllowlistState, updateAllowlistObject } from '../../../../core/store/allowlist';
-import { StyledCircleSpinner } from '../../../../core/presentation/components/Layout/helpers';
+import { StyledPuffLoader } from '../../../../core/presentation/components/Layout/helpers';
 import { updateUser } from '../../../../core/store/user';
 import { RootState } from '../../../../core/store';
 import { emptyGuildInfo } from '../../../../../../common/interfaces';
@@ -70,7 +70,7 @@ const CreateAllowlistPage = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   }, [currentCreationStep])
 
-  return loading ? <StyledCircleSpinner /> : (
+  return loading ? <StyledPuffLoader /> : (
     <Box id='createAllowlistPage' sx={createAllowlistStyles.holder}>
       <Box gap={4} id='contentHolder' sx={createAllowlistStyles.contentHolder}>
         <Box>

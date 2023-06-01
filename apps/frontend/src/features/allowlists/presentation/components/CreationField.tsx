@@ -1,11 +1,13 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Box, Input, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Input, Tooltip, Typography } from '@mui/material'
+import { getCosmosNetworkPrettyName } from 'cudosjs';
 
 import { BaseURL, FieldTooltips, FormField } from './helpers'
 import { RootState } from '../../../../core/store';
 import { getFieldisValid } from '../../validation';
 import { updateAllowlistObject } from '../../../../core/store/allowlist';
+import { updateModalState } from '../../../../core/store/modals';
 
 import { generalStyles, registrationCriteriaStyles, validationStyles } from './styles'
 
@@ -33,7 +35,7 @@ const CreationField = ({
     const [isValid, setIsValid] = useState<boolean>(true)
     const [pastedData, setPastedData] = useState<boolean>(false)
     const allowlistState = useSelector((state: RootState) => state.allowlistState)
-    const { connectedSocialMedia } = useSelector((state: RootState) => state.userState)
+    const { connectedSocialMedia, connectedAddress, chosenChainId } = useSelector((state: RootState) => state.userState)
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         let value = e.target.value
@@ -59,11 +61,41 @@ const CreationField = ({
             return ''
         }
 
+        if (type === FormField.cosmos_chain_id) {
+            if (!connectedAddress) {
+                return ''
+            }
+            const prettyName = getCosmosNetworkPrettyName(allowlistState[type])
+            if (prettyName) {
+                return `${prettyName} (${allowlistState[type]})`
+            }
+        }
+
         if (type === FormField.discord_server) {
             return `${BaseURL.discord_server}${allowlistState[type]}`
         }
 
         return allowlistState[type]
+    }
+
+    const handleTooltipOpen = () => {
+        if (!isValid || isConnectedDiscordServer()) {
+            return true
+        }
+        return false
+    }
+
+    const handleEndAdornment = () => {
+        if (type === FormField.cosmos_chain_id && !isValid) {
+            return <Button
+                variant="contained"
+                sx={{ height: '40px', width: '104px' }}
+                onClick={() => dispatch(updateModalState({ selectWallet: true }))}
+            >
+                Connect
+            </Button>
+        }
+        return null
     }
 
     const isConnectedDiscordServer = (): boolean => {
@@ -83,6 +115,20 @@ const CreationField = ({
             setIsValid(true)
         }
     }, [switchElement, switched])
+
+    useEffect(() => {
+        if (!connectedAddress) {
+            dispatch(updateAllowlistObject({ cosmos_chain_id: '' }))
+        } else {
+            dispatch(updateAllowlistObject({ cosmos_chain_id: chosenChainId }))
+        }
+    }, [connectedAddress])
+
+    useEffect(() => {
+        if (type === FormField.cosmos_chain_id) {
+            setIsValid(!!allowlistState.cosmos_chain_id && !!connectedAddress)
+        }
+    }, [allowlistState.cosmos_chain_id, connectedAddress])
 
     const getInputStyles = () => {
         if (isConnectedDiscordServer()) {
@@ -115,7 +161,7 @@ const CreationField = ({
                     componentsProps={isConnectedDiscordServer() ?
                         validationStyles.connectedTooltipProps :
                         validationStyles.tooltipProps}
-                    open={!isValid || isConnectedDiscordServer()}
+                    open={handleTooltipOpen()}
                     title={!isValid ?
                         FieldTooltips[type] : isConnectedDiscordServer() ?
                             `Connected to ${connectedSocialMedia.discord.guild.guildName} server` :
@@ -124,6 +170,7 @@ const CreationField = ({
                     <Input
                         disabled={isDisabled}
                         startAdornment={startAdornment ? startAdornment : null}
+                        endAdornment={handleEndAdornment()}
                         placeholder={placeholder ? placeholder : null}
                         multiline={type === FormField.description ? true : false}
                         rows={type === FormField.description ? 3 : 1}

@@ -7,12 +7,14 @@ import userStateReducer from './user'
 import modalStateReducer from './modals'
 import allowlistStateReducer from './allowlist'
 import socialMediaActionsStateReducer from './socialMediaActions'
+import searchStateReducer from './search'
 
 const rootReducer = combineReducers({
     userState: userStateReducer,
     modalState: modalStateReducer,
     allowlistState: allowlistStateReducer,
-    socialMediaActionsState: socialMediaActionsStateReducer
+    socialMediaActionsState: socialMediaActionsStateReducer,
+    searchState: searchStateReducer
 })
 
 const persistConfig = {

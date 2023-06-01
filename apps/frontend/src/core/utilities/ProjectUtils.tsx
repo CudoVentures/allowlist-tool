@@ -1,7 +1,6 @@
 import { DISCORD_API_MSGS, DISCORD_SERVER_ROLES } from "../../../../common/interfaces"
 import { blobToBase64 } from "../../features/allowlists/presentation/components/helpers"
 import { GET_GUILD_NAME_BY_INVITE_CODE, GET_ROLE_NAME_BY_ROLE_ID } from "../api/calls"
-import { CHAIN_DETAILS } from "./Constants"
 
 export const getServerRoleNameByRoleId = async (inviteCode: string, roleId: string): Promise<string> => {
   try {
@@ -72,8 +71,4 @@ export const formatAddress = (text: string, sliceIndex: number): string => {
     return text
   }
   return `${text.slice(0, sliceIndex)}...${text.slice(len - 4, len)}`
-}
-
-export const isMainnetInstance = (): boolean => {
-  return CHAIN_DETAILS.CHAIN_ID[CHAIN_DETAILS.DEFAULT_NETWORK] === CHAIN_DETAILS.CHAIN_ID.MAINNET
 }

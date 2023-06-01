@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import { LAYOUT_CONTENT_TEXT, SvgComponent } from "../../../../core/presentation/components/Layout/helpers"
-import { COLORS_DARK_THEME } from '../../../../core/theme/colors'
+import { COLORS } from '../../../../core/theme/colors'
 import { RootState } from '../../../../core/store'
 import { isValidStepOne, isValidStepTwo } from '../../validation'
 import useManipulateAllowlist from '../../../../core/utilities/CustomHooks/useManipulateAllowlist'
@@ -119,7 +119,7 @@ export const Controls = ({
                 >
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.ArrowRight}
-                        style={{ rotate: '180deg', color: COLORS_DARK_THEME.PRIMARY_BLUE, marginRight: '10px' }}
+                        style={{ rotate: '180deg', color: COLORS.LIGHT_BLUE[90], marginRight: '10px' }}
                     />
                     Back
                 </Button> : null}

@@ -21,7 +21,8 @@ const useNavigateToRoute = () => {
             }, 300)
             setTimeout(() => {
                 dispatch(updateModalState({
-                    pageTransitionLoading: false
+                    pageTransitionLoading: false,
+                    hamburgerMenu: false,
                 }))
             }, 600)
         }
