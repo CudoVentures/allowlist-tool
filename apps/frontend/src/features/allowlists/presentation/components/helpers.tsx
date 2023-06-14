@@ -34,7 +34,7 @@ export enum FormFieldErrors {
     connectWalletToSetChainId = 'Connect your Wallet to set a Chain ID',
     description = 'Have to be between 20 and 1000 characters',
     minimumFiveChars = 'Have to be minimum 5 characters',
-    invalidCustomUrl = 'Invalid format. Have to be 5 to 20 letters with no special characters and spaces',
+    invalidCustomUrl = 'Invalid format. Have to be 5 to 50 letters with no special characters and spaces',
     url = 'Invalid URL format',
     twitterAcc = 'Invalid Twitter Account',
     discordServer = 'Invalid Discord Server',
