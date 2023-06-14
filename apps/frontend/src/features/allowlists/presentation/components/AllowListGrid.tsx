@@ -135,7 +135,7 @@ const AllowListGrid = ({
                         {`${displayData.length} Allowlists`}
                     </Typography> : null}
                 </Box>
-                {withSearchBar ? <SearchBar displayDataLength={displayData.length} networks={defaultData.map((allowlist) => { return allowlist.cosmos_chain_id })} /> : null}
+                {withSearchBar ? <SearchBar displayDataLength={displayData.length} networks={[...new Set(defaultData.map((allowlist) => allowlist.cosmos_chain_id))]} /> : null}
             </Box>
             <GridList
                 data={displayData}
