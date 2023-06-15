@@ -63,10 +63,11 @@ export const SummaryView = ({
         setLogoLoaded(true)
     }, [])
 
-    const StyledTypography = ({ text, color }: { text: string, color?: string }): JSX.Element => {
+    const StyledTypography = ({ text, color, prewrap }: { text: string, color?: string, prewrap?: boolean }): JSX.Element => {
         return (
             <Typography
                 variant='subtitle1'
+                whiteSpace={prewrap ? 'pre-wrap' : undefined}
                 color={color ? color : COLORS.STEEL_GRAY[20]}
             >
                 {text}
@@ -125,8 +126,7 @@ export const SummaryView = ({
                     <Typography variant='h6' fontWeight={700}>
                         Description
                     </Typography>
-                    <StyledTypography text={props.description} />
-
+                    <StyledTypography text={props.description} prewrap={true} />
                 </Box>
                 : null}
             {props.website || props.twitter_account || props.discord_url ?
