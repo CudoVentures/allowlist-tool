@@ -26,13 +26,13 @@ const GridCardContent = ({ allowlist, width }: { allowlist: FetchedAllowlist, wi
 
     useEffect(() => {
         if (allowlist.banner_image) {
-            setBlobToB64Img(allowlist.banner_image, setBanner)
+            setBlobToB64Img(allowlist.banner_image, setBanner, { MAX_WIDTH: 284, MAX_HEIGHT: 210 })
         } else {
             setBanner('')
         }
 
         if (allowlist.image) {
-            setBlobToB64Img(allowlist.image, setAvatar)
+            setBlobToB64Img(allowlist.image, setAvatar, { MAX_WIDTH: 128, MAX_HEIGHT: 128 })
         } else {
             setAvatar('')
         }
