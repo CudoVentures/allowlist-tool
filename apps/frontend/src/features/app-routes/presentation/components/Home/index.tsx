@@ -22,16 +22,10 @@ const InitialLoading = () => {
       <ClipLoader
         color={COLORS.LIGHT_BLUE[90]}
         loading={true}
-        size={45}
+        size={35}
         aria-label="Loading Spinner"
         data-testid="loader"
       />
-      {/* <GradientText
-        text={'loading'.toUpperCase()}
-        fontFamily='CudosBit'
-        startColor={'rgba(252, 247, 109, 1)'}
-        endColor={'rgba(255, 253, 202, 1)'}
-      /> */}
     </Box>
   )
 }

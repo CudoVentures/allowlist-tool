@@ -160,7 +160,7 @@ export const generalStyles = {
         background: COLORS.STEEL_GRAY[100]
     },
     spinner: {
-        marginTop: '45vh',
+        marginTop: '40vh',
         display: 'flex',
         alignSelf: 'center',
     }
