@@ -20,8 +20,8 @@ function AllowlistPage() {
     if (loading) {
       return <StyledPuffLoader />
     }
-    if (Object.keys(allowlist || {}).length) {
-      return <Allowlist props={{ ...allowlist, end_date: new Date(allowlist.end_date) }} />
+    if (allowlist && Object.keys(allowlist).length) {
+      return <Allowlist props={allowlist} />
     }
   }, [loading, allowlist])
 
@@ -31,7 +31,7 @@ function AllowlistPage() {
       try {
         setLoading(true)
         const res = await GET_ALLOWLIST_DETAILS(id)
-        const data = res.data;
+        let data = res.data;
         delete data.createdAt;
         delete data.updatedAt;
         if (data.discord_invite_link) {
@@ -40,6 +40,7 @@ function AllowlistPage() {
             data.server_role = await getServerRoleNameByRoleId(data.discord_invite_link, data.server_role)
           }
         }
+        data = { ...data, end_date: new Date(data.end_date) }
         setAllowlist(data);
 
       } catch (error) {
