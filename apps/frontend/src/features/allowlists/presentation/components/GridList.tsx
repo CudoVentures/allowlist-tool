@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 import { Box, Grid } from '@mui/material';
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { FetchedAllowlist } from "../../../../core/store/allowlist";
 import GridCardContent from './GridCardContent';
@@ -19,7 +19,7 @@ const GridList = ({ data, withCreateBox }) => {
   return (
     <Box sx={{ width: '100%' }}
     >
-      {activeSearch ? <OvalLoader style={{ position: 'absolute', top: '50%', left: '50%', stroke: COLORS.LIGHT_BLUE[90] }} /> :
+      {activeSearch ? <ClipLoader color={COLORS.LIGHT_BLUE[90]} cssOverride={{ position: 'absolute', top: '50%', left: '50%' }} /> :
         <Fragment>
           <Box sx={allowlistDetailsStyles.contentHolder} >
             <Grid container

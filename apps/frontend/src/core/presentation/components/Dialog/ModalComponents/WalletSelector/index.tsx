@@ -3,7 +3,7 @@ import { Box, Tooltip, Typography, Dialog as MuiDialog, MenuItem, Select } from 
 import { LoadingButton } from '@mui/lab'
 import { ThreeDots as ThreeDotsLoading } from 'svg-loaders-react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 import {
   detectUserBrowser,
@@ -256,7 +256,7 @@ const WalletSelector = () => {
           </Typography>
           {selectChainId ?
             <Box gap={3} style={styles.btnsHolder}>
-              {loadSelectChainId ? <OvalLoader style={styles.ovalLoader} /> :
+              {loadSelectChainId ? <ClipLoader color={COLORS.LIGHT_BLUE[90]} cssOverride={styles.ovalLoader} /> :
                 <Fragment>
                   <Select
                     disableUnderline
@@ -337,7 +337,7 @@ const WalletSelector = () => {
             </Box>
             :
             <Box gap={3} style={styles.btnsHolder}>
-              {loadSelectChainId ? <OvalLoader style={styles.ovalLoader} /> :
+              {loadSelectChainId ? <ClipLoader color={COLORS.LIGHT_BLUE[90]} cssOverride={styles.ovalLoader} /> :
                 <Fragment>
                   {getSupportedWallets().map((wallet, idx) => {
                     return (

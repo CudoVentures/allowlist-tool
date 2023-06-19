@@ -36,20 +36,22 @@ const CreateAllowlistPage = () => {
 
   const cleanUp = () => {
     dispatch(updateAllowlistObject(initialAllowlistState))
-    dispatch(updateUser({
-      connectedSocialMedia: {
-        twitter: {
-          id: connectedSocialMedia.twitter.id,
-          userName: connectedSocialMedia.twitter.userName,
-          guild: emptyGuildInfo
-        },
-        discord: {
-          id: connectedSocialMedia.discord.id,
-          userName: connectedSocialMedia.discord.userName,
-          guild: emptyGuildInfo
+    if (connectedSocialMedia && (connectedSocialMedia.twitter || connectedSocialMedia.discord)) {
+      dispatch(updateUser({
+        connectedSocialMedia: {
+          twitter: {
+            id: connectedSocialMedia.twitter ? connectedSocialMedia.twitter.id : '',
+            userName: connectedSocialMedia.twitter ? connectedSocialMedia.twitter.userName : '',
+            guild: emptyGuildInfo
+          },
+          discord: {
+            id: connectedSocialMedia.discord ? connectedSocialMedia.discord.id : '',
+            userName: connectedSocialMedia.discord ? connectedSocialMedia.discord.userName : '',
+            guild: emptyGuildInfo
+          }
         }
-      }
-    }))
+      }))
+    }
   }
 
   // CLEAN-UP

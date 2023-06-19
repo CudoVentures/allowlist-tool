@@ -160,10 +160,8 @@ export const generalStyles = {
         background: COLORS.STEEL_GRAY[100]
     },
     spinner: {
-        width: '40px',
-        height: '80vh',
+        marginTop: '45vh',
         display: 'flex',
         alignSelf: 'center',
-        stroke: COLORS.LIGHT_BLUE[90]
     }
 }

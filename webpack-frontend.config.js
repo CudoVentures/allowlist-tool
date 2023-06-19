@@ -60,7 +60,25 @@ module.exports = function () {
         mode: process.env.NODE_ENV,
         externals: [],
         devtool: devTool,
-        optimization,
+        optimization: {
+            ...optimization,
+            splitChunks: {
+                chunks: 'all',
+                minSize: 30000,
+                maxSize: 100000,
+                minChunks: 1,
+                maxAsyncRequests: 5,
+                maxInitialRequests: 3,
+                automaticNameDelimiter: '~',
+                cacheGroups: {
+                    vendor: {
+                        test: /[\\/]node_modules[\\/]/,
+                        name: 'vendor',
+                        chunks: 'all',
+                    },
+                },
+            },
+        },
         entry: Path.join(srcPath, 'main.tsx'),
         output: {
             filename: '[name]-[fullhash].js',

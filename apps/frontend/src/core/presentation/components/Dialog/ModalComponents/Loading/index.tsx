@@ -1,7 +1,7 @@
 import React from 'react'
 import { Box, Dialog as MuiDialog, Typography } from '@mui/material'
 import { useSelector } from 'react-redux'
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { RootState } from '../../../../../store'
 import { COLORS } from '../../../../../../core/theme/colors'
@@ -24,7 +24,7 @@ const Loading = () => {
             }}>
                 {message ?
                     <Box gap={2} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                        {loadingSpinner ? <OvalLoader style={{ width: '60px', height: '60px', stroke: COLORS.LIGHT_BLUE[90] }} /> : null}
+                        {loadingSpinner ? <ClipLoader color={COLORS.LIGHT_BLUE[90]} cssOverride={{ width: '60px', height: '60px' }} /> : null}
                         <Typography variant='h5'>{message}</Typography>
                     </Box>
                     : null}
