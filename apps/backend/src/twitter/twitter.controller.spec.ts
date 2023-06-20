@@ -8,7 +8,7 @@ describe('TwitterController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [TwitterController],
-            imports: [TwitterModule]
+            imports: [TwitterModule],
         }).compile();
 
         controller = module.get<TwitterController>(TwitterController);

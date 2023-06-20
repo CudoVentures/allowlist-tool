@@ -1,16 +1,16 @@
 import {
-  Body,
-  Controller,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Put,
-  Req,
-  Request,
-  UnauthorizedException,
-  UseGuards,
-  UseInterceptors,
+    Body,
+    Controller,
+    Get,
+    Param,
+    ParseIntPipe,
+    Post,
+    Put,
+    Req,
+    Request,
+    UnauthorizedException,
+    UseGuards,
+    UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { TransactionInterceptor } from '../common/common.interceptors';
@@ -30,20 +30,20 @@ import { SignedMessageDto } from './dto/signed-message.dto';
 @ApiTags('Allowlist')
 @Controller('allowlist')
 export class AllowlistController {
-  constructor(private allowlistService: AllowlistService) { }
+    constructor(private allowlistService: AllowlistService) { }
 
   @Get('all')
-  async findAll(): Promise<AllowlistEntity[]> {
-    return this.allowlistService.findAll();
-  }
+    async findAll(): Promise<AllowlistEntity[]> {
+        return this.allowlistService.findAll();
+    }
 
   @Get(':allowlistId/user/joined')
   async isUserJoinedAllowlist(
     @Req() req,
     @Param('allowlistId') allowlistId: number,
   ): Promise<boolean> {
-    const sessionUserId = req.session.user?.id as number
-    return this.allowlistService.isUserJoinedAllowlist(allowlistId, sessionUserId);
+      const sessionUserId = req.session.user?.id as number
+      return this.allowlistService.isUserJoinedAllowlist(allowlistId, sessionUserId);
   }
 
   @Get(':allowlistId/user/address/:address')
@@ -52,40 +52,40 @@ export class AllowlistController {
     @Param('allowlistId') allowlistId: number,
     @Param('address') address: string,
   ): Promise<{ userEntity: UserEntity }> {
-    const userEntity = await this.allowlistService.getUserByAllowlistIdAndAddress(allowlistId, address);
+      const userEntity = await this.allowlistService.getUserByAllowlistIdAndAddress(allowlistId, address);
 
-    return {
-      userEntity,
-    }
+      return {
+          userEntity,
+      }
   }
 
   @Get(':customId')
   async findByCustomId(
     @Param('customId') customId: string,
   ): Promise<AllowlistEntity> {
-    return this.allowlistService.findByCustomId(customId);
+      return this.allowlistService.findByCustomId(customId);
   }
 
   @Get('/id/:id')
   async findById(
     @Param('id', ParseIntPipe) id: number,
   ): Promise<{ allowlistEntity: AllowlistEntity }> {
-    const allowlistEntity = await this.allowlistService.findOne(id);
+      const allowlistEntity = await this.allowlistService.findOne(id);
 
-    return {
-      allowlistEntity,
-    }
+      return {
+          allowlistEntity,
+      }
   }
 
   @Get()
   async findByAdmin(@Request() req): Promise<AllowlistEntity[]> {
-    return this.allowlistService.findByAdmin(req.session.user.address);
+      return this.allowlistService.findByAdmin(req.session.user.address);
   }
 
   @Get('entries/:id')
   @UseGuards(IsAdminGuard)
   async getEntries(@Param('id', ParseIntPipe) id: number) {
-    return this.allowlistService.getEntries(id);
+      return this.allowlistService.getEntries(id);
   }
 
   @UseInterceptors(TransactionInterceptor)
@@ -95,24 +95,24 @@ export class AllowlistController {
     @Req() req,
     @Body(SignMessagePipe) joinAllowlistDto: JoinAllowlistDto,
   ) {
-    const sessionUser = req.session.user
-    // update user record
-    const allowlistUser = await this.allowlistService.joinAllowlist(
-      id,
-      joinAllowlistDto.connectedAddress,
-      joinAllowlistDto.userEmail,
-      sessionUser,
-    );
-    return allowlistUser
+      const sessionUser = req.session.user
+      // update user record
+      const allowlistUser = await this.allowlistService.joinAllowlist(
+          id,
+          joinAllowlistDto.connectedAddress,
+          joinAllowlistDto.userEmail,
+          sessionUser,
+      );
+      return allowlistUser
   }
 
   @UseInterceptors(TransactionInterceptor)
   @Post()
   async create(
     @Body(SignMessagePipe, CreateAllowlistPipe)
-    createAllowlistDto: CreateAllowlistDto,
+        createAllowlistDto: CreateAllowlistDto,
   ): Promise<AllowlistEntity> {
-    return this.allowlistService.createAllowlist(createAllowlistDto);
+      return this.allowlistService.createAllowlist(createAllowlistDto);
   }
 
   @UseInterceptors(TransactionInterceptor)
@@ -125,11 +125,11 @@ export class AllowlistController {
     @Body(SignMessagePipe) signedData: SignedMessageDto,
     @Body(EditAllowlistPipe) updateAllowlistDto: UpdateAllowlistDto,
   ): Promise<AllowlistEntity> {
-    // If we reach here, we are guarantied a valid allowlist admin in the session by the "IsAdminGuard" 
-    // and valid signer by "SignMessagePipe". We only have to compare them.
-    if (req.session.user.address === signedData.connectedAddress) {
-      return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
-    }
-    throw new UnauthorizedException('Invalid admin');
+      // If we reach here, we are guarantied a valid allowlist admin in the session by the "IsAdminGuard"
+      // and valid signer by "SignMessagePipe". We only have to compare them.
+      if (req.session.user.address === signedData.connectedAddress) {
+          return this.allowlistService.updateAllowlist(id, updateAllowlistDto);
+      }
+      throw new UnauthorizedException('Invalid admin');
   }
 }

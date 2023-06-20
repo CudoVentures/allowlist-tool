@@ -50,7 +50,7 @@ export class UserService {
     }
 
     async updateUser(id: number, params: any): Promise<UserEntity> {
-        const [count, [userRepo]] = await this.userRepo.update(
+        const [_count, [userRepo]] = await this.userRepo.update(
             {
                 ...params,
             },

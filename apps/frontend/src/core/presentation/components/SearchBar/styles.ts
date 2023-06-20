@@ -1,4 +1,4 @@
-import { COLORS } from "../../../theme/colors";
+import { COLORS } from '../../../theme/colors';
 
 export const styles = {
     sortingOrder: {
@@ -10,13 +10,14 @@ export const styles = {
         height: '48px',
         borderRadius: '64px',
         padding: '15px 20px',
-        border: `1px solid ${COLORS.STEEL_GRAY[70]}`
+        border: `1px solid ${COLORS.STEEL_GRAY[70]}`,
     },
     cancelIcon: {
         marginRight: '-10px',
         marginTop: '5px',
         cursor: 'pointer',
-        height: '20px', color: COLORS.STEEL_GRAY[40]
+        height: '20px',
+        color: COLORS.STEEL_GRAY[40],
     },
     searchBar: (expandSearchBar: boolean, noResult: boolean, width?: string) => {
         return {
@@ -43,19 +44,19 @@ export const styles = {
         height: '48px',
         borderRadius: '10px',
         width: '100%',
-        "&:focus": {
+        '&:focus': {
             backgroundColor: 'transparent !important',
         },
-        "&:hover": {
+        '&:hover': {
             cursor: 'pointer',
-            backgroundColor: `${COLORS.STEEL_GRAY[90]} !important`
+            backgroundColor: `${COLORS.STEEL_GRAY[90]} !important`,
         },
-        "&:selected:hover": {
-            backgroundColor: `${COLORS.STEEL_GRAY[90]} !important`
+        '&:selected:hover': {
+            backgroundColor: `${COLORS.STEEL_GRAY[90]} !important`,
         },
-        "&:focus:hover": {
-            backgroundColor: `${COLORS.STEEL_GRAY[90]} !important`
-        }
+        '&:focus:hover': {
+            backgroundColor: `${COLORS.STEEL_GRAY[90]} !important`,
+        },
     },
     chainSelectorDropoDownMenuProps: {
         PaperProps: {
@@ -65,8 +66,8 @@ export const styles = {
                     padding: '8px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '4px'
-                }
+                    gap: '4px',
+                },
             },
             style: {
                 display: 'flex',
@@ -85,8 +86,8 @@ export const styles = {
                     padding: '8px',
                     display: 'flex',
                     flexDirection: 'column',
-                    gap: '4px'
-                }
+                    gap: '4px',
+                },
             },
             style: {
                 display: 'flex',
@@ -95,14 +96,14 @@ export const styles = {
                 borderRadius: '8px',
                 marginLeft: '8px',
                 minWidth: '192px',
-                maxWidth: '192px'
+                maxWidth: '192px',
             },
         },
     },
     chainSelectorDropDown: {
         width: '100%',
         height: '48px',
-        borderRadius: '64px'
+        borderRadius: '64px',
     },
     filterDropDown: {
         padding: '15px 24px 15px 20px',
@@ -110,11 +111,11 @@ export const styles = {
         maxWidth: '192px',
         height: '48px',
         border: `1px solid ${COLORS.STEEL_GRAY[70]}`,
-        borderRadius: '64px'
+        borderRadius: '64px',
     },
     dropDownPlaceholder: {
         fontSize: '14px',
         fontWeight: 600,
-        color: COLORS.STEEL_GRAY[20]
-    }
+        color: COLORS.STEEL_GRAY[20],
+    },
 }

@@ -1,75 +1,75 @@
 import {
-  IsBoolean,
-  IsDateString,
-  IsNumber,
-  IsOptional,
-  IsString,
-  IsArray,
+    IsBoolean,
+    IsDateString,
+    IsNumber,
+    IsOptional,
+    IsString,
+    IsArray,
 } from 'class-validator';
 
 export class AllowlistJSONValidator {
   @IsNumber()
-  id: number;
+      id: number;
 
   @IsString()
-  admin: string;
+      admin: string;
 
   @IsArray()
   @IsString({ each: true })
-  users: string[];
+      users: string[];
 
   @IsString()
-  name: string;
+      name: string;
 
   @IsString()
-  url: string;
+      url: string;
 
   @IsString()
   @IsOptional()
-  description: string;
+      description: string;
 
   @IsString()
-  cosmos_chain_id: string;
+      cosmos_chain_id: string;
 
   @IsString()
-  website: string;
+      website: string;
 
   @IsString()
-  twitter_account: string;
+      twitter_account: string;
 
   @IsString()
-  discord_url: string;
+      discord_url: string;
 
   @IsDateString()
-  end_date: Date;
+      end_date: Date;
 
   @IsString()
-  image: string;
+      image: string;
 
   @IsString()
-  banner_image: string;
-
-  @IsString()
-  @IsOptional()
-  twitter_account_to_follow: string;
+      banner_image: string;
 
   @IsString()
   @IsOptional()
-  tweet_to_like: string;
+      twitter_account_to_follow: string;
 
   @IsString()
   @IsOptional()
-  tweet_to_retweet: string;
+      tweet_to_like: string;
 
   @IsString()
   @IsOptional()
-  discord_invite_link: string;
+      tweet_to_retweet: string;
 
   @IsString()
   @IsOptional()
-  server_role: string;
+      discord_invite_link: string;
+
+  @IsString()
+  @IsOptional()
+      server_role: string;
 
   @IsBoolean()
   @IsOptional()
-  require_email: boolean;
+      require_email: boolean;
 }

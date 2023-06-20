@@ -19,7 +19,7 @@ export class CanEditGuard implements CanActivate {
             throw new NotFoundException('Allowlist not found')
         }
 
-        if (!!allowlistFound.users.length) {
+        if (allowlistFound.users.length) {
             throw new ForbiddenException('Cannot edit if users already joined')
         }
 

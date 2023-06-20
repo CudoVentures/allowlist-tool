@@ -12,6 +12,7 @@ import {
     JOIN_ALLOWLIST,
     UPDATE_ALLOWLIST
 } from "../../api/calls";
+import { blobToBase64 } from "../../../features/allowlists/presentation/components/helpers";
 
 const useManipulateAllowlist = () => {
 
@@ -113,6 +114,9 @@ const useManipulateAllowlist = () => {
 
     const createAllowlist = useCallback(async (collectedData: CollectedData): Promise<{ success: boolean, message: string }> => {
 
+        const image = await blobToBase64(collectedData.image)
+        const banner_image = await blobToBase64(collectedData.banner_image)
+
         const data = {
             name: collectedData.name,
             url: collectedData.url,
@@ -128,8 +132,8 @@ const useManipulateAllowlist = () => {
             discord_invite_link: collectedData.discord_server,
             server_role: collectedData.server_role,
             require_email: collectedData.require_email,
-            image: collectedData.image,
-            banner_image: collectedData.banner_image
+            image: image,
+            banner_image: banner_image
         };
 
         try {

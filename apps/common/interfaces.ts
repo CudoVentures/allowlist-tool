@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 export interface GuildInfo {
     guildId: string;
     guildName: string;
@@ -26,7 +27,7 @@ export const emptyGuildInfo: GuildInfo = {
     guildName: '',
     systemChannelId: '',
     guildRoles: {},
-    inviteCode: ''
+    inviteCode: '',
 }
 
 export enum SOCIAL_MEDIA {
@@ -47,7 +48,7 @@ export const emptySocialMedia = {
     id: '',
     userName: '',
     accessToken: '',
-    guild: emptyGuildInfo
+    guild: emptyGuildInfo,
 }
 
 export enum DISCORD_SERVER_ROLES {
@@ -55,16 +56,16 @@ export enum DISCORD_SERVER_ROLES {
 }
 
 export const DISCORD_API_MSGS = {
-    ExpiredOrUnknownInvite: 'Expired or Invalid invite'
+    ExpiredOrUnknownInvite: 'Expired or Invalid invite',
 }
 
 export const AUTH_API_MSGS = {
-    NoUserSession: 'No User Session'
+    NoUserSession: 'No User Session',
 }
 
 export const TWITTER_API_MSGS = {
     InvalidAccount: 'Invalid Account',
     NotFollowingAcc: 'User Not Following The Specified Account',
     NotLikedTweet: 'User Not Liked The Specified Tweet',
-    NotRetweetedTweet: 'User Not Retweeted The Specified Tweet'
+    NotRetweetedTweet: 'User Not Retweeted The Specified Tweet',
 }

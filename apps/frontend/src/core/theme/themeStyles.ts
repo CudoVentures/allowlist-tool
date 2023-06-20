@@ -1,4 +1,4 @@
-import { COLORS } from "./colors";
+import { COLORS } from './colors';
 
 export const themeStyles = {
     logoHolder: {
@@ -6,22 +6,22 @@ export const themeStyles = {
         height: '24px',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     centerFlexLinear: {
         alignItems: 'center',
         display: 'flex',
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     centerFlexColumn: {
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     icons: {
         marginLeft: '10px',
-        cursor: 'pointer'
+        cursor: 'pointer',
     },
     iconHolder: {
         display: 'flex',
@@ -32,11 +32,11 @@ export const themeStyles = {
         padding: '12px',
         borderRadius: '50%',
         background: COLORS.STEEL_GRAY[90],
-        "&:hover": {
-            background: COLORS.STEEL_GRAY[80]
+        '&:hover': {
+            background: COLORS.STEEL_GRAY[80],
         },
         '&:click': {
-            background: COLORS.STEEL_GRAY[70]
-        }
-    }
+            background: COLORS.STEEL_GRAY[70],
+        },
+    },
 }

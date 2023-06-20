@@ -2,36 +2,36 @@ import { IsEmail, IsNumber, IsString } from 'class-validator';
 
 export class UserJSONValidator {
   @IsNumber()
-  id: number;
+      id: number;
 
   @IsString()
-  address: string;
+      address: string;
 
   @IsEmail()
   @IsString()
-  email: string;
+      email: string;
 
   @IsString()
-  twitter_profile_id: string;
+      twitter_profile_id: string;
 
   @IsString()
-  twitter_profile_username: string;
+      twitter_profile_username: string;
 
   @IsString()
-  twitter_access_token: string;
+      twitter_access_token: string;
 
   @IsString()
-  twitter_refresh_token: string;
+      twitter_refresh_token: string;
 
   @IsString()
-  discord_profile_id: string;
+      discord_profile_id: string;
 
   @IsString()
-  discord_profile_username: string;
+      discord_profile_username: string;
 
   @IsString()
-  discord_access_token: string;
+      discord_access_token: string;
 
   @IsString()
-  discord_refresh_token: string;
+      discord_refresh_token: string;
 }
