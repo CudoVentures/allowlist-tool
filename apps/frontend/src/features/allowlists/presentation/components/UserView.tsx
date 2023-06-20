@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography, Divider, Input, Button } from '@mui/material'
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { SvgComponent, LAYOUT_CONTENT_TEXT } from '../../../../core/presentation/components/Layout/helpers'
 import { COLORS } from '../../../../core/theme/colors'
@@ -75,7 +75,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
             }
 
             //HANDLING TWITTER REQUIREMENTS
-            if (isTwitterRequired && !!connectedSocialMedia.twitter.id) {
+            if (isTwitterRequired && !!connectedSocialMedia.twitter?.id) {
                 //If page to follow
                 if (!!props.twitter_account_to_follow) {
                     const isFollowingAcc = await IS_FOLLOWING_TWITTER_ACCOUNT(connectedSocialMedia.twitter.id, props.twitter_account_to_follow)
@@ -206,7 +206,7 @@ const UserView = ({ props }: { props: FetchedAllowlist }) => {
         }
     }, [props.id, connectedAddress, connectedSocialMedia.discord.id, connectedSocialMedia.twitter.id])
 
-    return loading ? <OvalLoader style={{ stroke: COLORS.LIGHT_BLUE[90] }} /> : (
+    return loading ? <ClipLoader color={COLORS.LIGHT_BLUE[90]} /> : (
         <Fragment>
             <Dialog />
             <Box sx={allowListStyles.title} style={{ flexDirection: isUserJoined ? 'column-reverse' : 'column' }}>

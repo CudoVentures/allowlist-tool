@@ -156,10 +156,12 @@ const CreateAllowlistForm = () => {
               variant='subtitle2'
               color={COLORS.STEEL_GRAY[20]}
             >
-              This image will be used as profile image on your allowlist page. 350 x 350 recommended.
+              This image will be used as profile image on your allowlist page. 350 x 350 recommended (max 0.3mb in size)
             </Typography>
             <Box sx={allowlistDetailsStyles.fileUploaderHolder}>
               <FileUploader
+                maxSize={0.3}
+                onSizeError={() => alert('Invalid size')}
                 handleChange={(file: Blob) => dispatch(updateAllowlistObject({ image: file }))}
                 types={acceptedImgTypes}
                 children={
@@ -195,9 +197,11 @@ const CreateAllowlistForm = () => {
               variant='subtitle2'
               color={COLORS.STEEL_GRAY[20]}
             >
-              This image will appear at the top of your allow list page. 1400 x 400 px recommended.            </Typography>
+              This image will appear at the top of your allow list page. 1400 x 400 px recommended. (max 0.5mb in size)           </Typography>
             <Box sx={allowlistDetailsStyles.bannerUploaderHolder}>
               <FileUploader
+                onSizeError={() => alert('Invalid')}
+                maxSize={0.5}
                 handleChange={(file: Blob) => dispatch(updateAllowlistObject({ banner_image: file }))}
                 types={acceptedImgTypes}
                 children={

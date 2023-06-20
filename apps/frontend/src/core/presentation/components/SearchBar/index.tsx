@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { Box, Divider, Fade, Input, MenuItem, Select, Tooltip, Typography } from "@mui/material"
+import { Box, Divider, Fade, Input, MenuItem, Select, SelectChangeEvent, Tooltip, Typography } from "@mui/material"
 import { CancelRounded } from '@mui/icons-material'
 import { getCosmosNetworkPrettyName } from "cudosjs"
 
@@ -17,20 +17,31 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
 
     const dispatch = useDispatch()
     const searchBar = useRef<HTMLInputElement>()
-    const chainSelector = useRef<HTMLInputElement>()
+    const chainSelector = useRef<HTMLDivElement>()
+    const hide = useRef<HTMLDivElement>()
     const { searchTerms, appliedFilter, ascendingOrder, chainFilter, activeSearch } = useSelector((state: RootState) => state.searchState)
     const [filterOpen, setFilterOpen] = useState<boolean>(false)
     const [displaySortingIcon, setDisplaySortingIcon] = useState<boolean>(true)
     const [dropDownOpen, setDropDownOpen] = useState<boolean>(false)
-    const [expandChainSelector, setExpandChainSelector] = useState<boolean>(false)
     const [showChainSelectorCloseIcon, setChainSelectorCloseIcon] = useState<boolean>(false)
     const [chainSelectorPlaceholder, setChainSelectorPlaceholder] = useState<string>('')
+    const [chainSelectorOpen, setChainSelectorOpen] = useState<boolean>(false)
 
     const [showSearchBarCloseIcon, setShowSearchBarCloseIcon] = useState<boolean>(false)
     const [expandSearchBar, setExpandSearchBar] = useState<boolean>(false)
     const [searchBarPlaceholder, setSearchBarPlaceholder] = useState<string>('')
 
     const invalidSearch = expandSearchBar && !displayDataLength && !!searchTerms
+
+    const estimateStringWidth = (string: string, fontSize: string) => {
+        const element = document.createElement('span');
+        element.innerHTML = string;
+        element.style.fontSize = fontSize;
+        document.body.appendChild(element);
+        const width = element.getBoundingClientRect().width;
+        document.body.removeChild(element);
+        return width;
+    }
 
     const hasScrollbar = () => {
         return document.documentElement.scrollHeight > document.documentElement.clientHeight;
@@ -58,28 +69,40 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
     }
 
     //CHAIN SELECTOR
-    const handleChainSelectorTransitionEnd = () => {
-        if (expandChainSelector) {
-            chainSelector.current?.click()
-            setChainSelectorCloseIcon(true)
-            setChainSelectorPlaceholder('Select Network')
+    const handleNetworkFilterChange = (e: SelectChangeEvent<string>, child: React.ReactNode) => {
+        if (hide.current) {
+            hide.current.style.opacity = '0'
         }
+        const width = estimateStringWidth(e.target.value, '16px');
+        dispatch(updateSearchState({ chainFilter: e.target.value }));
+        setTimeout(() => {
+            chainSelector.current.style.width = `${width + 80}px`;
+
+        }, 200);
+        setTimeout(() => {
+            hide.current.style.opacity = '1'
+        }, 600)
     }
 
     const handleExpandChainSelector = () => {
-        setExpandChainSelector(true)
+        if (!chainSelectorOpen) {
+            chainSelector.current.style.width = '195px'
+            setTimeout(() => {
+                setChainSelectorCloseIcon(true)
+                setChainSelectorPlaceholder('Select Network')
+                setChainSelectorOpen(true)
+            }, 300)
+        }
     }
 
     const handleShrinkChainSelector = () => {
-        if (expandChainSelector) {
-            setExpandChainSelector(false)
-            setChainSelectorCloseIcon(false)
-            setTimeout(() => {
-                dispatch(updateSearchState({
-                    chainFilter: ''
-                }))
-            }, 300)
-        }
+        dispatch(updateSearchState({ chainFilter: '' }))
+        setChainSelectorPlaceholder('')
+        setChainSelectorCloseIcon(false)
+        setChainSelectorOpen(false)
+        setTimeout(() => {
+            chainSelector.current.style.width = '48px'
+        }, 100)
     }
 
     //SEARCH BAR
@@ -116,15 +139,6 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
 
         //eslint-disable-next-line
     }, [showSearchBarCloseIcon])
-
-    useEffect(() => {
-        if (!showChainSelectorCloseIcon) {
-            setChainSelectorPlaceholder('')
-            handleShrinkChainSelector()
-        }
-
-        //eslint-disable-next-line
-    }, [showChainSelectorCloseIcon])
 
     return (
         <Box sx={{ gap: '12px', display: 'flex', alignItems: 'center' }}>
@@ -166,21 +180,22 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
                 </Box>
             </Tooltip>
             <Box
-                onTransitionEnd={handleChainSelectorTransitionEnd}
+                ref={chainSelector}
                 onClick={handleExpandChainSelector}
                 gap={'10px'}
                 display={'flex'}
                 alignItems={'center'}
                 style={{ pointerEvents: invalidSearch ? 'none' : 'auto' }}
-                sx={styles.searchBar(expandChainSelector, false, "195px")}
+                sx={styles.chainSelector}
             >
-                <Box sx={{ display: 'flex', marginLeft: '-9px' }}>
+                <Box onClick={chainSelectorOpen ? () => setDropDownOpen(true) : null} sx={{ display: 'flex', marginLeft: '-9px' }}>
                     <SvgComponent
                         type={LAYOUT_CONTENT_TEXT.GlobusIcon}
                         style={{ color: invalidSearch ? '#88898c' : COLORS.STEEL_GRAY[20] }}
                     />
                 </Box>
                 <Select
+                    ref={hide}
                     disabled={invalidSearch || !networks.length}
                     MenuProps={styles.chainSelectorDropoDownMenuProps}
                     disableUnderline
@@ -201,10 +216,10 @@ const SearchBar = ({ networks, displayDataLength }: { networks: string[], displa
                     }
                     sx={styles.chainSelectorDropDown}
                     value={chainFilter}
-                    onChange={(e) => dispatch(updateSearchState({ chainFilter: e.target.value }))}
+                    onChange={handleNetworkFilterChange}
                     IconComponent={() => null}
-                    endAdornment={showChainSelectorCloseIcon ?
-                        <Box marginLeft={'-24px'} onClick={() => setChainSelectorCloseIcon(false)}>
+                    endAdornment={showChainSelectorCloseIcon && chainSelectorOpen ?
+                        <Box marginLeft={'-24px'} onClick={handleShrinkChainSelector}>
                             <CancelRounded sx={{ ...styles.cancelIcon, color: invalidSearch ? '#88898c' : COLORS.STEEL_GRAY[40] }} />
                         </Box>
                         : null}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 import { Box, Typography } from "@mui/material"
 
 import { COLORS } from "../../../../core/theme/colors"
@@ -26,13 +26,13 @@ const GridCardContent = ({ allowlist, width }: { allowlist: FetchedAllowlist, wi
 
     useEffect(() => {
         if (allowlist.banner_image) {
-            setBlobToB64Img(allowlist.banner_image, setBanner)
+            setBlobToB64Img(allowlist.banner_image, setBanner, { MAX_WIDTH: 284, MAX_HEIGHT: 210 })
         } else {
             setBanner('')
         }
 
         if (allowlist.image) {
-            setBlobToB64Img(allowlist.image, setAvatar)
+            setBlobToB64Img(allowlist.image, setAvatar, { MAX_WIDTH: 128, MAX_HEIGHT: 128 })
         } else {
             setAvatar('')
         }
@@ -65,7 +65,7 @@ const GridCardContent = ({ allowlist, width }: { allowlist: FetchedAllowlist, wi
 
     return (
         <Box onClick={() => navigateToRoute(`/allowlist/${allowlist.url}`)} sx={{ ...generalStyles.gridDataBox, width: width, minWidth: width }}>
-            {contentLoaded() ? null : <OvalLoader style={{ stroke: COLORS.LIGHT_BLUE[90] }} />}
+            {contentLoaded() ? null : <ClipLoader color={COLORS.LIGHT_BLUE[90]} />}
             <Box sx={{ display: contentLoaded() ? 'flex' : 'none', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
                 <Box sx={generalStyles.imgHolder}>
                     <img

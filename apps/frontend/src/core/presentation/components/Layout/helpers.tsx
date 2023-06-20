@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { CSSProperties } from 'react';
 import SVG from 'react-inlinesvg';
 import moment from "moment";
 import { Box, Divider } from '@mui/material';
 import { JdenticonConfig, toSvg } from 'jdenticon';
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { APP_DETAILS } from '../../../utilities/Constants';
 import { COLORS } from '../../../theme/colors';
@@ -282,6 +282,8 @@ export const SVG_FRAMES = {
     frame1674: frame1674
 }
 
+
 export const StyledPuffLoader = () => {
-    return <OvalLoader style={generalStyles.spinner} />
+    const override: CSSProperties = generalStyles.spinner;
+    return <ClipLoader color={COLORS.LIGHT_BLUE[90]} cssOverride={override} />
 }

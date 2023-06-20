@@ -104,7 +104,7 @@ export const AllowlistCreationPreview = () => {
                             <Typography sx={allowlistPreviewStyles.title}>
                                 {FIELD.title}
                             </Typography>
-                            <Typography sx={allowlistPreviewStyles.subTitle}>
+                            <Typography sx={allowlistPreviewStyles.subTitle} style={{ whiteSpace: FIELD.title === 'Description' ? 'pre-wrap' : undefined }}>
                                 {FIELD.subtitle}
                             </Typography>
                         </Box>

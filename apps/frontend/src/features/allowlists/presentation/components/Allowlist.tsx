@@ -20,7 +20,6 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isSignedUp, setIsSignedUp] = useState<boolean>(false);
   const [expired, setExpired] = useState<boolean>(false);
-  const [remainingTime, setRemainingTime] = useState<number>(null)
   const [loading, setLoading] = useState<boolean>(true)
   const { connectedAddress } = useSelector((state: RootState) => state.userState);
   const [bannerPreview, setBannerPreview] = useState<string>('')
@@ -59,30 +58,21 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
   }, [expired, isAdmin, isSignedUp])
 
   useEffect(() => {
-    const now = Date.now()
-    const end = props.end_date.valueOf()
+    const now = Date.now();
+    const end = props.end_date.valueOf();
 
-    if (now > end) {
-      setExpired(true)
-      return
-    }
+    let remainingTime = Math.abs(now - end);
+    setExpired(remainingTime <= 0);
 
-    setRemainingTime(Math.abs(now - end))
-    setExpired(false)
-  }, [])
+    const intervalId = setInterval(() => {
+      remainingTime -= 1000;
+      setExpired(remainingTime <= 0);
+    }, 1000);
 
-  useEffect(() => {
-    if (remainingTime === null) return
-
-    if (remainingTime > 0) {
-      setTimeout(() => {
-        setRemainingTime(remainingTime - 1000)
-      }, 1000)
-      return
-    }
-
-    setExpired(true)
-  }, [remainingTime])
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [props.end_date]);
 
   useEffect(() => {
     try {
@@ -143,7 +133,6 @@ const Allowlist = ({ props }: { props: FetchedAllowlist }) => {
                 allowListStyles.smallScreenPanel :
                 allowListStyles.panel}
           >
-            {/* <RemainingTimer time={remainingTime} /> */}
             {panelContentHandler()}
           </Box>
           {/* END-CONTENT */}

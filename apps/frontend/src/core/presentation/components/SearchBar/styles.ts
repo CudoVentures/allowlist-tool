@@ -26,8 +26,18 @@ export const styles = {
             padding: '15px 24px 15px 20px',
             height: '48px',
             border: noResult ? `1px solid ${COLORS.RED[60]}` : `1px solid ${COLORS.STEEL_GRAY[70]}`,
-            borderRadius: '64px'
+            borderRadius: '64px',
         }
+    },
+    chainSelector: {
+        width: '48px',
+        cursor: 'pointer',
+        transition: 'width .4s ease-in-out',
+        padding: '15px 24px 15px 20px',
+        height: '48px',
+        border: `1px solid ${COLORS.STEEL_GRAY[70]}`,
+        borderRadius: '64px',
+
     },
     menuItem: {
         height: '48px',
@@ -64,8 +74,6 @@ export const styles = {
                 background: COLORS.STEEL_GRAY[100],
                 borderRadius: '8px',
                 marginLeft: '-18px',
-                minWidth: '195px',
-                maxWidth: '195px'
             },
         },
     },

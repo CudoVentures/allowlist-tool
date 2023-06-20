@@ -14,7 +14,7 @@ import useSocialMedia from "../../../../core/utilities/CustomHooks/useSocialMedi
 import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
 import { updateModalState } from "../../../../core/store/modals";
-import { Oval as OvalLoader } from 'svg-loaders-react'
+import ClipLoader from "react-spinners/ClipLoader";
 
 import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
@@ -263,7 +263,7 @@ export const SocialMediaBoxes = ({
 
     const getCheckBox = (action: SocialMediaAction[]) => {
         if (ongoingEligibilityCheck) {
-            return <OvalLoader style={{ width: '24px', height: '24px', margin: '9px', stroke: COLORS.LIGHT_BLUE[90] }} />
+            return <ClipLoader color={COLORS.LIGHT_BLUE[90]} cssOverride={{ width: '24px', height: '24px', margin: '9px' }} />
         }
         return <Checkbox
             value={action}

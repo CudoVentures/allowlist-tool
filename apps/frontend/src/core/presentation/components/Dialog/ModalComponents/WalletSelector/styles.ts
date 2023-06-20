@@ -27,7 +27,6 @@ export const styles = {
         width: '50px',
         height: '50px',
         margin: '37px 0px',
-        stroke: COLORS.LIGHT_BLUE[90]
     },
     pluginWarning: {
         maxWidth: '550px',
