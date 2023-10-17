@@ -12,29 +12,33 @@ import { GlobalGuard } from './auth/guards/global-auth.guard';
 declare const module: any;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, {
-        logger: console,
-    });
+  const corsOptions =  {
+    origin: [process.env.APP_URL, process.env.AURA_POOL_URL]
+  }
+  
+  const app = await NestFactory.create(AppModule, {
+    logger: console
+  });
 
-    app.useGlobalGuards(new GlobalGuard(new Reflector()));
-    app.enableCors();
-    app.setGlobalPrefix('api');
-    app.enableVersioning({
-        type: VersioningType.URI,
-        defaultVersion: '1',
-    });
-    app.use(bodyParser.json({ limit: '50mb' }));
-    app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
-    app.use(
-        session({
-            cookie: {
-                maxAge: 2147483647, // 2^31 = 2147483647
-            },
-            secret: 'my-secret',
-            resave: false,
-            saveUninitialized: false,
-        }),
-    );
+  app.useGlobalGuards(new GlobalGuard(new Reflector));
+  app.enableCors(corsOptions);
+  app.setGlobalPrefix('api');
+  app.enableVersioning({
+    type: VersioningType.URI,
+    defaultVersion: '1',
+  });
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+  app.use(
+    session({
+      cookie: {
+        maxAge: 2147483647, // 2^31 = 2147483647
+      },
+      secret: 'my-secret',
+      resave: false,
+      saveUninitialized: false,
+    }),
+  );
 
     app.use(passport.initialize());
     app.use(passport.session());
