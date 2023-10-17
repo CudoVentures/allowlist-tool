@@ -1,6 +1,5 @@
-import { WebSocketGateway, WebSocketServer, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { WebSocketGateway, WebSocketServer, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, SubscribeMessage } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { SubscribeMessage } from '@nestjs/websockets';
 import { WS_MSGS, WS_ROOM } from '../../../common/interfaces';
 import { UserService } from '../user/user.service';
 
@@ -15,7 +14,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         const incomingId = this.decodedId(client.handshake.query.customId)
         const userAddress = incomingId.split(process.env.APP_WS_ID).pop();
         const userFound = await this.userService.findByAddress(userAddress)
-        let valid = false, usr = ""
+        let valid = false, usr = ''
         if (userFound !== null) {
             valid = incomingId.startsWith(process.env.APP_WS_ID)
             if (valid) {
@@ -34,7 +33,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
 
         if (!isValid) {
             client.disconnect(true)
-            console.log(`Socket Connection refused. Invalid client. Disconnecting...`);
+            console.log('Socket Connection refused. Invalid client. Disconnecting...');
             return
         }
 
@@ -59,7 +58,7 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
         console.log(`Client ${user} disconnected`);
     }
 
-    async afterInit(_: Server) {
+    async afterInit(_server: Server) {
         console.log('WebSocket server initialized');
     }
 
@@ -76,6 +75,6 @@ export class WebsocketGateway implements OnGatewayInit, OnGatewayConnection, OnG
     }
 
     sendMessageToClient(room: WS_ROOM, message: WS_MSGS, type?: any) {
-        this.server.to(room).emit(type ? type : message, message);
+        this.server.to(room).emit(type || message, message);
     }
 }

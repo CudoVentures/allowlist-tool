@@ -3,9 +3,9 @@ import { DiscordService } from './discord.service';
 import { DiscordController } from './discord.controller';
 
 @Module({
-  imports: [],
-  providers: [DiscordService],
-  controllers: [DiscordController],
-  exports: [DiscordService],
+    imports: [],
+    providers: [DiscordService],
+    controllers: [DiscordController],
+    exports: [DiscordService],
 })
 export class DiscordModule {}

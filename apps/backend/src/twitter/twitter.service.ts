@@ -3,13 +3,8 @@ import axios from 'axios';
 
 @Injectable()
 export class TwitterService {
-    constructor() {
-        const twitterCheckUrlMapper = {
 
-        }
-    }
-
-    //PUBLIC
+    // PUBLIC
     async isFollowingTwitterAcc(
         userId: string,
         accountName: string,
@@ -84,13 +79,13 @@ export class TwitterService {
         let arr = [];
 
         let res: any;
-        let next_token: any;
+        let nextToken: any;
 
         try {
             do {
                 const params = { max_results: 100 };
-                if (next_token) {
-                    params['pagination_token'] = next_token;
+                if (nextToken) {
+                    params['pagination_token'] = nextToken;
                 }
 
                 res = await axios.get(url, {
@@ -104,8 +99,8 @@ export class TwitterService {
 
                 const data = res.data.data.map((tweet: any) => tweet.id);
                 arr = arr.concat(data);
-                next_token = res.data.meta.next_token;
-            } while (next_token);
+                nextToken = res.data.meta.next_token;
+            } while (nextToken);
 
             return arr.includes(target);
 

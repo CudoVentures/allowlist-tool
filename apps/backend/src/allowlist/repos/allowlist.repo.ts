@@ -1,95 +1,95 @@
 import {
-  Column,
-  Model,
-  Table,
-  AllowNull,
-  PrimaryKey,
-  Unique,
-  AutoIncrement,
-  DataType,
+    Column,
+    Model,
+    Table,
+    AllowNull,
+    PrimaryKey,
+    Unique,
+    AutoIncrement,
+    DataType,
 } from 'sequelize-typescript';
 
 @Table({
-  freezeTableName: true,
-  tableName: 'allowlists',
+    freezeTableName: true,
+    tableName: 'allowlists',
 })
 export class AllowlistRepo extends Model {
   @Unique
   @PrimaryKey
   @AutoIncrement
   @Column
-  id: number;
+      id: number;
 
   @AllowNull(false)
   @Column
-  admin: string;
+      admin: string;
 
   @AllowNull(true)
   @Column({ type: DataType.ARRAY(DataType.STRING) })
-  users: string[];
+      users: string[];
 
   @AllowNull(false)
   @Column
-  name: string;
+      name: string;
 
   @Unique
   @AllowNull(true)
   @Column
-  url: string;
+      url: string;
 
   @AllowNull(true)
   @Column
-  description: string;
+      description: string;
 
   @AllowNull(false)
   @Column
-  cosmos_chain_id: string;
+      cosmos_chain_id: string;
 
   @AllowNull(true)
   @Column
-  website: string;
+      website: string;
 
   @AllowNull(true)
   @Column
-  twitter_account: string;
+      twitter_account: string;
 
   @AllowNull(true)
   @Column
-  discord_url: string;
+      discord_url: string;
 
   @AllowNull(false)
   @Column
-  end_date: Date;
+      end_date: Date;
 
   @AllowNull(false)
   @Column
-  image: string;
+      image: string;
 
   @AllowNull(false)
   @Column
-  banner_image: string;
+      banner_image: string;
 
   @AllowNull(true)
   @Column
-  twitter_account_to_follow: string;
+      twitter_account_to_follow: string;
 
   @AllowNull(true)
   @Column
-  tweet_to_like: string;
+      tweet_to_like: string;
 
   @AllowNull(true)
   @Column
-  tweet_to_retweet: string;
+      tweet_to_retweet: string;
 
   @AllowNull(true)
   @Column
-  discord_invite_link: string;
+      discord_invite_link: string;
 
   @AllowNull(true)
   @Column
-  server_role: string;
+      server_role: string;
 
   @AllowNull(true)
   @Column
-  require_email: boolean;
+      require_email: boolean;
 }

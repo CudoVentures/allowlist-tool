@@ -1,10 +1,10 @@
-import { COLORS } from "../../../theme/colors";
+import { COLORS } from '../../../theme/colors';
 
 export const headerStyles = {
     menuIcon: (compensateRightMargin: boolean, hasScrollbar: boolean) => {
         return {
             cursor: 'pointer',
-            marginRight: compensateRightMargin && hasScrollbar ? '4px' : '0px'
+            marginRight: compensateRightMargin && hasScrollbar ? '4px' : '0px',
         }
     },
     rightNavContent: (compensateRightMargin: boolean, hasScrollbar: boolean) => {
@@ -12,19 +12,19 @@ export const headerStyles = {
             display: 'flex',
             alignItems: 'center',
             flexDirection: 'row',
-            marginRight: compensateRightMargin && hasScrollbar ? '4px' : '0px'
+            marginRight: compensateRightMargin && hasScrollbar ? '4px' : '0px',
         }
     },
     hamburgerAddressHolder: {
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     hamburgerFlexLine: {
         display: 'flex',
         alignItems: 'center',
-        marginLeft: '-10px'
+        marginLeft: '-10px',
     },
     hamburgerMenuContent: {
         display: 'flex',
@@ -32,7 +32,7 @@ export const headerStyles = {
         width: '100%',
         marginBottom: '40px',
         alignItems: 'flex-start',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     hamburgerTopWideDivider: {
         margin: '20px 0px',
@@ -41,7 +41,7 @@ export const headerStyles = {
         position: 'absolute',
         left: 0,
         top: '65px',
-        width: '100vw'
+        width: '100vw',
     },
     hamburgerBottomWideDivider: {
         margin: '20px 0px',
@@ -49,48 +49,48 @@ export const headerStyles = {
         backgroundColor: COLORS.STEEL_GRAY[70],
         position: 'relative',
         left: '-62px',
-        width: '100vw'
+        width: '100vw',
     },
     headerDisabled: {
-        pointerEvents: "none",
+        pointerEvents: 'none',
     },
     disconnectBtn: {
         width: '195px',
         height: '45px',
-        borderRadius: '100px'
+        borderRadius: '100px',
     },
     logoGroup: {
         opacity: '1',
         transition: 'all .1s ease-in-out',
         cursor: 'pointer',
         display: 'flex',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     hamburgerMidDivider: {
         height: '1px',
         width: '100%',
         margin: '10px 0px',
         borderColor: COLORS.STEEL_GRAY[70],
-        backgroundColor: COLORS.STEEL_GRAY[70]
+        backgroundColor: COLORS.STEEL_GRAY[70],
     },
     divider: {
         height: '24px',
         borderColor: COLORS.STEEL_GRAY[70],
-        backgroundColor: COLORS.STEEL_GRAY[70]
+        backgroundColor: COLORS.STEEL_GRAY[70],
     },
     hamburgerDropDownItemHolder: {
         cursor: 'pointer',
-        justifyContent: "center",
+        justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        padding: '8px 0px'
+        padding: '8px 0px',
     },
     dropDownItemHolder: {
         alignItems: 'center',
         display: 'flex',
         flexDirection: 'column',
-        padding: '8px 0px'
+        padding: '8px 0px',
     },
     hamburgerDropDownContentHolder: {
         width: '176px',
@@ -98,28 +98,28 @@ export const headerStyles = {
         padding: '10px 20px',
         background: COLORS.STEEL_GRAY[90],
         '&:hover': {
-            background: COLORS.STEEL_GRAY[80]
+            background: COLORS.STEEL_GRAY[80],
         },
         '&:click': {
-            background: COLORS.STEEL_GRAY[70]
+            background: COLORS.STEEL_GRAY[70],
         },
         fontSize: '14px',
         fontWeight: '500',
         borderRadius: '24px',
         display: 'flex',
-        alignItems: "center",
+        alignItems: 'center',
         justifyContent: 'center',
     },
     dropDownDisconnectBtnHolder: {
-        display: "flex",
-        alignItems: "center",
+        display: 'flex',
+        alignItems: 'center',
         padding: '10px 20px',
         background: COLORS.STEEL_GRAY[90],
         '&:hover': {
-            background: COLORS.STEEL_GRAY[80]
+            background: COLORS.STEEL_GRAY[80],
         },
         '&:click': {
-            background: COLORS.STEEL_GRAY[70]
+            background: COLORS.STEEL_GRAY[70],
         },
         fontSize: '14px',
         width: '176px',
@@ -155,8 +155,8 @@ export const headerStyles = {
     },
     holder: {
         opacity: 1,
-        backdropFilter: "blur(12px)",
-        background: "rgba(16, 18, 26, 0.8)",
+        backdropFilter: 'blur(12px)',
+        background: 'rgba(16, 18, 26, 0.8)',
         height: '80px',
         transition: 'all .3s ease-in-out',
         padding: '16px 4rem !important',
@@ -169,7 +169,7 @@ export const headerStyles = {
         return {
             marginLeft: isConnected ? '-6px' : '0px',
             display: 'flex',
-            alignItems: 'center'
+            alignItems: 'center',
         }
     },
     leftNavContentAndIcon: (hamburgerMenu: boolean) => {
@@ -179,7 +179,7 @@ export const headerStyles = {
             justifyContent: 'space-between',
             alignItems: 'center',
             paddingTop: hamburgerMenu ? '8px' : '0px',
-            marginBottom: hamburgerMenu ? '60px' : '0px'
+            marginBottom: hamburgerMenu ? '60px' : '0px',
         }
     },
     hamburger: {
@@ -187,8 +187,8 @@ export const headerStyles = {
         overflowY: 'scroll',
         overflowX: 'clip',
         height: '100vh',
-        backdropFilter: "blur(20px)",
-        background: "rgba(16, 18, 26, 0.9)",
+        backdropFilter: 'blur(20px)',
+        background: 'rgba(16, 18, 26, 0.9)',
         transition: 'all .3s ease-in-out',
         padding: '16px 4rem !important',
         justifyContent: 'space-between',
@@ -205,14 +205,14 @@ export const headerStyles = {
             color: isMenuOpen ? COLORS.LIGHT_BLUE[90] : 'inherit',
             cursor: 'pointer',
             background: isMenuOpen ? COLORS.STEEL_GRAY[100] : 'transparent',
-            borderRadius: "12px",
-            padding: "9px 10px 2px 11px"
+            borderRadius: '12px',
+            padding: '9px 10px 2px 11px',
         }
     },
     logInBtn: (isConnected: boolean) => {
         return {
-            "&:hover": {
-                bgcolor: isConnected ? COLORS.STEEL_GRAY[80] : 'auto'
+            '&:hover': {
+                bgcolor: isConnected ? COLORS.STEEL_GRAY[80] : 'auto',
             },
             bgcolor: isConnected ? COLORS.STEEL_GRAY[90] : COLORS.LIGHT_BLUE[90],
             justifyContent: isConnected ? 'space-between' : 'center',
@@ -230,9 +230,9 @@ export const footerStyles = {
     typography: {
         fontWeight: 700,
         color: COLORS.STEEL_GRAY[50],
-        "&:hover": {
-            color: COLORS.LIGHT_BLUE[90]
-        }
+        '&:hover': {
+            color: COLORS.LIGHT_BLUE[90],
+        },
     },
     holder: {
         padding: '1rem 2rem',
@@ -240,7 +240,7 @@ export const footerStyles = {
         bottom: 0,
         width: '100%',
         alignItems: 'center',
-        display: 'flex'
+        display: 'flex',
     },
     rightItem: {
         display: 'flex',
@@ -249,12 +249,12 @@ export const footerStyles = {
         cursor: 'pointer',
         color: COLORS.STEEL_GRAY[50],
         '&:hover': {
-            color: COLORS.LIGHT_BLUE[90]
-        }
+            color: COLORS.LIGHT_BLUE[90],
+        },
     },
     leftItem: {
-        cursor: 'pointer'
-    }
+        cursor: 'pointer',
+    },
 }
 
 export const helperStyles = {
@@ -262,9 +262,9 @@ export const helperStyles = {
         display: 'flex',
         color: COLORS.STEEL_GRAY[50],
         alignItems: 'center',
-        "&:hover": {
-            color: COLORS.LIGHT_BLUE[90]
-        }
+        '&:hover': {
+            color: COLORS.LIGHT_BLUE[90],
+        },
     },
     dropDownItem: {
         width: '100%',
@@ -282,8 +282,8 @@ export const helperStyles = {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: '50%'
-    }
+        borderRadius: '50%',
+    },
 }
 
 export const layoutStyles = {
@@ -294,7 +294,7 @@ export const layoutStyles = {
         overflowWrap: 'break-word',
         overflow: 'auto',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     contentHolder: {
         display: 'flex',
@@ -305,6 +305,6 @@ export const layoutStyles = {
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        minWidth: '650px'
-    }
+        minWidth: '650px',
+    },
 }

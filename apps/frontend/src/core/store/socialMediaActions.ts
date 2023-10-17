@@ -1,6 +1,16 @@
+/* eslint-disable no-shadow */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
-import { SocialMediaAction } from '../../features/allowlists/presentation/components/helpers'
+export enum SocialMediaAction {
+    joinDiscordServer = 'joinDiscordServer',
+    followTwitterAccount = 'followTwitterAccount',
+    likeTweet = 'likeTweet',
+    retweetTweet = 'retweetTweet'
+}
+
+export type SocialMediaUserActions = {
+    [key in SocialMediaAction]: boolean
+}
 
 export interface socialMediaActionsState {
     [SocialMediaAction.followTwitterAccount]?: boolean,
@@ -13,7 +23,7 @@ export const initialState: socialMediaActionsState = {
     [SocialMediaAction.followTwitterAccount]: false,
     [SocialMediaAction.likeTweet]: false,
     [SocialMediaAction.retweetTweet]: false,
-    [SocialMediaAction.joinDiscordServer]: false
+    [SocialMediaAction.joinDiscordServer]: false,
 }
 
 export const socialMediaActionsStateSlice = createSlice({

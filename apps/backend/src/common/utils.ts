@@ -1,6 +1,6 @@
 import { StdSignature, decodeSignature } from 'cudosjs';
 import { verifyADR36Amino } from '@keplr-wallet/cosmos';
-import { bech32 } from "bech32"
+import { bech32 } from 'bech32'
 
 export const NOT_EXISTS_INT = -2147483648;
 

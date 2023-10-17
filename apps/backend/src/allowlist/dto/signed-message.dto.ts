@@ -1,36 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
-  IsString,
-  IsNotEmpty,
+    IsString,
+    IsNotEmpty,
 } from 'class-validator';
-
-class SignatureDto {
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  pub_key: Object;
-
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  type: string;
-
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  signature: string;
-}
+import { StdSignature } from 'cudosjs';
 
 export class SignedMessageDto {
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  @ApiProperty()
-  signature: Object;
+    @IsNotEmpty()
+    @ApiProperty({ required: true })
+    @ApiProperty()
+        signature: StdSignature;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  message: string;
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ required: true })
+        message: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({ required: true })
-  connectedAddress: string;
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ required: true })
+        connectedAddress: string;
 }

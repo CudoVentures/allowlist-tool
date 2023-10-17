@@ -1,60 +1,61 @@
 import {
-  Column,
-  Model,
-  Table,
-  AllowNull,
-  PrimaryKey,
-  Unique,
-  AutoIncrement,
+    Column,
+    Model,
+    Table,
+    AllowNull,
+    PrimaryKey,
+    Unique,
+    AutoIncrement,
 } from 'sequelize-typescript';
+
 @Table({
-  freezeTableName: true,
-  tableName: 'users',
+    freezeTableName: true,
+    tableName: 'users',
 })
 export class UserRepo extends Model {
   @Unique
   @PrimaryKey
   @AutoIncrement
   @Column
-  id: number;
+      id: number;
 
   @AllowNull(true)
   @Column
-  address: string;
+      address: string;
 
   @AllowNull(true)
   @Column
-  email: string;
+      email: string;
 
   @AllowNull(true)
   @Column
-  twitter_profile_id: string;
+      twitter_profile_id: string;
 
   @AllowNull(true)
   @Column
-  twitter_profile_username: string;
+      twitter_profile_username: string;
 
   @AllowNull(true)
   @Column
-  twitter_access_token: string;
+      twitter_access_token: string;
 
   @AllowNull(true)
   @Column
-  twitter_refresh_token: string;
+      twitter_refresh_token: string;
 
   @AllowNull(true)
   @Column
-  discord_profile_id: string;
+      discord_profile_id: string;
 
   @AllowNull(true)
   @Column
-  discord_profile_username: string;
+      discord_profile_username: string;
 
   @AllowNull(true)
   @Column
-  discord_access_token: string;
+      discord_access_token: string;
 
   @AllowNull(true)
   @Column
-  discord_refresh_token: string;
+      discord_refresh_token: string;
 }

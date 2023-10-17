@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 export enum SearchFilter {
@@ -19,7 +20,7 @@ export const initialState: searchState = {
     searchTerms: '',
     activeSearch: false,
     appliedFilter: undefined,
-    ascendingOrder: true
+    ascendingOrder: true,
 }
 
 export const searchStateSlice = createSlice({

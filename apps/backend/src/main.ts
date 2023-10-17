@@ -40,29 +40,29 @@ async function bootstrap() {
     }),
   );
 
-  app.use(passport.initialize());
-  app.use(passport.session());
+    app.use(passport.initialize());
+    app.use(passport.session());
 
-  const config = new DocumentBuilder()
-    .setTitle('Cudos allowlist tool')
-    .setDescription('Cudos allowlist tool descrition')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+    const config = new DocumentBuilder()
+        .setTitle('Cudos allowlist tool')
+        .setDescription('Cudos allowlist tool descrition')
+        .setVersion('1.0')
+        .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
 
-  const configService = app.get(ConfigService);
-  const appPort = configService.get<number>('APP_PORT');
-  await app.listen(appPort);
+    const configService = app.get(ConfigService);
+    const appPort = configService.get<number>('APP_PORT');
+    await app.listen(appPort);
 
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
+    if (module.hot) {
+        module.hot.accept();
+        module.hot.dispose(() => app.close());
+    }
 
-  process.on('unhandledRejection', error => {
-    console.error('Unhandled promise rejection:', error);
-  });
+    process.on('unhandledRejection', (error) => {
+        console.error('Unhandled promise rejection:', error);
+    });
 }
 
 bootstrap();

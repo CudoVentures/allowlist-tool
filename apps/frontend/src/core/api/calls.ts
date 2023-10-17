@@ -1,7 +1,6 @@
 import axios from './axios';
 
-import { FetchedAllowlist } from "../store/allowlist";
-import { blobToBase64 } from '../../features/allowlists/presentation/components/helpers';
+import { FetchedAllowlist } from '../store/allowlist';
 import { SOCIAL_MEDIA } from '../../../../common/interfaces';
 
 import {
@@ -20,7 +19,7 @@ import {
     SOCIAL_MEDIA_LOGOUT_URL,
     USER_DETAILS_URL,
     USER_JOINED_ALLOWLIST_URL,
-    USER_LOGIN_URL
+    USER_LOGIN_URL,
 } from './endpoints';
 
 export const IS_FOLLOWING_TWITTER_ACCOUNT = async (userId: string, accountName: string): Promise<boolean> => {
@@ -85,8 +84,6 @@ export const GET_ALLOWLIST_DETAILS = async (allowlistID: string) => {
 }
 
 export const CREATE_ALLOWLIST = async (data: any) => {
-    data.image = await blobToBase64(data.image)
-    data.banner_image = await blobToBase64(data.banner_image)
     return axios.post(ALLOWLIST_URL, data);
 }
 

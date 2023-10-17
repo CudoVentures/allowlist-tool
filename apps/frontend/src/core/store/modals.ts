@@ -19,7 +19,7 @@ export const initialState: modalState = {
     failure: false,
     message: '',
     loadingSpinner: false,
-    ongoingEligibilityCheck: false
+    ongoingEligibilityCheck: false,
 }
 
 export const modalStateSlice = createSlice({

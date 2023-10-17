@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
     modalState: modalStateReducer,
     allowlistState: allowlistStateReducer,
     socialMediaActionsState: socialMediaActionsStateReducer,
-    searchState: searchStateReducer
+    searchState: searchStateReducer,
 })
 
 const persistConfig = {

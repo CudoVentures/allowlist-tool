@@ -50,16 +50,20 @@ module.exports = {
         "radix": 0,
         "no-plusplus": "off",
         "no-bitwise": "off",
-        "no-undef": [ "error" ],
-        "prefer-destructuring": [ "error", { "array": false, "object": false }, { "enforceForRenamedProperties": false } ],
-        "max-len": [ "error", { "code": 1000 } ],
-        "indent": [ "error", 4, { "SwitchCase": 1 } ],
+        "no-undef": ["error"],
+        "prefer-destructuring": ["error", { "array": false, "object": false }, { "enforceForRenamedProperties": false }],
+        "max-len": ["error", { "code": 1000 }],
+        "indent": ["error", 4, { "SwitchCase": 1 }],
         "semi": "off",
         "no-unused-vars": "off",
-        "no-console": [ "warn", { "allow": [ "log", "warn", "error" ] } ],
-        "no-empty": [ "error", { "allowEmptyCatch": true } ],
+        "@typescript-eslint/no-unused-vars": "off",
+        "no-console": ["warn", { "allow": ["log", "warn", "error"] }],
+        "no-empty": ["error", { "allowEmptyCatch": true }],
+        "no-empty-function": ["error", {
+            "allow": ["constructors"]
+        }],
         "no-fallthrough": "warn",
-        "quotes": [ "warn", "single" ],
+        "quotes": ["warn", "single"],
         "one-var": "off",
         "one-var-declaration-per-line": "off",
         "nonblock-statement-body-position": "off",
@@ -74,12 +78,12 @@ module.exports = {
         "no-multi-assign": "off",
         "dot-notation": "off",
         "newline-per-chained-call": "off",
-        "import/extensions": [ "error", "ignorePackages", {
+        "import/extensions": ["error", "ignorePackages", {
             "js": "never",
             "jsx": "never",
             "ts": "never",
             "tsx": "never"
-        } ],
+        }],
         "import/prefer-default-export": "off",
         "max-classes-per-file": "off"
     },

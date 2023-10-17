@@ -1,5 +1,5 @@
 import {
-  Injectable
+    Injectable,
 } from '@nestjs/common';
 
 import { CreateAllowlistPipe } from './create-allowlist.pipe';
