@@ -8,7 +8,7 @@ describe('DiscordController', () => {
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             controllers: [DiscordController],
-            imports: [DiscordModule]
+            imports: [DiscordModule],
         }).compile();
 
         controller = module.get<DiscordController>(DiscordController);

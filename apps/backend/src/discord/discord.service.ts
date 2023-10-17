@@ -9,7 +9,7 @@ import {
     Guild,
     Invite,
     Role,
-    TextChannel
+    TextChannel,
 } from 'discord.js';
 
 @Injectable()
@@ -23,8 +23,8 @@ export class DiscordService {
                 GatewayIntentBits.GuildInvites,
                 GatewayIntentBits.GuildMembers,
                 GatewayIntentBits.GuildPresences,
-                GatewayIntentBits.GuildWebhooks
-            ]
+                GatewayIntentBits.GuildWebhooks,
+            ],
         }
         this.client = new Client(clientOptions);
     }
@@ -110,7 +110,7 @@ export class DiscordService {
         return channel.createInvite(inviteOptions)
     }
 
-    //PUBLIC
+    // PUBLIC
     async getGuildIdByInviteCode(inviteCode: string): Promise<string> {
         const guild = await this.getGuildByInviteCode(inviteCode)
         return guild.id
@@ -131,12 +131,8 @@ export class DiscordService {
     async getRoleNameByRoleId(inviteCode: string, roleId: string): Promise<string> {
         const guild = await this.getGuildByInviteCode(inviteCode)
         const feRolePairs = await this.getFeGuildRoles(guild)
-        for (const [id, name] of Object.entries(feRolePairs)) {
-            if (id === roleId) {
-                return name
-            }
-        }
-        return DISCORD_SERVER_ROLES.default
+        const role = Object.entries(feRolePairs).find(([id, _]) => id === roleId);
+        return role ? role[1] : DISCORD_SERVER_ROLES.default;
     }
 
     async getGuildInfoByGuildId(guildId: string): Promise<GuildInfo> {
@@ -148,7 +144,7 @@ export class DiscordService {
             guildName: guild.name,
             systemChannelId: guild.systemChannelId,
             guildRoles,
-            inviteCode
+            inviteCode,
         }
     }
 }

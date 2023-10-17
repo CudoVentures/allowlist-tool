@@ -1,32 +1,32 @@
-import { COLORS } from "../../../../../core/theme/colors"
+import { COLORS } from '../../../../../core/theme/colors'
 
 export const forCollectorsStyles = {
     avatar: {
         padding: '10px 10px 0px 10px',
         borderRadius: '8px',
-        border: "1px solid #F5FAFF",
+        border: '1px solid #F5FAFF',
         position: 'absolute',
         top: -5,
         right: 55,
         backdropFilter: 'blur(16px)',
         background: 'gba(16, 18, 26, 0.8)',
         height: '164px',
-        width: '164px'
+        width: '164px',
     },
     yellowBox: {
         borderRadius: '8px',
-        border: "1px solid #F5FAFF",
+        border: '1px solid #F5FAFF',
         position: 'absolute',
         top: 20,
         right: 30,
         background: 'rgba(218, 251, 51, 1)',
         height: '164px',
-        width: '164px'
+        width: '164px',
     },
     leftContent: {
         position: 'relative',
         width: '490px',
-        height: '480px'
+        height: '480px',
     },
     holder: {
         marginBottom: '4rem',
@@ -38,13 +38,13 @@ export const forCollectorsStyles = {
     textHolder: {
         flexDirection: 'column',
         display: 'flex',
-        width: '551px'
+        width: '551px',
     },
     btn: {
         marginTop: '3rem',
         width: '192px',
         height: '56px',
-        borderRadius: '100px'
+        borderRadius: '100px',
     },
     rightContent: {
         justifyContent: 'space-between',
@@ -55,19 +55,19 @@ export const forCollectorsStyles = {
 
 export const forCreatorsStyles = {
     avatar: {
-        position: 'absolute' as 'absolute',
+        position: 'absolute' as const,
         top: -5,
         right: 55,
     },
     avatarBack: {
-        position: 'absolute' as 'absolute',
+        position: 'absolute' as const,
         top: 20,
         right: 60,
     },
     rightContent: {
         position: 'relative',
         width: '490px',
-        height: '480px'
+        height: '480px',
     },
     holder: {
         marginBottom: '4rem',
@@ -79,13 +79,13 @@ export const forCreatorsStyles = {
     textHolder: {
         flexDirection: 'column',
         display: 'flex',
-        width: '551px'
+        width: '551px',
     },
     btn: {
         marginTop: '3rem',
         width: '192px',
         height: '56px',
-        borderRadius: '100px'
+        borderRadius: '100px',
     },
     leftContent: {
         justifyContent: 'space-between',
@@ -96,14 +96,14 @@ export const forCreatorsStyles = {
 export const homeStyles = {
     mainCardAndFeadturesHolder: {
         margin: '0rem 4rem',
-        maxWidth: '1600px'
+        maxWidth: '1600px',
     },
 
     holder: {
         alignItems: 'center',
         width: '100%',
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
 }
 
@@ -115,28 +115,28 @@ export const lowerSectionStyles = {
         width: '100%',
         height: 'max-content',
         borderRadius: '64px 64px 0px 0px',
-        background: 'linear-gradient(135deg, #10121A 0%, #1D243F 100%)'
-    }
+        background: 'linear-gradient(135deg, #10121A 0%, #1D243F 100%)',
+    },
 }
 
 export const mainCardStyles = {
     textHolder: {
         flexDirection: 'column',
         display: 'flex',
-        width: '551px'
+        width: '551px',
     },
     avatar: {
         width: '128px',
         marginLeft: '-64px',
-        position: 'absolute' as 'absolute',
+        position: 'absolute' as const,
         left: '50%',
-        bottom: -60
+        bottom: -60,
     },
     svgHolder: {
         position: 'relative',
         flexDirection: 'column',
         display: 'flex',
-        height: '288px'
+        height: '288px',
     },
     rightContent: {
         justifyContent: 'space-between',
@@ -158,11 +158,11 @@ export const mainCardStyles = {
         alignItems: 'center',
         display: 'flex',
         justifyContent: 'space-between',
-        padding: "115px 111px",
+        padding: '115px 111px',
         borderRadius: '24px',
         width: '100%',
-        background: 'linear-gradient(135deg, #10121A 0%, #2F4597 100%)'
-    }
+        background: 'linear-gradient(135deg, #10121A 0%, #2F4597 100%)',
+    },
 }
 
 export const featuresStyle = {
@@ -173,37 +173,37 @@ export const featuresStyle = {
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
     },
     gridHolder: {
         display: 'flex',
-        justifyContent: "space-around",
+        justifyContent: 'space-around',
         alignItems: 'center',
-        height: "100%"
+        height: '100%',
     },
 }
 
 export const FAQStyle = {
     expandIcon: {
         color: COLORS.LIGHT_BLUE[90],
-        height: '22px'
+        height: '22px',
     },
     containerBox: {
         maxWidth: '1024px',
         textAlign: 'center',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     FaqItemHolder: {
         width: '100%',
         display: 'flex',
         borderRadius: '32px',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     accordion: {
         borderRadius: '32px',
-        background: COLORS.DARK_BLUE[50]
+        background: COLORS.DARK_BLUE[50],
     },
 }

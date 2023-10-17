@@ -79,8 +79,8 @@ export const initialState: CollectedData = {
         tweet: false,
         twitter_account: false,
         discord_server: false,
-        server_role: false
-    }
+        server_role: false,
+    },
 }
 
 export const userAllowlistObjectStateSlice = createSlice({

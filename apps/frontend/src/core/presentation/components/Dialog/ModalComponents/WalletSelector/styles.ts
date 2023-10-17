@@ -1,10 +1,8 @@
-import { COLORS } from "../../../../../../core/theme/colors"
-
 export const styles = {
     logoHolder: (logoLoaded: boolean, isLoadingComponent?: boolean) => {
-        let extraStyles = isLoadingComponent ? {
+        const extraStyles = isLoadingComponent ? {
             visibility: logoLoaded ? 'hidden' : 'visible',
-            position: logoLoaded ? 'absolute' : 'relative'
+            position: logoLoaded ? 'absolute' : 'relative',
         } : {
             visibility: logoLoaded ? 'visible' : 'hidden',
             position: logoLoaded ? 'relative' : 'absolute',
@@ -16,12 +14,12 @@ export const styles = {
             marginRight: '-24px',
             display: 'flex',
             justifyContent: 'center',
-            alignItems: 'center'
+            alignItems: 'center',
         }
     },
     logo: {
         width: '24px',
-        height: '24px'
+        height: '24px',
     },
     ovalLoader: {
         width: '50px',
@@ -46,7 +44,7 @@ export const styles = {
     },
     connectButton: {
         height: '50px',
-        width: '100%'
+        width: '100%',
     },
     btnsHolder: {
         alignItems: 'center',

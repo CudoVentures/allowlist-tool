@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import axios from 'axios';
@@ -20,7 +21,7 @@ export class AllowlistService {
         private allowlistRepo: typeof AllowlistRepo,
         private userService: UserService,
         private discordService: DiscordService,
-        private twitterService: TwitterService
+        private twitterService: TwitterService,
     ) { }
 
     async getUserByAllowlistIdAndAddress(allowlistId: number, address: string): Promise<UserEntity> {
@@ -90,7 +91,7 @@ export class AllowlistService {
         id: number,
         updateCollectionDto: UpdateAllowlistDto,
     ): Promise<AllowlistEntity> {
-        const [count, [allowlistRepo]] = await this.allowlistRepo.update(
+        const [_count, [allowlistRepo]] = await this.allowlistRepo.update(
             { ...updateCollectionDto },
             { where: { id }, returning: true },
         );
@@ -111,9 +112,8 @@ export class AllowlistService {
         if (registeredUsers.includes(userId)) {
             return allowlistEntity;
         }
-        const updatedList = allowlistEntity.users.push(`${userId}`);
 
-        const [count, [updatedAllowlistRepo]] = await this.allowlistRepo.update(
+        const [_count, [updatedAllowlistRepo]] = await this.allowlistRepo.update(
             { users: allowlistEntity.users },
             { where: { id }, returning: true },
         );
@@ -161,7 +161,7 @@ export class AllowlistService {
         if (allowlistEntity.tweet_to_retweet) {
             const retweeted = await this.twitterService.isTweetRetweeted(
                 allowlistEntity.tweet_to_retweet,
-                user.twitter_profile_id
+                user.twitter_profile_id,
             );
             if (!retweeted) {
                 throw new BadRequestException(`Criteria not met: ${TWITTER_API_MSGS.NotRetweetedTweet}`);
@@ -211,6 +211,7 @@ export class AllowlistService {
             }),
         );
 
+        // eslint-disable-next-line no-restricted-syntax
         for (const u of users) {
             if (
                 user.discord_profile_id
@@ -279,9 +280,9 @@ export class AllowlistService {
                     return {
                         id: user.id,
                         address: user.address,
-                        email: user.email || "Not provided",
-                        twitter_handle: user.twitter_profile_id || "Not provided",
-                        discord_handle: user.discord_profile_id || "Not provided",
+                        email: user.email || 'Not provided',
+                        twitter_handle: user.twitter_profile_id || 'Not provided',
+                        discord_handle: user.discord_profile_id || 'Not provided',
                     };
                 });
             }),
@@ -289,8 +290,8 @@ export class AllowlistService {
     }
 
     async updateUserInfo(user, sessionUser) {
-        let sessionTwitterUser = sessionUser.twitter
-        let sessionDiscordUser = sessionUser.discord
+        const sessionTwitterUser = sessionUser.twitter
+        const sessionDiscordUser = sessionUser.discord
 
         if (sessionTwitterUser) {
             delete sessionTwitterUser.email
@@ -313,8 +314,8 @@ export class AllowlistService {
         const newUser = {
             ...sessionDiscordUser,
             ...sessionTwitterUser,
-            address: user.address
+            address: user.address,
         }
-        return await this.userService.updateUser(user.id, newUser)
+        return this.userService.updateUser(user.id, newUser)
     }
 }

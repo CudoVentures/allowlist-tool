@@ -15,20 +15,10 @@ import { getTimeFromNumber } from "../../../../core/utilities/ProjectUtils";
 import { LinkBox } from "../../../../core/theme/helpers";
 import { updateModalState } from "../../../../core/store/modals";
 import ClipLoader from "react-spinners/ClipLoader";
+import { SocialMediaAction } from "../../../../core/store/socialMediaActions";
 
 import { headerStyles } from "../../../../core/presentation/components/Layout/styles";
 import { allowlistPreviewStyles, allowListStyles, menuStyles } from "./styles";
-
-export enum SocialMediaAction {
-    joinDiscordServer = 'joinDiscordServer',
-    followTwitterAccount = 'followTwitterAccount',
-    likeTweet = 'likeTweet',
-    retweetTweet = 'retweetTweet'
-}
-
-export type SocialMediaUserActions = {
-    [key in SocialMediaAction]: boolean
-}
 
 export enum FormFieldErrors {
     connectWalletToSetChainId = 'Connect your Wallet to set a Chain ID',

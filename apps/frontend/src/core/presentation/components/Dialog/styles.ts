@@ -19,7 +19,7 @@ export const CancelRoundedIcon = styled(CancelRounded)(({ theme }) => ({
     cursor: 'pointer',
 }))
 
-export const ModalContainer = styled(Box)(({ theme }) => ({
+export const ModalContainer = styled(Box)(() => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',

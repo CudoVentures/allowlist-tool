@@ -3,9 +3,9 @@ import { TwitterController } from './twitter.controller';
 import { TwitterService } from './twitter.service';
 
 @Module({
-  imports: [],
-  providers: [TwitterService],
-  controllers: [TwitterController],
-  exports: [TwitterService],
+    imports: [],
+    providers: [TwitterService],
+    controllers: [TwitterController],
+    exports: [TwitterService],
 })
 export class TwitterModule { }

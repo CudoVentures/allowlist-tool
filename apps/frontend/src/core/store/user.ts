@@ -1,4 +1,4 @@
-import { Coin, SUPPORTED_WALLET } from 'cudosjs'
+import { SUPPORTED_WALLET } from 'cudosjs'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { CONNECTED_SOCIAL_MEDIA, emptySocialMedia, SOCIAL_MEDIA } from '../../../../common/interfaces'
@@ -21,7 +21,7 @@ export const initialState: userState = {
     connectedSocialMedia: {
         [SOCIAL_MEDIA.twitter]: emptySocialMedia,
         [SOCIAL_MEDIA.discord]: emptySocialMedia,
-    }
+    },
 }
 
 export const userStateSlice = createSlice({

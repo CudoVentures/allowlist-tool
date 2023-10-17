@@ -1,9 +1,9 @@
 import Path from 'path';
 import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  OnModuleInit,
+    MiddlewareConsumer,
+    Module,
+    NestModule,
+    OnModuleInit,
 } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -29,66 +29,66 @@ import { TwitterService } from './twitter/twitter.service';
 import { TwitterController } from './twitter/twitter.controller';
 
 @Module({
-  imports: [
-    SequelizeModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          dialect: 'postgres',
-          host: config.get('APP_DATABASE_HOST'),
-          port: config.get('APP_DATABASE_PORT'),
-          username: config.get('APP_DATABASE_USER'),
-          password: config.get('APP_DATABASE_PASS'),
-          database: config.get('APP_DATABASE_DB_NAME'),
-          autoLoadModels: true,
-          synchronize: true,
-        };
-      },
-    }),
-    ServeStaticModule.forRoot({
-      rootPath: Path.join(__dirname, '..', 'frontend', 'src', 'public'),
-    }),
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: ['./config/.env'],
-      load: [
-        () => {
-          const Config = {};
-          Object.keys(process.env).forEach((envName) => {
-            const envNameUppercase = envName.toUpperCase();
-            if (envNameUppercase.startsWith('APP_') === false) {
-              return;
-            }
+    imports: [
+        SequelizeModule.forRootAsync({
+            inject: [ConfigService],
+            useFactory: (config: ConfigService) => {
+                return {
+                    dialect: 'postgres',
+                    host: config.get('APP_DATABASE_HOST'),
+                    port: config.get('APP_DATABASE_PORT'),
+                    username: config.get('APP_DATABASE_USER'),
+                    password: config.get('APP_DATABASE_PASS'),
+                    database: config.get('APP_DATABASE_DB_NAME'),
+                    autoLoadModels: true,
+                    synchronize: true,
+                };
+            },
+        }),
+        ServeStaticModule.forRoot({
+            rootPath: Path.join(__dirname, '..', 'frontend', 'src', 'public'),
+        }),
+        ConfigModule.forRoot({
+            isGlobal: true,
+            envFilePath: ['./config/.env'],
+            load: [
+                () => {
+                    const Config = {};
+                    Object.keys(process.env).forEach((envName) => {
+                        const envNameUppercase = envName.toUpperCase();
+                        if (envNameUppercase.startsWith('APP_') === false) {
+                            return;
+                        }
 
-            Config[envNameUppercase] = process.env[envName];
-          });
-          return Config;
-        },
-      ],
-    }),
-    AuthModule,
-    UserModule,
-    PassportModule.register({ session: true }),
-    AllowlistModule,
-    DiscordModule,
-    TwitterModule
-  ],
-  providers: [AppService, AuthService, UserService, AllowlistService, DiscordService, TwitterService, WebsocketGateway],
-  controllers: [AuthController, AllowlistController, UserController, DiscordController, TwitterController],
+                        Config[envNameUppercase] = process.env[envName];
+                    });
+                    return Config;
+                },
+            ],
+        }),
+        AuthModule,
+        UserModule,
+        PassportModule.register({ session: true }),
+        AllowlistModule,
+        DiscordModule,
+        TwitterModule,
+    ],
+    providers: [AppService, AuthService, UserService, AllowlistService, DiscordService, TwitterService, WebsocketGateway],
+    controllers: [AuthController, AllowlistController, UserController, DiscordController, TwitterController],
 })
 
 export class AppModule implements NestModule, OnModuleInit {
-  constructor(private readonly discordService: DiscordService) { }
+    constructor(private readonly discordService: DiscordService) { }
 
-  async onModuleInit() {
-    await this.discordService.connect();
-  }
+    async onModuleInit() {
+        await this.discordService.connect();
+    }
 
-  configure(consumer: MiddlewareConsumer) {
+    configure(_consumer: MiddlewareConsumer) {
     // remove auth middleware for now - we don't need it
     // consumer
     //   .apply(AuthMiddleware)
     //   .exclude({ path: '/api/v1/auth/login', method: RequestMethod.POST })
     //   .forRoutes('/');
-  }
+    }
 }
